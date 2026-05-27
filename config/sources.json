@@ -268,6 +268,28 @@
             ],
             "min_title_length": 20
           }
+        },
+        {
+          "name": "TRT عربي",
+          "url": "https://www.trtarabi.com/sys",
+          "selectors": {
+            "article_selector": "h3, h2, .article-title",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "ad"
+            ],
+            "min_title_length": 15
+          }
         }
       ]
     },
@@ -1119,6 +1141,28 @@
           "article_selector": "h2",
           "link_selector": "a",
           "base_url": "https://aitnews.com"
+        },
+        {
+          "name": "TRT عربي",
+          "url": "https://www.trtarabi.com/l-aaml-wltknwlwjy",
+          "selectors": {
+            "article_selector": "h3, h2, .article-title",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "ad"
+            ],
+            "min_title_length": 15
+          }
         }
       ]
     },
@@ -1971,6 +2015,28 @@
               "sidebar"
             ],
             "min_title_length": 20
+          }
+        },
+        {
+          "name": "TRT عربي",
+          "url": "https://www.trtarabi.com/thqf",
+          "selectors": {
+            "article_selector": "h3, h2, .article-title",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "ad"
+            ],
+            "min_title_length": 15
           }
         }
       ]
@@ -3317,6 +3383,28 @@
               "sidebar"
             ],
             "min_title_length": 20
+          }
+        },
+        {
+          "name": "TRT عربي",
+          "url": "https://www.trtarabi.com/laalm",
+          "selectors": {
+            "article_selector": "h3, h2, .article-title",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "ad"
+            ],
+            "min_title_length": 15
           }
         }
       ]
@@ -4731,6 +4819,28 @@
         {
           "name": "الجزيرة - اقتصاد",
           "url": "https://www.aljazeera.net/rss/ebusiness"
+        },
+        {
+          "name": "TRT عربي",
+          "url": "https://www.trtarabi.com/l-aaml-wltknwlwjy",
+          "selectors": {
+            "article_selector": "h3, h2, .article-title",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "ad"
+            ],
+            "min_title_length": 15
+          }
         }
       ]
     },

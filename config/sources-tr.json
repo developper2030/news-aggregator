@@ -511,13 +511,6 @@
       "icon": "🕌",
       "sources": [
         {
-          "name": "TRT Arabi",
-          "url": "https://www.trtarabi.com/",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.trtarabi.com"
-        },
-        {
           "name": "Anadolu Ajansı",
           "url": "https://www.aa.com.tr/tr/dunya",
           "article_selector": "h3",
