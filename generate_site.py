@@ -775,24 +775,20 @@ def _xslug(slug: str, target_lang: str) -> str:
 def _lang_switcher(current_lang: str, page_file: str) -> str:
     """Build a compact multi-language switcher for the site header.
 
-    Generates relative URLs from the current language directory to each
-    target language directory.  Language-specific slugs are resolved via
-    _xslug() so links always point to an existing page.
+    Always links to the homepage (index.html) of the target language.
     """
-    slug  = page_file.removesuffix(".html")
     items = ""
     for lang, prefix in LANG_DIRS.items():
         label = LANG_LABELS[lang]
         if lang == current_lang:
             items += f'<span class="lang-btn current">{label}</span>'
         else:
-            target_file = _xslug(slug, lang)
             if current_lang == "en":
-                href = f"{prefix}{target_file}"      # root  → subdir/page
+                href = f"{prefix}index.html"     # root → subdir/index.html
             elif lang == "en":
-                href = f"../{target_file}"           # subdir → root/page
+                href = "../index.html"           # subdir → root/index.html
             else:
-                href = f"../{prefix}{target_file}"   # subdir → ../other/page
+                href = f"../{prefix}index.html"  # subdir → ../other/index.html
             items += f'<a href="{href}" class="lang-btn">{label}</a>'
     return f'<div class="lang-switcher">{items}</div>'
 
