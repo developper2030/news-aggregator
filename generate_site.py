@@ -51,7 +51,11 @@ CATEGORY_COLORS: dict[str, str] = {
     "asia":      "#06b6d4",
     "americas":  "#3b82f6",
     "europe":    "#8b5cf6",
-    "africa":    "#16a34a",
+    "africa":      "#16a34a",
+    # New universal categories
+    "environment": "#15803d",
+    "business":    "#1d4ed8",
+    "travel":      "#ea580c",
     # Media (vid-*) thematic categories
     "vid-news":          "#e11d48",
     "vid-business":      "#0369a1",
@@ -77,7 +81,11 @@ CATEGORY_GRADIENTS: dict[str, str] = {
     "asia":      "linear-gradient(135deg, #06b6d4, #67e8f9)",
     "americas":  "linear-gradient(135deg, #3b82f6, #93c5fd)",
     "europe":    "linear-gradient(135deg, #8b5cf6, #c4b5fd)",
-    "africa":    "linear-gradient(135deg, #16a34a, #4ade80)",
+    "africa":      "linear-gradient(135deg, #16a34a, #4ade80)",
+    # New universal categories
+    "environment": "linear-gradient(135deg, #15803d, #4ade80)",
+    "business":    "linear-gradient(135deg, #1d4ed8, #60a5fa)",
+    "travel":      "linear-gradient(135deg, #ea580c, #fb923c)",
     # Media (vid-*) thematic categories
     "vid-news":          "linear-gradient(135deg, #e11d48, #fb7185)",
     "vid-business":      "linear-gradient(135deg, #0369a1, #38bdf8)",
@@ -282,11 +290,13 @@ def _fetch_market_data(api_keys: dict, cache_path: str = "",
 def _economy_widget(s: dict, active_tab: str = "") -> str:
     """Build the tabbed economy navigation widget (language-aware).
 
-    active_tab: "prices" to highlight the link tab (used on prices.html).
+    active_tab: "prices" | "business" | "travel" to highlight the active link tab.
     """
-    prices_cls = "econ-tab active" if active_tab == "prices" else "econ-tab"
+    prices_cls   = "econ-tab active" if active_tab == "prices"   else "econ-tab"
+    business_cls = "econ-tab active" if active_tab == "business" else "econ-tab"
+    travel_cls   = "econ-tab active" if active_tab == "travel"   else "econ-tab"
 
-    # ── Tab panels ────────────────────────────────────────────────────────────
+    # ── Tab panels (coming-soon placeholders) ────────────────────────────────
     stats_panel  = f'<div class="econ-soon">{esc(s["econ_stats_soon"])}</div>'
     bourse_panel = f'<div class="econ-soon">{esc(s["econ_bourse_soon"])}</div>'
     biz_panel    = f'<div class="econ-soon">{esc(s["econ_biz_soon"])}</div>'
@@ -295,7 +305,9 @@ def _economy_widget(s: dict, active_tab: str = "") -> str:
         f'<div class="econ-widget" role="complementary" aria-label="{esc(s["econ_widget_label"])}">'
         f'<div class="econ-tab-nav">'
         f'<div class="econ-tab-nav-inner">'
-        f'<a href="prices.html" class="{prices_cls}">{esc(s["econ_prices"])}</a>'
+        f'<a href="prices.html"   class="{prices_cls}">{esc(s["econ_prices"])}</a>'
+        f'<a href="business.html" class="{business_cls}">{esc(s["econ_business_btn"])}</a>'
+        f'<a href="travel.html"   class="{travel_cls}">{esc(s["econ_travel_btn"])}</a>'
         f'<button class="econ-tab" data-panel="econ-stats">{esc(s["econ_stats_btn"])}</button>'
         f'<button class="econ-tab" data-panel="econ-bourse">{esc(s["econ_bourse_btn"])}</button>'
         f'<button class="econ-tab" data-panel="econ-biz">{esc(s["econ_biz_btn"])}</button>'
@@ -352,6 +364,8 @@ STRINGS: dict[str, dict] = {
         "econ_stats_btn": "📊 إحصاءات وأرقام",
         "econ_bourse_btn": "📈 بورصات",
         "econ_biz_btn": "🏢 دليل الشركات",
+        "econ_business_btn": "💼 مال وأعمال",
+        "econ_travel_btn": "✈️ سياحة وسفر",
         "econ_widget_label": "أقسام الاقتصاد",
         "econ_stats_soon": "📊 إحصاءات وأرقام — قريباً",
         "econ_bourse_soon": "📈 بورصات — قريباً",
@@ -413,7 +427,9 @@ STRINGS: dict[str, dict] = {
         "econ_prices": "💱 Prices",
         "econ_stats_btn": "📊 Statistics",
         "econ_bourse_btn": "📈 Markets",
-        "econ_biz_btn": "🏢 Business",
+        "econ_biz_btn": "🏢 Business Directory",
+        "econ_business_btn": "💼 Finance & Business",
+        "econ_travel_btn": "✈️ Travel & Tourism",
         "econ_widget_label": "Economy sections",
         "econ_stats_soon": "📊 Statistics — Coming soon",
         "econ_bourse_soon": "📈 Markets — Coming soon",
@@ -475,7 +491,9 @@ STRINGS: dict[str, dict] = {
         "econ_prices": "💱 Prix",
         "econ_stats_btn": "📊 Statistiques",
         "econ_bourse_btn": "📈 Bourses",
-        "econ_biz_btn": "🏢 Entreprises",
+        "econ_biz_btn": "🏢 Répertoire",
+        "econ_business_btn": "💼 Finance & Business",
+        "econ_travel_btn": "✈️ Tourisme & Voyages",
         "econ_widget_label": "Sections économie",
         "econ_stats_soon": "📊 Statistiques — Bientôt",
         "econ_bourse_soon": "📈 Bourses — Bientôt",
@@ -537,7 +555,9 @@ STRINGS: dict[str, dict] = {
         "econ_prices": "💱 Precios",
         "econ_stats_btn": "📊 Estadísticas",
         "econ_bourse_btn": "📈 Bolsas",
-        "econ_biz_btn": "🏢 Empresas",
+        "econ_biz_btn": "🏢 Directorio",
+        "econ_business_btn": "💼 Finanzas & Negocios",
+        "econ_travel_btn": "✈️ Turismo & Viajes",
         "econ_widget_label": "Secciones de economía",
         "econ_stats_soon": "📊 Estadísticas — Próximamente",
         "econ_bourse_soon": "📈 Bolsas — Próximamente",
@@ -599,7 +619,9 @@ STRINGS: dict[str, dict] = {
         "econ_prices": "💱 Kurlar",
         "econ_stats_btn": "📊 İstatistikler",
         "econ_bourse_btn": "📈 Borsalar",
-        "econ_biz_btn": "🏢 Şirketler",
+        "econ_biz_btn": "🏢 Şirket Rehberi",
+        "econ_business_btn": "💼 Finans & İş Dünyası",
+        "econ_travel_btn": "✈️ Turizm & Seyahat",
         "econ_widget_label": "Ekonomi bölümleri",
         "econ_stats_soon": "📊 İstatistikler — Yakında",
         "econ_bourse_soon": "📈 Borsalar — Yakında",
@@ -699,6 +721,10 @@ _SLUG_XMAP: dict[str, dict[str, str | None]] = {
     # ── Main categories only in some languages (→ index.html elsewhere) ──────
     "society":         {"ar": "society",    "en": None,          "fr": None,          "es": None,          "tr": None},
     "science":         {"ar": None,         "en": "science",     "fr": "science",     "es": "science",     "tr": "science"},
+    # ── New universal categories (same slug in all languages) ─────────────────
+    "environment":     {"ar": "environment","en": "environment", "fr": "environment", "es": "environment", "tr": "environment"},
+    "business":        {"ar": "business",   "en": "business",    "fr": "business",    "es": "business",    "tr": "business"},
+    "travel":          {"ar": "travel",     "en": "travel",      "fr": "travel",      "es": "travel",      "tr": "travel"},
 }
 
 # Slugs that are world-region pages (fallback = world.html when no equivalent)
@@ -3251,8 +3277,11 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             [(slug, cat["name"], cat.get("icon", ""))],
             per_slug=16,
         ), s=s)
-        # Economy tabs widget only on economy page (and prices sub-page)
-        cat_ticker = _economy_widget(s) if slug == "economy" else ""
+        # Economy tabs widget on economy, business, and travel pages
+        if slug in {"economy", "business", "travel"}:
+            cat_ticker = _economy_widget(s, active_tab=slug)
+        else:
+            cat_ticker = ""
         # RSS link: category-specific feed when available
         cat_rss = f"rss-{slug}.xml" if slug in articles_by_cat else "rss.xml"
         _wrt(f"{slug}.html", _page(

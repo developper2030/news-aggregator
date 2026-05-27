@@ -1431,9 +1431,9 @@
       ]
     },
     {
-      "name": "صحة وبيئة",
+      "name": "صحة وطب",
       "slug": "health",
-      "icon": "🌿",
+      "icon": "🏥",
       "sources": [
         {
           "name": "الجزيرة - صحة",
@@ -4658,6 +4658,312 @@
         {
           "name": "BBC عربي ترفيه",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCelk6aHijZq-GJBBB9YpReA"
+        }
+      ]
+    },
+    {
+      "name": "بيئة ومناخ",
+      "slug": "environment",
+      "icon": "🌿",
+      "sources": [
+        {
+          "name": "الجزيرة - بيئة",
+          "url": "https://www.aljazeera.net/tag/بيئة/",
+          "selectors": {
+            "article_selector": "article, .article-card, .gc__content",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "سكاي نيوز - بيئة",
+          "url": "https://www.skynewsarabia.com/environment",
+          "selectors": {
+            "article_selector": "article, .news-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "عربي 21 - بيئة",
+          "url": "https://arabi21.com/stories/c/19/0/بيئة",
+          "selectors": {
+            "article_selector": "article, .story-card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "BBC عربي - بيئة",
+          "url": "https://www.bbc.com/arabic/topics/cze3gpe3gvpt",
+          "selectors": {
+            "article_selector": "article, .lx-stream__post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "CNN عربي - بيئة",
+          "url": "https://arabic.cnn.com/world/environment",
+          "selectors": {
+            "article_selector": "article, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "مال وأعمال",
+      "slug": "business",
+      "icon": "💼",
+      "sources": [
+        {
+          "name": "Forbes الشرق الأوسط",
+          "url": "https://www.forbesmiddleeast.com/ar",
+          "selectors": {
+            "article_selector": "article, .article-card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "زاوية أعمال",
+          "url": "https://www.zawya.com/ar/business",
+          "selectors": {
+            "article_selector": "article, .story-card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "مباشر أعمال",
+          "url": "https://www.mubasher.info/ar/news/business",
+          "selectors": {
+            "article_selector": "article, .news-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "أرقام - أعمال",
+          "url": "https://www.argaam.com/ar/article/articlelist/latest",
+          "selectors": {
+            "article_selector": "article, .article-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "الشرق للأخبار - ريادة",
+          "url": "https://asharq.com/startups/",
+          "selectors": {
+            "article_selector": "article, .story-card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "سياحة وسفر",
+      "slug": "travel",
+      "icon": "✈️",
+      "sources": [
+        {
+          "name": "CNN عربي - سفر",
+          "url": "https://arabic.cnn.com/travel",
+          "selectors": {
+            "article_selector": "article, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "سكاي نيوز - سياحة",
+          "url": "https://www.skynewsarabia.com/lifestyle/travel",
+          "selectors": {
+            "article_selector": "article, .news-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "الجزيرة - سياحة",
+          "url": "https://www.aljazeera.net/tag/سياحة/",
+          "selectors": {
+            "article_selector": "article, .article-card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "ناشيونال جيوغرافيك عربي",
+          "url": "https://www.nationalgeographic.ae/ar/travel",
+          "selectors": {
+            "article_selector": "article, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "لقطة سفر",
+          "url": "https://www.laqtasafar.com/",
+          "selectors": {
+            "article_selector": "article, .post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
         }
       ]
     }

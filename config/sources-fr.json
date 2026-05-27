@@ -198,9 +198,9 @@
       ]
     },
     {
-      "name": "Santé",
+      "name": "Santé & Médecine",
       "slug": "health",
-      "icon": "🔬",
+      "icon": "🏥",
       "sources": [
         {
           "name": "Le Monde Santé",
@@ -712,6 +712,214 @@
         {
           "name": "L'Équipe",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCio4yaFxDNGMHu9CE0PYJg"
+        }
+      ]
+    },
+    {
+      "name": "Environnement & Climat",
+      "slug": "environment",
+      "icon": "🌿",
+      "sources": [
+        {
+          "name": "Le Monde Planète",
+          "type": "rss",
+          "url": "https://www.lemonde.fr/planete/rss_full.xml"
+        },
+        {
+          "name": "Reporterre",
+          "type": "rss",
+          "url": "https://reporterre.net/spip.php?page=backend"
+        },
+        {
+          "name": "20 Minutes Planète",
+          "type": "rss",
+          "url": "https://www.20minutes.fr/rss/planete.xml"
+        },
+        {
+          "name": "Le Figaro Environnement",
+          "url": "https://www.lefigaro.fr/environnement",
+          "selectors": {
+            "article_selector": "article, .fig-content-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "France Info Environnement",
+          "url": "https://www.francetvinfo.fr/monde/environnement/",
+          "selectors": {
+            "article_selector": "article, .teaser",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Finance & Business",
+      "slug": "business",
+      "icon": "💼",
+      "sources": [
+        {
+          "name": "Les Echos",
+          "type": "rss",
+          "url": "https://syndication.lesechos.fr/rss/rss_une.xml"
+        },
+        {
+          "name": "Capital",
+          "type": "rss",
+          "url": "https://www.capital.fr/rss"
+        },
+        {
+          "name": "BFM Business",
+          "url": "https://www.bfmtv.com/economie/",
+          "selectors": {
+            "article_selector": "article, .article-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "Challenges",
+          "type": "rss",
+          "url": "https://www.challenges.fr/rss.xml"
+        },
+        {
+          "name": "L'Usine Nouvelle",
+          "url": "https://www.usinenouvelle.com/",
+          "selectors": {
+            "article_selector": "article, .article-card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tourisme & Voyages",
+      "slug": "travel",
+      "icon": "✈️",
+      "sources": [
+        {
+          "name": "Geo.fr",
+          "type": "rss",
+          "url": "https://www.geo.fr/rss.xml"
+        },
+        {
+          "name": "Le Figaro Voyage",
+          "url": "https://voyage.lefigaro.fr/",
+          "selectors": {
+            "article_selector": "article, .fig-content-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "Lonely Planet France",
+          "url": "https://www.lonelyplanet.fr/",
+          "selectors": {
+            "article_selector": "article, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "Routard.com",
+          "url": "https://www.routard.com/",
+          "selectors": {
+            "article_selector": "article, .article",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "National Geographic FR Voyage",
+          "url": "https://www.nationalgeographic.fr/voyage",
+          "selectors": {
+            "article_selector": "article, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
         }
       ]
     }

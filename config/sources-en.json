@@ -142,9 +142,9 @@
       ]
     },
     {
-      "name": "Health",
+      "name": "Health & Medicine",
       "slug": "health",
-      "icon": "🔬",
+      "icon": "🏥",
       "sources": [
         {
           "name": "Reuters Health",
@@ -713,6 +713,186 @@
         {
           "name": "Al Jazeera",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
+        }
+      ]
+    },
+    {
+      "name": "Environment & Climate",
+      "slug": "environment",
+      "icon": "🌿",
+      "sources": [
+        {
+          "name": "BBC Environment",
+          "type": "rss",
+          "url": "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml"
+        },
+        {
+          "name": "The Guardian Environment",
+          "type": "rss",
+          "url": "https://www.theguardian.com/environment/rss"
+        },
+        {
+          "name": "AP Climate",
+          "url": "https://apnews.com/hub/climate-and-environment",
+          "selectors": {
+            "article_selector": "article, .PagePromo",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "Reuters Environment",
+          "url": "https://www.reuters.com/sustainability/climate-energy/",
+          "selectors": {
+            "article_selector": "article, .article-container",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "National Geographic Climate",
+          "type": "rss",
+          "url": "https://www.nationalgeographic.com/environment/rss"
+        }
+      ]
+    },
+    {
+      "name": "Finance & Business",
+      "slug": "business",
+      "icon": "💼",
+      "sources": [
+        {
+          "name": "Business Insider",
+          "type": "rss",
+          "url": "https://feeds.businessinsider.com/custom/all"
+        },
+        {
+          "name": "Inc.com",
+          "type": "rss",
+          "url": "https://www.inc.com/rss"
+        },
+        {
+          "name": "Fast Company",
+          "type": "rss",
+          "url": "https://www.fastcompany.com/latest/rss"
+        },
+        {
+          "name": "CNBC Business",
+          "type": "rss",
+          "url": "https://www.cnbc.com/id/10001147/device/rss/rss.html"
+        },
+        {
+          "name": "Forbes Business",
+          "url": "https://www.forbes.com/business/",
+          "selectors": {
+            "article_selector": "article, .stream-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Travel & Tourism",
+      "slug": "travel",
+      "icon": "✈️",
+      "sources": [
+        {
+          "name": "Travel + Leisure",
+          "type": "rss",
+          "url": "https://www.travelandleisure.com/rss/all.rss"
+        },
+        {
+          "name": "Condé Nast Traveler",
+          "type": "rss",
+          "url": "https://www.cntraveler.com/feed/rss"
+        },
+        {
+          "name": "Lonely Planet News",
+          "url": "https://www.lonelyplanet.com/news",
+          "selectors": {
+            "article_selector": "article, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "National Geographic Travel",
+          "url": "https://www.nationalgeographic.com/travel/",
+          "selectors": {
+            "article_selector": "article, .PromoTile",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "Skyscanner Travel News",
+          "url": "https://www.skyscanner.net/news",
+          "selectors": {
+            "article_selector": "article, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
         }
       ]
     }

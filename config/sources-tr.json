@@ -289,9 +289,9 @@
       ]
     },
     {
-      "name": "Sağlık",
+      "name": "Sağlık & Tıp",
       "slug": "health",
-      "icon": "🔬",
+      "icon": "🏥",
       "sources": [
         {
           "name": "NTV Sağlık",
@@ -796,6 +796,242 @@
         {
           "name": "A Haber Kültür",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCKQhfw-lzz0uKnE1fY1PsAA"
+        }
+      ]
+    },
+    {
+      "name": "Çevre & İklim",
+      "slug": "environment",
+      "icon": "🌿",
+      "sources": [
+        {
+          "name": "Yeşil Gazete",
+          "type": "rss",
+          "url": "https://yesilgazete.org/feed/"
+        },
+        {
+          "name": "İklim Haber",
+          "type": "rss",
+          "url": "https://iklimhaber.org/feed/"
+        },
+        {
+          "name": "Hürriyet Çevre",
+          "url": "https://www.hurriyet.com.tr/gundem/cevre/",
+          "selectors": {
+            "article_selector": "article, .news-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "Milliyet Çevre",
+          "url": "https://www.milliyet.com.tr/cevre/",
+          "selectors": {
+            "article_selector": "article, .article-card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "Diken Çevre",
+          "url": "https://www.diken.com.tr/kategori/cevre/",
+          "selectors": {
+            "article_selector": "article, .post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Finans & İş Dünyası",
+      "slug": "business",
+      "icon": "💼",
+      "sources": [
+        {
+          "name": "Bloomberg HT",
+          "type": "rss",
+          "url": "https://www.bloomberght.com/rss.xml"
+        },
+        {
+          "name": "Forbes TR",
+          "url": "https://www.forbes.com.tr/",
+          "selectors": {
+            "article_selector": "article, .article-card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "Dünya Gazetesi",
+          "type": "rss",
+          "url": "https://www.dunya.com/rss.xml"
+        },
+        {
+          "name": "Para Analiz",
+          "url": "https://www.paraanaliz.com/",
+          "selectors": {
+            "article_selector": "article, .news-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "Ekonomim",
+          "url": "https://www.ekonomim.com/",
+          "selectors": {
+            "article_selector": "article, .article",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Turizm & Seyahat",
+      "slug": "travel",
+      "icon": "✈️",
+      "sources": [
+        {
+          "name": "Gezimanya",
+          "type": "rss",
+          "url": "https://www.gezimanya.com/feed/"
+        },
+        {
+          "name": "Lonely Planet TR",
+          "url": "https://www.lonelyplanet.com/tr",
+          "selectors": {
+            "article_selector": "article, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "Hürriyet Seyahat",
+          "url": "https://www.hurriyet.com.tr/seyahat/",
+          "selectors": {
+            "article_selector": "article, .news-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "Milliyet Seyahat",
+          "url": "https://www.milliyet.com.tr/seyahat/",
+          "selectors": {
+            "article_selector": "article, .article-card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "NTV Seyahat",
+          "url": "https://www.ntv.com.tr/seyahat",
+          "selectors": {
+            "article_selector": "article, .article",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
         }
       ]
     }

@@ -103,6 +103,63 @@ def _is_junk_title(title: str) -> bool:
     return False
 
 
+# ──────────────────────────────────────────────────────────────────────────────
+# LANGUAGE DETECTION
+# ──────────────────────────────────────────────────────────────────────────────
+
+def _is_correct_lang(title: str, expected_lang: str) -> bool:
+    """Return True if *title* appears to be in *expected_lang*.
+
+    Strategy:
+    - Arabic (ar): Unicode ratio — fast and ~100% accurate.
+    - Latin langs (en/fr/es/tr): reject if clearly Arabic, then use langdetect
+      to catch remaining mismatches. Lenient on ambiguity → avoids false positives.
+    - Titles < 12 chars or detection errors → always pass (fail open).
+    """
+    if not expected_lang or not title:
+        return True
+
+    text = title.strip()
+    if len(text) < 12:
+        return True  # Too short to detect reliably — let it pass
+
+    # Count Arabic-script characters (Arabic, Persian, Urdu share this block)
+    alpha_chars  = sum(1 for c in text if c.isalpha())
+    if alpha_chars == 0:
+        return True
+
+    arabic_chars = sum(1 for c in text if "؀" <= c <= "ۿ")
+    arabic_ratio = arabic_chars / alpha_chars
+
+    # ── Arabic feed: title must be mostly Arabic ───────────────────────────────
+    if expected_lang == "ar":
+        return arabic_ratio >= 0.30
+
+    # ── Latin feed (en/fr/es/tr): reject clearly Arabic titles ────────────────
+    if arabic_ratio >= 0.30:
+        return False
+
+    # Use langdetect for Latin-to-Latin contamination detection
+    # Accept languages that are closely related to avoid false positives
+    _LATIN_ACCEPT: dict[str, set] = {
+        "en": {"en"},
+        "fr": {"fr"},
+        "es": {"es", "ca", "pt", "gl"},  # Catalan/Portuguese/Galician are close
+        "tr": {"tr"},
+    }
+    try:
+        from langdetect import detect
+        detected = detect(text)
+        if detected == "ar":
+            return False
+        accepted = _LATIN_ACCEPT.get(expected_lang)
+        if accepted and detected not in accepted:
+            return False
+        return True
+    except Exception:
+        return True  # Can't detect → pass (fail open)
+
+
 def _element_in_excluded_area(el, exclude_classes: list, exclude_id_patterns: list) -> bool:
     for parent in el.parents:
         if parent is None:
@@ -527,9 +584,13 @@ def run(config_path: str | None = None, db_path: str | None = None) -> None:
     if db_path:
         set_db_path(db_path)
 
-    settings  = config.get("settings", {})
-    max_per   = int(settings.get("max_articles_per_source", 10))
-    keep_days = int(settings.get("oldest_days", 7))
+    settings      = config.get("settings", {})
+    max_per       = int(settings.get("max_articles_per_source", 10))
+    keep_days     = int(settings.get("oldest_days", 7))
+    expected_lang = settings.get("lang_code", "")  # e.g. "ar", "en", "fr", "es", "tr"
+
+    if expected_lang:
+        logger.info("Language filter active: expected_lang='%s'", expected_lang)
 
     init_db()
     _robots_cache.clear()  # fresh cache for this run
@@ -557,6 +618,18 @@ def run(config_path: str | None = None, db_path: str | None = None) -> None:
                 logger.error("!! %s threw: %s", src["name"], exc)
                 arts = []
 
+            # Language filter — reject articles not matching expected_lang
+            if expected_lang:
+                filtered = [a for a in arts if _is_correct_lang(a["title"], expected_lang)]
+                rejected = len(arts) - len(filtered)
+                if rejected:
+                    logger.info(
+                        "Lang filter [%s]: removed %d/%d wrong-lang articles from %s",
+                        expected_lang, rejected, len(arts), src["name"],
+                    )
+            else:
+                filtered = arts
+
             # Batch insert for efficiency
             batch = [
                 {
@@ -567,10 +640,10 @@ def run(config_path: str | None = None, db_path: str | None = None) -> None:
                     "category_name": cname,
                     "category_slug": cslug,
                 }
-                for a in arts
+                for a in filtered
             ]
             save_articles_batch(batch)
-            all_articles.extend(arts)
+            all_articles.extend(filtered)
 
     print(f"\n{'=' * 50}")
     print("Summary by source:")

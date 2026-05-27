@@ -163,9 +163,9 @@
       ]
     },
     {
-      "name": "Salud",
+      "name": "Salud & Medicina",
       "slug": "health",
-      "icon": "🔬",
+      "icon": "🏥",
       "sources": [
         {
           "name": "El País Salud",
@@ -635,6 +635,242 @@
         {
           "name": "Euronews Cultura",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
+        }
+      ]
+    },
+    {
+      "name": "Medio Ambiente & Clima",
+      "slug": "environment",
+      "icon": "🌿",
+      "sources": [
+        {
+          "name": "El País Clima",
+          "type": "rss",
+          "url": "https://elpais.com/rss/tag/cambio_climatico.xml"
+        },
+        {
+          "name": "EFEverde",
+          "type": "rss",
+          "url": "https://www.efeverde.com/feed/"
+        },
+        {
+          "name": "20 Minutos Medioambiente",
+          "url": "https://www.20minutos.es/medio-ambiente/",
+          "selectors": {
+            "article_selector": "article, .article",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "El Confidencial Medio Ambiente",
+          "url": "https://www.elconfidencial.com/medioambiente/",
+          "selectors": {
+            "article_selector": "article, .article-list",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "National Geographic ES Ciencia",
+          "url": "https://www.nationalgeographic.com.es/naturaleza",
+          "selectors": {
+            "article_selector": "article, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Finanzas & Negocios",
+      "slug": "business",
+      "icon": "💼",
+      "sources": [
+        {
+          "name": "Cinco Días",
+          "type": "rss",
+          "url": "https://cincodias.elpais.com/rss/"
+        },
+        {
+          "name": "Expansión",
+          "type": "rss",
+          "url": "https://www.expansion.com/rss/portada.xml"
+        },
+        {
+          "name": "El Economista",
+          "url": "https://www.eleconomista.es/",
+          "selectors": {
+            "article_selector": "article, .news-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "Forbes España",
+          "url": "https://forbes.es/",
+          "selectors": {
+            "article_selector": "article, .article-card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "Emprendedores",
+          "type": "rss",
+          "url": "https://www.emprendedores.es/feed/"
+        }
+      ]
+    },
+    {
+      "name": "Turismo & Viajes",
+      "slug": "travel",
+      "icon": "✈️",
+      "sources": [
+        {
+          "name": "Condé Nast Traveler ES",
+          "url": "https://www.traveler.es/",
+          "selectors": {
+            "article_selector": "article, .summary-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "National Geographic ES Viajes",
+          "url": "https://www.nationalgeographic.com.es/viajes",
+          "selectors": {
+            "article_selector": "article, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "El País Viajes",
+          "url": "https://elviajero.elpais.com/",
+          "selectors": {
+            "article_selector": "article, .article-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "Lonely Planet ES",
+          "url": "https://www.lonelyplanet.com/es",
+          "selectors": {
+            "article_selector": "article, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
+        },
+        {
+          "name": "Turismo.org",
+          "url": "https://www.turismo.org/",
+          "selectors": {
+            "article_selector": "article, .post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "min_title_length": 15,
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ]
+          }
         }
       ]
     }
