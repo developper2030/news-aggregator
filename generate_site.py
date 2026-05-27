@@ -335,6 +335,75 @@ def _economy_widget(s: dict, active_tab: str = "") -> str:
     )
 
 
+# ── Market strip — shown only on economy.html ─────────────────────────────────
+
+# (code, display_symbol) — USD is the base, all rates are "1 USD = X code"
+DEFAULT_MARKET_PAIRS = [
+    # Arab currencies
+    ("MAD", "MAD"), ("DZD", "DZD"), ("TND", "TND"), ("EGP", "EGP"),
+    ("SAR", "SAR"), ("AED", "AED"), ("KWD", "KWD"), ("QAR", "QAR"),
+    ("BHD", "BHD"), ("OMR", "OMR"), ("JOD", "JOD"),
+    # Major economies
+    ("EUR", "EUR"), ("GBP", "GBP"), ("JPY", "JPY"), ("CNY", "CNY"),
+    ("CHF", "CHF"), ("CAD", "CAD"), ("AUD", "AUD"),
+]
+
+
+def _market_strip(data: dict, s: dict,
+                  pairs: list = DEFAULT_MARKET_PAIRS) -> str:
+    """Build the horizontal market-data strip HTML for the economy page.
+
+    Shows exchange rates (always) + gold + Brent oil (when API keys present).
+    Returns empty string if no data is available at all.
+    """
+    if not data.get("rates") and data.get("gold") is None and data.get("oil") is None:
+        return ""
+
+    items = ""
+    rates = data.get("rates", {})
+
+    for code, symbol in pairs:
+        val = rates.get(code)
+        if val is None:
+            continue
+        items += (
+            f'<div class="market-item">'
+            f'<span class="market-lbl">1 USD =</span> '
+            f'<span class="market-val">{val:.2f} {esc(symbol)}</span>'
+            f'</div>'
+        )
+
+    if data.get("gold"):
+        items += (
+            f'<div class="market-item">'
+            f'<span class="market-lbl">🥇</span> '
+            f'<span class="market-val">${data["gold"]:,.0f}/oz</span>'
+            f'</div>'
+        )
+
+    if data.get("oil"):
+        items += (
+            f'<div class="market-item">'
+            f'<span class="market-lbl">🛢️</span> '
+            f'<span class="market-val">${data["oil"]:.1f}/bbl</span>'
+            f'</div>'
+        )
+
+    if not items:
+        return ""
+
+    ts = data.get("ts", "")
+    ts_html = (
+        f'<span class="market-ts">🕒 {esc(ts)}</span>' if ts else ""
+    )
+    return (
+        f'<div class="market-strip" role="complementary" '
+        f'aria-label="{esc(s.get("market_strip_label", "Market data"))}">'
+        f'<div class="market-strip-inner">{ts_html}{items}</div>'
+        f'</div>'
+    )
+
+
 # Arabic display names override (for any remaining non-Arabic source names)
 SOURCE_AR_NAME: dict[str, str] = {
     "Le360":    "لو 360",
@@ -381,6 +450,7 @@ STRINGS: dict[str, dict] = {
         "econ_business_btn": "💼 مال وأعمال",
         "econ_travel_btn": "✈️ سياحة وسفر",
         "econ_widget_label": "أقسام الاقتصاد",
+        "market_strip_label": "بيانات السوق",
         "econ_stats_soon": "📊 إحصاءات وأرقام — قريباً",
         "econ_bourse_soon": "📈 بورصات — قريباً",
         "econ_biz_soon": "🏢 دليل الشركات — قريباً",
@@ -451,6 +521,7 @@ STRINGS: dict[str, dict] = {
         "econ_business_btn": "💼 Finance & Business",
         "econ_travel_btn": "✈️ Travel & Tourism",
         "econ_widget_label": "Economy sections",
+        "market_strip_label": "Market data",
         "econ_stats_soon": "📊 Statistics — Coming soon",
         "econ_bourse_soon": "📈 Markets — Coming soon",
         "econ_biz_soon": "🏢 Business Directory — Coming soon",
@@ -521,6 +592,7 @@ STRINGS: dict[str, dict] = {
         "econ_business_btn": "💼 Finance & Business",
         "econ_travel_btn": "✈️ Tourisme & Voyages",
         "econ_widget_label": "Sections économie",
+        "market_strip_label": "Données du marché",
         "econ_stats_soon": "📊 Statistiques — Bientôt",
         "econ_bourse_soon": "📈 Bourses — Bientôt",
         "econ_biz_soon": "🏢 Répertoire des entreprises — Bientôt",
@@ -591,6 +663,7 @@ STRINGS: dict[str, dict] = {
         "econ_business_btn": "💼 Finanzas & Negocios",
         "econ_travel_btn": "✈️ Turismo & Viajes",
         "econ_widget_label": "Secciones de economía",
+        "market_strip_label": "Datos del mercado",
         "econ_stats_soon": "📊 Estadísticas — Próximamente",
         "econ_bourse_soon": "📈 Bolsas — Próximamente",
         "econ_biz_soon": "🏢 Directorio de empresas — Próximamente",
@@ -661,6 +734,7 @@ STRINGS: dict[str, dict] = {
         "econ_business_btn": "💼 Finans & İş Dünyası",
         "econ_travel_btn": "✈️ Turizm & Seyahat",
         "econ_widget_label": "Ekonomi bölümleri",
+        "market_strip_label": "Piyasa verileri",
         "econ_stats_soon": "📊 İstatistikler — Yakında",
         "econ_bourse_soon": "📈 Borsalar — Yakında",
         "econ_biz_soon": "🏢 Şirket Rehberi — Yakında",
@@ -1394,6 +1468,18 @@ body.lang-ltr .nh-text{direction:ltr}
   .cookie-btn{padding:9px 16px;font-size:.8em}
 }
 .dark-mode .cookie-banner{background:#0f172a;border-color:#2563eb}
+/* ====== MARKET STRIP ====== */
+.market-strip{background:linear-gradient(90deg,#059669,#0d9488);color:#fff;padding:7px 0;font-size:.82em;font-weight:700;border-bottom:2px solid rgba(0,0,0,.1)}
+.market-strip-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;gap:0;overflow-x:auto;scrollbar-width:none;align-items:center;white-space:nowrap}
+.market-strip-inner::-webkit-scrollbar{display:none}
+.market-item{display:flex;align-items:center;gap:5px;padding:0 16px;border-left:1px solid rgba(255,255,255,.25);flex-shrink:0}
+.market-item:first-child{border-left:none;padding-left:0}
+.market-lbl{opacity:.8;font-size:.9em}
+.market-val{font-size:1em;letter-spacing:.3px}
+.market-up{color:#bbf7d0}
+.market-dn{color:#fca5a5}
+.market-ts{opacity:.55;font-size:.78em;margin-inline-end:auto;padding-inline-end:16px;flex-shrink:0}
+.dark-mode .market-strip{background:linear-gradient(90deg,#065f46,#0f766e)}
 """
 
 APP_JS = r"""
@@ -4658,8 +4744,10 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             yt_only_slugs=media_slugs_local if slug in media_slugs_local else None,
         ), s=s)
         # Economy tabs widget on economy, business, and travel pages
+        # + market data strip on economy page only
         if slug in {"economy", "business", "travel"}:
-            cat_ticker = _economy_widget(s, active_tab=slug)
+            _strip = _market_strip(_market_data, s) if slug == "economy" else ""
+            cat_ticker = _strip + _economy_widget(s, active_tab=slug)
         else:
             cat_ticker = ""
         # RSS link: category-specific feed when available
