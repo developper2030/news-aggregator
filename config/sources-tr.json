@@ -669,35 +669,13 @@
       "slug": "vid-business",
       "name": "Finans ve İş",
       "icon": "💼",
-      "sources": [
-        {
-          "name": "CNN Türk Ekonomi",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCJCYKGZ4ZyjjshYa6fhRgRw"
-        },
-        {
-          "name": "Habertürk Ekonomi",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UClGZC_r-sUcBdElAtDSrQ5g"
-        },
-        {
-          "name": "NTV Ekonomi",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCRFPZHb9xE176G77Z54zCXA"
-        }
-      ]
+      "sources": []
     },
     {
       "slug": "vid-science",
       "name": "Bilim ve Teknoloji",
       "icon": "🔬",
-      "sources": [
-        {
-          "name": "TRT Haber Bilim",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCBgTP2LOFVPmq15W-RH-WXA"
-        },
-        {
-          "name": "CNN Türk Teknoloji",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCJCYKGZ4ZyjjshYa6fhRgRw"
-        }
-      ]
+      "sources": []
     },
     {
       "slug": "vid-sports",
@@ -715,14 +693,6 @@
         {
           "name": "Beşiktaş JK",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCLJVUlpsxZcIMECVDcZaM2g"
-        },
-        {
-          "name": "CNN Türk Spor",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCJCYKGZ4ZyjjshYa6fhRgRw"
-        },
-        {
-          "name": "NTV Spor",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCRFPZHb9xE176G77Z54zCXA"
         }
       ]
     },
@@ -730,28 +700,7 @@
       "slug": "vid-politics",
       "name": "Siyasi Analizler",
       "icon": "🎙️",
-      "sources": [
-        {
-          "name": "TRT Haber Siyaset",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCBgTP2LOFVPmq15W-RH-WXA"
-        },
-        {
-          "name": "CNN Türk Siyaset",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCJCYKGZ4ZyjjshYa6fhRgRw"
-        },
-        {
-          "name": "Habertürk Siyaset",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UClGZC_r-sUcBdElAtDSrQ5g"
-        },
-        {
-          "name": "NTV Siyaset",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCRFPZHb9xE176G77Z54zCXA"
-        },
-        {
-          "name": "A Haber Siyaset",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCKQhfw-lzz0uKnE1fY1PsAA"
-        }
-      ]
+      "sources": []
     },
     {
       "slug": "vid-cooking",
@@ -761,22 +710,6 @@
         {
           "name": "Refika's Kitchen",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCONn3cHs5mqgCMqf_a4fcSg"
-        },
-        {
-          "name": "TRT Haber Mutfak",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCBgTP2LOFVPmq15W-RH-WXA"
-        },
-        {
-          "name": "CNN Türk Yaşam",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCJCYKGZ4ZyjjshYa6fhRgRw"
-        },
-        {
-          "name": "NTV Yaşam",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCRFPZHb9xE176G77Z54zCXA"
-        },
-        {
-          "name": "Habertürk Yaşam",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UClGZC_r-sUcBdElAtDSrQ5g"
         }
       ]
     },
@@ -784,24 +717,7 @@
       "slug": "vid-entertainment",
       "name": "Eğlence",
       "icon": "🎬",
-      "sources": [
-        {
-          "name": "TRT Haber Kültür",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCBgTP2LOFVPmq15W-RH-WXA"
-        },
-        {
-          "name": "CNN Türk Kültür",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCJCYKGZ4ZyjjshYa6fhRgRw"
-        },
-        {
-          "name": "NTV Eğlence",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCRFPZHb9xE176G77Z54zCXA"
-        },
-        {
-          "name": "A Haber Kültür",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCKQhfw-lzz0uKnE1fY1PsAA"
-        }
-      ]
+      "sources": []
     },
     {
       "name": "Çevre",

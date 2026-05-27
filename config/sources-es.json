@@ -528,20 +528,7 @@
       "slug": "vid-business",
       "name": "Finanzas y Negocios",
       "icon": "💼",
-      "sources": [
-        {
-          "name": "DW Economía",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCT4Jg8h03dD0iN3Pb5L0PMA"
-        },
-        {
-          "name": "France 24 Economía",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
-        },
-        {
-          "name": "Euronews Economía",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
-        }
-      ]
+      "sources": []
     },
     {
       "slug": "vid-science",
@@ -555,18 +542,6 @@
         {
           "name": "Date un Vlog",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQX_MZRCaluNKxkywkLEgfA"
-        },
-        {
-          "name": "DW Ciencia",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCT4Jg8h03dD0iN3Pb5L0PMA"
-        },
-        {
-          "name": "France 24 Ciencia",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
-        },
-        {
-          "name": "Euronews Ciencia",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
         }
       ]
     },
@@ -582,18 +557,6 @@
         {
           "name": "Real Madrid",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCLiS9vTXRNT1RwOTGqTN1og"
-        },
-        {
-          "name": "DW Deporte",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCT4Jg8h03dD0iN3Pb5L0PMA"
-        },
-        {
-          "name": "Euronews Deporte",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
-        },
-        {
-          "name": "France 24 Deporte",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
         }
       ]
     },
@@ -601,20 +564,7 @@
       "slug": "vid-politics",
       "name": "Análisis político",
       "icon": "🎙️",
-      "sources": [
-        {
-          "name": "France 24 Política",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
-        },
-        {
-          "name": "DW Política",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCT4Jg8h03dD0iN3Pb5L0PMA"
-        },
-        {
-          "name": "Euronews Política",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
-        }
-      ]
+      "sources": []
     },
     {
       "slug": "vid-cooking",
@@ -624,18 +574,6 @@
         {
           "name": "Canal Cocina",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCMCQlw54oqPMRnKKRjsRnYA"
-        },
-        {
-          "name": "France 24 Gastronomía",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
-        },
-        {
-          "name": "DW Gastronomía",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCT4Jg8h03dD0iN3Pb5L0PMA"
-        },
-        {
-          "name": "Euronews Cocina",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
         }
       ]
     },
@@ -647,18 +585,6 @@
         {
           "name": "El Hormiguero",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCLNZvDlwQJMaQg477NAxvjQ"
-        },
-        {
-          "name": "France 24 Cultura",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
-        },
-        {
-          "name": "DW Cultura",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCT4Jg8h03dD0iN3Pb5L0PMA"
-        },
-        {
-          "name": "Euronews Cultura",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
         }
       ]
     },

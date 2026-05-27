@@ -570,10 +570,6 @@
         {
           "name": "Euronews",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
-        },
-        {
-          "name": "Arte",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCHGMBrXUzClgjEzBMei-Jdw"
         }
       ]
     },
@@ -581,20 +577,7 @@
       "slug": "vid-business",
       "name": "Finance & Affaires",
       "icon": "💼",
-      "sources": [
-        {
-          "name": "BFM Business",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCUsBMOIUl_ad6JUOC16DpmQ"
-        },
-        {
-          "name": "France 24 Éco",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQfwfsi5VrQ8yKZ-UWmAEFg"
-        },
-        {
-          "name": "Euronews Business",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
-        }
-      ]
+      "sources": []
     },
     {
       "slug": "vid-science",
@@ -604,18 +587,6 @@
         {
           "name": "e-penser",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCcziTK2NKeWtWQ6kB5tmQ8Q"
-        },
-        {
-          "name": "Arte Docs",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCHGMBrXUzClgjEzBMei-Jdw"
-        },
-        {
-          "name": "France 24 Science",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQfwfsi5VrQ8yKZ-UWmAEFg"
-        },
-        {
-          "name": "Euronews Science",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
         }
       ]
     },
@@ -631,14 +602,6 @@
         {
           "name": "beIN SPORTS France",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfj4kQ6_mYO5r4hzX5KloVw"
-        },
-        {
-          "name": "France 24 Sport",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQfwfsi5VrQ8yKZ-UWmAEFg"
-        },
-        {
-          "name": "BFMTV Sport",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCXwDLMDV86ldKoFVc_g8P0g"
         }
       ]
     },
@@ -648,20 +611,8 @@
       "icon": "🎙️",
       "sources": [
         {
-          "name": "France 24 Politique",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQfwfsi5VrQ8yKZ-UWmAEFg"
-        },
-        {
           "name": "BFMTV",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCXwDLMDV86ldKoFVc_g8P0g"
-        },
-        {
-          "name": "Arte Géopolitique",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCHGMBrXUzClgjEzBMei-Jdw"
-        },
-        {
-          "name": "Euronews Politique",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
         }
       ]
     },
@@ -681,14 +632,6 @@
         {
           "name": "Julie Andrieu",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC2MZZuIDWw-YHcWejxQaiCg"
-        },
-        {
-          "name": "Arte Food",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCHGMBrXUzClgjEzBMei-Jdw"
-        },
-        {
-          "name": "France 24 Lifestyle",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQfwfsi5VrQ8yKZ-UWmAEFg"
         }
       ]
     },
@@ -704,18 +647,6 @@
         {
           "name": "Arte",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCHGMBrXUzClgjEzBMei-Jdw"
-        },
-        {
-          "name": "France 24 Culture",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQfwfsi5VrQ8yKZ-UWmAEFg"
-        },
-        {
-          "name": "BFMTV",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCXwDLMDV86ldKoFVc_g8P0g"
-        },
-        {
-          "name": "Euronews Culture",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
         }
       ]
     },

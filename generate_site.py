@@ -105,6 +105,16 @@ MEDIA_SLUGS: set[str] = {
     "vid-sports", "vid-politics", "vid-cooking", "vid-entertainment"
 }
 
+
+def _is_yt_url(url: str) -> bool:
+    """Return True if *url* is a YouTube watch or short link.
+
+    Used to filter vid-* sections so only real video entries (not article
+    links accidentally stored under a vid-* category) are displayed.
+    """
+    return "youtube.com/watch" in url or "youtu.be/" in url
+
+
 # Slugs that are economy sub-sections (hidden from main nav & home — accessible only via economy strip)
 ECON_SUB_SLUGS: set[str] = {"business", "travel"}
 
@@ -2513,11 +2523,15 @@ def _gather_carousel(
     slugs_order: list[tuple],
     per_slug: int = 4,
     max_total: int = 16,
+    yt_only_slugs: set | None = None,
 ) -> list[dict]:
     """Build a flat list of carousel-ready article dicts.
 
     slugs_order: list of (slug, cat_name, cat_icon) tuples in display order.
     Returns up to max_total items with valid images, taking up to per_slug per slug.
+
+    yt_only_slugs: when provided, articles from these slugs are filtered to
+    YouTube watch URLs only — prevents article links bleeding into vid-* carousels.
     """
     result: list[dict] = []
     for slug, cat_name, cat_icon in slugs_order:
@@ -2526,6 +2540,9 @@ def _gather_carousel(
             continue
         count = 0
         for art in cat_data["articles"]:
+            # Skip non-YouTube URLs in video-only sections
+            if yt_only_slugs and slug in yt_only_slugs and not _is_yt_url(art.get("url", "")):
+                continue
             img = art.get("image", "")
             if img and img.startswith("http") and not img.startswith("data:"):
                 result.append({**art, "slug": slug,
@@ -3240,11 +3257,15 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             f'<span>{esc(cat.get("icon",""))} {esc(cat["name"])}</span>'
             f'</div>'
         )
-        if cat_data and cat_data["articles"]:
-            cards      = "".join(_card(a, slug) for a in cat_data["articles"])
+        # For vid-* sections only show YouTube watch URLs; other slugs show all
+        raw_articles = cat_data["articles"] if (cat_data and cat_data["articles"]) else []
+        if slug in media_slugs_local:
+            raw_articles = [a for a in raw_articles if _is_yt_url(a.get("url", ""))]
+        if raw_articles:
+            cards      = "".join(_card(a, slug) for a in raw_articles)
             grid       = f'<div class="articles-grid">{cards}</div>'
             src_filter = _source_filter_strip(
-                cat_data["articles"], cat.get("sources", []), color, s
+                raw_articles, cat.get("sources", []), color, s
             )
         else:
             grid       = (
@@ -3275,10 +3296,12 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             page_world_subnav = ""
 
         # Per-category carousel: articles from this category only
+        # Pass yt_only_slugs so vid-* carousels skip non-YouTube entries
         cat_carousel = _carousel(_gather_carousel(
             articles_by_cat,
             [(slug, cat["name"], cat.get("icon", ""))],
             per_slug=16,
+            yt_only_slugs=media_slugs_local if slug in media_slugs_local else None,
         ), s=s)
         # Economy tabs widget on economy, business, and travel pages
         if slug in {"economy", "business", "travel"}:
@@ -3390,10 +3413,15 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             cat_data = articles_by_cat.get(slug)
             color    = CATEGORY_COLORS.get(slug, DEFAULT_COLOR)
 
-            if cat_data and cat_data["articles"]:
-                preview  = cat_data["articles"][:PREVIEW_PER_CAT]
+            # Only show genuine YouTube watch links in vid-* sections
+            yt_articles = [
+                a for a in (cat_data["articles"] if cat_data else [])
+                if _is_yt_url(a.get("url", ""))
+            ]
+            if yt_articles:
+                preview  = yt_articles[:PREVIEW_PER_CAT]
                 cards    = "".join(_card(a, slug) for a in preview)
-                total    = len(cat_data["articles"])
+                total    = len(yt_articles)
                 more_btn = (
                     f'<a href="{esc(slug)}.html" class="more-btn" '
                     f'style="border-color:{esc(color)};color:{esc(color)}">'
@@ -3427,6 +3455,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             articles_by_cat,
             [(r["slug"], r["name"], r["icon"]) for r in media_regions_list],
             per_slug=3,
+            yt_only_slugs=media_slugs_local,
         ), s=s)
         _wrt("media.html", _page(
             title=site_title,

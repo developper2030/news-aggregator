@@ -568,10 +568,6 @@
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UChqUTb7kYRX8-EiaN3XFrSQ"
         },
         {
-          "name": "PBS NewsHour",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC2s0uKOc2WgB9eGta7cUUEA"
-        },
-        {
           "name": "NBC News",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UChDKyKQ59fYz3JO2fl0Z6sg"
         }
@@ -637,28 +633,12 @@
       "icon": "🎙️",
       "sources": [
         {
-          "name": "BBC News",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCj956IF62FbT7Gouszaj9w"
-        },
-        {
-          "name": "Al Jazeera English",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
-        },
-        {
-          "name": "CNN",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCupvZG-5ko_eiXAupbDfxWw"
-        },
-        {
-          "name": "France 24",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
-        },
-        {
-          "name": "Sky News",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCkFclpi8U9VJjfxLYoms7Aw"
-        },
-        {
           "name": "PBS NewsHour",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC2s0uKOc2WgB9eGta7cUUEA"
+        },
+        {
+          "name": "VICE News",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCZaT_X_mc0BI-djXOlfhqWQ"
         }
       ]
     },
@@ -703,16 +683,12 @@
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCzq572hUnxUKVXrNCvqQwog"
         },
         {
-          "name": "BBC",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCj956IF62FbT7Gouszaj9w"
+          "name": "Jimmy Kimmel Live",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCa6vGFO9ty8v5KZJXQxdhaw"
         },
         {
-          "name": "CNN",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCupvZG-5ko_eiXAupbDfxWw"
-        },
-        {
-          "name": "France 24 Culture",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
+          "name": "The Daily Show",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCwWhs_6x42TyRM4Wstoq8HA"
         }
       ]
     },

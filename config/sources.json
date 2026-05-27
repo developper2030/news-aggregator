@@ -4499,28 +4499,7 @@
       "slug": "vid-business",
       "name": "مال وأعمال",
       "icon": "💼",
-      "sources": [
-        {
-          "name": "الجزيرة اقتصاد",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
-        },
-        {
-          "name": "سكاي نيوز اقتصاد",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCIJXOvggjKtCagMfxvcCzAA"
-        },
-        {
-          "name": "الحدث أعمال",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCrj5BGAhtWxDfqbza9T9hqA"
-        },
-        {
-          "name": "فرانس 24 اقتصاد",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCdTyuXgmJkG_O8_75eqej-w"
-        },
-        {
-          "name": "BBC عربي أعمال",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCelk6aHijZq-GJBBB9YpReA"
-        }
-      ]
+      "sources": []
     },
     {
       "slug": "vid-science",
@@ -4542,10 +4521,6 @@
         {
           "name": "تيك بالعربي",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCpTSn0cAhi5tTs14vCbtlJw"
-        },
-        {
-          "name": "DW عربي علوم",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC2KCI1AXQVx1_XJmykB7cHA"
         }
       ]
     },
@@ -4565,14 +4540,6 @@
         {
           "name": "الكأس الرياضية",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCMhIREK83uEenBR4tKZTPQ"
-        },
-        {
-          "name": "الجزيرة رياضة",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
-        },
-        {
-          "name": "سكاي نيوز رياضة",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCIJXOvggjKtCagMfxvcCzAA"
         }
       ]
     },
@@ -4582,28 +4549,8 @@
       "icon": "🎙️",
       "sources": [
         {
-          "name": "الجزيرة تحليلات",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
-        },
-        {
-          "name": "الحدث سياسة",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCrj5BGAhtWxDfqbza9T9hqA"
-        },
-        {
           "name": "الميادين",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCO-kV7ZFOiKwcP2U0h4aEbA"
-        },
-        {
-          "name": "سكاي نيوز سياسة",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCIJXOvggjKtCagMfxvcCzAA"
-        },
-        {
-          "name": "فرانس 24 سياسة",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCdTyuXgmJkG_O8_75eqej-w"
-        },
-        {
-          "name": "BBC عربي سياسة",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCelk6aHijZq-GJBBB9YpReA"
         }
       ]
     },
