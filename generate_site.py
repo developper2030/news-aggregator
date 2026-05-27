@@ -1711,6 +1711,11 @@ function initSourceFilter() {
     banner.classList.remove('cb-visible');
     /* Remove from DOM after animation */
     setTimeout(function() { banner.remove(); }, 500);
+    /* Activate Google Analytics on accept */
+    if (value === 'accepted' && window.gtag) {
+      gtag('consent', 'update', {'analytics_storage': 'granted'});
+      gtag('event', 'page_view');
+    }
   }
 
   var btnAccept = document.getElementById('cookie-accept');
@@ -3367,6 +3372,53 @@ Disallow: /admin
 # Sitemap: https://YOUR-DOMAIN/sitemap.xml
 """
 
+# ──────────────────────────────────────────────────────────────────────────────
+# CLOUDFLARE PAGES _headers — Security + Cache-Control
+# Written to the domain root only (during EN generation).
+# Docs: https://developers.cloudflare.com/pages/configuration/headers/
+# ──────────────────────────────────────────────────────────────────────────────
+CLOUDFLARE_HEADERS = """\
+# Security headers — apply to every route
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+
+# HTML pages — short cache, revalidate quickly (site updates every 6h in CI)
+/*.html
+  Cache-Control: public, max-age=3600, stale-while-revalidate=43200
+
+# CSS / JS — long cache (content-hash would be ideal but we use fixed names)
+/style.css
+  Cache-Control: public, max-age=604800
+
+/app.js
+  Cache-Control: public, max-age=604800
+
+# Service worker — never cache (must always be fresh)
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# Favicon / icons
+/favicon.svg
+  Cache-Control: public, max-age=2592000
+
+/favicon-32.png
+  Cache-Control: public, max-age=2592000
+
+/icon-192.png
+  Cache-Control: public, max-age=2592000
+
+/icon-512.png
+  Cache-Control: public, max-age=2592000
+
+# RSS feeds — refresh faster
+/rss*.xml
+  Cache-Control: public, max-age=1800, stale-while-revalidate=7200
+"""
+
 # ads.txt — placed at the DOMAIN ROOT only (written during EN generation).
 # Replace placeholder publisher IDs with your real IDs before going live.
 ADS_TXT = """\
@@ -3452,10 +3504,12 @@ def _write_static_assets(out_dir: str = OUTPUT_DIR, lang: str = "ar",
     for filename, content in assets.items():
         with open(os.path.join(out_dir, filename), "w", encoding="utf-8") as f:
             f.write(content)
-    # ads.txt must live at the DOMAIN ROOT — only write for EN (root dir)
+    # Domain-root-only files — only write for EN (which deploys to static/)
     if lang == "en":
         with open(os.path.join(out_dir, "ads.txt"), "w", encoding="utf-8") as f:
             f.write(ADS_TXT)
+        with open(os.path.join(out_dir, "_headers"), "w", encoding="utf-8") as f:
+            f.write(CLOUDFLARE_HEADERS)
     # Minimal 32×32 transparent PNG favicon fallback (only write if not present)
     _FAVICON_32_PNG = (
         b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00 \x00\x00\x00 "
@@ -3910,6 +3964,32 @@ def _breadcrumb_json_ld(site_title: str, cat_name: str,
     return f'  <script type="application/ld+json">{json.dumps(obj, ensure_ascii=False)}</script>'
 
 
+def _ga4_head(ga_id: str) -> str:
+    """Return GA4 <head> snippet with GDPR consent mode.
+
+    - Starts with analytics_storage=denied (no data until user accepts).
+    - If the user already accepted (localStorage), grants immediately.
+    - When ga_id is empty, returns empty string (no tracking).
+    """
+    if not ga_id:
+        return ""
+    _id = esc(ga_id)
+    return f"""\
+  <!-- Google Analytics 4 — consent mode enabled -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id={_id}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('consent', 'default', {{'analytics_storage': 'denied', 'ad_storage': 'denied'}});
+    gtag('js', new Date());
+    gtag('config', '{_id}', {{'anonymize_ip': true, 'send_page_view': false}});
+    if (localStorage.getItem('atlas_cookie_consent') === 'accepted') {{
+      gtag('consent', 'update', {{'analytics_storage': 'granted'}});
+      gtag('event', 'page_view');
+    }}
+  </script>"""
+
+
 # ──────────────────────────────────────────────────────────────────────────────
 # FAVICON SVG (inline, generated as static asset)
 # ──────────────────────────────────────────────────────────────────────────────
@@ -3946,6 +4026,7 @@ def _page(*, title: str, desc: str, nav_html: str,
           hreflang_html: str = "",
           og_image_url: str = "",
           extra_json_ld: str = "",
+          ga_id: str = "",
           s: dict) -> str:
     # ── JSON-LD: WebSite ──────────────────────────────────────────────────────
     sd = json.dumps({
@@ -3998,6 +4079,7 @@ def _page(*, title: str, desc: str, nav_html: str,
   <!-- JSON-LD -->
   <script type="application/ld+json">{sd}</script>
 {extra_json_ld}
+{_ga4_head(ga_id)}
 </head>
 <body id="top" class="{s["body_class"]}">
   <div class="sticky-header">
@@ -4432,9 +4514,11 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         f'<li><a href="{esc(c["slug"])}.html">{esc(c.get("icon",""))} {esc(c["name"])}</a></li>'
         for c in categories if c["slug"] in articles_by_cat
     )
+    _ga_id = settings.get("ga_id", "").strip()
     common = dict(
         desc=site_desc, footer_cats=footer_cats, today_ar=today_ar, now=now,
-        total_articles=total_articles, total_sources=total_sources, s=s,
+        total_articles=total_articles, total_sources=total_sources,
+        ga_id=_ga_id, s=s,
     )
 
     # ── Language switcher helper for this build ───────────────────────────────
