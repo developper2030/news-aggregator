@@ -4046,6 +4046,7 @@ def _page(*, title: str, desc: str, nav_html: str,
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="index, follow">
+  <meta name="google-site-verification" content="S3p0K9iOQqP3aAeKp_xq8anLJEunF-LDN4cPldiVaUY">
   <title>{esc(title)}</title>
   <meta name="description" content="{esc(desc)}">
   <!-- Open Graph -->
