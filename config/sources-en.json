@@ -583,24 +583,24 @@
       "icon": "🔬",
       "sources": [
         {
+          "name": "Veritasium",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA"
+        },
+        {
+          "name": "Kurzgesagt",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCsXVk37bltHxD1rDPwtNM8Q"
+        },
+        {
+          "name": "NASA",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCLA_DiR1FfKNvjuUpBHmylQ"
+        },
+        {
+          "name": "TED-Ed",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCsooa4yRKGN_zEE8iknghZA"
+        },
+        {
           "name": "National Geographic",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCDPk9MG2RexnOMGTD-YnSnA"
-        },
-        {
-          "name": "BBC News",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCj956IF62FbT7Gouszaj9w"
-        },
-        {
-          "name": "DW News",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCbbS1GE942k3UVqpLklyhIA"
-        },
-        {
-          "name": "France 24",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
-        },
-        {
-          "name": "Reuters",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UChqUTb7kYRX8-EiaN3XFrSQ"
         }
       ]
     },
@@ -614,20 +614,20 @@
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC7i94bTxxuZBrllSxXHyFxg"
         },
         {
-          "name": "Sky News",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCkFclpi8U9VJjfxLYoms7Aw"
+          "name": "Sky Sports",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCTU_wC79Dgi9rh4e9-baTqA"
         },
         {
-          "name": "Al Jazeera Sport",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
+          "name": "Premier League",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCi6vApxGkoVz7RwdIi2n7-w"
         },
         {
-          "name": "BBC Sport",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCj956IF62FbT7Gouszaj9w"
+          "name": "NBA",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCWJ2lWNubArHWmf3FIHbfcQ"
         },
         {
-          "name": "Reuters Sports",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UChqUTb7kYRX8-EiaN3XFrSQ"
+          "name": "FIFA",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCEY4pu5B6KdGZDlu9mvGtvw"
         }
       ]
     },
@@ -668,24 +668,24 @@
       "icon": "🍳",
       "sources": [
         {
-          "name": "BBC Food",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCj956IF62FbT7Gouszaj9w"
+          "name": "Tasty",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCJFp8uSYCjXOMnkUyb3CQ3Q"
         },
         {
-          "name": "France 24",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
+          "name": "Gordon Ramsay",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCIEv3lZ_tNXHzL3ox-_uUGQ"
         },
         {
-          "name": "Reuters",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UChqUTb7kYRX8-EiaN3XFrSQ"
+          "name": "Binging with Babish",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCJHA_jMfCvEnv-3kRjTCQXw"
         },
         {
-          "name": "CNN",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCupvZG-5ko_eiXAupbDfxWw"
+          "name": "Joshua Weissman",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UChBEbMKI1eCcejTtmI32UEw"
         },
         {
-          "name": "NBC News",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UChDKyKQ59fYz3JO2fl0Z6sg"
+          "name": "Bon Appétit",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCbpMy0Fg74eXXkvxJrtEn3w"
         }
       ]
     },
@@ -695,24 +695,24 @@
       "icon": "🎬",
       "sources": [
         {
-          "name": "BBC Entertainment",
+          "name": "Vox",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCLXo7UDZvByw2ixzpQCufnA"
+        },
+        {
+          "name": "The Tonight Show",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCzq572hUnxUKVXrNCvqQwog"
+        },
+        {
+          "name": "BBC",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCj956IF62FbT7Gouszaj9w"
         },
         {
-          "name": "CNN Culture",
+          "name": "CNN",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCupvZG-5ko_eiXAupbDfxWw"
         },
         {
           "name": "France 24 Culture",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
-        },
-        {
-          "name": "Reuters Arts",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UChqUTb7kYRX8-EiaN3XFrSQ"
-        },
-        {
-          "name": "Al Jazeera",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
         }
       ]
     },

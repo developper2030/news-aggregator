@@ -4528,24 +4528,24 @@
       "icon": "🔬",
       "sources": [
         {
-          "name": "BBC عربي علوم",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCelk6aHijZq-GJBBB9YpReA"
+          "name": "إدراك",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCboXAcT6m0T49x0zr-cQihQ"
         },
         {
-          "name": "الجزيرة علوم",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
+          "name": "أكاديمية خان عربي",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfF2dJcCCXm6sVT-daQQz5Q"
         },
         {
-          "name": "DW عربي تكنولوجيا",
+          "name": "عالم بلا حدود",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCvxJbCdTUjneWXRedM1T13Q"
+        },
+        {
+          "name": "تيك بالعربي",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCpTSn0cAhi5tTs14vCbtlJw"
+        },
+        {
+          "name": "DW عربي علوم",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC2KCI1AXQVx1_XJmykB7cHA"
-        },
-        {
-          "name": "فرانس 24 علوم",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCdTyuXgmJkG_O8_75eqej-w"
-        },
-        {
-          "name": "سكاي نيوز تقنية",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCIJXOvggjKtCagMfxvcCzAA"
         }
       ]
     },
@@ -4555,24 +4555,24 @@
       "icon": "⚽",
       "sources": [
         {
+          "name": "beIN Sports عربي",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCJUCcJUeh0Cz2xyKwkw5Q1w"
+        },
+        {
+          "name": "SSC الرياضية",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCZ3tVV0D7MlCSd9zqtH5GwA"
+        },
+        {
+          "name": "الكأس الرياضية",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCMhIREK83uEenBR4tKZTPQ"
+        },
+        {
           "name": "الجزيرة رياضة",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
         },
         {
           "name": "سكاي نيوز رياضة",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCIJXOvggjKtCagMfxvcCzAA"
-        },
-        {
-          "name": "الحدث رياضة",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCrj5BGAhtWxDfqbza9T9hqA"
-        },
-        {
-          "name": "فرانس 24 رياضة",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCdTyuXgmJkG_O8_75eqej-w"
-        },
-        {
-          "name": "BBC عربي رياضة",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCelk6aHijZq-GJBBB9YpReA"
         }
       ]
     },
@@ -4590,6 +4590,10 @@
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCrj5BGAhtWxDfqbza9T9hqA"
         },
         {
+          "name": "الميادين",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCO-kV7ZFOiKwcP2U0h4aEbA"
+        },
+        {
           "name": "سكاي نيوز سياسة",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCIJXOvggjKtCagMfxvcCzAA"
         },
@@ -4600,10 +4604,6 @@
         {
           "name": "BBC عربي سياسة",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCelk6aHijZq-GJBBB9YpReA"
-        },
-        {
-          "name": "DW عربي سياسة",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC2KCI1AXQVx1_XJmykB7cHA"
         }
       ]
     },
@@ -4613,24 +4613,24 @@
       "icon": "🍳",
       "sources": [
         {
-          "name": "الجزيرة مطبخ",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
+          "name": "مطبخ منال العالم",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCMM7pqZRzJIWk-YZiH5eKIg"
         },
         {
-          "name": "الحدث لايف ستايل",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCrj5BGAhtWxDfqbza9T9hqA"
+          "name": "فاطمة أبو حاتي",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCyUnkCOIbi-7MImxJcOu3Lg"
         },
         {
-          "name": "سكاي نيوز مطبخ",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCIJXOvggjKtCagMfxvcCzAA"
+          "name": "مطبخ ست البيت",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCUd8UZT7R5i25PewEwkQaUw"
         },
         {
-          "name": "فرانس 24 مطبخ",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCdTyuXgmJkG_O8_75eqej-w"
+          "name": "سنة أولى مطبخ",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC3XRTjJw2QjqxnwKaI9C0Vg"
         },
         {
-          "name": "BBC عربي وصفات",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCelk6aHijZq-GJBBB9YpReA"
+          "name": "مطبخ بيتي",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCup2OJ-u-0HNXf2ZPSjiQHw"
         }
       ]
     },
@@ -4640,24 +4640,24 @@
       "icon": "🎬",
       "sources": [
         {
-          "name": "الجزيرة ثقافة",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
+          "name": "MBC دراما",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCBAEVMr0li9YYF8IwZHfusw"
         },
         {
-          "name": "الحدث ترفيه",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCrj5BGAhtWxDfqbza9T9hqA"
+          "name": "MBC1",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCPvObfhnwu_QNi6mc4z5UPQ"
         },
         {
-          "name": "سكاي نيوز فن",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCIJXOvggjKtCagMfxvcCzAA"
+          "name": "MBC اكشن",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCK0nncZOyJQWv9vC7mtBcIw"
         },
         {
-          "name": "فرانس 24 ثقافة",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCdTyuXgmJkG_O8_75eqej-w"
+          "name": "روتانا موسيقى",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCNhqvQMXIgRfjAGmxQqdNRw"
         },
         {
-          "name": "BBC عربي ترفيه",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCelk6aHijZq-GJBBB9YpReA"
+          "name": "MBC Group",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCy2CIDKYZqqbeJ0NHNcJ9sQ"
         }
       ]
     },

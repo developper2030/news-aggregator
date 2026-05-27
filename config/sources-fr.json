@@ -602,7 +602,11 @@
       "icon": "🔬",
       "sources": [
         {
-          "name": "Arte",
+          "name": "e-penser",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCcziTK2NKeWtWQ6kB5tmQ8Q"
+        },
+        {
+          "name": "Arte Docs",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCHGMBrXUzClgjEzBMei-Jdw"
         },
         {
@@ -622,19 +626,19 @@
       "sources": [
         {
           "name": "L'Équipe",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCio4yaFxDNGMHu9CE0PYJg"
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCyIV8rkza5Uk_sJIhqilBvQ"
         },
         {
-          "name": "BFM Sport",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCUsBMOIUl_ad6JUOC16DpmQ"
-        },
-        {
-          "name": "Euronews Sport",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
+          "name": "beIN SPORTS France",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfj4kQ6_mYO5r4hzX5KloVw"
         },
         {
           "name": "France 24 Sport",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQfwfsi5VrQ8yKZ-UWmAEFg"
+        },
+        {
+          "name": "BFMTV Sport",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCXwDLMDV86ldKoFVc_g8P0g"
         }
       ]
     },
@@ -648,11 +652,11 @@
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQfwfsi5VrQ8yKZ-UWmAEFg"
         },
         {
-          "name": "BFM TV Politique",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCUsBMOIUl_ad6JUOC16DpmQ"
+          "name": "BFMTV",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCXwDLMDV86ldKoFVc_g8P0g"
         },
         {
-          "name": "Arte Politique",
+          "name": "Arte Géopolitique",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCHGMBrXUzClgjEzBMei-Jdw"
         },
         {
@@ -668,23 +672,23 @@
       "sources": [
         {
           "name": "Marmiton",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCbJT4BWy7Y5dZalqKu0zIug"
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCmKCpHH5ATFMURHTRC2jLyA"
         },
         {
-          "name": "Arte Gastronomie",
+          "name": "Hervé Cuisine",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCgCEqjKOabA2_IvZ-agkQCQ"
+        },
+        {
+          "name": "Julie Andrieu",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC2MZZuIDWw-YHcWejxQaiCg"
+        },
+        {
+          "name": "Arte Food",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCHGMBrXUzClgjEzBMei-Jdw"
         },
         {
           "name": "France 24 Lifestyle",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQfwfsi5VrQ8yKZ-UWmAEFg"
-        },
-        {
-          "name": "BFM Lifestyle",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCUsBMOIUl_ad6JUOC16DpmQ"
-        },
-        {
-          "name": "Euronews Culture",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
         }
       ]
     },
@@ -694,6 +698,10 @@
       "icon": "🎬",
       "sources": [
         {
+          "name": "CANAL+",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCb4UAZwZqS4a35FrBcLlMXA"
+        },
+        {
           "name": "Arte",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCHGMBrXUzClgjEzBMei-Jdw"
         },
@@ -702,16 +710,12 @@
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQfwfsi5VrQ8yKZ-UWmAEFg"
         },
         {
-          "name": "BFM Culture",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCUsBMOIUl_ad6JUOC16DpmQ"
+          "name": "BFMTV",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCXwDLMDV86ldKoFVc_g8P0g"
         },
         {
           "name": "Euronews Culture",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
-        },
-        {
-          "name": "L'Équipe",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCio4yaFxDNGMHu9CE0PYJg"
         }
       ]
     },

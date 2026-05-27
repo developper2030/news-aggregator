@@ -549,6 +549,14 @@
       "icon": "🔬",
       "sources": [
         {
+          "name": "En Pocas Palabras – Kurzgesagt",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCZcvCpFcLxOKGbMocVgLjEA"
+        },
+        {
+          "name": "Date un Vlog",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQX_MZRCaluNKxkywkLEgfA"
+        },
+        {
           "name": "DW Ciencia",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCT4Jg8h03dD0iN3Pb5L0PMA"
         },
@@ -567,6 +575,14 @@
       "name": "Deportes",
       "icon": "⚽",
       "sources": [
+        {
+          "name": "LaLiga EA Sports",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCTv-XvfzLX3i4IGWAm4sbmA"
+        },
+        {
+          "name": "Real Madrid",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCLiS9vTXRNT1RwOTGqTN1og"
+        },
         {
           "name": "DW Deporte",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCT4Jg8h03dD0iN3Pb5L0PMA"
@@ -606,6 +622,10 @@
       "icon": "🍳",
       "sources": [
         {
+          "name": "Canal Cocina",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCMCQlw54oqPMRnKKRjsRnYA"
+        },
+        {
           "name": "France 24 Gastronomía",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
         },
@@ -624,6 +644,10 @@
       "name": "Entretenimiento",
       "icon": "🎬",
       "sources": [
+        {
+          "name": "El Hormiguero",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCLNZvDlwQJMaQg477NAxvjQ"
+        },
         {
           "name": "France 24 Cultura",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"

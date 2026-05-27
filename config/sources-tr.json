@@ -705,8 +705,16 @@
       "icon": "⚽",
       "sources": [
         {
-          "name": "TRT Spor",
+          "name": "TRT Spor Yıldız",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCebdo7-2NdjcktKzco64iNw"
+        },
+        {
+          "name": "Galatasaray",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCf6aPSUdfZlYpd4CROaEYWQ"
+        },
+        {
+          "name": "Beşiktaş JK",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCLJVUlpsxZcIMECVDcZaM2g"
         },
         {
           "name": "CNN Türk Spor",
@@ -715,10 +723,6 @@
         {
           "name": "NTV Spor",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCRFPZHb9xE176G77Z54zCXA"
-        },
-        {
-          "name": "A Haber Spor",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCKQhfw-lzz0uKnE1fY1PsAA"
         }
       ]
     },
@@ -755,6 +759,10 @@
       "icon": "🍳",
       "sources": [
         {
+          "name": "Refika's Kitchen",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCONn3cHs5mqgCMqf_a4fcSg"
+        },
+        {
           "name": "TRT Haber Mutfak",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCBgTP2LOFVPmq15W-RH-WXA"
         },
@@ -769,10 +777,6 @@
         {
           "name": "Habertürk Yaşam",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UClGZC_r-sUcBdElAtDSrQ5g"
-        },
-        {
-          "name": "A Haber Yaşam",
-          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCKQhfw-lzz0uKnE1fY1PsAA"
         }
       ]
     },
