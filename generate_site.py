@@ -407,6 +407,11 @@ STRINGS: dict[str, dict] = {
         "prices_prices_bc": "أسعار",
         "src_all": "الكل",
         "src_no_results": "لا توجد مقالات من هذا المصدر حالياً",
+        "gdpr_title": "نستخدم ملفات تعريف الارتباط",
+        "gdpr_body": "نستخدم ملفات تعريف الارتباط لتحسين تجربتك وتحليل حركة الزوار. اختر ما يناسبك.",
+        "gdpr_accept": "قبول الكل",
+        "gdpr_reject": "الضروري فقط",
+        "gdpr_policy": "سياسة الخصوصية",
     },
     "en": {
         "lang": "en", "dir": "ltr",
@@ -472,6 +477,11 @@ STRINGS: dict[str, dict] = {
         "prices_prices_bc": "Prices",
         "src_all": "All",
         "src_no_results": "No articles from this source at the moment",
+        "gdpr_title": "We use cookies",
+        "gdpr_body": "We use cookies to improve your experience and analyse traffic. Choose what works for you.",
+        "gdpr_accept": "Accept All",
+        "gdpr_reject": "Essential Only",
+        "gdpr_policy": "Privacy Policy",
     },
     "fr": {
         "lang": "fr", "dir": "ltr",
@@ -537,6 +547,11 @@ STRINGS: dict[str, dict] = {
         "prices_prices_bc": "Prix",
         "src_all": "Tout",
         "src_no_results": "Aucun article de cette source pour le moment",
+        "gdpr_title": "Nous utilisons des cookies",
+        "gdpr_body": "Nous utilisons des cookies pour améliorer votre expérience et analyser le trafic. Faites votre choix.",
+        "gdpr_accept": "Tout accepter",
+        "gdpr_reject": "Essentiel uniquement",
+        "gdpr_policy": "Politique de confidentialité",
     },
     "es": {
         "lang": "es", "dir": "ltr",
@@ -602,6 +617,11 @@ STRINGS: dict[str, dict] = {
         "prices_prices_bc": "Precios",
         "src_all": "Todo",
         "src_no_results": "No hay artículos de esta fuente en este momento",
+        "gdpr_title": "Usamos cookies",
+        "gdpr_body": "Usamos cookies para mejorar tu experiencia y analizar el tráfico. Elige lo que prefieras.",
+        "gdpr_accept": "Aceptar todo",
+        "gdpr_reject": "Solo esenciales",
+        "gdpr_policy": "Política de privacidad",
     },
     "tr": {
         "lang": "tr", "dir": "ltr",
@@ -667,6 +687,11 @@ STRINGS: dict[str, dict] = {
         "prices_prices_bc": "Kurlar",
         "src_all": "Tümü",
         "src_no_results": "Bu kaynaktan şu an makale bulunmuyor",
+        "gdpr_title": "Çerez kullanıyoruz",
+        "gdpr_body": "Deneyiminizi iyileştirmek ve trafiği analiz etmek için çerez kullanıyoruz. Tercihinizi seçin.",
+        "gdpr_accept": "Tümünü kabul et",
+        "gdpr_reject": "Yalnızca zorunlu",
+        "gdpr_policy": "Gizlilik Politikası",
     },
 }
 
@@ -1327,6 +1352,48 @@ body.lang-ltr .nh-text{direction:ltr}
   background:color-mix(in srgb,var(--sc-color,#818cf8) 16%,transparent);
   color:var(--sc-color,#818cf8)
 }
+
+/* ====== GDPR COOKIE BANNER ====== */
+.cookie-banner{
+  position:fixed;bottom:0;left:0;right:0;z-index:9998;
+  background:#1e293b;color:#f1f5f9;
+  padding:14px 20px;
+  box-shadow:0 -4px 24px rgba(0,0,0,.35);
+  border-top:3px solid #3b82f6;
+  transform:translateY(110%);
+  transition:transform .4s cubic-bezier(.16,1,.3,1);
+  will-change:transform;
+}
+.cookie-banner.cb-visible{transform:translateY(0)}
+.cookie-inner{
+  max-width:1100px;margin:0 auto;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.cookie-text{display:flex;flex-direction:column;gap:3px;flex:1;min-width:220px}
+.cookie-text strong{font-size:.9em;font-weight:700;line-height:1.3}
+.cookie-text span{font-size:.78em;opacity:.78;line-height:1.4}
+.cookie-actions{
+  display:flex;align-items:center;gap:10px;flex-shrink:0;flex-wrap:wrap
+}
+.cookie-policy-link{
+  font-size:.78em;color:#93c5fd;text-decoration:underline;white-space:nowrap
+}
+.cookie-btn{
+  padding:8px 20px;border:none;border-radius:7px;
+  cursor:pointer;font-size:.82em;font-weight:600;
+  transition:opacity .15s,background .15s;
+  white-space:nowrap;
+}
+.cookie-btn:hover{opacity:.88}
+.cookie-accept{background:#3b82f6;color:#fff}
+.cookie-reject{background:transparent;color:#94a3b8;border:1px solid #475569}
+.cookie-reject:hover{background:#334155;color:#e2e8f0}
+@media(max-width:600px){
+  .cookie-inner{flex-direction:column;align-items:flex-start}
+  .cookie-actions{width:100%;justify-content:flex-end}
+  .cookie-btn{padding:9px 16px;font-size:.8em}
+}
+.dark-mode .cookie-banner{background:#0f172a;border-color:#2563eb}
 """
 
 APP_JS = r"""
@@ -1624,6 +1691,33 @@ function initSourceFilter() {
     });
   });
 }
+
+/* ====== GDPR COOKIE CONSENT ====== */
+(function() {
+  var CONSENT_KEY = 'atlas_cookie_consent';
+  var banner = document.getElementById('cookie-banner');
+  if (!banner) return;
+
+  /* Already decided — don't show */
+  if (localStorage.getItem(CONSENT_KEY)) return;
+
+  /* Show after short delay so page feels loaded */
+  setTimeout(function() {
+    banner.classList.add('cb-visible');
+  }, 900);
+
+  function dismiss(value) {
+    localStorage.setItem(CONSENT_KEY, value);
+    banner.classList.remove('cb-visible');
+    /* Remove from DOM after animation */
+    setTimeout(function() { banner.remove(); }, 500);
+  }
+
+  var btnAccept = document.getElementById('cookie-accept');
+  var btnReject = document.getElementById('cookie-reject');
+  if (btnAccept) btnAccept.addEventListener('click', function() { dismiss('accepted'); });
+  if (btnReject) btnReject.addEventListener('click', function() { dismiss('rejected'); });
+})();
 """
 
 PRIVACY_HTML = """\
@@ -3273,6 +3367,31 @@ Disallow: /admin
 # Sitemap: https://YOUR-DOMAIN/sitemap.xml
 """
 
+# ads.txt — placed at the DOMAIN ROOT only (written during EN generation).
+# Replace placeholder publisher IDs with your real IDs before going live.
+ADS_TXT = """\
+# ads.txt — atlasnews.solvixi.com
+# https://iabtechlab.com/ads-txt/
+#
+# ── Google AdSense ────────────────────────────────────────────────────────────
+# Uncomment and replace pub-XXXXXXXXXXXXXXXX with your real Publisher ID:
+# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
+#
+# ── Media.net ─────────────────────────────────────────────────────────────────
+# media.net, XXXXXXXXX, DIRECT
+#
+# ── Amazon Publisher Services ────────────────────────────────────────────────
+# amazon.com, XXXXXXXXXXXXXXXXXXXX, DIRECT
+#
+# ── Ezoic ────────────────────────────────────────────────────────────────────
+# ezoic.com, XXXXXXX, DIRECT, XXXXXXXXXXXXXXXX
+#
+# ── AdSense via Ezoic reseller ───────────────────────────────────────────────
+# google.com, pub-XXXXXXXXXXXXXXXX, RESELLER, f08c47fec0942fa0
+#
+# Contact: ads@solvixi.com
+"""
+
 
 def _make_sw(site_url: str = "") -> str:
     """Generate a minimal Service Worker for PWA offline caching."""
@@ -3333,6 +3452,10 @@ def _write_static_assets(out_dir: str = OUTPUT_DIR, lang: str = "ar",
     for filename, content in assets.items():
         with open(os.path.join(out_dir, filename), "w", encoding="utf-8") as f:
             f.write(content)
+    # ads.txt must live at the DOMAIN ROOT — only write for EN (root dir)
+    if lang == "en":
+        with open(os.path.join(out_dir, "ads.txt"), "w", encoding="utf-8") as f:
+            f.write(ADS_TXT)
     # Minimal 32×32 transparent PNG favicon fallback (only write if not present)
     _FAVICON_32_PNG = (
         b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00 \x00\x00\x00 "
@@ -3942,6 +4065,20 @@ def _page(*, title: str, desc: str, nav_html: str,
       <p><a href="privacy.html">{s["privacy"]}</a> · <a href="terms.html">{s["terms"]}</a> · <a href="about.html">{s["about"]}</a> · <a href="contact.html">{s["contact"]}</a> · <a href="advertise.html">{s["advertise"]}</a> · <a href="{esc(rss_url)}" type="application/rss+xml">RSS</a></p>
     </div>
   </footer>
+  <!-- GDPR Cookie Banner -->
+  <div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="{esc(s.get('gdpr_title','Cookies'))}">
+    <div class="cookie-inner">
+      <div class="cookie-text">
+        <strong>{esc(s.get('gdpr_title','We use cookies'))}</strong>
+        <span>{esc(s.get('gdpr_body',''))}</span>
+      </div>
+      <div class="cookie-actions">
+        <a href="privacy.html" class="cookie-policy-link">{esc(s.get('gdpr_policy','Privacy Policy'))}</a>
+        <button id="cookie-reject" class="cookie-btn cookie-reject">{esc(s.get('gdpr_reject','Essential Only'))}</button>
+        <button id="cookie-accept" class="cookie-btn cookie-accept">{esc(s.get('gdpr_accept','Accept All'))}</button>
+      </div>
+    </div>
+  </div>
   <script src="app.js"></script>
 </body>
 </html>"""
