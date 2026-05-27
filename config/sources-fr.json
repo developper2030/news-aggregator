@@ -1,17 +1,17 @@
 {
   "settings": {
-    "site_title": "Actualités Mondiales",
-    "site_description": "Les dernières actualités de sources internationales fiables en un seul endroit",
+    "site_title": "ActualitÃ©s Mondiales",
+    "site_description": "Les derniÃ¨res actualitÃ©s de sources internationales fiables en un seul endroit",
     "oldest_days": 7,
-    "site_url": "https://YOUR-DOMAIN.com/fr",
+    "site_url": "https://atlasnews.solvixi.com/fr",
     "lang_code": "fr",
-    "lang_rule": "French only — all sources must publish content in French"
+    "lang_rule": "French only â€” all sources must publish content in French"
   },
   "categories": [
     {
       "name": "Politique",
       "slug": "politics",
-      "icon": "🏛️",
+      "icon": "ðŸ›ï¸",
       "sources": [
         {
           "name": "Le Monde International",
@@ -72,9 +72,9 @@
       ]
     },
     {
-      "name": "Économie",
+      "name": "Ã‰conomie",
       "slug": "economy",
-      "icon": "💰",
+      "icon": "ðŸ’°",
       "sources": [
         {
           "name": "La Tribune",
@@ -102,7 +102,7 @@
     {
       "name": "Technologie",
       "slug": "tech",
-      "icon": "💻",
+      "icon": "ðŸ’»",
       "sources": [
         {
           "name": "Le Monde Pixels",
@@ -158,10 +158,10 @@
     {
       "name": "Sports",
       "slug": "sports",
-      "icon": "⚽",
+      "icon": "âš½",
       "sources": [
         {
-          "name": "L'Équipe",
+          "name": "L'Ã‰quipe",
           "url": "https://www.lequipe.fr/",
           "article_selector": "h2",
           "link_selector": "a",
@@ -189,7 +189,7 @@
           "base_url": "https://www.francefootball.fr"
         },
         {
-          "name": "L'Équipe du Soir",
+          "name": "L'Ã‰quipe du Soir",
           "url": "https://www.lequipe.fr/Football/",
           "article_selector": "h2",
           "link_selector": "a",
@@ -198,12 +198,12 @@
       ]
     },
     {
-      "name": "Santé & Médecine",
+      "name": "SantÃ© & MÃ©decine",
       "slug": "health",
-      "icon": "🏥",
+      "icon": "ðŸ¥",
       "sources": [
         {
-          "name": "Le Monde Santé",
+          "name": "Le Monde SantÃ©",
           "url": "https://www.lemonde.fr/sante/",
           "article_selector": "h3",
           "link_selector": "a",
@@ -217,7 +217,7 @@
           "base_url": "https://www.pourquoidocteur.fr"
         },
         {
-          "name": "Santé Magazine",
+          "name": "SantÃ© Magazine",
           "url": "https://www.santemagazine.fr/actualites/",
           "article_selector": "h2",
           "link_selector": "a",
@@ -228,7 +228,7 @@
     {
       "name": "Science",
       "slug": "science",
-      "icon": "🧪",
+      "icon": "ðŸ§ª",
       "sources": [
         {
           "name": "Le Monde Sciences",
@@ -256,7 +256,7 @@
     {
       "name": "Culture",
       "slug": "arts",
-      "icon": "🎬",
+      "icon": "ðŸŽ¬",
       "sources": [
         {
           "name": "Le Monde Culture",
@@ -266,7 +266,7 @@
           "base_url": "https://www.lemonde.fr"
         },
         {
-          "name": "Télérama",
+          "name": "TÃ©lÃ©rama",
           "url": "https://www.telerama.fr/",
           "article_selector": "h2",
           "link_selector": "a",
@@ -282,26 +282,26 @@
       ]
     },
     {
-      "name": "Éducation",
+      "name": "Ã‰ducation",
       "slug": "education",
-      "icon": "🎓",
+      "icon": "ðŸŽ“",
       "sources": [
         {
-          "name": "Le Monde Éducation",
+          "name": "Le Monde Ã‰ducation",
           "url": "https://www.lemonde.fr/education/",
           "article_selector": "h3",
           "link_selector": "a",
           "base_url": "https://www.lemonde.fr"
         },
         {
-          "name": "L'Étudiant",
+          "name": "L'Ã‰tudiant",
           "url": "https://www.letudiant.fr/",
           "article_selector": "h2",
           "link_selector": "a",
           "base_url": "https://www.letudiant.fr"
         },
         {
-          "name": "Café pédagogique",
+          "name": "CafÃ© pÃ©dagogique",
           "url": "https://www.cafepedagogique.net/",
           "article_selector": "h2",
           "link_selector": "a",
@@ -315,7 +315,7 @@
           "base_url": "https://www.scienceshumaines.com"
         },
         {
-          "name": "L'Obs Éducation",
+          "name": "L'Obs Ã‰ducation",
           "url": "https://www.nouvelobs.com/education/",
           "article_selector": "h3",
           "link_selector": "a",
@@ -333,7 +333,7 @@
     {
       "name": "Afrique du Nord",
       "slug": "n-africa-fr",
-      "icon": "🇲🇦",
+      "icon": "ðŸ‡²ðŸ‡¦",
       "sources": [
         {
           "name": "Le Monde Afrique",
@@ -368,7 +368,7 @@
     {
       "name": "Europe",
       "slug": "europe-fr",
-      "icon": "🏰",
+      "icon": "ðŸ°",
       "sources": [
         {
           "name": "Le Monde Europe",
@@ -378,7 +378,7 @@
           "base_url": "https://www.lemonde.fr"
         },
         {
-          "name": "Euronews Français",
+          "name": "Euronews FranÃ§ais",
           "url": "https://feeds.feedburner.com/euronews/fr/home/",
           "article_selector": "h3",
           "link_selector": "a",
@@ -403,7 +403,7 @@
     {
       "name": "Asie",
       "slug": "asia-fr",
-      "icon": "🌏",
+      "icon": "ðŸŒ",
       "sources": [
         {
           "name": "Le Monde Asie",
@@ -429,9 +429,9 @@
       ]
     },
     {
-      "name": "Actualités France",
+      "name": "ActualitÃ©s France",
       "slug": "france-fr",
-      "icon": "🇫🇷",
+      "icon": "ðŸ‡«ðŸ‡·",
       "sources": [
         {
           "name": "Le Monde France",
@@ -471,9 +471,9 @@
       ]
     },
     {
-      "name": "Actualités Afrique",
+      "name": "ActualitÃ©s Afrique",
       "slug": "afrique-fr",
-      "icon": "🌍",
+      "icon": "ðŸŒ",
       "sources": [
         {
           "name": "Jeune Afrique",
@@ -499,12 +499,12 @@
       ]
     },
     {
-      "name": "Actualités Amériques",
+      "name": "ActualitÃ©s AmÃ©riques",
       "slug": "ameriques-fr",
-      "icon": "🌎",
+      "icon": "ðŸŒŽ",
       "sources": [
         {
-          "name": "Le Monde Amériques",
+          "name": "Le Monde AmÃ©riques",
           "url": "https://www.lemonde.fr/ameriques/",
           "article_selector": "h3",
           "link_selector": "a",
@@ -529,7 +529,7 @@
     {
       "name": "Moyen-Orient",
       "slug": "moyen-orient-fr",
-      "icon": "🕌",
+      "icon": "ðŸ•Œ",
       "sources": [
         {
           "name": "Le Monde Moyen-Orient",
@@ -556,8 +556,8 @@
     },
     {
       "slug": "vid-news",
-      "name": "Actualités",
-      "icon": "📰",
+      "name": "ActualitÃ©s",
+      "icon": "ðŸ“°",
       "sources": [
         {
           "name": "France 24",
@@ -576,13 +576,13 @@
     {
       "slug": "vid-business",
       "name": "Finance & Affaires",
-      "icon": "💼",
+      "icon": "ðŸ’¼",
       "sources": []
     },
     {
       "slug": "vid-science",
       "name": "Sciences & Technologie",
-      "icon": "🔬",
+      "icon": "ðŸ”¬",
       "sources": [
         {
           "name": "e-penser",
@@ -593,10 +593,10 @@
     {
       "slug": "vid-sports",
       "name": "Sport",
-      "icon": "⚽",
+      "icon": "âš½",
       "sources": [
         {
-          "name": "L'Équipe",
+          "name": "L'Ã‰quipe",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCyIV8rkza5Uk_sJIhqilBvQ"
         },
         {
@@ -608,7 +608,7 @@
     {
       "slug": "vid-politics",
       "name": "Analyses politiques",
-      "icon": "🎙️",
+      "icon": "ðŸŽ™ï¸",
       "sources": [
         {
           "name": "BFMTV",
@@ -619,14 +619,14 @@
     {
       "slug": "vid-cooking",
       "name": "Cuisine",
-      "icon": "🍳",
+      "icon": "ðŸ³",
       "sources": [
         {
           "name": "Marmiton",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCmKCpHH5ATFMURHTRC2jLyA"
         },
         {
-          "name": "Hervé Cuisine",
+          "name": "HervÃ© Cuisine",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCgCEqjKOabA2_IvZ-agkQCQ"
         },
         {
@@ -638,7 +638,7 @@
     {
       "slug": "vid-entertainment",
       "name": "Divertissement",
-      "icon": "🎬",
+      "icon": "ðŸŽ¬",
       "sources": [
         {
           "name": "CANAL+",
@@ -653,10 +653,10 @@
     {
       "name": "Environnement",
       "slug": "environment",
-      "icon": "🌿",
+      "icon": "ðŸŒ¿",
       "sources": [
         {
-          "name": "Le Monde Planète",
+          "name": "Le Monde PlanÃ¨te",
           "type": "rss",
           "url": "https://www.lemonde.fr/planete/rss_full.xml"
         },
@@ -666,7 +666,7 @@
           "url": "https://reporterre.net/spip.php?page=backend"
         },
         {
-          "name": "20 Minutes Planète",
+          "name": "20 Minutes PlanÃ¨te",
           "type": "rss",
           "url": "https://www.20minutes.fr/rss/planete.xml"
         },
@@ -713,7 +713,7 @@
     {
       "name": "Finance & Business",
       "slug": "business",
-      "icon": "💼",
+      "icon": "ðŸ’¼",
       "sources": [
         {
           "name": "Les Echos",
@@ -773,7 +773,7 @@
     {
       "name": "Tourisme & Voyages",
       "slug": "travel",
-      "icon": "✈️",
+      "icon": "âœˆï¸",
       "sources": [
         {
           "name": "Geo.fr",
@@ -862,75 +862,75 @@
   "media_regions": [
     {
       "slug": "vid-news",
-      "name": "Actualités",
-      "icon": "📰"
+      "name": "ActualitÃ©s",
+      "icon": "ðŸ“°"
     },
     {
       "slug": "vid-business",
       "name": "Finance & Affaires",
-      "icon": "💼"
+      "icon": "ðŸ’¼"
     },
     {
       "slug": "vid-science",
       "name": "Sciences & Technologie",
-      "icon": "🔬"
+      "icon": "ðŸ”¬"
     },
     {
       "slug": "vid-sports",
       "name": "Sport",
-      "icon": "⚽"
+      "icon": "âš½"
     },
     {
       "slug": "vid-politics",
       "name": "Analyses politiques",
-      "icon": "🎙️"
+      "icon": "ðŸŽ™ï¸"
     },
     {
       "slug": "vid-cooking",
       "name": "Cuisine",
-      "icon": "🍳"
+      "icon": "ðŸ³"
     },
     {
       "slug": "vid-entertainment",
       "name": "Divertissement",
-      "icon": "🎬"
+      "icon": "ðŸŽ¬"
     }
   ],
   "world_regions": [
     {
       "slug": "france-fr",
       "name": "France",
-      "icon": "🇫🇷"
+      "icon": "ðŸ‡«ðŸ‡·"
     },
     {
       "slug": "n-africa-fr",
       "name": "Afrique du Nord",
-      "icon": "🇲🇦"
+      "icon": "ðŸ‡²ðŸ‡¦"
     },
     {
       "slug": "europe-fr",
       "name": "Europe",
-      "icon": "🏰"
+      "icon": "ðŸ°"
     },
     {
       "slug": "asia-fr",
       "name": "Asie",
-      "icon": "🌏"
+      "icon": "ðŸŒ"
     },
     {
       "slug": "afrique-fr",
       "name": "Afrique",
-      "icon": "🌍"
+      "icon": "ðŸŒ"
     },
     {
       "slug": "ameriques-fr",
-      "name": "Amériques",
-      "icon": "🌎"
+      "name": "AmÃ©riques",
+      "icon": "ðŸŒŽ"
     },
     {
       "slug": "moyen-orient-fr",
       "name": "Moyen-Orient",
-      "icon": "🕌"
+      "icon": "ðŸ•Œ"
     }
   ]
 }

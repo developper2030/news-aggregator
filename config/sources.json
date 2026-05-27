@@ -5,6 +5,7 @@
     "output_file": "static/index.html",
     "site_title": "اخر الأخبار",
     "site_description": "أهم العناوين من مصادر متعددة في مكان واحد",
+    "site_url": "https://atlasnews.solvixi.com/ar",
     "lang_code": "ar",
     "lang_rule": "Arabic only — all sources must publish content in Arabic"
   },

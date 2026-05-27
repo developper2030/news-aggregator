@@ -3323,18 +3323,30 @@ self.addEventListener('fetch', e => {{
 
 def _write_static_assets(out_dir: str = OUTPUT_DIR, lang: str = "ar",
                          site_url: str = "") -> None:
-    """Write CSS, JS, SW and static HTML pages to out_dir."""
+    """Write CSS, JS, SW, favicons and static HTML pages to out_dir."""
     os.makedirs(out_dir, exist_ok=True)
 
     assets = {
-        "style.css":  STYLE_CSS,
-        "app.js":     APP_JS,
-        "robots.txt": ROBOTS_TXT,
-        "sw.js":      _make_sw(site_url),
+        "style.css":   STYLE_CSS,
+        "app.js":      APP_JS,
+        "robots.txt":  ROBOTS_TXT,
+        "sw.js":       _make_sw(site_url),
+        "favicon.svg": FAVICON_SVG,
+        "og-image.svg": OG_IMAGE_SVG,
     }
     for filename, content in assets.items():
         with open(os.path.join(out_dir, filename), "w", encoding="utf-8") as f:
             f.write(content)
+    # Minimal 32×32 transparent PNG favicon fallback (only write if not present)
+    _FAVICON_32_PNG = (
+        b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00 \x00\x00\x00 "
+        b"\x08\x06\x00\x00\x00szz\xf4\x00\x00\x00\x16IDATx\x9cc\xf8\x0f"
+        b"\x00\x01\x01\x00\x05\x18\xd8N\x00\x00\x00\x00IEND\xaeB`\x82"
+    )
+    _fav32 = os.path.join(out_dir, "favicon-32.png")
+    if not os.path.exists(_fav32):
+        with open(_fav32, "wb") as _f:
+            _f.write(_FAVICON_32_PNG)
 
     _privacy_map   = {"en": PRIVACY_HTML_EN,   "fr": PRIVACY_HTML_FR,   "es": PRIVACY_HTML_ES,   "tr": PRIVACY_HTML_TR}
     _about_map     = {"en": ABOUT_HTML_EN,     "fr": ABOUT_HTML_FR,     "es": ABOUT_HTML_ES,     "tr": ABOUT_HTML_TR}
@@ -3688,17 +3700,146 @@ def _sidebar(categories: list, articles_by_cat: dict,
 </div>"""
 
 
+# ──────────────────────────────────────────────────────────────────────────────
+# SEO HELPERS
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Language subpath mapping.  EN lives at the site root; all others have a
+# subpath prefix.  Matches the output directories in run.py.
+_LANG_PATHS: dict[str, str] = {
+    "en": "",
+    "ar": "/ar",
+    "fr": "/fr",
+    "es": "/es",
+    "tr": "/tr",
+}
+
+# BCP-47 hreflang values for each language
+_LANG_HREFLANG: dict[str, str] = {
+    "en": "en",
+    "ar": "ar",
+    "fr": "fr",
+    "es": "es",
+    "tr": "tr",
+}
+
+
+def _hreflang_links(base_url: str, filename: str) -> str:
+    """Return <link rel="alternate" hreflang="…"> tags for all 5 languages.
+
+    base_url — the site root without trailing slash, e.g.
+               "https://atlasnews.solvixi.com"
+    filename — e.g. "index.html", "politics.html"
+    Returns an empty string when base_url is not configured.
+    """
+    if not base_url:
+        return ""
+    base = base_url.rstrip("/")
+    tags = []
+    for lang_code, path in _LANG_PATHS.items():
+        href = f"{base}{path}/{filename}"
+        hl   = _LANG_HREFLANG[lang_code]
+        tags.append(f'  <link rel="alternate" hreflang="{hl}" href="{esc(href)}">')
+    # x-default points to the EN (root) version
+    xdef = f"{base}/{filename}"
+    tags.append(f'  <link rel="alternate" hreflang="x-default" href="{esc(xdef)}">')
+    return "\n".join(tags)
+
+
+def _org_json_ld(site_title: str, site_url: str) -> str:
+    """Return an Organization JSON-LD <script> block."""
+    if not site_url:
+        return ""
+    obj = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": site_title,
+        "url": site_url.rstrip("/") + "/",
+        "logo": site_url.rstrip("/") + "/icon-512.png",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "contact@solvixi.com",
+            "contactType": "customer service",
+        },
+        "sameAs": [],
+    }
+    return f'  <script type="application/ld+json">{json.dumps(obj, ensure_ascii=False)}</script>'
+
+
+def _breadcrumb_json_ld(site_title: str, cat_name: str,
+                        site_url: str, page_file: str) -> str:
+    """Return a BreadcrumbList JSON-LD <script> block for category pages."""
+    if not site_url:
+        return ""
+    base = site_url.rstrip("/")
+    obj = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem", "position": 1,
+                "name": site_title,
+                "item": base + "/",
+            },
+            {
+                "@type": "ListItem", "position": 2,
+                "name": cat_name,
+                "item": f"{base}/{page_file}",
+            },
+        ],
+    }
+    return f'  <script type="application/ld+json">{json.dumps(obj, ensure_ascii=False)}</script>'
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# FAVICON SVG (inline, generated as static asset)
+# ──────────────────────────────────────────────────────────────────────────────
+
+FAVICON_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#1d4ed8"/>
+  <text x="16" y="23" text-anchor="middle" font-family="Arial,sans-serif"
+        font-size="20" font-weight="bold" fill="#ffffff">N</text>
+</svg>
+"""
+
+# Default OG image path (relative).  Override per-page by passing og_image.
+_DEFAULT_OG_IMAGE_PATH = "og-image.png"
+
+# Default OG image (1200×630 SVG rendered as PNG by most scrapers; we supply
+# the SVG source which doubles as the og-image when no PNG is available).
+OG_IMAGE_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#1d4ed8"/>
+  <text x="600" y="280" text-anchor="middle" font-family="Arial,sans-serif"
+        font-size="80" font-weight="bold" fill="#ffffff">Atlas News</text>
+  <text x="600" y="380" text-anchor="middle" font-family="Arial,sans-serif"
+        font-size="36" fill="#93c5fd">Your World in 5 Languages</text>
+</svg>
+"""
+
+
 def _page(*, title: str, desc: str, nav_html: str,
           main_html: str, footer_cats: str,
           today_ar: str, now: str, total_articles: int, total_sources: int,
           world_subnav_html: str = "", ticker_html: str = "",
           lang_switcher_html: str = "",
           canonical: str = "", carousel_html: str = "",
-          rss_url: str = "rss.xml", s: dict) -> str:
+          rss_url: str = "rss.xml",
+          hreflang_html: str = "",
+          og_image_url: str = "",
+          extra_json_ld: str = "",
+          s: dict) -> str:
+    # ── JSON-LD: WebSite ──────────────────────────────────────────────────────
     sd = json.dumps({
         "@context": "https://schema.org", "@type": "WebSite",
         "name": title, "description": desc, "inLanguage": s["in_language"],
+        "url": canonical or "",
     }, ensure_ascii=False)
+    og_img_tags = (
+        f'  <meta property="og:image" content="{esc(og_image_url)}">\n'
+        f'  <meta property="og:image:width" content="1200">\n'
+        f'  <meta property="og:image:height" content="630">\n'
+        f'  <meta name="twitter:image" content="{esc(og_image_url)}">'
+    ) if og_image_url else ""
     return f"""<!DOCTYPE html>
 <html lang="{s["lang"]}" dir="{s["dir"]}">
 <head>
@@ -3707,21 +3848,37 @@ def _page(*, title: str, desc: str, nav_html: str,
   <meta name="robots" content="index, follow">
   <title>{esc(title)}</title>
   <meta name="description" content="{esc(desc)}">
+  <!-- Open Graph -->
   <meta property="og:title" content="{esc(title)}">
   <meta property="og:description" content="{esc(desc)}">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="{s["og_locale"]}">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:url" content="{esc(canonical)}">
+{og_img_tags}
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{esc(title)}">
+  <meta name="twitter:description" content="{esc(desc)}">
+  <!-- Canonical & hreflang -->
   <link rel="canonical" href="{esc(canonical)}">
+{hreflang_html}
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icon-192.png">
+  <!-- PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="{esc(s.get("theme_color","#1d4ed8"))}">
+  <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="{esc(title)}" href="{esc(rss_url)}">
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="{esc(s["font_url"])}" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <!-- JSON-LD -->
   <script type="application/ld+json">{sd}</script>
+{extra_json_ld}
 </head>
 <body id="top" class="{s["body_class"]}">
   <div class="sticky-header">
@@ -4025,6 +4182,37 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
 
     _write_static_assets(out_dir, lang, settings.get("site_url", ""))
 
+    # ── Site URL helpers for SEO ──────────────────────────────────────────────
+    # _site_url = language-specific base (e.g. "https://atlasnews.solvixi.com/ar")
+    # _root_url = domain root without lang path (e.g. "https://atlasnews.solvixi.com")
+    # hreflang needs the root; canonical/breadcrumb need the lang-specific base.
+    _site_url = settings.get("site_url", "").rstrip("/")
+    _lang_prefix = _LANG_PATHS.get(lang, "")  # e.g. "/ar" for AR, "" for EN
+    if _site_url and _lang_prefix and _site_url.endswith(_lang_prefix):
+        _root_url = _site_url[: -len(_lang_prefix)].rstrip("/")
+    else:
+        _root_url = _site_url  # EN: site_url is already the root
+
+    _og_img_url = f"{_root_url}/og-image.svg" if _root_url else ""
+
+    def _make_hreflang(filename: str) -> str:
+        """Generate hreflang links using root domain (cross-language links)."""
+        return _hreflang_links(_root_url, filename) if _root_url else ""
+
+    def _make_org_ld() -> str:
+        return _org_json_ld(site_title, _root_url) if _root_url else ""
+
+    def _make_bc_ld(cat_name: str, page_file: str) -> str:
+        """Breadcrumb JSON-LD — uses the language-specific base URL."""
+        return _breadcrumb_json_ld(site_title, cat_name, _site_url, page_file) if _site_url else ""
+
+    def _page_canonical(filename: str) -> str:
+        """Absolute canonical URL for a page (language-specific path)."""
+        return f"{_site_url}/{filename}" if _site_url else filename
+
+    # Organisation JSON-LD (added once, on every page)
+    _org_ld = _make_org_ld()
+
     # ── Market data (fetched once, used only on economy page) ─────────────────
     _root = os.path.dirname(os.path.abspath(__file__))
     _api_keys: dict = {}
@@ -4179,6 +4367,10 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         main_html=home_sections,
         world_subnav_html=world_subnav,
         carousel_html=home_carousel,
+        canonical=_page_canonical("index.html"),
+        hreflang_html=_make_hreflang("index.html"),
+        og_image_url=_og_img_url,
+        extra_json_ld=_org_ld,
         lang_switcher_html=_lsw("index.html"),
         **common,
     ))
@@ -4254,19 +4446,31 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             cat_ticker = ""
         # RSS link: category-specific feed when available
         cat_rss = f"rss-{slug}.xml" if slug in articles_by_cat else "rss.xml"
-        _wrt(f"{slug}.html", _page(
+        _cat_page_file = f"{slug}.html"
+        _cat_bc_ld = (
+            _make_bc_ld(cat["name"], _cat_page_file)
+            if slug not in region_slugs and slug not in media_slugs_local
+            else ""
+        )
+        _cat_extra_ld = "\n".join(filter(None, [_org_ld, _cat_bc_ld]))
+        # Override desc with category-specific description (common has site_desc)
+        _cat_common = {**common, "desc": cat_desc}
+        _wrt(_cat_page_file, _page(
             title=cat_title,
             nav_html=_nav(categories, articles_by_cat, active=slug,
                           s=s, region_slugs=region_slugs, has_world=has_world,
                           media_slugs=media_slugs_local, has_media=has_media),
             main_html=cat_section,
-            canonical=f"{slug}.html",
+            canonical=_page_canonical(_cat_page_file),
+            hreflang_html=_make_hreflang(_cat_page_file),
+            og_image_url=_og_img_url,
+            extra_json_ld=_cat_extra_ld,
             world_subnav_html=page_world_subnav,
             ticker_html=cat_ticker,
             carousel_html=cat_carousel,
             rss_url=cat_rss,
-            lang_switcher_html=_lsw(f"{slug}.html"),
-            **common,
+            lang_switcher_html=_lsw(_cat_page_file),
+            **_cat_common,
         ))
         pages_written += 1
 
@@ -4278,7 +4482,10 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
                               s=s, region_slugs=region_slugs, has_world=has_world,
                               media_slugs=media_slugs_local),
                 main_html=_prices_main_html(_market_data, s=s),
-                canonical="prices.html",
+                canonical=_page_canonical("prices.html"),
+                hreflang_html=_make_hreflang("prices.html"),
+                og_image_url=_og_img_url,
+                extra_json_ld=_org_ld,
                 world_subnav_html="",
                 ticker_html=_economy_widget(s, active_tab="prices"),
                 carousel_html="",
@@ -4342,7 +4549,10 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
                           media_slugs=media_slugs_local, has_media=has_media),
             main_html=world_sections,
             world_subnav_html=_world_subnav(world_regions=world_regions, s=s),
-            canonical="world.html",
+            canonical=_page_canonical("world.html"),
+            hreflang_html=_make_hreflang("world.html"),
+            og_image_url=_og_img_url,
+            extra_json_ld=_org_ld,
             carousel_html=world_carousel,
             lang_switcher_html=_lsw("world.html"),
             **common,
@@ -4408,7 +4618,10 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
                           media_slugs=media_slugs_local, has_media=has_media),
             main_html=media_sections,
             world_subnav_html=_media_subnav(media_regions=media_regions_list, s=s),
-            canonical="media.html",
+            canonical=_page_canonical("media.html"),
+            hreflang_html=_make_hreflang("media.html"),
+            og_image_url=_og_img_url,
+            extra_json_ld=_org_ld,
             carousel_html=media_carousel,
             lang_switcher_html=_lsw("media.html"),
             **common,
