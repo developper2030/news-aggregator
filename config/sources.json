@@ -4769,99 +4769,20 @@
       "icon": "💼",
       "sources": [
         {
-          "name": "Forbes الشرق الأوسط",
-          "url": "https://www.forbesmiddleeast.com/ar",
-          "selectors": {
-            "article_selector": "article, .article-card",
-            "heading_tags": [
-              "h2",
-              "h3"
-            ],
-            "min_title_length": 15,
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar"
-            ]
-          }
+          "name": "الشرق الأوسط - اقتصاد",
+          "url": "https://aawsat.com/feed/economy"
         },
         {
-          "name": "زاوية أعمال",
-          "url": "https://www.zawya.com/ar/business",
-          "selectors": {
-            "article_selector": "article, .story-card",
-            "heading_tags": [
-              "h2",
-              "h3"
-            ],
-            "min_title_length": 15,
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar"
-            ]
-          }
+          "name": "سكاي نيوز - أعمال",
+          "url": "https://www.skynewsarabia.com/web/rss/business.xml"
         },
         {
-          "name": "مباشر أعمال",
-          "url": "https://www.mubasher.info/ar/news/business",
-          "selectors": {
-            "article_selector": "article, .news-item",
-            "heading_tags": [
-              "h2",
-              "h3"
-            ],
-            "min_title_length": 15,
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar"
-            ]
-          }
+          "name": "روسيا اليوم - أعمال",
+          "url": "https://arabic.rt.com/rss/business"
         },
         {
-          "name": "أرقام - أعمال",
-          "url": "https://www.argaam.com/ar/article/articlelist/latest",
-          "selectors": {
-            "article_selector": "article, .article-item",
-            "heading_tags": [
-              "h2",
-              "h3"
-            ],
-            "min_title_length": 15,
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar"
-            ]
-          }
-        },
-        {
-          "name": "الشرق للأخبار - ريادة",
-          "url": "https://asharq.com/startups/",
-          "selectors": {
-            "article_selector": "article, .story-card",
-            "heading_tags": [
-              "h2",
-              "h3"
-            ],
-            "min_title_length": 15,
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar"
-            ]
-          }
+          "name": "الجزيرة - اقتصاد",
+          "url": "https://www.aljazeera.net/rss/ebusiness"
         }
       ]
     },
@@ -4870,6 +4791,10 @@
       "slug": "travel",
       "icon": "✈️",
       "sources": [
+        {
+          "name": "الشرق الأوسط - سياحة",
+          "url": "https://aawsat.com/feed/travel"
+        },
         {
           "name": "CNN عربي - سفر",
           "url": "https://arabic.cnn.com/travel",
