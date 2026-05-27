@@ -105,6 +105,9 @@ MEDIA_SLUGS: set[str] = {
     "vid-sports", "vid-politics", "vid-cooking", "vid-entertainment"
 }
 
+# Slugs that are economy sub-sections (hidden from main nav & home — accessible only via economy strip)
+ECON_SUB_SLUGS: set[str] = {"business", "travel"}
+
 # Ordered world-region display data
 WORLD_REGIONS = [
     {"slug": "morocco",    "name": "المغرب وشمال أفريقيا", "icon": "🇲🇦"},
@@ -2670,8 +2673,8 @@ def _nav(categories: list, articles_by_cat: dict, active: str = "home",
 
     for cat in categories:
         slug = cat["slug"]
-        if slug in region_slugs or slug in media_slugs:
-            continue  # regions/media live in subnav, not main nav
+        if slug in region_slugs or slug in media_slugs or slug in ECON_SUB_SLUGS:
+            continue  # regions/media/econ-sub live in subnav, not main nav
         cls = "nav-tab active" if active == slug else "nav-tab"
         html += (
             f'<a href="{esc(slug)}.html" class="{cls}" data-cat="{esc(slug)}">'
@@ -3169,8 +3172,8 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
     home_sections = ""
     for cat in categories:
         slug     = cat["slug"]
-        if slug in region_slugs or slug in media_slugs_local:
-            continue  # regions/media shown in subnav / world.html / media.html, not home
+        if slug in region_slugs or slug in media_slugs_local or slug in ECON_SUB_SLUGS:
+            continue  # regions/media/econ-sub shown elsewhere, not home
         cat_data = articles_by_cat.get(slug)
         if not cat_data or not cat_data["articles"]:
             continue
@@ -3204,7 +3207,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
     home_carousel = _carousel(_gather_carousel(
         articles_by_cat,
         [(c["slug"], c["name"], c.get("icon", ""))
-         for c in categories if c["slug"] not in region_slugs and c["slug"] not in media_slugs_local],
+         for c in categories if c["slug"] not in region_slugs and c["slug"] not in media_slugs_local and c["slug"] not in ECON_SUB_SLUGS],
         per_slug=3,
     ), s=s)
     _wrt("index.html", _page(
