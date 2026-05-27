@@ -49,8 +49,31 @@ MIN_DELAY = 0.5
 MAX_DELAY = 2.0
 MAX_WORKERS = 4
 
+# ── Retry settings ─────────────────────────────────────────────────────────
+_RETRY_MAX   = 2   # extra attempts after first failure (3 total)
+_RETRY_DELAY = 3   # base seconds between attempts (3 s -> 6 s)
+
 # robots.txt results are cached per run: {origin: bool}
 _robots_cache: dict[str, bool] = {}
+
+
+def _is_retryable_exc(exc: Exception) -> bool:
+    """Return True for transient network errors that are worth retrying.
+
+    HTTP 4xx (client errors) are *not* retried — they won't improve.
+    HTTP 5xx, DNS failures, connection resets and timeouts are retried.
+    """
+    import urllib.error as _ue
+    import socket as _sock
+    if isinstance(exc, _ue.HTTPError):
+        return exc.code >= 500          # server-side errors only
+    return isinstance(exc, (
+        _ue.URLError,                   # wraps most urllib network errors
+        TimeoutError,
+        ConnectionError,
+        OSError,
+        _sock.timeout,
+    ))
 
 # Non-article URL path patterns
 _NON_ARTICLE_PATTERNS = re.compile(
@@ -517,56 +540,171 @@ def extract_articles_yt_feed(feed_text: str, source_name: str, max_articles: int
     return articles
 
 
+# ── RSS auto-discovery ─────────────────────────────────────────────────────
+_RSS_FEED_PATHS = (
+    "/feed", "/feed.xml", "/rss", "/rss.xml", "/rss/news",
+    "/atom.xml", "/feed/atom", "/index.xml",
+    "/en/rss", "/ar/rss", "/fr/rss", "/es/rss", "/tr/rss",
+    "/news/rss", "/news/feed", "/feeds/posts/default",   # Blogger
+)
+
+
+def _discover_rss(base_url: str) -> str | None:
+    """Auto-discover an RSS/Atom feed for the site at *base_url*.
+
+    Strategy:
+      1. Fetch the page and scan <link rel="alternate" type="application/rss+xml"> tags.
+      2. Probe the most common feed paths.
+
+    Returns the first working feed URL, or None if nothing is found.
+    """
+    parsed   = urlparse(base_url)
+    origin   = f"{parsed.scheme}://{parsed.netloc}"
+    candidates: list[str] = []
+
+    # ── Try declared feed links from page HTML ──────────────────────────────
+    try:
+        html = fetch_html(base_url)
+        soup = BeautifulSoup(html, "html.parser")
+        for tag in soup.find_all("link"):
+            rel  = tag.get("rel") or []
+            mime = tag.get("type", "")
+            if "alternate" not in rel:
+                continue
+            if "rss" not in mime and "atom" not in mime:
+                continue
+            href = (tag.get("href") or "").strip()
+            if not href:
+                continue
+            if href.startswith("//"):
+                href = f"{parsed.scheme}:{href}"
+            elif href.startswith("/"):
+                href = origin + href
+            elif not href.startswith("http"):
+                href = f"{origin}/{href}"
+            candidates.append(href)
+    except Exception:
+        pass  # page unreachable; fall through to common-path probing
+
+    # ── Probe common feed paths ─────────────────────────────────────────────
+    for path in _RSS_FEED_PATHS:
+        candidates.append(origin + path)
+
+    seen: set[str] = set()
+    for feed_url in candidates:
+        if feed_url in seen:
+            continue
+        seen.add(feed_url)
+        try:
+            content = fetch_html(feed_url)
+            snippet = content.lstrip()[:300]
+            if "<rss" in snippet or "<feed" in snippet or "<atom:feed" in snippet:
+                logger.info("RSS auto-discovered: %s -> %s", base_url, feed_url)
+                return feed_url
+        except Exception:
+            continue
+
+    return None
+
+
 def scrape_source(source: dict, category_name: str, category_slug: str, max_articles: int) -> list[dict]:
-    """Scrape one source. Called from a thread pool — adds a small random delay."""
+    """Scrape one source. Called from a thread pool — adds a small random delay.
+
+    Transient network errors (5xx, timeouts, connection resets) are retried up to
+    _RETRY_MAX extra times with linear back-off (_RETRY_DELAY * attempt seconds).
+    Non-retryable errors (4xx, parse errors, robots.txt block) give up immediately.
+    """
     articles: list[dict] = []
     url         = source.get("url", "")
     selectors   = source.get("selectors")
     use_browser = source.get("use_browser", False)
+    src_name    = source.get("name", url)
     time.sleep(random.uniform(MIN_DELAY, MAX_DELAY))
 
-    try:
-        # ── YouTube RSS feeds — parse as Atom XML, no robots.txt check needed ──
-        if _is_yt_feed_url(url):
-            logger.info("Fetching YT feed %s (%s)...", source.get("name"), url)
-            xml_text = fetch_html(url)
-            articles = extract_articles_yt_feed(xml_text, source.get("name", ""), max_articles)
-            logger.info("-> %d videos from %s", len(articles), source.get("name"))
-            return articles
+    for attempt in range(_RETRY_MAX + 1):
+        # ── Wait before each retry (not before the first attempt) ──────────
+        if attempt:
+            wait = _RETRY_DELAY * attempt
+            logger.warning(
+                "Retrying %s (attempt %d/%d) in %ds...", src_name, attempt, _RETRY_MAX, wait
+            )
+            time.sleep(wait)
 
-        # ── Generic RSS / Atom feeds ─────────────────────────────────────────
-        if _is_rss_feed_url(url):
-            logger.info("Fetching RSS feed %s (%s)...", source.get("name"), url)
-            xml_text = fetch_html(url)
-            articles = extract_articles_rss(xml_text, source.get("name", ""), max_articles)
-            logger.info("-> %d articles from %s", len(articles), source.get("name"))
-            return articles
-
-        if not can_fetch(url):
-            logger.info("Skipping %s (disallowed by robots.txt)", source.get("name"))
-            return articles
-
-        logger.info("Fetching %s (%s)...", source.get("name"), url)
-        if use_browser:
-            if not _PLAYWRIGHT_AVAILABLE:
-                logger.error("FAILED %s: playwright not installed", source.get("name"))
+        try:
+            # ── YouTube RSS feeds — parse as Atom XML, no robots.txt check ──
+            if _is_yt_feed_url(url):
+                logger.info("Fetching YT feed %s (%s)...", src_name, url)
+                xml_text = fetch_html(url)
+                articles = extract_articles_yt_feed(xml_text, src_name, max_articles)
+                logger.info("-> %d videos from %s", len(articles), src_name)
                 return articles
-            logger.info("Using browser for %s", source.get("name"))
-            html = fetch_html_browser(url)
-        else:
-            html = fetch_html(url)
-        logger.debug("Got %d bytes from %s", len(html), source.get("name"))
 
-        articles = extract_articles_bs4(html, url, source.get("name", ""), max_articles, selectors)
+            # ── Generic RSS / Atom feeds ────────────────────────────────────
+            if _is_rss_feed_url(url):
+                logger.info("Fetching RSS feed %s (%s)...", src_name, url)
+                xml_text = fetch_html(url)
+                articles = extract_articles_rss(xml_text, src_name, max_articles)
+                logger.info("-> %d articles from %s", len(articles), src_name)
+                return articles
 
-        if not articles:
-            logger.info("No articles via selectors — trying fallback for %s", source.get("name"))
-            articles = extract_articles_fallback(html, url, source.get("name", ""), max_articles)
+            if not can_fetch(url):
+                # ── Step 1: auto-discover an RSS feed (not subject to robots.txt) ──
+                rss_url = _discover_rss(url)
+                if rss_url:
+                    logger.info(
+                        "Robots.txt blocked %s — using auto-discovered feed: %s",
+                        src_name, rss_url,
+                    )
+                    try:
+                        xml_text = fetch_html(rss_url)
+                        articles = extract_articles_rss(xml_text, src_name, max_articles)
+                        logger.info("-> %d articles from %s (auto-RSS)", len(articles), src_name)
+                        return articles
+                    except Exception as exc:
+                        logger.warning("Auto-RSS fetch failed for %s: %s", src_name, exc)
 
-        logger.info("-> %d articles from %s", len(articles), source.get("name"))
+                # ── Step 2: honour ignore_robots override in source config ──────
+                if not source.get("ignore_robots", False):
+                    logger.info("Skipping %s (disallowed by robots.txt)", src_name)
+                    return articles
+                logger.info(
+                    "Bypassing robots.txt for %s (ignore_robots=true in config)", src_name
+                )
+                # fall through to normal HTML scraping
 
-    except Exception as exc:
-        logger.error("FAILED %s: %s", source.get("name"), exc)
+            logger.info("Fetching %s (%s)...", src_name, url)
+            if use_browser:
+                if not _PLAYWRIGHT_AVAILABLE:
+                    logger.error("FAILED %s: playwright not installed", src_name)
+                    return articles
+                logger.info("Using browser for %s", src_name)
+                html = fetch_html_browser(url)
+            else:
+                html = fetch_html(url)
+            logger.debug("Got %d bytes from %s", len(html), src_name)
+
+            articles = extract_articles_bs4(html, url, src_name, max_articles, selectors)
+
+            if not articles:
+                logger.info("No articles via selectors — trying fallback for %s", src_name)
+                articles = extract_articles_fallback(html, url, src_name, max_articles)
+
+            logger.info("-> %d articles from %s", len(articles), src_name)
+            return articles  # ← success, exit retry loop
+
+        except Exception as exc:
+            if _is_retryable_exc(exc):
+                if attempt < _RETRY_MAX:
+                    logger.warning("TRANSIENT ERROR %s: %s", src_name, exc)
+                    continue          # will retry
+                # All attempts exhausted
+                logger.error(
+                    "FAILED %s after %d attempt(s): %s", src_name, _RETRY_MAX + 1, exc
+                )
+            else:
+                # Non-retryable (4xx, parse error, etc.) — log and give up
+                logger.error("FAILED %s: %s", src_name, exc)
+                break
 
     return articles
 
