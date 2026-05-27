@@ -5,13 +5,13 @@
     "oldest_days": 7,
     "site_url": "https://atlasnews.solvixi.com",
     "lang_code": "en",
-    "lang_rule": "English only â€” all sources must publish content in English"
+    "lang_rule": "English only — all sources must publish content in English"
   },
   "categories": [
     {
       "name": "Politics",
       "slug": "politics",
-      "icon": "ðŸ›ï¸",
+      "icon": "🏛️",
       "sources": [
         {
           "name": "BBC World News",
@@ -46,7 +46,7 @@
     {
       "name": "Economy",
       "slug": "economy",
-      "icon": "ðŸ’°",
+      "icon": "💰",
       "sources": [
         {
           "name": "Reuters Business",
@@ -74,7 +74,7 @@
     {
       "name": "Technology",
       "slug": "tech",
-      "icon": "ðŸ’»",
+      "icon": "💻",
       "sources": [
         {
           "name": "TechCrunch",
@@ -116,7 +116,7 @@
     {
       "name": "Sports",
       "slug": "sports",
-      "icon": "âš½",
+      "icon": "⚽",
       "sources": [
         {
           "name": "BBC Sport",
@@ -144,7 +144,7 @@
     {
       "name": "Health & Medicine",
       "slug": "health",
-      "icon": "ðŸ¥",
+      "icon": "🏥",
       "sources": [
         {
           "name": "Reuters Health",
@@ -165,7 +165,7 @@
     {
       "name": "Science",
       "slug": "science",
-      "icon": "ðŸ§ª",
+      "icon": "🧪",
       "sources": [
         {
           "name": "BBC Science",
@@ -186,7 +186,7 @@
     {
       "name": "Entertainment",
       "slug": "arts",
-      "icon": "ðŸŽ¬",
+      "icon": "🎬",
       "sources": [
         {
           "name": "BBC Entertainment",
@@ -207,7 +207,7 @@
     {
       "name": "Education",
       "slug": "education",
-      "icon": "ðŸŽ“",
+      "icon": "🎓",
       "sources": [
         {
           "name": "The Guardian Education",
@@ -270,7 +270,7 @@
     {
       "name": "North Africa",
       "slug": "n-africa-en",
-      "icon": "ðŸ‡²ðŸ‡¦",
+      "icon": "🇲🇦",
       "sources": [
         {
           "name": "Al Jazeera Africa",
@@ -305,7 +305,7 @@
     {
       "name": "Europe",
       "slug": "europe-en",
-      "icon": "ðŸ°",
+      "icon": "🏰",
       "sources": [
         {
           "name": "BBC Europe",
@@ -340,7 +340,7 @@
     {
       "name": "Americas",
       "slug": "americas-en",
-      "icon": "ðŸŒŽ",
+      "icon": "🌎",
       "sources": [
         {
           "name": "Reuters Americas",
@@ -368,7 +368,7 @@
     {
       "name": "UK News",
       "slug": "uk-en",
-      "icon": "ðŸ‡¬ðŸ‡§",
+      "icon": "🇬🇧",
       "sources": [
         {
           "name": "BBC UK",
@@ -403,7 +403,7 @@
     {
       "name": "US News",
       "slug": "us-en",
-      "icon": "ðŸ‡ºðŸ‡¸",
+      "icon": "🇺🇸",
       "sources": [
         {
           "name": "Reuters US",
@@ -431,7 +431,7 @@
     {
       "name": "Middle East",
       "slug": "mideast-en",
-      "icon": "ðŸ•Œ",
+      "icon": "🕌",
       "sources": [
         {
           "name": "Al Jazeera English",
@@ -466,7 +466,7 @@
     {
       "name": "Africa",
       "slug": "africa-en",
-      "icon": "ðŸŒ",
+      "icon": "🌍",
       "sources": [
         {
           "name": "Al Jazeera Africa",
@@ -494,7 +494,7 @@
     {
       "name": "Asia",
       "slug": "asia-en",
-      "icon": "ðŸŒ",
+      "icon": "🌏",
       "sources": [
         {
           "name": "Al Jazeera Asia",
@@ -522,7 +522,7 @@
     {
       "slug": "vid-news",
       "name": "News",
-      "icon": "ðŸ“°",
+      "icon": "📰",
       "sources": [
         {
           "name": "BBC News",
@@ -553,7 +553,7 @@
     {
       "slug": "vid-business",
       "name": "Business & Finance",
-      "icon": "ðŸ’¼",
+      "icon": "💼",
       "sources": [
         {
           "name": "Bloomberg",
@@ -576,7 +576,7 @@
     {
       "slug": "vid-science",
       "name": "Science & Technology",
-      "icon": "ðŸ”¬",
+      "icon": "🔬",
       "sources": [
         {
           "name": "Veritasium",
@@ -603,7 +603,7 @@
     {
       "slug": "vid-sports",
       "name": "Sports",
-      "icon": "âš½",
+      "icon": "⚽",
       "sources": [
         {
           "name": "ESPN",
@@ -630,7 +630,7 @@
     {
       "slug": "vid-politics",
       "name": "Political Analysis",
-      "icon": "ðŸŽ™ï¸",
+      "icon": "🎙️",
       "sources": [
         {
           "name": "PBS NewsHour",
@@ -645,7 +645,7 @@
     {
       "slug": "vid-cooking",
       "name": "Cuisine",
-      "icon": "ðŸ³",
+      "icon": "🍳",
       "sources": [
         {
           "name": "Tasty",
@@ -664,7 +664,7 @@
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UChBEbMKI1eCcejTtmI32UEw"
         },
         {
-          "name": "Bon AppÃ©tit",
+          "name": "Bon Appétit",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCbpMy0Fg74eXXkvxJrtEn3w"
         }
       ]
@@ -672,7 +672,7 @@
     {
       "slug": "vid-entertainment",
       "name": "Entertainment",
-      "icon": "ðŸŽ¬",
+      "icon": "🎬",
       "sources": [
         {
           "name": "Vox",
@@ -695,7 +695,7 @@
     {
       "name": "Environment",
       "slug": "environment",
-      "icon": "ðŸŒ¿",
+      "icon": "🌿",
       "sources": [
         {
           "name": "BBC Environment",
@@ -755,7 +755,7 @@
     {
       "name": "Finance & Business",
       "slug": "business",
-      "icon": "ðŸ’¼",
+      "icon": "💼",
       "sources": [
         {
           "name": "Business Insider",
@@ -801,7 +801,7 @@
     {
       "name": "Travel & Tourism",
       "slug": "travel",
-      "icon": "âœˆï¸",
+      "icon": "✈️",
       "sources": [
         {
           "name": "Travel + Leisure",
@@ -809,7 +809,7 @@
           "url": "https://www.travelandleisure.com/rss/all.rss"
         },
         {
-          "name": "CondÃ© Nast Traveler",
+          "name": "Condé Nast Traveler",
           "type": "rss",
           "url": "https://www.cntraveler.com/feed/rss"
         },
@@ -877,79 +877,79 @@
     {
       "slug": "vid-news",
       "name": "News",
-      "icon": "ðŸ“°"
+      "icon": "📰"
     },
     {
       "slug": "vid-business",
       "name": "Business & Finance",
-      "icon": "ðŸ’¼"
+      "icon": "💼"
     },
     {
       "slug": "vid-science",
       "name": "Science & Technology",
-      "icon": "ðŸ”¬"
+      "icon": "🔬"
     },
     {
       "slug": "vid-sports",
       "name": "Sports",
-      "icon": "âš½"
+      "icon": "⚽"
     },
     {
       "slug": "vid-politics",
       "name": "Political Analysis",
-      "icon": "ðŸŽ™ï¸"
+      "icon": "🎙️"
     },
     {
       "slug": "vid-cooking",
       "name": "Cuisine",
-      "icon": "ðŸ³"
+      "icon": "🍳"
     },
     {
       "slug": "vid-entertainment",
       "name": "Entertainment",
-      "icon": "ðŸŽ¬"
+      "icon": "🎬"
     }
   ],
   "world_regions": [
     {
       "slug": "uk-en",
       "name": "United Kingdom",
-      "icon": "ðŸ‡¬ðŸ‡§"
+      "icon": "🇬🇧"
     },
     {
       "slug": "us-en",
       "name": "United States",
-      "icon": "ðŸ‡ºðŸ‡¸"
+      "icon": "🇺🇸"
     },
     {
       "slug": "n-africa-en",
       "name": "North Africa",
-      "icon": "ðŸ‡²ðŸ‡¦"
+      "icon": "🇲🇦"
     },
     {
       "slug": "europe-en",
       "name": "Europe",
-      "icon": "ðŸ°"
+      "icon": "🏰"
     },
     {
       "slug": "asia-en",
       "name": "Asia",
-      "icon": "ðŸŒ"
+      "icon": "🌏"
     },
     {
       "slug": "africa-en",
       "name": "Africa",
-      "icon": "ðŸŒ"
+      "icon": "🌍"
     },
     {
       "slug": "americas-en",
       "name": "Americas",
-      "icon": "ðŸŒŽ"
+      "icon": "🌎"
     },
     {
       "slug": "mideast-en",
       "name": "Middle East",
-      "icon": "ðŸ•Œ"
+      "icon": "🕌"
     }
   ]
 }

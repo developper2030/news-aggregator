@@ -1,20 +1,20 @@
 {
   "settings": {
     "site_title": "Noticias Mundiales",
-    "site_description": "Los Ãºltimos titulares de fuentes internacionales de confianza en un solo lugar",
+    "site_description": "Los últimos titulares de fuentes internacionales de confianza en un solo lugar",
     "oldest_days": 7,
     "site_url": "https://atlasnews.solvixi.com/es",
     "lang_code": "es",
-    "lang_rule": "Spanish only â€” all sources must publish content in Spanish"
+    "lang_rule": "Spanish only — all sources must publish content in Spanish"
   },
   "categories": [
     {
-      "name": "PolÃ­tica",
+      "name": "Política",
       "slug": "politics",
-      "icon": "ðŸ›ï¸",
+      "icon": "🏛️",
       "sources": [
         {
-          "name": "El PaÃ­s Internacional",
+          "name": "El País Internacional",
           "url": "https://elpais.com/internacional/",
           "article_selector": "h2",
           "link_selector": "a",
@@ -56,7 +56,7 @@
           "base_url": "https://www.europapress.es"
         },
         {
-          "name": "El PaÃ­s PolÃ­tica",
+          "name": "El País Política",
           "url": "https://elpais.com/noticias/politica/",
           "article_selector": "h2",
           "link_selector": "a",
@@ -65,19 +65,19 @@
       ]
     },
     {
-      "name": "EconomÃ­a",
+      "name": "Economía",
       "slug": "economy",
-      "icon": "ðŸ’°",
+      "icon": "💰",
       "sources": [
         {
-          "name": "El PaÃ­s EconomÃ­a",
+          "name": "El País Economía",
           "url": "https://elpais.com/economia/",
           "article_selector": "h2",
           "link_selector": "a",
           "base_url": "https://elpais.com"
         },
         {
-          "name": "ExpansiÃ³n",
+          "name": "Expansión",
           "url": "https://www.expansion.com/",
           "article_selector": "h2",
           "link_selector": "a",
@@ -86,9 +86,9 @@
       ]
     },
     {
-      "name": "TecnologÃ­a",
+      "name": "Tecnología",
       "slug": "tech",
-      "icon": "ðŸ’»",
+      "icon": "💻",
       "sources": [
         {
           "name": "Xataka",
@@ -112,7 +112,7 @@
           "base_url": "https://hipertextual.com"
         },
         {
-          "name": "El EspaÃ±ol Omicrono",
+          "name": "El Español Omicrono",
           "url": "https://www.elespanol.com/omicrono/",
           "article_selector": "h2",
           "link_selector": "a",
@@ -126,7 +126,7 @@
           "base_url": "https://computerhoy.20minutos.es"
         },
         {
-          "name": "Gizmodo en EspaÃ±ol",
+          "name": "Gizmodo en Español",
           "url": "https://es.gizmodo.com/",
           "article_selector": "h2",
           "link_selector": "a",
@@ -144,7 +144,7 @@
     {
       "name": "Deportes",
       "slug": "sports",
-      "icon": "âš½",
+      "icon": "⚽",
       "sources": [
         {
           "name": "Marca",
@@ -165,10 +165,10 @@
     {
       "name": "Salud & Medicina",
       "slug": "health",
-      "icon": "ðŸ¥",
+      "icon": "🏥",
       "sources": [
         {
-          "name": "El PaÃ­s Salud",
+          "name": "El País Salud",
           "url": "https://elpais.com/salud-y-bienestar/",
           "article_selector": "h2",
           "link_selector": "a",
@@ -193,10 +193,10 @@
     {
       "name": "Ciencia",
       "slug": "science",
-      "icon": "ðŸ§ª",
+      "icon": "🧪",
       "sources": [
         {
-          "name": "El PaÃ­s Ciencia",
+          "name": "El País Ciencia",
           "url": "https://elpais.com/ciencia/",
           "article_selector": "h2",
           "link_selector": "a",
@@ -221,10 +221,10 @@
     {
       "name": "Entretenimiento",
       "slug": "arts",
-      "icon": "ðŸŽ¬",
+      "icon": "🎬",
       "sources": [
         {
-          "name": "El PaÃ­s Cultura",
+          "name": "El País Cultura",
           "url": "https://elpais.com/cultura/",
           "article_selector": "h2",
           "link_selector": "a",
@@ -247,40 +247,40 @@
       ]
     },
     {
-      "name": "EducaciÃ³n",
+      "name": "Educación",
       "slug": "education",
-      "icon": "ðŸŽ“",
+      "icon": "🎓",
       "sources": [
         {
-          "name": "El PaÃ­s EducaciÃ³n",
+          "name": "El País Educación",
           "url": "https://elpais.com/educacion/",
           "article_selector": "h3",
           "link_selector": "a",
           "base_url": "https://elpais.com"
         },
         {
-          "name": "La Vanguardia EducaciÃ³n",
+          "name": "La Vanguardia Educación",
           "url": "https://www.lavanguardia.com/vida/formacion/",
           "article_selector": "h3",
           "link_selector": "a",
           "base_url": "https://www.lavanguardia.com"
         },
         {
-          "name": "Infobae EducaciÃ³n",
+          "name": "Infobae Educación",
           "url": "https://www.infobae.com/educacion/",
           "article_selector": "h2",
           "link_selector": "a",
           "base_url": "https://www.infobae.com"
         },
         {
-          "name": "RTVE EducaciÃ³n",
+          "name": "RTVE Educación",
           "url": "https://www.rtve.es/noticias/educacion/",
           "article_selector": "h2",
           "link_selector": "a",
           "base_url": "https://www.rtve.es"
         },
         {
-          "name": "El Diario EducaciÃ³n",
+          "name": "El Diario Educación",
           "url": "https://www.eldiario.es/sociedad/educacion/",
           "article_selector": "h3",
           "link_selector": "a",
@@ -289,9 +289,9 @@
       ]
     },
     {
-      "name": "Norte de Ãfrica",
+      "name": "Norte de África",
       "slug": "n-africa-es",
-      "icon": "ðŸ‡²ðŸ‡¦",
+      "icon": "🇲🇦",
       "sources": [
         {
           "name": "BBC Mundo",
@@ -301,7 +301,7 @@
           "base_url": "https://www.bbc.com"
         },
         {
-          "name": "Deutsche Welle EspaÃ±ol",
+          "name": "Deutsche Welle Español",
           "url": "https://www.dw.com/es/",
           "article_selector": "h2",
           "link_selector": "a",
@@ -319,17 +319,17 @@
     {
       "name": "Europa",
       "slug": "europe-es",
-      "icon": "ðŸ°",
+      "icon": "🏰",
       "sources": [
         {
-          "name": "El PaÃ­s Internacional",
+          "name": "El País Internacional",
           "url": "https://elpais.com/internacional/",
           "article_selector": "h2",
           "link_selector": "a",
           "base_url": "https://elpais.com"
         },
         {
-          "name": "Euronews EspaÃ±ol",
+          "name": "Euronews Español",
           "url": "https://feeds.feedburner.com/euronews/es/home/",
           "article_selector": "h3",
           "link_selector": "a",
@@ -354,10 +354,10 @@
     {
       "name": "Asia",
       "slug": "asia-es",
-      "icon": "ðŸŒ",
+      "icon": "🌏",
       "sources": [
         {
-          "name": "El PaÃ­s Internacional",
+          "name": "El País Internacional",
           "url": "https://elpais.com/internacional/",
           "article_selector": "h2",
           "link_selector": "a",
@@ -371,7 +371,7 @@
           "base_url": "https://www.bbc.com"
         },
         {
-          "name": "Deutsche Welle EspaÃ±ol Asia",
+          "name": "Deutsche Welle Español Asia",
           "url": "https://www.dw.com/es/",
           "article_selector": "h3",
           "link_selector": "a",
@@ -382,17 +382,17 @@
     {
       "name": "Oriente Medio",
       "slug": "mideast-es",
-      "icon": "ðŸ•Œ",
+      "icon": "🕌",
       "sources": [
         {
-          "name": "El PaÃ­s Internacional",
+          "name": "El País Internacional",
           "url": "https://elpais.com/internacional/",
           "article_selector": "h2",
           "link_selector": "a",
           "base_url": "https://elpais.com"
         },
         {
-          "name": "Deutsche Welle EspaÃ±ol Oriente Medio",
+          "name": "Deutsche Welle Español Oriente Medio",
           "url": "https://www.dw.com/es/",
           "article_selector": "h3",
           "link_selector": "a",
@@ -408,40 +408,40 @@
       ]
     },
     {
-      "name": "Noticias EspaÃ±a",
+      "name": "Noticias España",
       "slug": "espana-es",
-      "icon": "ðŸ‡ªðŸ‡¸",
+      "icon": "🇪🇸",
       "sources": [
         {
-          "name": "El PaÃ­s EspaÃ±a",
+          "name": "El País España",
           "url": "https://elpais.com/espana/",
           "article_selector": "h2",
           "link_selector": "a",
           "base_url": "https://elpais.com"
         },
         {
-          "name": "El Mundo EspaÃ±a",
+          "name": "El Mundo España",
           "url": "https://www.elmundo.es/espana.html",
           "article_selector": "h2",
           "link_selector": "a",
           "base_url": "https://www.elmundo.es"
         },
         {
-          "name": "RTVE EspaÃ±a",
+          "name": "RTVE España",
           "url": "https://www.rtve.es/noticias/espana/",
           "article_selector": "h2",
           "link_selector": "a",
           "base_url": "https://www.rtve.es"
         },
         {
-          "name": "El Confidencial EspaÃ±a",
+          "name": "El Confidencial España",
           "url": "https://www.elconfidencial.com/espana/",
           "article_selector": "h2",
           "link_selector": "a",
           "base_url": "https://www.elconfidencial.com"
         },
         {
-          "name": "Europapress EspaÃ±a",
+          "name": "Europapress España",
           "url": "https://www.europapress.es/nacional/",
           "article_selector": "h2",
           "link_selector": "a",
@@ -450,9 +450,9 @@
       ]
     },
     {
-      "name": "AmÃ©ricas",
+      "name": "Américas",
       "slug": "latam-es",
-      "icon": "ðŸŒŽ",
+      "icon": "🌎",
       "sources": [
         {
           "name": "BBC Mundo",
@@ -469,14 +469,14 @@
           "base_url": "https://www.infobae.com"
         },
         {
-          "name": "El PaÃ­s AmÃ©rica",
+          "name": "El País América",
           "url": "https://elpais.com/america/",
           "article_selector": "h2",
           "link_selector": "a",
           "base_url": "https://elpais.com"
         },
         {
-          "name": "Deutsche Welle EspaÃ±ol AmÃ©rica",
+          "name": "Deutsche Welle Español América",
           "url": "https://www.dw.com/es/",
           "article_selector": "h3",
           "link_selector": "a",
@@ -485,12 +485,12 @@
       ]
     },
     {
-      "name": "Ãfrica",
+      "name": "África",
       "slug": "africa-es",
-      "icon": "ðŸŒ",
+      "icon": "🌍",
       "sources": [
         {
-          "name": "Deutsche Welle EspaÃ±ol Ãfrica",
+          "name": "Deutsche Welle Español África",
           "url": "https://www.dw.com/es/",
           "article_selector": "h3",
           "link_selector": "a",
@@ -508,14 +508,14 @@
     {
       "slug": "vid-news",
       "name": "Noticias",
-      "icon": "ðŸ“°",
+      "icon": "📰",
       "sources": [
         {
-          "name": "France 24 EspaÃ±ol",
+          "name": "France 24 Español",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
         },
         {
-          "name": "DW EspaÃ±ol",
+          "name": "DW Español",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCT4Jg8h03dD0iN3Pb5L0PMA"
         },
         {
@@ -527,16 +527,16 @@
     {
       "slug": "vid-business",
       "name": "Finanzas y Negocios",
-      "icon": "ðŸ’¼",
+      "icon": "💼",
       "sources": []
     },
     {
       "slug": "vid-science",
-      "name": "Ciencia y TecnologÃ­a",
-      "icon": "ðŸ”¬",
+      "name": "Ciencia y Tecnología",
+      "icon": "🔬",
       "sources": [
         {
-          "name": "En Pocas Palabras â€“ Kurzgesagt",
+          "name": "En Pocas Palabras – Kurzgesagt",
           "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCZcvCpFcLxOKGbMocVgLjEA"
         },
         {
@@ -548,7 +548,7 @@
     {
       "slug": "vid-sports",
       "name": "Deportes",
-      "icon": "âš½",
+      "icon": "⚽",
       "sources": [
         {
           "name": "LaLiga EA Sports",
@@ -562,14 +562,14 @@
     },
     {
       "slug": "vid-politics",
-      "name": "AnÃ¡lisis polÃ­tico",
-      "icon": "ðŸŽ™ï¸",
+      "name": "Análisis político",
+      "icon": "🎙️",
       "sources": []
     },
     {
       "slug": "vid-cooking",
-      "name": "GastronomÃ­a",
-      "icon": "ðŸ³",
+      "name": "Gastronomía",
+      "icon": "🍳",
       "sources": [
         {
           "name": "Canal Cocina",
@@ -580,7 +580,7 @@
     {
       "slug": "vid-entertainment",
       "name": "Entretenimiento",
-      "icon": "ðŸŽ¬",
+      "icon": "🎬",
       "sources": [
         {
           "name": "El Hormiguero",
@@ -591,10 +591,10 @@
     {
       "name": "Medio Ambiente",
       "slug": "environment",
-      "icon": "ðŸŒ¿",
+      "icon": "🌿",
       "sources": [
         {
-          "name": "El PaÃ­s Clima",
+          "name": "El País Clima",
           "type": "rss",
           "url": "https://elpais.com/rss/tag/cambio_climatico.xml"
         },
@@ -665,15 +665,15 @@
     {
       "name": "Finanzas & Negocios",
       "slug": "business",
-      "icon": "ðŸ’¼",
+      "icon": "💼",
       "sources": [
         {
-          "name": "Cinco DÃ­as",
+          "name": "Cinco Días",
           "type": "rss",
           "url": "https://cincodias.elpais.com/rss/"
         },
         {
-          "name": "ExpansiÃ³n",
+          "name": "Expansión",
           "type": "rss",
           "url": "https://www.expansion.com/rss/portada.xml"
         },
@@ -697,7 +697,7 @@
           }
         },
         {
-          "name": "Forbes EspaÃ±a",
+          "name": "Forbes España",
           "url": "https://forbes.es/",
           "selectors": {
             "article_selector": "article, .article-card",
@@ -725,10 +725,10 @@
     {
       "name": "Turismo & Viajes",
       "slug": "travel",
-      "icon": "âœˆï¸",
+      "icon": "✈️",
       "sources": [
         {
-          "name": "CondÃ© Nast Traveler ES",
+          "name": "Condé Nast Traveler ES",
           "url": "https://www.traveler.es/",
           "selectors": {
             "article_selector": "article, .summary-item",
@@ -766,7 +766,7 @@
           }
         },
         {
-          "name": "El PaÃ­s Viajes",
+          "name": "El País Viajes",
           "url": "https://elviajero.elpais.com/",
           "selectors": {
             "article_selector": "article, .article-item",
@@ -829,74 +829,74 @@
     {
       "slug": "vid-news",
       "name": "Noticias",
-      "icon": "ðŸ“°"
+      "icon": "📰"
     },
     {
       "slug": "vid-business",
       "name": "Finanzas y Negocios",
-      "icon": "ðŸ’¼"
+      "icon": "💼"
     },
     {
       "slug": "vid-science",
-      "name": "Ciencia y TecnologÃ­a",
-      "icon": "ðŸ”¬"
+      "name": "Ciencia y Tecnología",
+      "icon": "🔬"
     },
     {
       "slug": "vid-sports",
       "name": "Deportes",
-      "icon": "âš½"
+      "icon": "⚽"
     },
     {
       "slug": "vid-politics",
-      "name": "AnÃ¡lisis polÃ­tico",
-      "icon": "ðŸŽ™ï¸"
+      "name": "Análisis político",
+      "icon": "🎙️"
     },
     {
       "slug": "vid-cooking",
-      "name": "GastronomÃ­a",
-      "icon": "ðŸ³"
+      "name": "Gastronomía",
+      "icon": "🍳"
     },
     {
       "slug": "vid-entertainment",
       "name": "Entretenimiento",
-      "icon": "ðŸŽ¬"
+      "icon": "🎬"
     }
   ],
   "world_regions": [
     {
       "slug": "espana-es",
-      "name": "EspaÃ±a",
-      "icon": "ðŸ‡ªðŸ‡¸"
+      "name": "España",
+      "icon": "🇪🇸"
     },
     {
       "slug": "n-africa-es",
-      "name": "Norte de Ãfrica",
-      "icon": "ðŸ‡²ðŸ‡¦"
+      "name": "Norte de África",
+      "icon": "🇲🇦"
     },
     {
       "slug": "europe-es",
       "name": "Europa",
-      "icon": "ðŸ°"
+      "icon": "🏰"
     },
     {
       "slug": "asia-es",
       "name": "Asia",
-      "icon": "ðŸŒ"
+      "icon": "🌏"
     },
     {
       "slug": "africa-es",
-      "name": "Ãfrica",
-      "icon": "ðŸŒ"
+      "name": "África",
+      "icon": "🌍"
     },
     {
       "slug": "latam-es",
-      "name": "AmÃ©ricas",
-      "icon": "ðŸŒŽ"
+      "name": "Américas",
+      "icon": "🌎"
     },
     {
       "slug": "mideast-es",
       "name": "Oriente Medio",
-      "icon": "ðŸ•Œ"
+      "icon": "🕌"
     }
   ]
 }
