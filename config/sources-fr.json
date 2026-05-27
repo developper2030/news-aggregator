@@ -1,0 +1,793 @@
+{
+  "settings": {
+    "site_title": "Actualités Mondiales",
+    "site_description": "Les dernières actualités de sources internationales fiables en un seul endroit",
+    "oldest_days": 7,
+    "site_url": "https://YOUR-DOMAIN.com/fr",
+    "lang_code": "fr",
+    "lang_rule": "French only — all sources must publish content in French"
+  },
+  "categories": [
+    {
+      "name": "Politique",
+      "slug": "politics",
+      "icon": "🏛️",
+      "sources": [
+        {
+          "name": "Le Monde International",
+          "url": "https://www.lemonde.fr/international/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.lemonde.fr"
+        },
+        {
+          "name": "Le Figaro International",
+          "url": "https://www.lefigaro.fr/international/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.lefigaro.fr"
+        },
+        {
+          "name": "L'Express Monde",
+          "url": "https://www.lexpress.fr/monde/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.lexpress.fr"
+        },
+        {
+          "name": "Le Point International",
+          "url": "https://www.lepoint.fr/monde/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.lepoint.fr"
+        },
+        {
+          "name": "France Info Politique",
+          "url": "https://www.francetvinfo.fr/politique/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.francetvinfo.fr"
+        },
+        {
+          "name": "BFMTV Politique",
+          "url": "https://www.bfmtv.com/politique/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.bfmtv.com"
+        },
+        {
+          "name": "Euronews France",
+          "url": "https://feeds.feedburner.com/euronews/fr/home/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://fr.euronews.com"
+        },
+        {
+          "name": "20 Minutes Monde",
+          "url": "https://www.20minutes.fr/monde/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.20minutes.fr"
+        }
+      ]
+    },
+    {
+      "name": "Économie",
+      "slug": "economy",
+      "icon": "💰",
+      "sources": [
+        {
+          "name": "La Tribune",
+          "url": "https://www.latribune.fr/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.latribune.fr"
+        },
+        {
+          "name": "BFM Business",
+          "url": "https://www.bfmtv.com/economie/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.bfmtv.com"
+        },
+        {
+          "name": "Capital",
+          "url": "https://www.capital.fr/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.capital.fr"
+        }
+      ]
+    },
+    {
+      "name": "Technologie",
+      "slug": "tech",
+      "icon": "💻",
+      "sources": [
+        {
+          "name": "Le Monde Pixels",
+          "url": "https://www.lemonde.fr/pixels/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.lemonde.fr"
+        },
+        {
+          "name": "01net",
+          "url": "https://www.01net.com/actualites/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.01net.com"
+        },
+        {
+          "name": "Numerama",
+          "url": "https://www.numerama.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.numerama.com"
+        },
+        {
+          "name": "ZDNet France",
+          "url": "https://www.zdnet.fr/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.zdnet.fr"
+        },
+        {
+          "name": "Futura Tech",
+          "url": "https://www.futura-sciences.com/tech/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.futura-sciences.com"
+        },
+        {
+          "name": "Clubic",
+          "url": "https://www.clubic.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.clubic.com"
+        },
+        {
+          "name": "MacGeneration",
+          "url": "https://www.macg.co/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.macg.co"
+        }
+      ]
+    },
+    {
+      "name": "Sports",
+      "slug": "sports",
+      "icon": "⚽",
+      "sources": [
+        {
+          "name": "L'Équipe",
+          "url": "https://www.lequipe.fr/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.lequipe.fr"
+        },
+        {
+          "name": "RMC Sport",
+          "url": "https://rmcsport.bfmtv.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://rmcsport.bfmtv.com"
+        },
+        {
+          "name": "Le Parisien Sports",
+          "url": "https://www.leparisien.fr/sports/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.leparisien.fr"
+        },
+        {
+          "name": "France Football",
+          "url": "https://www.francefootball.fr/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.francefootball.fr"
+        },
+        {
+          "name": "L'Équipe du Soir",
+          "url": "https://www.lequipe.fr/Football/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.lequipe.fr"
+        }
+      ]
+    },
+    {
+      "name": "Santé",
+      "slug": "health",
+      "icon": "🔬",
+      "sources": [
+        {
+          "name": "Le Monde Santé",
+          "url": "https://www.lemonde.fr/sante/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.lemonde.fr"
+        },
+        {
+          "name": "Pourquoi Docteur",
+          "url": "https://www.pourquoidocteur.fr/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.pourquoidocteur.fr"
+        },
+        {
+          "name": "Santé Magazine",
+          "url": "https://www.santemagazine.fr/actualites/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.santemagazine.fr"
+        }
+      ]
+    },
+    {
+      "name": "Science",
+      "slug": "science",
+      "icon": "🧪",
+      "sources": [
+        {
+          "name": "Le Monde Sciences",
+          "url": "https://www.lemonde.fr/sciences/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.lemonde.fr"
+        },
+        {
+          "name": "Futura Sciences",
+          "url": "https://www.futura-sciences.com/sciences/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.futura-sciences.com"
+        },
+        {
+          "name": "Sciences et Avenir",
+          "url": "https://www.sciencesetavenir.fr/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.sciencesetavenir.fr"
+        }
+      ]
+    },
+    {
+      "name": "Culture",
+      "slug": "arts",
+      "icon": "🎬",
+      "sources": [
+        {
+          "name": "Le Monde Culture",
+          "url": "https://www.lemonde.fr/culture/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.lemonde.fr"
+        },
+        {
+          "name": "Télérama",
+          "url": "https://www.telerama.fr/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.telerama.fr"
+        },
+        {
+          "name": "Le Figaro Culture",
+          "url": "https://www.lefigaro.fr/culture/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.lefigaro.fr"
+        }
+      ]
+    },
+    {
+      "name": "Éducation",
+      "slug": "education",
+      "icon": "🎓",
+      "sources": [
+        {
+          "name": "Le Monde Éducation",
+          "url": "https://www.lemonde.fr/education/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.lemonde.fr"
+        },
+        {
+          "name": "L'Étudiant",
+          "url": "https://www.letudiant.fr/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.letudiant.fr"
+        },
+        {
+          "name": "Café pédagogique",
+          "url": "https://www.cafepedagogique.net/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.cafepedagogique.net"
+        },
+        {
+          "name": "Sciences Humaines",
+          "url": "https://www.scienceshumaines.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.scienceshumaines.com"
+        },
+        {
+          "name": "L'Obs Éducation",
+          "url": "https://www.nouvelobs.com/education/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.nouvelobs.com"
+        },
+        {
+          "name": "Studyrama",
+          "url": "https://www.studyrama.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.studyrama.com"
+        }
+      ]
+    },
+    {
+      "name": "Afrique du Nord",
+      "slug": "n-africa-fr",
+      "icon": "🇲🇦",
+      "sources": [
+        {
+          "name": "Le Monde Afrique",
+          "url": "https://www.lemonde.fr/afrique/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.lemonde.fr"
+        },
+        {
+          "name": "Jeune Afrique",
+          "url": "https://www.jeuneafrique.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.jeuneafrique.com"
+        },
+        {
+          "name": "TV5 Monde Afrique",
+          "url": "https://information.tv5monde.com/afrique",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://information.tv5monde.com"
+        },
+        {
+          "name": "Le Figaro International",
+          "url": "https://www.lefigaro.fr/international/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.lefigaro.fr"
+        }
+      ]
+    },
+    {
+      "name": "Europe",
+      "slug": "europe-fr",
+      "icon": "🏰",
+      "sources": [
+        {
+          "name": "Le Monde Europe",
+          "url": "https://www.lemonde.fr/europe/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.lemonde.fr"
+        },
+        {
+          "name": "Euronews Français",
+          "url": "https://feeds.feedburner.com/euronews/fr/home/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://fr.euronews.com"
+        },
+        {
+          "name": "Le Figaro International",
+          "url": "https://www.lefigaro.fr/international/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.lefigaro.fr"
+        },
+        {
+          "name": "France Info Monde",
+          "url": "https://www.francetvinfo.fr/monde/europe/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.francetvinfo.fr"
+        }
+      ]
+    },
+    {
+      "name": "Asie",
+      "slug": "asia-fr",
+      "icon": "🌏",
+      "sources": [
+        {
+          "name": "Le Monde Asie",
+          "url": "https://www.lemonde.fr/asie-pacifique/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.lemonde.fr"
+        },
+        {
+          "name": "Le Figaro International",
+          "url": "https://www.lefigaro.fr/international/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.lefigaro.fr"
+        },
+        {
+          "name": "France Info Monde",
+          "url": "https://www.francetvinfo.fr/monde/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.francetvinfo.fr"
+        }
+      ]
+    },
+    {
+      "name": "Actualités France",
+      "slug": "france-fr",
+      "icon": "🇫🇷",
+      "sources": [
+        {
+          "name": "Le Monde France",
+          "url": "https://www.lemonde.fr/politique/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.lemonde.fr"
+        },
+        {
+          "name": "Le Figaro France",
+          "url": "https://www.lefigaro.fr/actualite-france/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.lefigaro.fr"
+        },
+        {
+          "name": "France Info France",
+          "url": "https://www.francetvinfo.fr/france/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.francetvinfo.fr"
+        },
+        {
+          "name": "Le Parisien",
+          "url": "https://www.leparisien.fr/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.leparisien.fr"
+        },
+        {
+          "name": "20 Minutes France",
+          "url": "https://www.20minutes.fr/france/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.20minutes.fr"
+        }
+      ]
+    },
+    {
+      "name": "Actualités Afrique",
+      "slug": "afrique-fr",
+      "icon": "🌍",
+      "sources": [
+        {
+          "name": "Jeune Afrique",
+          "url": "https://www.jeuneafrique.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.jeuneafrique.com"
+        },
+        {
+          "name": "Le Monde Afrique",
+          "url": "https://www.lemonde.fr/afrique/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.lemonde.fr"
+        },
+        {
+          "name": "TV5 Monde Afrique",
+          "url": "https://information.tv5monde.com/afrique",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://information.tv5monde.com"
+        }
+      ]
+    },
+    {
+      "name": "Actualités Amériques",
+      "slug": "ameriques-fr",
+      "icon": "🌎",
+      "sources": [
+        {
+          "name": "Le Monde Amériques",
+          "url": "https://www.lemonde.fr/ameriques/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.lemonde.fr"
+        },
+        {
+          "name": "Le Point International",
+          "url": "https://www.lepoint.fr/monde/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.lepoint.fr"
+        },
+        {
+          "name": "La Tribune Monde",
+          "url": "https://www.latribune.fr/economie/international/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.latribune.fr"
+        }
+      ]
+    },
+    {
+      "name": "Moyen-Orient",
+      "slug": "moyen-orient-fr",
+      "icon": "🕌",
+      "sources": [
+        {
+          "name": "Le Monde Moyen-Orient",
+          "url": "https://www.lemonde.fr/moyen-orient/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.lemonde.fr"
+        },
+        {
+          "name": "Le Figaro International",
+          "url": "https://www.lefigaro.fr/international/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.lefigaro.fr"
+        },
+        {
+          "name": "L'Orient Le Jour",
+          "url": "https://www.lorientlejour.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.lorientlejour.com"
+        }
+      ]
+    },
+    {
+      "slug": "vid-news",
+      "name": "Actualités",
+      "icon": "📰",
+      "sources": [
+        {
+          "name": "France 24",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQfwfsi5VrQ8yKZ-UWmAEFg"
+        },
+        {
+          "name": "BFM Business",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCUsBMOIUl_ad6JUOC16DpmQ"
+        },
+        {
+          "name": "Euronews",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
+        },
+        {
+          "name": "Arte",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCHGMBrXUzClgjEzBMei-Jdw"
+        }
+      ]
+    },
+    {
+      "slug": "vid-business",
+      "name": "Finance & Affaires",
+      "icon": "💼",
+      "sources": [
+        {
+          "name": "BFM Business",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCUsBMOIUl_ad6JUOC16DpmQ"
+        },
+        {
+          "name": "France 24 Éco",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQfwfsi5VrQ8yKZ-UWmAEFg"
+        },
+        {
+          "name": "Euronews Business",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
+        }
+      ]
+    },
+    {
+      "slug": "vid-science",
+      "name": "Sciences & Technologie",
+      "icon": "🔬",
+      "sources": [
+        {
+          "name": "Arte",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCHGMBrXUzClgjEzBMei-Jdw"
+        },
+        {
+          "name": "France 24 Science",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQfwfsi5VrQ8yKZ-UWmAEFg"
+        },
+        {
+          "name": "Euronews Science",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
+        }
+      ]
+    },
+    {
+      "slug": "vid-sports",
+      "name": "Sport",
+      "icon": "⚽",
+      "sources": [
+        {
+          "name": "L'Équipe",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCio4yaFxDNGMHu9CE0PYJg"
+        },
+        {
+          "name": "BFM Sport",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCUsBMOIUl_ad6JUOC16DpmQ"
+        },
+        {
+          "name": "Euronews Sport",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
+        },
+        {
+          "name": "France 24 Sport",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQfwfsi5VrQ8yKZ-UWmAEFg"
+        }
+      ]
+    },
+    {
+      "slug": "vid-politics",
+      "name": "Analyses politiques",
+      "icon": "🎙️",
+      "sources": [
+        {
+          "name": "France 24 Politique",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQfwfsi5VrQ8yKZ-UWmAEFg"
+        },
+        {
+          "name": "BFM TV Politique",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCUsBMOIUl_ad6JUOC16DpmQ"
+        },
+        {
+          "name": "Arte Politique",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCHGMBrXUzClgjEzBMei-Jdw"
+        },
+        {
+          "name": "Euronews Politique",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
+        }
+      ]
+    },
+    {
+      "slug": "vid-cooking",
+      "name": "Cuisine",
+      "icon": "🍳",
+      "sources": [
+        {
+          "name": "Marmiton",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCbJT4BWy7Y5dZalqKu0zIug"
+        },
+        {
+          "name": "Arte Gastronomie",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCHGMBrXUzClgjEzBMei-Jdw"
+        },
+        {
+          "name": "France 24 Lifestyle",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQfwfsi5VrQ8yKZ-UWmAEFg"
+        },
+        {
+          "name": "BFM Lifestyle",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCUsBMOIUl_ad6JUOC16DpmQ"
+        },
+        {
+          "name": "Euronews Culture",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
+        }
+      ]
+    },
+    {
+      "slug": "vid-entertainment",
+      "name": "Divertissement",
+      "icon": "🎬",
+      "sources": [
+        {
+          "name": "Arte",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCHGMBrXUzClgjEzBMei-Jdw"
+        },
+        {
+          "name": "France 24 Culture",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCQfwfsi5VrQ8yKZ-UWmAEFg"
+        },
+        {
+          "name": "BFM Culture",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCUsBMOIUl_ad6JUOC16DpmQ"
+        },
+        {
+          "name": "Euronews Culture",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
+        },
+        {
+          "name": "L'Équipe",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCio4yaFxDNGMHu9CE0PYJg"
+        }
+      ]
+    }
+  ],
+  "media_regions": [
+    {
+      "slug": "vid-news",
+      "name": "Actualités",
+      "icon": "📰"
+    },
+    {
+      "slug": "vid-business",
+      "name": "Finance & Affaires",
+      "icon": "💼"
+    },
+    {
+      "slug": "vid-science",
+      "name": "Sciences & Technologie",
+      "icon": "🔬"
+    },
+    {
+      "slug": "vid-sports",
+      "name": "Sport",
+      "icon": "⚽"
+    },
+    {
+      "slug": "vid-politics",
+      "name": "Analyses politiques",
+      "icon": "🎙️"
+    },
+    {
+      "slug": "vid-cooking",
+      "name": "Cuisine",
+      "icon": "🍳"
+    },
+    {
+      "slug": "vid-entertainment",
+      "name": "Divertissement",
+      "icon": "🎬"
+    }
+  ],
+  "world_regions": [
+    {
+      "slug": "france-fr",
+      "name": "France",
+      "icon": "🇫🇷"
+    },
+    {
+      "slug": "n-africa-fr",
+      "name": "Afrique du Nord",
+      "icon": "🇲🇦"
+    },
+    {
+      "slug": "europe-fr",
+      "name": "Europe",
+      "icon": "🏰"
+    },
+    {
+      "slug": "asia-fr",
+      "name": "Asie",
+      "icon": "🌏"
+    },
+    {
+      "slug": "afrique-fr",
+      "name": "Afrique",
+      "icon": "🌍"
+    },
+    {
+      "slug": "ameriques-fr",
+      "name": "Amériques",
+      "icon": "🌎"
+    },
+    {
+      "slug": "moyen-orient-fr",
+      "name": "Moyen-Orient",
+      "icon": "🕌"
+    }
+  ]
+}

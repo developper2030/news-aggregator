@@ -1,0 +1,799 @@
+{
+  "settings": {
+    "site_title": "World News",
+    "site_description": "Top headlines from trusted international sources in one place",
+    "oldest_days": 7,
+    "site_url": "https://YOUR-DOMAIN.com",
+    "lang_code": "en",
+    "lang_rule": "English only — all sources must publish content in English"
+  },
+  "categories": [
+    {
+      "name": "Politics",
+      "slug": "politics",
+      "icon": "🏛️",
+      "sources": [
+        {
+          "name": "BBC World News",
+          "url": "https://www.bbc.com/news/world",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "Reuters",
+          "url": "https://www.reuters.com/world/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.reuters.com"
+        },
+        {
+          "name": "Al Jazeera English",
+          "url": "https://www.aljazeera.com/news/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.aljazeera.com"
+        },
+        {
+          "name": "AP News",
+          "url": "https://apnews.com/world-news",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://apnews.com"
+        }
+      ]
+    },
+    {
+      "name": "Economy",
+      "slug": "economy",
+      "icon": "💰",
+      "sources": [
+        {
+          "name": "Reuters Business",
+          "url": "https://www.reuters.com/business/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.reuters.com"
+        },
+        {
+          "name": "BBC Business",
+          "url": "https://www.bbc.com/news/business",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "Al Jazeera Economy",
+          "url": "https://www.aljazeera.com/economy/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.aljazeera.com"
+        }
+      ]
+    },
+    {
+      "name": "Technology",
+      "slug": "tech",
+      "icon": "💻",
+      "sources": [
+        {
+          "name": "TechCrunch",
+          "url": "https://techcrunch.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://techcrunch.com"
+        },
+        {
+          "name": "The Verge",
+          "url": "https://www.theverge.com/tech",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.theverge.com"
+        },
+        {
+          "name": "Ars Technica",
+          "url": "https://arstechnica.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://arstechnica.com"
+        },
+        {
+          "name": "BBC Technology",
+          "url": "https://www.bbc.com/news/technology",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "Digital Trends",
+          "url": "https://www.digitaltrends.com/computing/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.digitaltrends.com"
+        }
+      ]
+    },
+    {
+      "name": "Sports",
+      "slug": "sports",
+      "icon": "⚽",
+      "sources": [
+        {
+          "name": "BBC Sport",
+          "url": "https://www.bbc.com/sport",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "Reuters Sports",
+          "url": "https://www.reuters.com/sports/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.reuters.com"
+        },
+        {
+          "name": "Al Jazeera Sport",
+          "url": "https://www.aljazeera.com/sports/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.aljazeera.com"
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "slug": "health",
+      "icon": "🔬",
+      "sources": [
+        {
+          "name": "Reuters Health",
+          "url": "https://www.reuters.com/business/healthcare-pharmaceuticals/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.reuters.com"
+        },
+        {
+          "name": "BBC Health",
+          "url": "https://www.bbc.com/news/health",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        }
+      ]
+    },
+    {
+      "name": "Science",
+      "slug": "science",
+      "icon": "🧪",
+      "sources": [
+        {
+          "name": "BBC Science",
+          "url": "https://www.bbc.com/news/science_and_environment",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "Reuters Science",
+          "url": "https://www.reuters.com/science/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.reuters.com"
+        }
+      ]
+    },
+    {
+      "name": "Entertainment",
+      "slug": "arts",
+      "icon": "🎬",
+      "sources": [
+        {
+          "name": "BBC Entertainment",
+          "url": "https://www.bbc.com/news/entertainment_and_arts",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "The Verge Culture",
+          "url": "https://www.theverge.com/culture",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.theverge.com"
+        }
+      ]
+    },
+    {
+      "name": "Education",
+      "slug": "education",
+      "icon": "🎓",
+      "sources": [
+        {
+          "name": "The Guardian Education",
+          "url": "https://www.theguardian.com/education",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.theguardian.com"
+        },
+        {
+          "name": "Education Week",
+          "url": "https://www.edweek.org/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.edweek.org"
+        },
+        {
+          "name": "Times Higher Education",
+          "url": "https://www.timeshighereducation.com/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.timeshighereducation.com"
+        },
+        {
+          "name": "EdSurge",
+          "url": "https://www.edsurge.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.edsurge.com"
+        },
+        {
+          "name": "Inside Higher Ed",
+          "url": "https://www.insidehighered.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.insidehighered.com"
+        },
+        {
+          "name": "NPR Education",
+          "url": "https://www.npr.org/sections/education/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.npr.org"
+        },
+        {
+          "name": "Edutopia",
+          "url": "https://www.edutopia.org/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.edutopia.org"
+        },
+        {
+          "name": "Chalkbeat",
+          "url": "https://www.chalkbeat.org/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.chalkbeat.org"
+        }
+      ]
+    },
+    {
+      "name": "North Africa",
+      "slug": "n-africa-en",
+      "icon": "🇲🇦",
+      "sources": [
+        {
+          "name": "Al Jazeera Africa",
+          "url": "https://www.aljazeera.com/africa/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.aljazeera.com"
+        },
+        {
+          "name": "BBC Africa",
+          "url": "https://www.bbc.com/news/world/africa",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "Reuters Africa",
+          "url": "https://www.reuters.com/world/africa/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.reuters.com"
+        },
+        {
+          "name": "Middle East Eye",
+          "url": "https://www.middleeasteye.net/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.middleeasteye.net"
+        }
+      ]
+    },
+    {
+      "name": "Europe",
+      "slug": "europe-en",
+      "icon": "🏰",
+      "sources": [
+        {
+          "name": "BBC Europe",
+          "url": "https://www.bbc.com/news/world/europe",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "The Guardian Europe",
+          "url": "https://www.theguardian.com/world/europe-news",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.theguardian.com"
+        },
+        {
+          "name": "Reuters Europe",
+          "url": "https://www.reuters.com/world/europe/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.reuters.com"
+        },
+        {
+          "name": "Euronews English",
+          "url": "https://feeds.feedburner.com/euronews/en/home/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.euronews.com"
+        }
+      ]
+    },
+    {
+      "name": "Americas",
+      "slug": "americas-en",
+      "icon": "🌎",
+      "sources": [
+        {
+          "name": "Reuters Americas",
+          "url": "https://www.reuters.com/world/americas/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.reuters.com"
+        },
+        {
+          "name": "BBC Americas",
+          "url": "https://www.bbc.com/news/world/latin_america",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "The Guardian US",
+          "url": "https://www.theguardian.com/us-news",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.theguardian.com"
+        }
+      ]
+    },
+    {
+      "name": "UK News",
+      "slug": "uk-en",
+      "icon": "🇬🇧",
+      "sources": [
+        {
+          "name": "BBC UK",
+          "url": "https://www.bbc.com/news/uk",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "The Guardian UK",
+          "url": "https://www.theguardian.com/uk-news",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.theguardian.com"
+        },
+        {
+          "name": "The Independent UK",
+          "url": "https://www.independent.co.uk/news/uk",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.independent.co.uk"
+        },
+        {
+          "name": "Sky News UK",
+          "url": "https://news.sky.com/uk",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://news.sky.com"
+        }
+      ]
+    },
+    {
+      "name": "US News",
+      "slug": "us-en",
+      "icon": "🇺🇸",
+      "sources": [
+        {
+          "name": "Reuters US",
+          "url": "https://www.reuters.com/world/us/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.reuters.com"
+        },
+        {
+          "name": "AP News",
+          "url": "https://apnews.com/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://apnews.com"
+        },
+        {
+          "name": "The Guardian US",
+          "url": "https://www.theguardian.com/us-news",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.theguardian.com"
+        }
+      ]
+    },
+    {
+      "name": "Middle East",
+      "slug": "mideast-en",
+      "icon": "🕌",
+      "sources": [
+        {
+          "name": "Al Jazeera English",
+          "url": "https://www.aljazeera.com/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.aljazeera.com"
+        },
+        {
+          "name": "Reuters Middle East",
+          "url": "https://www.reuters.com/world/middle-east/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.reuters.com"
+        },
+        {
+          "name": "Middle East Eye",
+          "url": "https://www.middleeasteye.net/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.middleeasteye.net"
+        },
+        {
+          "name": "BBC Middle East",
+          "url": "https://www.bbc.com/news/world/middle_east",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        }
+      ]
+    },
+    {
+      "name": "Africa",
+      "slug": "africa-en",
+      "icon": "🌍",
+      "sources": [
+        {
+          "name": "Al Jazeera Africa",
+          "url": "https://www.aljazeera.com/africa/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.aljazeera.com"
+        },
+        {
+          "name": "BBC Africa",
+          "url": "https://www.bbc.com/news/world/africa",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "Reuters Africa",
+          "url": "https://www.reuters.com/world/africa/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.reuters.com"
+        }
+      ]
+    },
+    {
+      "name": "Asia",
+      "slug": "asia-en",
+      "icon": "🌏",
+      "sources": [
+        {
+          "name": "Al Jazeera Asia",
+          "url": "https://www.aljazeera.com/asia/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.aljazeera.com"
+        },
+        {
+          "name": "BBC Asia",
+          "url": "https://www.bbc.com/news/world/asia",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "Reuters Asia",
+          "url": "https://www.reuters.com/world/asia-pacific/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.reuters.com"
+        }
+      ]
+    },
+    {
+      "slug": "vid-news",
+      "name": "News",
+      "icon": "📰",
+      "sources": [
+        {
+          "name": "BBC News",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCj956IF62FbT7Gouszaj9w"
+        },
+        {
+          "name": "CNN",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCupvZG-5ko_eiXAupbDfxWw"
+        },
+        {
+          "name": "Al Jazeera",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
+        },
+        {
+          "name": "France 24",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
+        },
+        {
+          "name": "DW News",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCbbS1GE942k3UVqpLklyhIA"
+        },
+        {
+          "name": "Sky News",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCkFclpi8U9VJjfxLYoms7Aw"
+        }
+      ]
+    },
+    {
+      "slug": "vid-business",
+      "name": "Business & Finance",
+      "icon": "💼",
+      "sources": [
+        {
+          "name": "Bloomberg",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCyxnPZfofoutjmyvaV0GGeQ"
+        },
+        {
+          "name": "CNBC",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCH5_L3ytGbBziX0CLuYdQ1Q"
+        },
+        {
+          "name": "Reuters",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UChqUTb7kYRX8-EiaN3XFrSQ"
+        },
+        {
+          "name": "PBS NewsHour",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC2s0uKOc2WgB9eGta7cUUEA"
+        },
+        {
+          "name": "NBC News",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UChDKyKQ59fYz3JO2fl0Z6sg"
+        }
+      ]
+    },
+    {
+      "slug": "vid-science",
+      "name": "Science & Technology",
+      "icon": "🔬",
+      "sources": [
+        {
+          "name": "National Geographic",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCDPk9MG2RexnOMGTD-YnSnA"
+        },
+        {
+          "name": "BBC News",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCj956IF62FbT7Gouszaj9w"
+        },
+        {
+          "name": "DW News",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCbbS1GE942k3UVqpLklyhIA"
+        },
+        {
+          "name": "France 24",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
+        },
+        {
+          "name": "Reuters",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UChqUTb7kYRX8-EiaN3XFrSQ"
+        }
+      ]
+    },
+    {
+      "slug": "vid-sports",
+      "name": "Sports",
+      "icon": "⚽",
+      "sources": [
+        {
+          "name": "ESPN",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC7i94bTxxuZBrllSxXHyFxg"
+        },
+        {
+          "name": "Sky News",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCkFclpi8U9VJjfxLYoms7Aw"
+        },
+        {
+          "name": "Al Jazeera Sport",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
+        },
+        {
+          "name": "BBC Sport",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCj956IF62FbT7Gouszaj9w"
+        },
+        {
+          "name": "Reuters Sports",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UChqUTb7kYRX8-EiaN3XFrSQ"
+        }
+      ]
+    },
+    {
+      "slug": "vid-politics",
+      "name": "Political Analysis",
+      "icon": "🎙️",
+      "sources": [
+        {
+          "name": "BBC News",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCj956IF62FbT7Gouszaj9w"
+        },
+        {
+          "name": "Al Jazeera English",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
+        },
+        {
+          "name": "CNN",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCupvZG-5ko_eiXAupbDfxWw"
+        },
+        {
+          "name": "France 24",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
+        },
+        {
+          "name": "Sky News",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCkFclpi8U9VJjfxLYoms7Aw"
+        },
+        {
+          "name": "PBS NewsHour",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC2s0uKOc2WgB9eGta7cUUEA"
+        }
+      ]
+    },
+    {
+      "slug": "vid-cooking",
+      "name": "Cuisine",
+      "icon": "🍳",
+      "sources": [
+        {
+          "name": "BBC Food",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCj956IF62FbT7Gouszaj9w"
+        },
+        {
+          "name": "France 24",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
+        },
+        {
+          "name": "Reuters",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UChqUTb7kYRX8-EiaN3XFrSQ"
+        },
+        {
+          "name": "CNN",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCupvZG-5ko_eiXAupbDfxWw"
+        },
+        {
+          "name": "NBC News",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UChDKyKQ59fYz3JO2fl0Z6sg"
+        }
+      ]
+    },
+    {
+      "slug": "vid-entertainment",
+      "name": "Entertainment",
+      "icon": "🎬",
+      "sources": [
+        {
+          "name": "BBC Entertainment",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCj956IF62FbT7Gouszaj9w"
+        },
+        {
+          "name": "CNN Culture",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCupvZG-5ko_eiXAupbDfxWw"
+        },
+        {
+          "name": "France 24 Culture",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
+        },
+        {
+          "name": "Reuters Arts",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UChqUTb7kYRX8-EiaN3XFrSQ"
+        },
+        {
+          "name": "Al Jazeera",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
+        }
+      ]
+    }
+  ],
+  "media_regions": [
+    {
+      "slug": "vid-news",
+      "name": "News",
+      "icon": "📰"
+    },
+    {
+      "slug": "vid-business",
+      "name": "Business & Finance",
+      "icon": "💼"
+    },
+    {
+      "slug": "vid-science",
+      "name": "Science & Technology",
+      "icon": "🔬"
+    },
+    {
+      "slug": "vid-sports",
+      "name": "Sports",
+      "icon": "⚽"
+    },
+    {
+      "slug": "vid-politics",
+      "name": "Political Analysis",
+      "icon": "🎙️"
+    },
+    {
+      "slug": "vid-cooking",
+      "name": "Cuisine",
+      "icon": "🍳"
+    },
+    {
+      "slug": "vid-entertainment",
+      "name": "Entertainment",
+      "icon": "🎬"
+    }
+  ],
+  "world_regions": [
+    {
+      "slug": "uk-en",
+      "name": "United Kingdom",
+      "icon": "🇬🇧"
+    },
+    {
+      "slug": "us-en",
+      "name": "United States",
+      "icon": "🇺🇸"
+    },
+    {
+      "slug": "n-africa-en",
+      "name": "North Africa",
+      "icon": "🇲🇦"
+    },
+    {
+      "slug": "europe-en",
+      "name": "Europe",
+      "icon": "🏰"
+    },
+    {
+      "slug": "asia-en",
+      "name": "Asia",
+      "icon": "🌏"
+    },
+    {
+      "slug": "africa-en",
+      "name": "Africa",
+      "icon": "🌍"
+    },
+    {
+      "slug": "americas-en",
+      "name": "Americas",
+      "icon": "🌎"
+    },
+    {
+      "slug": "mideast-en",
+      "name": "Middle East",
+      "icon": "🕌"
+    }
+  ]
+}

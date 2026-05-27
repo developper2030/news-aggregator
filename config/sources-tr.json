@@ -1,0 +1,877 @@
+{
+  "settings": {
+    "site_title": "Dünya Haberleri",
+    "site_description": "Güvenilir kaynaklardan günün en son haberleri tek bir yerde",
+    "oldest_days": 7,
+    "site_url": "https://YOUR-DOMAIN.com/tr",
+    "lang_code": "tr",
+    "lang_rule": "Turkish only — all sources must publish content in Turkish"
+  },
+  "categories": [
+    {
+      "name": "Politika",
+      "slug": "politics",
+      "icon": "🏛️",
+      "sources": [
+        {
+          "name": "Hürriyet Gündem",
+          "url": "https://www.hurriyet.com.tr/gundem/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.hurriyet.com.tr"
+        },
+        {
+          "name": "Sabah Gündem",
+          "url": "https://www.sabah.com.tr/gundem",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.sabah.com.tr"
+        },
+        {
+          "name": "Cumhuriyet Siyaset",
+          "url": "https://www.cumhuriyet.com.tr/siyaset/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.cumhuriyet.com.tr"
+        },
+        {
+          "name": "NTV Türkiye",
+          "url": "https://www.ntv.com.tr/turkiye",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.ntv.com.tr"
+        },
+        {
+          "name": "TRT Haber Gündem",
+          "url": "https://www.trthaber.com/haber/gundem/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.trthaber.com"
+        },
+        {
+          "name": "HaberTürk Gündem",
+          "url": "https://www.haberturk.com/gundem",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.haberturk.com"
+        },
+        {
+          "name": "Milliyet Siyaset",
+          "url": "https://www.milliyet.com.tr/siyaset/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.milliyet.com.tr"
+        },
+        {
+          "name": "CNN Türk Gündem",
+          "url": "https://www.cnnturk.com/turkiye",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.cnnturk.com"
+        },
+        {
+          "name": "T24 Haber",
+          "url": "https://t24.com.tr/haber",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://t24.com.tr"
+        },
+        {
+          "name": "Bianet",
+          "url": "https://bianet.org/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://bianet.org"
+        },
+        {
+          "name": "Diken",
+          "url": "https://www.diken.com.tr/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.diken.com.tr"
+        },
+        {
+          "name": "Medyascope",
+          "url": "https://medyascope.tv/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://medyascope.tv"
+        }
+      ]
+    },
+    {
+      "name": "Ekonomi",
+      "slug": "economy",
+      "icon": "💰",
+      "sources": [
+        {
+          "name": "Bloomberg HT",
+          "url": "https://www.bloomberght.com/haberler",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bloomberght.com"
+        },
+        {
+          "name": "Dünya Gazetesi",
+          "url": "https://www.dunya.com/ekonomi/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.dunya.com"
+        },
+        {
+          "name": "Hürriyet Ekonomi",
+          "url": "https://www.hurriyet.com.tr/ekonomi/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.hurriyet.com.tr"
+        },
+        {
+          "name": "Milliyet Ekonomi",
+          "url": "https://www.milliyet.com.tr/ekonomi/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.milliyet.com.tr"
+        },
+        {
+          "name": "Sözcü Ekonomi",
+          "url": "https://www.sozcu.com.tr/ekonomi/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.sozcu.com.tr"
+        },
+        {
+          "name": "Para Analiz",
+          "url": "https://www.paraanaliz.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.paraanaliz.com"
+        },
+        {
+          "name": "Ekonomim",
+          "url": "https://ekonomim.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://ekonomim.com"
+        },
+        {
+          "name": "NTV Ekonomi",
+          "url": "https://www.ntv.com.tr/ekonomi",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.ntv.com.tr"
+        }
+      ]
+    },
+    {
+      "name": "Teknoloji",
+      "slug": "tech",
+      "icon": "💻",
+      "sources": [
+        {
+          "name": "Technopat",
+          "url": "https://www.technopat.net/kategori/haberler/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.technopat.net"
+        },
+        {
+          "name": "ShiftDelete",
+          "url": "https://shiftdelete.net/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://shiftdelete.net"
+        },
+        {
+          "name": "WebTekno",
+          "url": "https://www.webtekno.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.webtekno.com"
+        },
+        {
+          "name": "Chip Online TR",
+          "url": "https://www.chip.com.tr/haber",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.chip.com.tr"
+        },
+        {
+          "name": "Log Dergi",
+          "url": "https://www.log.com.tr/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.log.com.tr"
+        },
+        {
+          "name": "Teknolojioku",
+          "url": "https://teknolojioku.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://teknolojioku.com"
+        },
+        {
+          "name": "NTV Teknoloji",
+          "url": "https://www.ntv.com.tr/teknoloji",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.ntv.com.tr"
+        },
+        {
+          "name": "TRT Haber Teknoloji",
+          "url": "https://www.trthaber.com/haber/bilim-teknoloji/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.trthaber.com"
+        },
+        {
+          "name": "Hürriyet Teknoloji",
+          "url": "https://www.hurriyet.com.tr/teknoloji/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.hurriyet.com.tr"
+        }
+      ]
+    },
+    {
+      "name": "Spor",
+      "slug": "sports",
+      "icon": "⚽",
+      "sources": [
+        {
+          "name": "Fanatik",
+          "url": "https://www.fanatik.com.tr/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.fanatik.com.tr"
+        },
+        {
+          "name": "Sporx",
+          "url": "https://www.sporx.com/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.sporx.com"
+        },
+        {
+          "name": "Fotomaç",
+          "url": "https://www.fotomac.com.tr/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.fotomac.com.tr"
+        },
+        {
+          "name": "TRT Spor",
+          "url": "https://www.trtspor.com.tr/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.trtspor.com.tr"
+        },
+        {
+          "name": "NTV Spor",
+          "url": "https://www.ntvspor.net/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.ntvspor.net"
+        },
+        {
+          "name": "Milliyet Spor",
+          "url": "https://www.milliyet.com.tr/spor/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.milliyet.com.tr"
+        },
+        {
+          "name": "Hürriyet Spor",
+          "url": "https://www.hurriyet.com.tr/spor/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.hurriyet.com.tr"
+        }
+      ]
+    },
+    {
+      "name": "Sağlık",
+      "slug": "health",
+      "icon": "🔬",
+      "sources": [
+        {
+          "name": "NTV Sağlık",
+          "url": "https://www.ntv.com.tr/saglik",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.ntv.com.tr"
+        },
+        {
+          "name": "Milliyet Sağlık",
+          "url": "https://www.milliyet.com.tr/saglik/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.milliyet.com.tr"
+        },
+        {
+          "name": "Sabah Sağlık",
+          "url": "https://www.sabah.com.tr/saglik",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.sabah.com.tr"
+        },
+        {
+          "name": "TRT Haber Sağlık",
+          "url": "https://www.trthaber.com/haber/yasam/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.trthaber.com"
+        }
+      ]
+    },
+    {
+      "name": "Bilim",
+      "slug": "science",
+      "icon": "🧪",
+      "sources": [
+        {
+          "name": "NTV Bilim",
+          "url": "https://www.ntv.com.tr/bilim-teknoloji",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.ntv.com.tr"
+        },
+        {
+          "name": "Bilim Fili",
+          "url": "https://www.bilimfili.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.bilimfili.com"
+        },
+        {
+          "name": "National Geographic TR",
+          "url": "https://www.nationalgeographic.com.tr/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.nationalgeographic.com.tr"
+        },
+        {
+          "name": "TRT Haber Bilim",
+          "url": "https://www.trthaber.com/haber/bilim-teknoloji/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.trthaber.com"
+        },
+        {
+          "name": "Hürriyet Bilim",
+          "url": "https://www.hurriyet.com.tr/dunya/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.hurriyet.com.tr"
+        }
+      ]
+    },
+    {
+      "name": "Kültür & Sanat",
+      "slug": "arts",
+      "icon": "🎬",
+      "sources": [
+        {
+          "name": "NTV Kültür-Sanat",
+          "url": "https://www.ntv.com.tr/kultur-sanat",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.ntv.com.tr"
+        },
+        {
+          "name": "Cumhuriyet Kültür",
+          "url": "https://www.cumhuriyet.com.tr/kultur-sanat/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.cumhuriyet.com.tr"
+        },
+        {
+          "name": "TRT Haber Kültür",
+          "url": "https://www.trthaber.com/haber/kultur-sanat/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.trthaber.com"
+        }
+      ]
+    },
+    {
+      "name": "Eğitim",
+      "slug": "education",
+      "icon": "🎓",
+      "sources": [
+        {
+          "name": "NTV Eğitim",
+          "url": "https://www.ntv.com.tr/egitim",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.ntv.com.tr"
+        },
+        {
+          "name": "Milliyet Eğitim",
+          "url": "https://www.milliyet.com.tr/egitim/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.milliyet.com.tr"
+        },
+        {
+          "name": "Sabah Eğitim",
+          "url": "https://www.sabah.com.tr/egitim",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.sabah.com.tr"
+        },
+        {
+          "name": "Hürriyet Eğitim",
+          "url": "https://www.hurriyet.com.tr/egitim/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.hurriyet.com.tr"
+        },
+        {
+          "name": "TRT Haber Eğitim",
+          "url": "https://www.trthaber.com/haber/egitim/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.trthaber.com"
+        }
+      ]
+    },
+    {
+      "name": "Türkiye Haberleri",
+      "slug": "turkey",
+      "icon": "🇹🇷",
+      "sources": [
+        {
+          "name": "TRT Haber",
+          "url": "https://www.trthaber.com/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.trthaber.com"
+        },
+        {
+          "name": "Sabah",
+          "url": "https://www.sabah.com.tr/gundem",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.sabah.com.tr"
+        },
+        {
+          "name": "NTV Türkiye",
+          "url": "https://www.ntv.com.tr/turkiye",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.ntv.com.tr"
+        },
+        {
+          "name": "Milliyet",
+          "url": "https://www.milliyet.com.tr/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.milliyet.com.tr"
+        },
+        {
+          "name": "Hürriyet",
+          "url": "https://www.hurriyet.com.tr/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.hurriyet.com.tr"
+        }
+      ]
+    },
+    {
+      "name": "Avrupa Haberleri",
+      "slug": "europe-tr",
+      "icon": "🏰",
+      "sources": [
+        {
+          "name": "BBC Türkçe",
+          "url": "https://www.bbc.com/turkce",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "Deutsche Welle Türkçe",
+          "url": "https://www.dw.com/tr/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.dw.com"
+        },
+        {
+          "name": "Euronews Türkçe",
+          "url": "https://tr.euronews.com/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://tr.euronews.com"
+        }
+      ]
+    },
+    {
+      "name": "Orta Doğu Haberleri",
+      "slug": "mideast-tr",
+      "icon": "🕌",
+      "sources": [
+        {
+          "name": "TRT Arabi",
+          "url": "https://www.trtarabi.com/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.trtarabi.com"
+        },
+        {
+          "name": "Anadolu Ajansı",
+          "url": "https://www.aa.com.tr/tr/dunya",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.aa.com.tr"
+        },
+        {
+          "name": "TRT Haber Dünya",
+          "url": "https://www.trthaber.com/haber/dunya/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.trthaber.com"
+        }
+      ]
+    },
+    {
+      "name": "Kuzey Afrika Haberleri",
+      "slug": "n-africa-tr",
+      "icon": "🇲🇦",
+      "sources": [
+        {
+          "name": "Anadolu Ajansı",
+          "url": "https://www.aa.com.tr/tr/dunya",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.aa.com.tr"
+        },
+        {
+          "name": "TRT Haber Dünya",
+          "url": "https://www.trthaber.com/haber/dunya/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.trthaber.com"
+        },
+        {
+          "name": "Deutsche Welle Türkçe",
+          "url": "https://www.dw.com/tr/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.dw.com"
+        }
+      ]
+    },
+    {
+      "name": "Asya Haberleri",
+      "slug": "asia-tr",
+      "icon": "🌏",
+      "sources": [
+        {
+          "name": "Anadolu Ajansı",
+          "url": "https://www.aa.com.tr/tr/dunya",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.aa.com.tr"
+        },
+        {
+          "name": "TRT Haber",
+          "url": "https://www.trthaber.com/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.trthaber.com"
+        },
+        {
+          "name": "BBC Türkçe",
+          "url": "https://www.bbc.com/turkce",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        }
+      ]
+    },
+    {
+      "name": "Afrika Haberleri",
+      "slug": "africa-tr",
+      "icon": "🌍",
+      "sources": [
+        {
+          "name": "Anadolu Ajansı",
+          "url": "https://www.aa.com.tr/tr/dunya",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.aa.com.tr"
+        },
+        {
+          "name": "TRT Haber",
+          "url": "https://www.trthaber.com/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.trthaber.com"
+        }
+      ]
+    },
+    {
+      "name": "Amerika Haberleri",
+      "slug": "americas-tr",
+      "icon": "🌎",
+      "sources": [
+        {
+          "name": "BBC Türkçe",
+          "url": "https://www.bbc.com/turkce",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "Anadolu Ajansı",
+          "url": "https://www.aa.com.tr/tr/dunya",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.aa.com.tr"
+        },
+        {
+          "name": "Deutsche Welle Türkçe",
+          "url": "https://www.dw.com/tr/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.dw.com"
+        }
+      ]
+    },
+    {
+      "slug": "vid-news",
+      "name": "Haberler",
+      "icon": "📰",
+      "sources": [
+        {
+          "name": "TRT Haber",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCBgTP2LOFVPmq15W-RH-WXA"
+        },
+        {
+          "name": "CNN Türk",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCJCYKGZ4ZyjjshYa6fhRgRw"
+        },
+        {
+          "name": "NTV",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCRFPZHb9xE176G77Z54zCXA"
+        },
+        {
+          "name": "Habertürk",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UClGZC_r-sUcBdElAtDSrQ5g"
+        },
+        {
+          "name": "A Haber",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCKQhfw-lzz0uKnE1fY1PsAA"
+        }
+      ]
+    },
+    {
+      "slug": "vid-business",
+      "name": "Finans ve İş",
+      "icon": "💼",
+      "sources": [
+        {
+          "name": "CNN Türk Ekonomi",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCJCYKGZ4ZyjjshYa6fhRgRw"
+        },
+        {
+          "name": "Habertürk Ekonomi",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UClGZC_r-sUcBdElAtDSrQ5g"
+        },
+        {
+          "name": "NTV Ekonomi",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCRFPZHb9xE176G77Z54zCXA"
+        }
+      ]
+    },
+    {
+      "slug": "vid-science",
+      "name": "Bilim ve Teknoloji",
+      "icon": "🔬",
+      "sources": [
+        {
+          "name": "TRT Haber Bilim",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCBgTP2LOFVPmq15W-RH-WXA"
+        },
+        {
+          "name": "CNN Türk Teknoloji",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCJCYKGZ4ZyjjshYa6fhRgRw"
+        }
+      ]
+    },
+    {
+      "slug": "vid-sports",
+      "name": "Spor",
+      "icon": "⚽",
+      "sources": [
+        {
+          "name": "TRT Spor",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCebdo7-2NdjcktKzco64iNw"
+        },
+        {
+          "name": "CNN Türk Spor",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCJCYKGZ4ZyjjshYa6fhRgRw"
+        },
+        {
+          "name": "NTV Spor",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCRFPZHb9xE176G77Z54zCXA"
+        },
+        {
+          "name": "A Haber Spor",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCKQhfw-lzz0uKnE1fY1PsAA"
+        }
+      ]
+    },
+    {
+      "slug": "vid-politics",
+      "name": "Siyasi Analizler",
+      "icon": "🎙️",
+      "sources": [
+        {
+          "name": "TRT Haber Siyaset",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCBgTP2LOFVPmq15W-RH-WXA"
+        },
+        {
+          "name": "CNN Türk Siyaset",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCJCYKGZ4ZyjjshYa6fhRgRw"
+        },
+        {
+          "name": "Habertürk Siyaset",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UClGZC_r-sUcBdElAtDSrQ5g"
+        },
+        {
+          "name": "NTV Siyaset",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCRFPZHb9xE176G77Z54zCXA"
+        },
+        {
+          "name": "A Haber Siyaset",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCKQhfw-lzz0uKnE1fY1PsAA"
+        }
+      ]
+    },
+    {
+      "slug": "vid-cooking",
+      "name": "Mutfak",
+      "icon": "🍳",
+      "sources": [
+        {
+          "name": "TRT Haber Mutfak",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCBgTP2LOFVPmq15W-RH-WXA"
+        },
+        {
+          "name": "CNN Türk Yaşam",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCJCYKGZ4ZyjjshYa6fhRgRw"
+        },
+        {
+          "name": "NTV Yaşam",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCRFPZHb9xE176G77Z54zCXA"
+        },
+        {
+          "name": "Habertürk Yaşam",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UClGZC_r-sUcBdElAtDSrQ5g"
+        },
+        {
+          "name": "A Haber Yaşam",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCKQhfw-lzz0uKnE1fY1PsAA"
+        }
+      ]
+    },
+    {
+      "slug": "vid-entertainment",
+      "name": "Eğlence",
+      "icon": "🎬",
+      "sources": [
+        {
+          "name": "TRT Haber Kültür",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCBgTP2LOFVPmq15W-RH-WXA"
+        },
+        {
+          "name": "CNN Türk Kültür",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCJCYKGZ4ZyjjshYa6fhRgRw"
+        },
+        {
+          "name": "NTV Eğlence",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCRFPZHb9xE176G77Z54zCXA"
+        },
+        {
+          "name": "A Haber Kültür",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCKQhfw-lzz0uKnE1fY1PsAA"
+        }
+      ]
+    }
+  ],
+  "media_regions": [
+    {
+      "slug": "vid-news",
+      "name": "Haberler",
+      "icon": "📰"
+    },
+    {
+      "slug": "vid-business",
+      "name": "Finans & İş",
+      "icon": "💼"
+    },
+    {
+      "slug": "vid-science",
+      "name": "Bilim & Teknoloji",
+      "icon": "🔬"
+    },
+    {
+      "slug": "vid-sports",
+      "name": "Spor",
+      "icon": "⚽"
+    },
+    {
+      "slug": "vid-politics",
+      "name": "Siyasi Analizler",
+      "icon": "🎙️"
+    },
+    {
+      "slug": "vid-cooking",
+      "name": "Mutfak",
+      "icon": "🍳"
+    },
+    {
+      "slug": "vid-entertainment",
+      "name": "Eğlence",
+      "icon": "🎬"
+    }
+  ],
+  "world_regions": [
+    {
+      "slug": "turkey",
+      "name": "Türkiye",
+      "icon": "🇹🇷"
+    },
+    {
+      "slug": "n-africa-tr",
+      "name": "Kuzey Afrika",
+      "icon": "🇲🇦"
+    },
+    {
+      "slug": "europe-tr",
+      "name": "Avrupa",
+      "icon": "🏰"
+    },
+    {
+      "slug": "asia-tr",
+      "name": "Asya",
+      "icon": "🌏"
+    },
+    {
+      "slug": "africa-tr",
+      "name": "Afrika",
+      "icon": "🌍"
+    },
+    {
+      "slug": "americas-tr",
+      "name": "Amerika",
+      "icon": "🌎"
+    },
+    {
+      "slug": "mideast-tr",
+      "name": "Orta Doğu",
+      "icon": "🕌"
+    }
+  ]
+}

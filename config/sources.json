@@ -1,0 +1,4702 @@
+{
+  "settings": {
+    "max_articles_per_source": 10,
+    "oldest_days": 7,
+    "output_file": "static/index.html",
+    "site_title": "اخر الأخبار",
+    "site_description": "أهم العناوين من مصادر متعددة في مكان واحد",
+    "lang_code": "ar",
+    "lang_rule": "Arabic only — all sources must publish content in Arabic"
+  },
+  "categories": [
+    {
+      "name": "سياسة",
+      "slug": "politics",
+      "icon": "🏛️",
+      "sources": [
+        {
+          "name": "الجزيرة نت",
+          "url": "https://www.aljazeera.net",
+          "selectors": {
+            "article_selector": "article.gc__content, .article-card, .card",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner",
+              "ad",
+              "advertisement"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "اليوم 24",
+          "url": "https://alyaoum24.com",
+          "selectors": {
+            "article_selector": "article, .post, .article, .entry",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "بي بي سي عربي",
+          "url": "https://www.bbc.com/arabic",
+          "selectors": {
+            "article_selector": "article, .lx-stream__post, .gc__content, .bbc-1cvxiy9",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "navigation",
+              "orb-nav",
+              "orb-footer"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "orbit",
+              "orb"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "عربي 21",
+          "url": "https://arabi21.com",
+          "selectors": {
+            "article_selector": "article, .post, .story, .article-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "سكاي نيوز عربية",
+          "url": "https://www.skynewsarabia.com",
+          "selectors": {
+            "article_selector": "article, .news-item, .post-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "MSN عربي - أخبار",
+          "url": "https://www.msn.com/ar-sa/news/world",
+          "selectors": {
+            "article_selector": "article, .content-card, .story-card, .card-body, .slide",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "advertisement"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "Google News - أخبار",
+          "url": "https://news.google.com/?hl=ar&gl=MA&ceid=MA:ar",
+          "selectors": {
+            "article_selector": "article, .xrnccd, .IBr9hb, .NiLAwe, .ipQwMb",
+            "heading_tags": [
+              "h3",
+              "h4"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "header",
+              "menu"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "header"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "اليوم السابع - سياسة",
+          "url": "https://www.youm7.com/Section/%D8%B3%D9%8A%D8%A7%D8%B3%D8%A9/319/1",
+          "selectors": {
+            "article_selector": "#nt-title li",
+            "heading_tags": [
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "المصري اليوم - أخبار",
+          "url": "https://www.almasryalyoum.com/section/index/3",
+          "use_browser": true,
+          "selectors": {
+            "article_selector": "article, .news-item, .story-item, .list-story",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        }
+      ]
+    },
+    {
+      "name": "اقتصاد",
+      "slug": "economy",
+      "icon": "💰",
+      "sources": [
+        {
+          "name": "سكاي نيوز - أعمال",
+          "url": "https://www.skynewsarabia.com/business",
+          "selectors": {
+            "article_selector": "article, .news-item, .post-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "أرقام",
+          "url": "https://www.argaam.com/ar",
+          "selectors": {
+            "article_selector": "article, .news-item, .article-item, .post, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner",
+              "ad"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "CNBC عربية",
+          "url": "https://www.cnbcarabia.com/news/",
+          "selectors": {
+            "article_selector": "article, .card, .news-card, .story, .item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "الاقتصادية",
+          "url": "https://www.aleqt.com/",
+          "selectors": {
+            "article_selector": "article, .news-item, .post, .article",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "فوربس الشرق الأوسط",
+          "url": "https://www.forbesmiddleeast.com/ar",
+          "selectors": {
+            "article_selector": "article, .article-card, .story, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "إنتربرايز عربي",
+          "url": "https://enterprise.press/ar/",
+          "selectors": {
+            "article_selector": "article, .post, .article, .card, .entry",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "الاقتصادي العربي",
+          "url": "https://aliqtisadi.com/",
+          "selectors": {
+            "article_selector": "article, .post, .article, .news-item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "مال",
+          "url": "https://www.maaal.com/",
+          "selectors": {
+            "article_selector": "article, .post, .article, .news-item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "البيان الاقتصادي",
+          "url": "https://www.albayan.ae/economy/",
+          "selectors": {
+            "article_selector": "article, .news-item, .post, .article, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "الاقتصادي المغربي",
+          "url": "https://iktissadkom.ma/",
+          "selectors": {
+            "article_selector": "article, .post, .article, .news-item, .entry",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "كونسو نيوز",
+          "url": "https://ar.consonews.ma/",
+          "selectors": {
+            "article_selector": "article, .post, .article, .news-item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "بنكينج نيوز",
+          "url": "https://bankingnewsar.com/",
+          "selectors": {
+            "article_selector": "article, .post, .article, .entry, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "FX نيوز",
+          "url": "https://www.fxnewstoday.ae/international-markets",
+          "selectors": {
+            "article_selector": "article, .post, .article, .news-item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "لايف 24",
+          "url": "https://live24ksa.com/",
+          "selectors": {
+            "article_selector": "article, .post, .article, .news-item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "عربي 21 - اقتصاد",
+          "url": "https://arabi21.com/stories/c/4/0/اقتصاد",
+          "selectors": {
+            "article_selector": "article, .post, .story, .article-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "MSN عربي - اقتصاد",
+          "url": "https://www.msn.com/ar-sa/money",
+          "selectors": {
+            "article_selector": "article, .content-card, .story-card, .card-body, .slide",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "advertisement"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "Google News - اقتصاد",
+          "url": "https://news.google.com/topics/CAAqBwgKMLe3_Qow4qX6Ag?hl=ar&gl=MA&ceid=MA:ar",
+          "selectors": {
+            "article_selector": "article, .xrnccd, .IBr9hb, .NiLAwe",
+            "heading_tags": [
+              "h3",
+              "h4"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "header",
+              "menu"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "header"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "مصراوي - اقتصاد",
+          "url": "https://www.masrawy.com/news/News_Economy/section/206",
+          "selectors": {
+            "article_selector": "div.item",
+            "heading_tags": [
+              "h2"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "اليوم السابع - اقتصاد",
+          "url": "https://www.youm7.com/Section/%D8%A7%D9%82%D8%AA%D8%B5%D8%A7%D8%AF-%D9%88%D8%A8%D9%88%D8%B1%D8%B5%D8%A9/297/1",
+          "selectors": {
+            "article_selector": "#nt-title li",
+            "heading_tags": [
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "المصري اليوم - اقتصاد",
+          "url": "https://www.almasryalyoum.com/section/index/4",
+          "use_browser": true,
+          "selectors": {
+            "article_selector": "article, .news-item, .story-item, .list-story",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        }
+      ]
+    },
+    {
+      "name": "تكنولوجيا وعلوم",
+      "slug": "tech",
+      "icon": "💻",
+      "sources": [
+        {
+          "name": "الجزيرة - تقنية",
+          "url": "https://www.aljazeera.net/science/",
+          "selectors": {
+            "article_selector": "article, .article-card, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "سكاي نيوز - تقنية",
+          "url": "https://www.skynewsarabia.com/technology",
+          "selectors": {
+            "article_selector": "article, .news-item, .post-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "بي بي سي - تقنية",
+          "url": "https://www.bbc.com/arabic/vert-fut",
+          "selectors": {
+            "article_selector": "article, .lx-stream__post, .gs-c-promo",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "navigation",
+              "orb-nav"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "orbit"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "عربي 21 - تكنولوجيا",
+          "url": "https://arabi21.com/stories/c/8/0/تكنولوجيا",
+          "selectors": {
+            "article_selector": "article, .post, .story, .article-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "MSN عربي - تقنية",
+          "url": "https://www.msn.com/ar-sa/technology",
+          "selectors": {
+            "article_selector": "article, .content-card, .story-card, .card-body, .slide",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "advertisement"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "Google News - تقنية",
+          "url": "https://news.google.com/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNR2xqTjJJU0FtRnlIZ0pCVWlnQVAB?hl=ar&gl=MA&ceid=MA:ar",
+          "selectors": {
+            "article_selector": "article, .xrnccd, .IBr9hb, .NiLAwe",
+            "heading_tags": [
+              "h3",
+              "h4"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "header",
+              "menu"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "header"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "أراجيك - تقنية",
+          "url": "https://www.arageek.com/tech",
+          "selectors": {
+            "article_selector": "article, .post, li.post, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "عرب هاردوير",
+          "url": "https://www.arabhardware.net/",
+          "selectors": {
+            "article_selector": "article, .post, .item, .review-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "عالم التقنية",
+          "url": "http://www.tech-wd.com/wd",
+          "selectors": {
+            "article_selector": "article.post, .tie-box, .post-inner, .post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "اليوم السابع - تكنولوجيا",
+          "url": "https://www.youm7.com/Section/%D8%B9%D9%84%D9%88%D9%85-%D9%88-%D8%AA%D9%83%D9%86%D9%88%D9%84%D9%88%D8%AC%D9%8A%D8%A7/328/1",
+          "selectors": {
+            "article_selector": "#nt-title li",
+            "heading_tags": [
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "AIT News تكنولوجيا",
+          "url": "https://aitnews.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://aitnews.com"
+        }
+      ]
+    },
+    {
+      "name": "رياضة",
+      "slug": "sports",
+      "icon": "⚽",
+      "sources": [
+        {
+          "name": "كورة",
+          "url": "https://www.kooora.com",
+          "selectors": {
+            "article_selector": "article, .news-item, .post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "يلا كورة",
+          "url": "https://www.yallakora.com",
+          "selectors": {
+            "article_selector": "article, .news-item, .post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "سكاي نيوز - رياضة",
+          "url": "https://www.skynewsarabia.com/sport",
+          "selectors": {
+            "article_selector": "article, .news-item, .post-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "الجزيرة - رياضة",
+          "url": "https://www.aljazeera.net/sports/",
+          "selectors": {
+            "article_selector": "article, .article-card, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "MSN عربي - رياضة",
+          "url": "https://www.msn.com/ar-sa/sports",
+          "selectors": {
+            "article_selector": "article, .content-card, .story-card, .card-body, .slide",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "advertisement"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "Google News - رياضة",
+          "url": "https://news.google.com/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx5TjJJU0FtRnlIZ0pCVWlnQVAB?hl=ar&gl=MA&ceid=MA:ar",
+          "selectors": {
+            "article_selector": "article, .xrnccd, .IBr9hb, .NiLAwe",
+            "heading_tags": [
+              "h3",
+              "h4"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "header",
+              "menu"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "header"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "مصراوي - رياضة",
+          "url": "https://www.masrawy.com/channel/sports",
+          "selectors": {
+            "article_selector": "div.item",
+            "heading_tags": [
+              "h2"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "اليوم السابع - رياضة",
+          "url": "https://www.youm7.com/Section/%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1-%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D8%A9/298/1",
+          "selectors": {
+            "article_selector": "#nt-title li",
+            "heading_tags": [
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "المصري اليوم - رياضة",
+          "url": "https://www.almasryalyoum.com/section/index/8",
+          "use_browser": true,
+          "selectors": {
+            "article_selector": "article, .news-item, .story-item, .list-story",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "المنتخب",
+          "url": "https://www.almountakhab.com/",
+          "selectors": {
+            "article_selector": "article, .post, .news-item, .card, .entry",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "هسبورت",
+          "url": "https://www.hesport.com/",
+          "selectors": {
+            "article_selector": "article, .post, .news-item, .card, .entry",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        }
+      ]
+    },
+    {
+      "name": "صحة وبيئة",
+      "slug": "health",
+      "icon": "🌿",
+      "sources": [
+        {
+          "name": "الجزيرة - صحة",
+          "url": "https://www.aljazeera.net/health",
+          "selectors": {
+            "article_selector": "article.gc__content, .article-card, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "سكاي نيوز - صحة",
+          "url": "https://www.skynewsarabia.com/world",
+          "selectors": {
+            "article_selector": "article, .news-item, .post-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "بي بي سي - صحة",
+          "url": "https://www.bbc.com/arabic/topics/c2lej05l471t",
+          "selectors": {
+            "article_selector": "article, .lx-stream__post, .gs-c-promo",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "navigation",
+              "orb-nav"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "orbit"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "MSN عربي - صحة",
+          "url": "https://www.msn.com/ar-sa/health",
+          "selectors": {
+            "article_selector": "article, .content-card, .story-card, .card-body, .slide",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "advertisement"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "Google News - صحة",
+          "url": "https://news.google.com/topics/CAAqIQgKIhtDQkFTRGdvSUwyMHZNR3QwTlRFU0FtRnlLQUFQAQ?hl=ar&gl=MA&ceid=MA:ar",
+          "selectors": {
+            "article_selector": "article, .xrnccd, .IBr9hb, .NiLAwe",
+            "heading_tags": [
+              "h3",
+              "h4"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "header",
+              "menu"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "header"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "اليوم السابع - صحة",
+          "url": "https://www.youm7.com/Section/%D8%B5%D8%AD%D8%A9-%D9%88%D8%B7%D8%A8/245/1",
+          "selectors": {
+            "article_selector": "#nt-title li",
+            "heading_tags": [
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        }
+      ]
+    },
+    {
+      "name": "أسرة ومجتمع",
+      "slug": "society",
+      "icon": "👥",
+      "sources": [
+        {
+          "name": "الجزيرة - مجتمع",
+          "url": "https://www.aljazeera.net/humanrights/",
+          "selectors": {
+            "article_selector": "article, .article-card, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "MSN عربي - مجتمع",
+          "url": "https://www.msn.com/ar-sa/lifestyle",
+          "selectors": {
+            "article_selector": "article, .content-card, .story-card, .card-body, .slide",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "advertisement"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        }
+      ]
+    },
+    {
+      "name": "ثقافة وفن",
+      "slug": "arts",
+      "icon": "🎬",
+      "sources": [
+        {
+          "name": "الجزيرة - فنون",
+          "url": "https://www.aljazeera.net/culture/",
+          "selectors": {
+            "article_selector": "article, .article-card, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "MSN عربي - ترفيه",
+          "url": "https://www.msn.com/ar-sa/entertainment",
+          "selectors": {
+            "article_selector": "article, .content-card, .story-card, .card-body, .slide",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "advertisement"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "الشرق الأوسط - ثقافة وفنون",
+          "url": "https://aawsat.com/%D8%AB%D9%82%D8%A7%D9%81%D8%A9-%D9%88%D9%81%D9%86%D9%88%D9%86",
+          "selectors": {
+            "article_selector": "article, .article-card, .news-item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "الشرق للأخبار - ثقافة",
+          "url": "https://asharq.com/culture/",
+          "selectors": {
+            "article_selector": "article, .article-card, .story-card, .post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "ضفة ثالثة",
+          "url": "https://diffah.alaraby.co.uk/diffah",
+          "selectors": {
+            "article_selector": "article, .article-card, .card, .post-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "أخبار الأدب",
+          "url": "https://adab-news.com/",
+          "selectors": {
+            "article_selector": "article, .post, .entry, .type-post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "related"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "العين - فنون",
+          "url": "https://al-ain.com/section/arts/",
+          "selectors": {
+            "article_selector": "article, .article-card, .news-item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "CNN عربي - فنون",
+          "url": "https://arabic.cnn.com/specials/showbiz-news",
+          "selectors": {
+            "article_selector": "article, .card, .container__item, .container_lead-package__item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "مصراوي - فنون",
+          "url": "https://www.masrawy.com/channel/arts",
+          "selectors": {
+            "article_selector": "div.item",
+            "heading_tags": [
+              "h2"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "اليوم السابع - فن",
+          "url": "https://www.youm7.com/Section/%D9%81%D9%86/48/1",
+          "selectors": {
+            "article_selector": "#nt-title li",
+            "heading_tags": [
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "المصري اليوم - فنون",
+          "url": "https://www.almasryalyoum.com/section/index/10",
+          "use_browser": true,
+          "selectors": {
+            "article_selector": "article, .news-item, .story-item, .list-story",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        }
+      ]
+    },
+    {
+      "name": "تربية وتعليم",
+      "slug": "education",
+      "icon": "🎓",
+      "sources": [
+        {
+          "name": "الجزيرة - تعليم",
+          "url": "https://www.aljazeera.net/tag/تعليم/",
+          "selectors": {
+            "article_selector": "article, .article-card, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "سكاي نيوز - تعليم",
+          "url": "https://www.skynewsarabia.com/education",
+          "selectors": {
+            "article_selector": "article, .news-item, .post-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "BBC عربي - تعليم",
+          "url": "https://feeds.bbci.co.uk/arabic/rss.xml",
+          "selectors": {
+            "article_selector": "article, .lx-stream__post, .gs-c-promo",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "navigation"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "تعليم جديد",
+          "url": "https://www.new-educ.com/",
+          "selectors": {
+            "article_selector": "article, .post, .entry, .type-post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "related"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "تعليم اليوم",
+          "url": "https://taleemalyoum.com/",
+          "selectors": {
+            "article_selector": "article, .post, .entry-content, .post-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "تربية بريس",
+          "url": "https://www.tarbiapress.net/",
+          "selectors": {
+            "article_selector": ".post-outer, article, .post, .item-post",
+            "heading_tags": [
+              "h3",
+              "h2"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "comments"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "أخبار التعليم تونس",
+          "url": "https://news.mourajaa.com/",
+          "selectors": {
+            "article_selector": "article, .post, .entry, .type-post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "related"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "مصراوي - تعليم",
+          "url": "https://www.masrawy.com/news/education",
+          "selectors": {
+            "article_selector": "article, .story-card, .news-item, .item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "الإمارات اليوم - تعليم",
+          "url": "https://www.emaratalyoum.com/local-section/education",
+          "selectors": {
+            "article_selector": "article, .news-item, .post-item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "وزارة التربية الوطنية - المغرب",
+          "url": "http://www.men.gov.ma/",
+          "selectors": {
+            "article_selector": "article, .post, .news-item, .card",
+            "heading_tags": [
+              "h5",
+              "h4",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "المجلس الأعلى للتربية والتكوين",
+          "url": "https://www.csefrs.ma/مستجدات-المجلس/",
+          "selectors": {
+            "article_selector": "article, .post, .news-item, .entry",
+            "heading_tags": [
+              "h3",
+              "h2"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "المستجد التربوي",
+          "url": "http://www.mostajad.com/",
+          "selectors": {
+            "article_selector": "article, .post, .item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "تعليم بريس",
+          "url": "https://www.taalimpress.info/",
+          "selectors": {
+            "article_selector": "article, .post, .item",
+            "heading_tags": [
+              "h3",
+              "h2"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "تربية المغرب",
+          "url": "http://www.tarbiyamaroc.net/",
+          "selectors": {
+            "article_selector": "article, .post, .item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "قرائتي",
+          "url": "https://www.9rayti.com/",
+          "selectors": {
+            "article_selector": "article, .post, .card, .item",
+            "heading_tags": [
+              "h3",
+              "h2"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "مدونة معلمي",
+          "url": "http://www.moualimi.com/",
+          "selectors": {
+            "article_selector": "article, .post, .item",
+            "heading_tags": [
+              "h3",
+              "h2"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "تعليمي",
+          "url": "https://www.taalime.com/",
+          "selectors": {
+            "article_selector": "article, .post, .item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "تفتحي",
+          "url": "https://www.tafatohe.com/",
+          "selectors": {
+            "article_selector": "article, .post, .item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "أحوال التعليم",
+          "url": "http://feeds.feedburner.com/ahwaltaalim"
+        },
+        {
+          "name": "مجموع تعليم",
+          "url": "https://www.mojmos-taalim.com/rss.xml"
+        }
+      ]
+    },
+    {
+      "name": "المغرب وشمال أفريقيا",
+      "slug": "morocco",
+      "icon": "🇲🇦",
+      "sources": [
+        {
+          "name": "هسبريس",
+          "url": "https://www.hespress.com",
+          "selectors": {
+            "article_selector": "article, .post, .article, .card",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "Le360",
+          "url": "https://ar.le360.ma",
+          "selectors": {
+            "article_selector": "article, .post, .article, .news-item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget",
+              "ad"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "ميدي1 تيفي",
+          "url": "https://www.medi1tv.com/ar",
+          "selectors": {
+            "article_selector": "article, .post, .article, .news-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "الأحداث المغربية",
+          "url": "https://ahdath.info",
+          "selectors": {
+            "article_selector": "article, .post, .article, .entry",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "جود",
+          "url": "https://www.goud.ma",
+          "selectors": {
+            "article_selector": "article, .post, .article, .entry, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "ناظور سيتي",
+          "url": "https://nadorcity.com",
+          "selectors": {
+            "article_selector": "article, .post, .article, .news-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "العمق المغربي",
+          "url": "https://al3omk.com",
+          "selectors": {
+            "article_selector": "article, .post, .article, .entry",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "المغرب اليوم",
+          "url": "https://www.almaghribtoday.net",
+          "selectors": {
+            "article_selector": "article, .post, .article, .card, .entry",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "MAP News",
+          "url": "https://www.mapnews.ma/ar",
+          "selectors": {
+            "article_selector": "article, .post, .article, .news-item, .views-row",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "أخبارنا",
+          "url": "https://www.akhbarona.com/",
+          "selectors": {
+            "article_selector": "article, .post, .article, .news-item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "لوماتان",
+          "url": "https://lematin.ma/",
+          "selectors": {
+            "article_selector": "article, .post, .article, .news-item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "رو20",
+          "url": "https://rue20.com/",
+          "selectors": {
+            "article_selector": "article, .post, .article, .entry, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "هبا برس",
+          "url": "https://ar.hibapress.com/",
+          "selectors": {
+            "article_selector": "article, .post, .article, .entry, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "اليوم 24 - المغرب",
+          "url": "https://alyaoum24.com/",
+          "selectors": {
+            "article_selector": "article, .post, .article, .entry",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "بلادي نت",
+          "url": "https://www.bladi.net/",
+          "selectors": {
+            "article_selector": "article, .post, .article, .news-item, .entry",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "أشكاين",
+          "url": "https://www.achkayen.com/",
+          "selectors": {
+            "article_selector": "article, .post, .article, .entry, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "MSN عربي - المغرب",
+          "url": "https://www.msn.com/ar-ma/news",
+          "selectors": {
+            "article_selector": "article, .content-card, .story-card, .card-body, .slide",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "advertisement"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "البوابة الوطنية للمغرب",
+          "url": "https://www.maroc.ma/ar",
+          "selectors": {
+            "article_selector": "article, .post, .news-item, .card, .actualite",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "الشركة الوطنية للإذاعة والتلفزة",
+          "url": "http://www.snrt.ma/?lang=ar",
+          "selectors": {
+            "article_selector": "article, .post, .news-item, .card, .item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "قناة 2M",
+          "url": "https://www.2m.ma/ar/",
+          "selectors": {
+            "article_selector": "article, .post, .news-item, .card, .article-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "وكالة المغرب العربي للأنباء",
+          "url": "https://www.map.ma/ar/",
+          "selectors": {
+            "article_selector": "article, .post, .news-item, .card, .entry",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "الأيام 24",
+          "url": "https://www.alayam24.com/",
+          "selectors": {
+            "article_selector": "article, .post, .news-item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "هوية بريس",
+          "url": "http://howiyapress.com/",
+          "selectors": {
+            "article_selector": "article, .post, .news-item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "ميدياس24",
+          "url": "https://www.medias24.com/nation/politique.html",
+          "selectors": {
+            "article_selector": "article, .post, .news-item, .card, .article-card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "لوديسك عربي",
+          "url": "https://ledesk.ma/arabia/",
+          "selectors": {
+            "article_selector": "article, .post, .news-item, .card, .entry",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        }
+      ]
+    },
+    {
+      "name": "الشرق الأوسط",
+      "slug": "middleeast",
+      "icon": "🕌",
+      "sources": [
+        {
+          "name": "الجزيرة - الشرق الأوسط",
+          "url": "https://www.aljazeera.net/news/",
+          "selectors": {
+            "article_selector": "article.gc__content, .article-card, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "سكاي نيوز - الشرق الأوسط",
+          "url": "https://www.skynewsarabia.com/middle-east",
+          "selectors": {
+            "article_selector": "article, .news-item, .post-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "بي بي سي - الشرق الأوسط",
+          "url": "https://www.bbc.com/arabic/middleeast",
+          "selectors": {
+            "article_selector": "article, .lx-stream__post, .gs-c-promo",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "navigation",
+              "orb-nav"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "orbit"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "MSN عربي - الشرق الأوسط",
+          "url": "https://www.msn.com/ar-sa/news/world",
+          "selectors": {
+            "article_selector": "article, .content-card, .story-card, .card-body, .slide",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "advertisement"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        }
+      ]
+    },
+    {
+      "name": "العالم الإسلامي",
+      "slug": "islamic",
+      "icon": "☪️",
+      "sources": [
+        {
+          "name": "الجزيرة - الدين",
+          "url": "https://www.aljazeera.net/religion/",
+          "selectors": {
+            "article_selector": "article, .article-card, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "MSN عربي - عالم",
+          "url": "https://www.msn.com/ar-sa/news/world",
+          "selectors": {
+            "article_selector": "article, .content-card, .story-card, .card-body, .slide",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "advertisement"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "اخوان",
+          "url": "https://ikhwanonline.info/",
+          "selectors": {
+            "article_selector": "article,.post,.article",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "الاصلاح",
+          "url": "http://www.alislah.ma/",
+          "selectors": {
+            "article_selector": "article,.post,.article",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "مقاتل",
+          "url": "http://www.moqatel.com",
+          "selectors": {
+            "article_selector": "article,.post,.article",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "العدالة والتنمية المغربي",
+          "url": "https://pjd.ma/",
+          "selectors": {
+            "article_selector": "article,.post,.article",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "الراية",
+          "url": "http://www.alraiah.net/index.php",
+          "selectors": {
+            "article_selector": "article,.post,.article",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "المسلمون",
+          "url": "http://www.almuslimon.net",
+          "selectors": {
+            "article_selector": "article,.post,.article",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "حماس",
+          "url": "http://hamas.ps/ar/",
+          "selectors": {
+            "article_selector": "article,.post,.article",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        }
+      ]
+    },
+    {
+      "name": "شؤون المهاجرين",
+      "slug": "diaspora",
+      "icon": "👥",
+      "sources": [
+        {
+          "name": "بلادي نت - الجاليات",
+          "url": "https://www.bladi.net/",
+          "selectors": {
+            "article_selector": "article, .post, .article, .news-item, .entry",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "عربي 21 - الجاليات",
+          "url": "https://arabi21.com",
+          "selectors": {
+            "article_selector": "article, .post, .story, .article-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "اخبار الجالية",
+          "url": "https://www.akhbaraljaliya.com/",
+          "selectors": {
+            "article_selector": "article, .post, .article, .news-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "المدار الإعلامي الأوروبي",
+          "url": "https://www.almadar.be/",
+          "selectors": {
+            "article_selector": "article, .post, .entry, .type-post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "related"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "ألمانيا بالعربي",
+          "url": "https://germanyarabic.de/",
+          "selectors": {
+            "article_selector": "article, .post, .entry, .type-post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "related"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "أخبار ألمانيا بالعربي",
+          "url": "https://arab-de.com/",
+          "selectors": {
+            "article_selector": "article, .post, .entry, .type-post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "related"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "هلا كندا",
+          "url": "https://halacanada.ca/",
+          "selectors": {
+            "article_selector": "article, .post, .entry, .type-post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "related"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        }
+      ]
+    },
+    {
+      "name": "آسيا",
+      "slug": "asia",
+      "icon": "🌏",
+      "sources": [
+        {
+          "name": "الجزيرة - آسيا",
+          "url": "https://www.aljazeera.net/tag/آسيا/",
+          "selectors": {
+            "article_selector": "article, .article-card, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "سكاي نيوز - آسيا",
+          "url": "https://www.skynewsarabia.com/world",
+          "selectors": {
+            "article_selector": "article, .news-item, .post-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "Google News - آسيا",
+          "url": "https://news.google.com/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx1YlY4U0FtRnlIZ0pCVWlnQVAB?hl=ar&gl=MA&ceid=MA:ar",
+          "selectors": {
+            "article_selector": "article, .xrnccd, .IBr9hb, .NiLAwe",
+            "heading_tags": [
+              "h3",
+              "h4"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "header",
+              "menu"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "header"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "شينخوا العربية",
+          "url": "https://arabic.news.cn/",
+          "selectors": {
+            "article_selector": "article, .tit, .news-item, li",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "CGTN العربية",
+          "url": "https://arabic.cgtn.com/world",
+          "selectors": {
+            "article_selector": "article, .news-item, .story, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "الشرق الأوسط - آسيا",
+          "url": "https://aawsat.com/%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85/%D8%A2%D8%B3%D9%8A%D8%A7",
+          "selectors": {
+            "article_selector": "article, .article-card, .news-item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "استراليا بالعربي",
+          "url": "https://australiainarabic.com/",
+          "selectors": {
+            "article_selector": "article, .post, .entry, .type-post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "related"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "SBS عربي - أستراليا",
+          "url": "https://www.sbs.com.au/language/arabic/ar",
+          "selectors": {
+            "article_selector": "article, .card, .news-item, .article-card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header"
+            ],
+            "min_title_length": 15
+          }
+        }
+      ]
+    },
+    {
+      "name": "الأمريكتين",
+      "slug": "americas",
+      "icon": "🌎",
+      "sources": [
+        {
+          "name": "الجزيرة - أمريكا",
+          "url": "https://www.aljazeera.net/tag/أمريكا/",
+          "selectors": {
+            "article_selector": "article, .article-card, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "بي بي سي - أمريكا",
+          "url": "https://www.bbc.com/arabic/topics/c2lej05lz31t",
+          "selectors": {
+            "article_selector": "article, .lx-stream__post, .gs-c-promo",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "navigation",
+              "orb-nav"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "orbit"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "MSN عربي - أمريكا",
+          "url": "https://www.msn.com/ar-sa/news/world",
+          "selectors": {
+            "article_selector": "article, .content-card, .story-card, .card-body, .slide",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "advertisement"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "أمريكا بالعربي",
+          "url": "https://usainarabic.net/",
+          "selectors": {
+            "article_selector": "article, .post, .entry, .type-post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "related"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "أخبار أمريكا",
+          "url": "https://www.akhbarus.com/",
+          "selectors": {
+            "article_selector": "article, .post, .news-item, .entry",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        }
+      ]
+    },
+    {
+      "name": "أوروبا",
+      "slug": "europe",
+      "icon": "🏰",
+      "sources": [
+        {
+          "name": "الجزيرة - أوروبا",
+          "url": "https://www.aljazeera.net/tag/أوروبا/",
+          "selectors": {
+            "article_selector": "article, .article-card, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "بي بي سي - أوروبا",
+          "url": "https://www.bbc.com/arabic/topics/c2lej05lzpkt",
+          "selectors": {
+            "article_selector": "article, .lx-stream__post, .gs-c-promo",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "navigation",
+              "orb-nav"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "orbit"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "MSN عربي - أوروبا",
+          "url": "https://www.msn.com/ar-sa/news/world",
+          "selectors": {
+            "article_selector": "article, .content-card, .story-card, .card-body, .slide",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "advertisement"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "يورو برس عربية",
+          "url": "https://europressarabia.com/",
+          "selectors": {
+            "article_selector": "article, .post, .entry, .type-post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "related"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "الشرق الأوسط - أوروبا",
+          "url": "https://aawsat.com/%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85/%D8%A3%D9%88%D8%B1%D9%88%D8%A8%D8%A7",
+          "selectors": {
+            "article_selector": "article, .article-card, .news-item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        }
+      ]
+    },
+    {
+      "name": "أفريقيا",
+      "slug": "africa",
+      "icon": "🌍",
+      "sources": [
+        {
+          "name": "الجزيرة - أفريقيا",
+          "url": "https://www.aljazeera.net/tag/أفريقيا/",
+          "selectors": {
+            "article_selector": "article, .article-card, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "سكاي نيوز - أفريقيا",
+          "url": "https://www.skynewsarabia.com/world",
+          "selectors": {
+            "article_selector": "article, .news-item, .post-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "MSN عربي - أفريقيا",
+          "url": "https://www.msn.com/ar-sa/news/world",
+          "selectors": {
+            "article_selector": "article, .content-card, .story-card, .card-body, .slide",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "advertisement"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "قراءات إفريقية",
+          "url": "https://qiraatafrican.com/category/news/",
+          "selectors": {
+            "article_selector": "article, .post, .entry, .type-post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "related"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "أفريكا نيوز",
+          "url": "https://africanews.dz/",
+          "selectors": {
+            "article_selector": "article, .post, .entry, .type-post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "related"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "الشرق الأوسط - أفريقيا",
+          "url": "https://aawsat.com/%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85/%D8%A3%D9%81%D8%B1%D9%8A%D9%82%D9%8A%D8%A7",
+          "selectors": {
+            "article_selector": "article, .article-card, .news-item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        }
+      ]
+    },
+    {
+      "slug": "vid-news",
+      "name": "أحداث",
+      "icon": "📰",
+      "sources": [
+        {
+          "name": "الجزيرة",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
+        },
+        {
+          "name": "الحدث",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCrj5BGAhtWxDfqbza9T9hqA"
+        },
+        {
+          "name": "سكاي نيوز عربية",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCIJXOvggjKtCagMfxvcCzAA"
+        },
+        {
+          "name": "فرانس 24 عربي",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCdTyuXgmJkG_O8_75eqej-w"
+        },
+        {
+          "name": "BBC عربي",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCelk6aHijZq-GJBBB9YpReA"
+        },
+        {
+          "name": "DW عربي",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC2KCI1AXQVx1_XJmykB7cHA"
+        },
+        {
+          "name": "العربي - أخبار",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC65i3Fyq91uiUkIS0i5GLNQ"
+        }
+      ]
+    },
+    {
+      "slug": "vid-business",
+      "name": "مال وأعمال",
+      "icon": "💼",
+      "sources": [
+        {
+          "name": "الجزيرة اقتصاد",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
+        },
+        {
+          "name": "سكاي نيوز اقتصاد",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCIJXOvggjKtCagMfxvcCzAA"
+        },
+        {
+          "name": "الحدث أعمال",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCrj5BGAhtWxDfqbza9T9hqA"
+        },
+        {
+          "name": "فرانس 24 اقتصاد",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCdTyuXgmJkG_O8_75eqej-w"
+        },
+        {
+          "name": "BBC عربي أعمال",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCelk6aHijZq-GJBBB9YpReA"
+        }
+      ]
+    },
+    {
+      "slug": "vid-science",
+      "name": "علوم وتكنولوجيا",
+      "icon": "🔬",
+      "sources": [
+        {
+          "name": "BBC عربي علوم",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCelk6aHijZq-GJBBB9YpReA"
+        },
+        {
+          "name": "الجزيرة علوم",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
+        },
+        {
+          "name": "DW عربي تكنولوجيا",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC2KCI1AXQVx1_XJmykB7cHA"
+        },
+        {
+          "name": "فرانس 24 علوم",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCdTyuXgmJkG_O8_75eqej-w"
+        },
+        {
+          "name": "سكاي نيوز تقنية",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCIJXOvggjKtCagMfxvcCzAA"
+        }
+      ]
+    },
+    {
+      "slug": "vid-sports",
+      "name": "رياضة",
+      "icon": "⚽",
+      "sources": [
+        {
+          "name": "الجزيرة رياضة",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
+        },
+        {
+          "name": "سكاي نيوز رياضة",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCIJXOvggjKtCagMfxvcCzAA"
+        },
+        {
+          "name": "الحدث رياضة",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCrj5BGAhtWxDfqbza9T9hqA"
+        },
+        {
+          "name": "فرانس 24 رياضة",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCdTyuXgmJkG_O8_75eqej-w"
+        },
+        {
+          "name": "BBC عربي رياضة",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCelk6aHijZq-GJBBB9YpReA"
+        }
+      ]
+    },
+    {
+      "slug": "vid-politics",
+      "name": "تحليلات سياسية",
+      "icon": "🎙️",
+      "sources": [
+        {
+          "name": "الجزيرة تحليلات",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
+        },
+        {
+          "name": "الحدث سياسة",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCrj5BGAhtWxDfqbza9T9hqA"
+        },
+        {
+          "name": "سكاي نيوز سياسة",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCIJXOvggjKtCagMfxvcCzAA"
+        },
+        {
+          "name": "فرانس 24 سياسة",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCdTyuXgmJkG_O8_75eqej-w"
+        },
+        {
+          "name": "BBC عربي سياسة",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCelk6aHijZq-GJBBB9YpReA"
+        },
+        {
+          "name": "DW عربي سياسة",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC2KCI1AXQVx1_XJmykB7cHA"
+        }
+      ]
+    },
+    {
+      "slug": "vid-cooking",
+      "name": "مطبخ",
+      "icon": "🍳",
+      "sources": [
+        {
+          "name": "الجزيرة مطبخ",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
+        },
+        {
+          "name": "الحدث لايف ستايل",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCrj5BGAhtWxDfqbza9T9hqA"
+        },
+        {
+          "name": "سكاي نيوز مطبخ",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCIJXOvggjKtCagMfxvcCzAA"
+        },
+        {
+          "name": "فرانس 24 مطبخ",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCdTyuXgmJkG_O8_75eqej-w"
+        },
+        {
+          "name": "BBC عربي وصفات",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCelk6aHijZq-GJBBB9YpReA"
+        }
+      ]
+    },
+    {
+      "slug": "vid-entertainment",
+      "name": "ترفيه",
+      "icon": "🎬",
+      "sources": [
+        {
+          "name": "الجزيرة ثقافة",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCfiwzLy-8yKzIbsmZTzxDgw"
+        },
+        {
+          "name": "الحدث ترفيه",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCrj5BGAhtWxDfqbza9T9hqA"
+        },
+        {
+          "name": "سكاي نيوز فن",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCIJXOvggjKtCagMfxvcCzAA"
+        },
+        {
+          "name": "فرانس 24 ثقافة",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCdTyuXgmJkG_O8_75eqej-w"
+        },
+        {
+          "name": "BBC عربي ترفيه",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCelk6aHijZq-GJBBB9YpReA"
+        }
+      ]
+    }
+  ],
+  "media_regions": [
+    {
+      "slug": "vid-news",
+      "name": "أحداث",
+      "icon": "📰"
+    },
+    {
+      "slug": "vid-business",
+      "name": "مال وأعمال",
+      "icon": "💼"
+    },
+    {
+      "slug": "vid-science",
+      "name": "علوم وتكنولوجيا",
+      "icon": "🔬"
+    },
+    {
+      "slug": "vid-sports",
+      "name": "رياضة",
+      "icon": "⚽"
+    },
+    {
+      "slug": "vid-politics",
+      "name": "تحليلات سياسية",
+      "icon": "🎙️"
+    },
+    {
+      "slug": "vid-cooking",
+      "name": "مطبخ",
+      "icon": "🍳"
+    },
+    {
+      "slug": "vid-entertainment",
+      "name": "ترفيه",
+      "icon": "🎬"
+    }
+  ]
+}

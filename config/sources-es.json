@@ -1,0 +1,716 @@
+{
+  "settings": {
+    "site_title": "Noticias Mundiales",
+    "site_description": "Los últimos titulares de fuentes internacionales de confianza en un solo lugar",
+    "oldest_days": 7,
+    "site_url": "https://YOUR-DOMAIN.com/es",
+    "lang_code": "es",
+    "lang_rule": "Spanish only — all sources must publish content in Spanish"
+  },
+  "categories": [
+    {
+      "name": "Política",
+      "slug": "politics",
+      "icon": "🏛️",
+      "sources": [
+        {
+          "name": "El País Internacional",
+          "url": "https://elpais.com/internacional/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://elpais.com"
+        },
+        {
+          "name": "BBC Mundo",
+          "url": "https://www.bbc.com/mundo",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "El Mundo Internacional",
+          "url": "https://www.elmundo.es/internacional.html",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.elmundo.es"
+        },
+        {
+          "name": "Infobae",
+          "url": "https://www.infobae.com/america/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.infobae.com"
+        },
+        {
+          "name": "RTVE Internacional",
+          "url": "https://www.rtve.es/noticias/internacional/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.rtve.es"
+        },
+        {
+          "name": "Europapress Internacional",
+          "url": "https://www.europapress.es/internacional/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.europapress.es"
+        },
+        {
+          "name": "El País Política",
+          "url": "https://elpais.com/noticias/politica/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://elpais.com"
+        }
+      ]
+    },
+    {
+      "name": "Economía",
+      "slug": "economy",
+      "icon": "💰",
+      "sources": [
+        {
+          "name": "El País Economía",
+          "url": "https://elpais.com/economia/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://elpais.com"
+        },
+        {
+          "name": "Expansión",
+          "url": "https://www.expansion.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.expansion.com"
+        }
+      ]
+    },
+    {
+      "name": "Tecnología",
+      "slug": "tech",
+      "icon": "💻",
+      "sources": [
+        {
+          "name": "Xataka",
+          "url": "https://www.xataka.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.xataka.com"
+        },
+        {
+          "name": "Genbeta",
+          "url": "https://www.genbeta.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.genbeta.com"
+        },
+        {
+          "name": "Hipertextual",
+          "url": "https://hipertextual.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://hipertextual.com"
+        },
+        {
+          "name": "El Español Omicrono",
+          "url": "https://www.elespanol.com/omicrono/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.elespanol.com"
+        },
+        {
+          "name": "Computer Hoy",
+          "url": "https://computerhoy.20minutos.es/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://computerhoy.20minutos.es"
+        },
+        {
+          "name": "Gizmodo en Español",
+          "url": "https://es.gizmodo.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://es.gizmodo.com"
+        },
+        {
+          "name": "FayerWayer",
+          "url": "https://www.fayerwayer.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.fayerwayer.com"
+        }
+      ]
+    },
+    {
+      "name": "Deportes",
+      "slug": "sports",
+      "icon": "⚽",
+      "sources": [
+        {
+          "name": "Marca",
+          "url": "https://www.marca.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.marca.com"
+        },
+        {
+          "name": "AS",
+          "url": "https://as.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://as.com"
+        }
+      ]
+    },
+    {
+      "name": "Salud",
+      "slug": "health",
+      "icon": "🔬",
+      "sources": [
+        {
+          "name": "El País Salud",
+          "url": "https://elpais.com/salud-y-bienestar/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://elpais.com"
+        },
+        {
+          "name": "Webconsultas",
+          "url": "https://www.webconsultas.com/noticias/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.webconsultas.com"
+        },
+        {
+          "name": "El Confidencial Salud",
+          "url": "https://www.elconfidencial.com/salud/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.elconfidencial.com"
+        }
+      ]
+    },
+    {
+      "name": "Ciencia",
+      "slug": "science",
+      "icon": "🧪",
+      "sources": [
+        {
+          "name": "El País Ciencia",
+          "url": "https://elpais.com/ciencia/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://elpais.com"
+        },
+        {
+          "name": "National Geographic ES",
+          "url": "https://www.nationalgeographic.com.es/ciencia/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.nationalgeographic.com.es"
+        },
+        {
+          "name": "Agencia SINC",
+          "url": "https://www.agenciasinc.es/Noticias",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.agenciasinc.es"
+        }
+      ]
+    },
+    {
+      "name": "Entretenimiento",
+      "slug": "arts",
+      "icon": "🎬",
+      "sources": [
+        {
+          "name": "El País Cultura",
+          "url": "https://elpais.com/cultura/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://elpais.com"
+        },
+        {
+          "name": "El Cultural",
+          "url": "https://elcultural.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://elcultural.com"
+        },
+        {
+          "name": "20minutos Cultura",
+          "url": "https://www.20minutos.es/cultura/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.20minutos.es"
+        }
+      ]
+    },
+    {
+      "name": "Educación",
+      "slug": "education",
+      "icon": "🎓",
+      "sources": [
+        {
+          "name": "El País Educación",
+          "url": "https://elpais.com/educacion/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://elpais.com"
+        },
+        {
+          "name": "La Vanguardia Educación",
+          "url": "https://www.lavanguardia.com/vida/formacion/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.lavanguardia.com"
+        },
+        {
+          "name": "Infobae Educación",
+          "url": "https://www.infobae.com/educacion/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.infobae.com"
+        },
+        {
+          "name": "RTVE Educación",
+          "url": "https://www.rtve.es/noticias/educacion/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.rtve.es"
+        },
+        {
+          "name": "El Diario Educación",
+          "url": "https://www.eldiario.es/sociedad/educacion/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.eldiario.es"
+        }
+      ]
+    },
+    {
+      "name": "Norte de África",
+      "slug": "n-africa-es",
+      "icon": "🇲🇦",
+      "sources": [
+        {
+          "name": "BBC Mundo",
+          "url": "https://www.bbc.com/mundo",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "Deutsche Welle Español",
+          "url": "https://www.dw.com/es/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.dw.com"
+        },
+        {
+          "name": "Europapress Internacional",
+          "url": "https://www.europapress.es/internacional/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.europapress.es"
+        }
+      ]
+    },
+    {
+      "name": "Europa",
+      "slug": "europe-es",
+      "icon": "🏰",
+      "sources": [
+        {
+          "name": "El País Internacional",
+          "url": "https://elpais.com/internacional/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://elpais.com"
+        },
+        {
+          "name": "Euronews Español",
+          "url": "https://feeds.feedburner.com/euronews/es/home/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://es.euronews.com"
+        },
+        {
+          "name": "El Mundo Internacional",
+          "url": "https://www.elmundo.es/internacional.html",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.elmundo.es"
+        },
+        {
+          "name": "RTVE Internacional",
+          "url": "https://www.rtve.es/noticias/internacional/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.rtve.es"
+        }
+      ]
+    },
+    {
+      "name": "Asia",
+      "slug": "asia-es",
+      "icon": "🌏",
+      "sources": [
+        {
+          "name": "El País Internacional",
+          "url": "https://elpais.com/internacional/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://elpais.com"
+        },
+        {
+          "name": "BBC Mundo",
+          "url": "https://www.bbc.com/mundo",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "Deutsche Welle Español Asia",
+          "url": "https://www.dw.com/es/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.dw.com"
+        }
+      ]
+    },
+    {
+      "name": "Oriente Medio",
+      "slug": "mideast-es",
+      "icon": "🕌",
+      "sources": [
+        {
+          "name": "El País Internacional",
+          "url": "https://elpais.com/internacional/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://elpais.com"
+        },
+        {
+          "name": "Deutsche Welle Español Oriente Medio",
+          "url": "https://www.dw.com/es/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.dw.com"
+        },
+        {
+          "name": "Europapress Internacional",
+          "url": "https://www.europapress.es/internacional/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.europapress.es"
+        }
+      ]
+    },
+    {
+      "name": "Noticias España",
+      "slug": "espana-es",
+      "icon": "🇪🇸",
+      "sources": [
+        {
+          "name": "El País España",
+          "url": "https://elpais.com/espana/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://elpais.com"
+        },
+        {
+          "name": "El Mundo España",
+          "url": "https://www.elmundo.es/espana.html",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.elmundo.es"
+        },
+        {
+          "name": "RTVE España",
+          "url": "https://www.rtve.es/noticias/espana/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.rtve.es"
+        },
+        {
+          "name": "El Confidencial España",
+          "url": "https://www.elconfidencial.com/espana/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.elconfidencial.com"
+        },
+        {
+          "name": "Europapress España",
+          "url": "https://www.europapress.es/nacional/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.europapress.es"
+        }
+      ]
+    },
+    {
+      "name": "Américas",
+      "slug": "latam-es",
+      "icon": "🌎",
+      "sources": [
+        {
+          "name": "BBC Mundo",
+          "url": "https://www.bbc.com/mundo",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "Infobae",
+          "url": "https://www.infobae.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.infobae.com"
+        },
+        {
+          "name": "El País América",
+          "url": "https://elpais.com/america/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://elpais.com"
+        },
+        {
+          "name": "Deutsche Welle Español América",
+          "url": "https://www.dw.com/es/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.dw.com"
+        }
+      ]
+    },
+    {
+      "name": "África",
+      "slug": "africa-es",
+      "icon": "🌍",
+      "sources": [
+        {
+          "name": "Deutsche Welle Español África",
+          "url": "https://www.dw.com/es/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.dw.com"
+        },
+        {
+          "name": "Europapress Internacional",
+          "url": "https://www.europapress.es/internacional/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.europapress.es"
+        }
+      ]
+    },
+    {
+      "slug": "vid-news",
+      "name": "Noticias",
+      "icon": "📰",
+      "sources": [
+        {
+          "name": "France 24 Español",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
+        },
+        {
+          "name": "DW Español",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCT4Jg8h03dD0iN3Pb5L0PMA"
+        },
+        {
+          "name": "Euronews",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
+        }
+      ]
+    },
+    {
+      "slug": "vid-business",
+      "name": "Finanzas y Negocios",
+      "icon": "💼",
+      "sources": [
+        {
+          "name": "DW Economía",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCT4Jg8h03dD0iN3Pb5L0PMA"
+        },
+        {
+          "name": "France 24 Economía",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
+        },
+        {
+          "name": "Euronews Economía",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
+        }
+      ]
+    },
+    {
+      "slug": "vid-science",
+      "name": "Ciencia y Tecnología",
+      "icon": "🔬",
+      "sources": [
+        {
+          "name": "DW Ciencia",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCT4Jg8h03dD0iN3Pb5L0PMA"
+        },
+        {
+          "name": "France 24 Ciencia",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
+        },
+        {
+          "name": "Euronews Ciencia",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
+        }
+      ]
+    },
+    {
+      "slug": "vid-sports",
+      "name": "Deportes",
+      "icon": "⚽",
+      "sources": [
+        {
+          "name": "DW Deporte",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCT4Jg8h03dD0iN3Pb5L0PMA"
+        },
+        {
+          "name": "Euronews Deporte",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
+        },
+        {
+          "name": "France 24 Deporte",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
+        }
+      ]
+    },
+    {
+      "slug": "vid-politics",
+      "name": "Análisis político",
+      "icon": "🎙️",
+      "sources": [
+        {
+          "name": "France 24 Política",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
+        },
+        {
+          "name": "DW Política",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCT4Jg8h03dD0iN3Pb5L0PMA"
+        },
+        {
+          "name": "Euronews Política",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
+        }
+      ]
+    },
+    {
+      "slug": "vid-cooking",
+      "name": "Gastronomía",
+      "icon": "🍳",
+      "sources": [
+        {
+          "name": "France 24 Gastronomía",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
+        },
+        {
+          "name": "DW Gastronomía",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCT4Jg8h03dD0iN3Pb5L0PMA"
+        },
+        {
+          "name": "Euronews Cocina",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
+        }
+      ]
+    },
+    {
+      "slug": "vid-entertainment",
+      "name": "Entretenimiento",
+      "icon": "🎬",
+      "sources": [
+        {
+          "name": "France 24 Cultura",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCCCPCZNChQdGa9EkATeye4g"
+        },
+        {
+          "name": "DW Cultura",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCT4Jg8h03dD0iN3Pb5L0PMA"
+        },
+        {
+          "name": "Euronews Cultura",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCSrZ3UV4jOidv8ppoVuvW9Q"
+        }
+      ]
+    }
+  ],
+  "media_regions": [
+    {
+      "slug": "vid-news",
+      "name": "Noticias",
+      "icon": "📰"
+    },
+    {
+      "slug": "vid-business",
+      "name": "Finanzas y Negocios",
+      "icon": "💼"
+    },
+    {
+      "slug": "vid-science",
+      "name": "Ciencia y Tecnología",
+      "icon": "🔬"
+    },
+    {
+      "slug": "vid-sports",
+      "name": "Deportes",
+      "icon": "⚽"
+    },
+    {
+      "slug": "vid-politics",
+      "name": "Análisis político",
+      "icon": "🎙️"
+    },
+    {
+      "slug": "vid-cooking",
+      "name": "Gastronomía",
+      "icon": "🍳"
+    },
+    {
+      "slug": "vid-entertainment",
+      "name": "Entretenimiento",
+      "icon": "🎬"
+    }
+  ],
+  "world_regions": [
+    {
+      "slug": "espana-es",
+      "name": "España",
+      "icon": "🇪🇸"
+    },
+    {
+      "slug": "n-africa-es",
+      "name": "Norte de África",
+      "icon": "🇲🇦"
+    },
+    {
+      "slug": "europe-es",
+      "name": "Europa",
+      "icon": "🏰"
+    },
+    {
+      "slug": "asia-es",
+      "name": "Asia",
+      "icon": "🌏"
+    },
+    {
+      "slug": "africa-es",
+      "name": "África",
+      "icon": "🌍"
+    },
+    {
+      "slug": "latam-es",
+      "name": "Américas",
+      "icon": "🌎"
+    },
+    {
+      "slug": "mideast-es",
+      "name": "Oriente Medio",
+      "icon": "🕌"
+    }
+  ]
+}
