@@ -358,6 +358,7 @@ STRINGS: dict[str, dict] = {
         "articles_unit": "خبر", "sources_unit": "مصدر", "cats_unit": "تصنيف",
         "sections_widget": "🗂️ الأقسام", "links_widget": "📎 روابط",
         "about": "من نحن", "privacy": "سياسة الخصوصية", "ad": "إعلان",
+        "contact": "اتصل بنا", "terms": "شروط الاستخدام", "advertise": "أعلن معنا",
         "theme_btn_label": "تبديل الوضع", "live_label": "مباشر",
         "nav_label": "الأقسام", "header_label": "عنوان الموقع",
         "back_to_top": "العودة للأعلى", "theme_color": "#1d4ed8",
@@ -422,6 +423,7 @@ STRINGS: dict[str, dict] = {
         "articles_unit": "articles", "sources_unit": "sources", "cats_unit": "sections",
         "sections_widget": "🗂️ Sections", "links_widget": "📎 Links",
         "about": "About", "privacy": "Privacy Policy", "ad": "Advertisement",
+        "contact": "Contact", "terms": "Terms of Use", "advertise": "Advertise",
         "theme_btn_label": "Toggle theme", "live_label": "Live",
         "nav_label": "Sections", "header_label": "Site header",
         "back_to_top": "Back to top", "theme_color": "#2563eb",
@@ -486,6 +488,7 @@ STRINGS: dict[str, dict] = {
         "articles_unit": "articles", "sources_unit": "sources", "cats_unit": "sections",
         "sections_widget": "🗂️ Sections", "links_widget": "📎 Liens",
         "about": "À propos", "privacy": "Confidentialité", "ad": "Publicité",
+        "contact": "Contact", "terms": "Conditions d'utilisation", "advertise": "Publicité avec nous",
         "theme_btn_label": "Changer le thème", "live_label": "En direct",
         "nav_label": "Sections", "header_label": "En-tête",
         "back_to_top": "Retour en haut", "theme_color": "#1d4ed8",
@@ -550,6 +553,7 @@ STRINGS: dict[str, dict] = {
         "articles_unit": "artículos", "sources_unit": "fuentes", "cats_unit": "secciones",
         "sections_widget": "🗂️ Secciones", "links_widget": "📎 Enlaces",
         "about": "Acerca de", "privacy": "Privacidad", "ad": "Publicidad",
+        "contact": "Contacto", "terms": "Términos de uso", "advertise": "Publicidad",
         "theme_btn_label": "Cambiar tema", "live_label": "En vivo",
         "nav_label": "Secciones", "header_label": "Encabezado",
         "back_to_top": "Volver arriba", "theme_color": "#c2410c",
@@ -614,6 +618,7 @@ STRINGS: dict[str, dict] = {
         "articles_unit": "haber", "sources_unit": "kaynak", "cats_unit": "bölüm",
         "sections_widget": "🗂️ Bölümler", "links_widget": "📎 Bağlantılar",
         "about": "Hakkımızda", "privacy": "Gizlilik Politikası", "ad": "Reklam",
+        "contact": "İletişim", "terms": "Kullanim Kosullari", "advertise": "Reklam Ver",
         "theme_btn_label": "Temayı değiştir", "live_label": "Canlı",
         "nav_label": "Bölümler", "header_label": "Site başlığı",
         "back_to_top": "Başa dön", "theme_color": "#dc2626",
@@ -2340,6 +2345,930 @@ ABOUT_HTML_TR = """\
 </html>
 """
 
+# ── Shared inline CSS for static pages ───────────────────────────────────────
+_PAGE_CSS = """
+.page{max-width:820px;margin:40px auto;padding:0 16px 80px}
+.page h1{margin-bottom:6px}
+.sub{color:var(--text-muted);margin-bottom:36px;font-size:.85em}
+.page h2{margin:28px 0 10px;font-size:1.05em;color:var(--accent);border-inline-start:3px solid var(--accent);padding-inline-start:10px}
+.dark-mode .page h2{color:#60a5fa;border-color:#60a5fa}
+.page p,.page li{color:var(--text-muted);line-height:1.85;margin-bottom:12px;font-size:.95em}
+.page ul{padding-inline-start:20px;margin-bottom:14px}
+.page li{list-style:disc}
+.page a{color:var(--accent);text-decoration:underline}
+.back{display:inline-block;margin-bottom:28px;color:var(--accent);font-size:.9em}
+.back:hover{text-decoration:underline}
+.info-card{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:14px;display:flex;gap:16px;align-items:flex-start}
+.info-card-icon{font-size:1.8em;flex-shrink:0;margin-top:2px}
+.info-card h3{margin:0 0 4px;font-size:1em;font-weight:700}
+.info-card p{margin:0;font-size:.88em;color:var(--text-muted)}
+.info-card a{color:var(--accent);font-weight:700;text-decoration:none}
+.info-card a:hover{text-decoration:underline}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
+.stat-box2{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:18px;text-align:center}
+.stat-box2-val{font-size:1.8em;font-weight:800;color:var(--accent)}
+.stat-box2-lbl{font-size:.78em;color:var(--text-muted);margin-top:4px}
+.ad-format{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.ad-format-name{font-weight:700;font-size:.95em}
+.ad-format-size{font-size:.82em;color:var(--text-muted);direction:ltr}
+.cta-box{background:linear-gradient(135deg,var(--accent),#6366f1);border-radius:14px;padding:32px;text-align:center;margin:28px 0;color:#fff}
+.cta-box h2{color:#fff;border:none;padding:0;margin:0 0 10px;font-size:1.3em}
+.cta-box p{color:rgba(255,255,255,.9);margin-bottom:20px}
+.cta-btn{display:inline-block;background:#fff;color:var(--accent);padding:12px 32px;border-radius:8px;font-weight:700;font-size:.95em;text-decoration:none;transition:.2s}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.2)}
+@media(max-width:540px){.stat-row{grid-template-columns:1fr 1fr}}
+"""
+
+# ════════════════════════════════════════════════════════════════════════════
+# CONTACT PAGES (5 languages)
+# ════════════════════════════════════════════════════════════════════════════
+CONTACT_HTML = """\
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>اتصل بنا — Atlas News</title>
+<meta name="description" content="تواصل مع فريق Atlas News — استفسارات، اقتراحات، وفرص الإعلان">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; العودة للرئيسية</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>اتصل بنا</h1>
+  <p class="sub">نسعد بسماع آرائكم واستفساراتكم — سيتم الرد خلال 48 ساعة عمل</p>
+
+  <div class="info-card">
+    <span class="info-card-icon">📧</span>
+    <div>
+      <h3>البريد العام</h3>
+      <p>للاستفسارات العامة والاقتراحات</p>
+      <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <span class="info-card-icon">📢</span>
+    <div>
+      <h3>الإعلان والشراكات</h3>
+      <p>للاستفسار عن فرص الإعلان والتعاون التجاري</p>
+      <a href="mailto:ads@solvixi.com">ads@solvixi.com</a>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <span class="info-card-icon">⚠️</span>
+    <div>
+      <h3>الإبلاغ عن محتوى</h3>
+      <p>للإبلاغ عن أي محتوى مشكوك فيه أو أخطاء</p>
+      <a href="mailto:report@solvixi.com">report@solvixi.com</a>
+    </div>
+  </div>
+
+  <h2>معلومات عامة</h2>
+  <p><strong>Atlas News</strong> هو موقع تجميع إخباري آلي يخدم الجمهور العالمي بخمس لغات: العربية، الإنجليزية، الفرنسية، الإسبانية، والتركية.</p>
+  <p>نحن نرحب بأي تعاون أو شراكة أو اقتراحات لمصادر جديدة. تواصل معنا وسنرد في أقرب وقت ممكن.</p>
+
+  <h2>اقتراح مصدر إخباري</h2>
+  <p>هل تعرف موقعاً إخبارياً موثوقاً يستحق الإضافة؟ أرسل لنا اسمه ورابطه على <a href="mailto:contact@solvixi.com">contact@solvixi.com</a> وسنراجعه بعناية.</p>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+CONTACT_HTML_EN = """\
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>Contact Us — Atlas News</title>
+<meta name="description" content="Get in touch with Atlas News — inquiries, suggestions, and advertising opportunities">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; Back to Home</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>Contact Us</h1>
+  <p class="sub">We'd love to hear from you — we reply within 48 business hours</p>
+
+  <div class="info-card">
+    <span class="info-card-icon">📧</span>
+    <div>
+      <h3>General Inquiries</h3>
+      <p>For questions, suggestions and feedback</p>
+      <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <span class="info-card-icon">📢</span>
+    <div>
+      <h3>Advertising &amp; Partnerships</h3>
+      <p>For advertising opportunities and commercial partnerships</p>
+      <a href="mailto:ads@solvixi.com">ads@solvixi.com</a>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <span class="info-card-icon">⚠️</span>
+    <div>
+      <h3>Report Content</h3>
+      <p>To report inaccurate or problematic content</p>
+      <a href="mailto:report@solvixi.com">report@solvixi.com</a>
+    </div>
+  </div>
+
+  <h2>About Atlas News</h2>
+  <p><strong>Atlas News</strong> is an automated multilingual news aggregator serving global audiences in five languages: Arabic, English, French, Spanish, and Turkish.</p>
+  <p>We welcome collaborations, partnerships, and source suggestions. Reach out and we'll get back to you as soon as possible.</p>
+
+  <h2>Suggest a News Source</h2>
+  <p>Know a reliable news source worth adding? Send us the name and URL at <a href="mailto:contact@solvixi.com">contact@solvixi.com</a> and we'll review it carefully.</p>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+CONTACT_HTML_FR = """\
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>Contactez-nous — Atlas News</title>
+<meta name="description" content="Contactez l'équipe Atlas News — questions, suggestions et opportunités publicitaires">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; Retour à l'accueil</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>Contactez-nous</h1>
+  <p class="sub">Nous serons ravis de vous entendre — réponse sous 48 heures ouvrables</p>
+
+  <div class="info-card">
+    <span class="info-card-icon">📧</span>
+    <div>
+      <h3>Contact général</h3>
+      <p>Pour les questions, suggestions et retours</p>
+      <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <span class="info-card-icon">📢</span>
+    <div>
+      <h3>Publicité &amp; Partenariats</h3>
+      <p>Pour les opportunités publicitaires et partenariats commerciaux</p>
+      <a href="mailto:ads@solvixi.com">ads@solvixi.com</a>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <span class="info-card-icon">⚠️</span>
+    <div>
+      <h3>Signaler un contenu</h3>
+      <p>Pour signaler un contenu inexact ou problématique</p>
+      <a href="mailto:report@solvixi.com">report@solvixi.com</a>
+    </div>
+  </div>
+
+  <h2>À propos d'Atlas News</h2>
+  <p><strong>Atlas News</strong> est un agrégateur d'actualités multilingue automatisé servant un public mondial en cinq langues : arabe, anglais, français, espagnol et turc.</p>
+  <p>Nous accueillons volontiers les collaborations, partenariats et suggestions de sources. Contactez-nous et nous vous répondrons dans les plus brefs délais.</p>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+CONTACT_HTML_ES = """\
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>Contacto — Atlas News</title>
+<meta name="description" content="Contacta con el equipo de Atlas News — consultas, sugerencias y oportunidades publicitarias">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; Volver al inicio</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>Contacto</h1>
+  <p class="sub">Nos encantará saber de ti — respondemos en 48 horas hábiles</p>
+
+  <div class="info-card">
+    <span class="info-card-icon">📧</span>
+    <div>
+      <h3>Consultas generales</h3>
+      <p>Para preguntas, sugerencias y comentarios</p>
+      <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <span class="info-card-icon">📢</span>
+    <div>
+      <h3>Publicidad &amp; Colaboraciones</h3>
+      <p>Para oportunidades publicitarias y asociaciones comerciales</p>
+      <a href="mailto:ads@solvixi.com">ads@solvixi.com</a>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <span class="info-card-icon">⚠️</span>
+    <div>
+      <h3>Reportar contenido</h3>
+      <p>Para reportar contenido inexacto o problemático</p>
+      <a href="mailto:report@solvixi.com">report@solvixi.com</a>
+    </div>
+  </div>
+
+  <h2>Sobre Atlas News</h2>
+  <p><strong>Atlas News</strong> es un agregador de noticias multilingüe automatizado que sirve a audiencias globales en cinco idiomas: árabe, inglés, francés, español y turco.</p>
+  <p>Damos la bienvenida a colaboraciones, asociaciones y sugerencias de fuentes. Contáctanos y te responderemos lo antes posible.</p>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+CONTACT_HTML_TR = """\
+<!DOCTYPE html>
+<html lang="tr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>Iletisim — Atlas News</title>
+<meta name="description" content="Atlas News ekibiyle iletisime gecin — sorular, oneriler ve reklam firsatlari">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; Ana Sayfaya Don</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>Iletisim</h1>
+  <p class="sub">Sizden haber almaktan memnuniyet duyariz — 48 is saati icinde yanit veririz</p>
+
+  <div class="info-card">
+    <span class="info-card-icon">📧</span>
+    <div>
+      <h3>Genel Sorular</h3>
+      <p>Sorular, oneriler ve geri bildirimler icin</p>
+      <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <span class="info-card-icon">📢</span>
+    <div>
+      <h3>Reklam &amp; Is Birligi</h3>
+      <p>Reklam firsatlari ve ticari ortakliklar icin</p>
+      <a href="mailto:ads@solvixi.com">ads@solvixi.com</a>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <span class="info-card-icon">⚠️</span>
+    <div>
+      <h3>Icerik Bildirin</h3>
+      <p>Yanlis veya sorunlu icerigi bildirmek icin</p>
+      <a href="mailto:report@solvixi.com">report@solvixi.com</a>
+    </div>
+  </div>
+
+  <h2>Atlas News Hakkinda</h2>
+  <p><strong>Atlas News</strong>, bes dilde — Arapca, Ingilizce, Fransizca, Ispanyolca ve Turkce — kuresel kitlelere hizmet eden otomatik cok dilli bir haber toplayicisidir.</p>
+  <p>Is birlikleri, ortakliklar ve kaynak onerileri konusunda her zaman acigiz. Bize ulasin, en kisa surede geri donecegiz.</p>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+# ════════════════════════════════════════════════════════════════════════════
+# TERMS OF USE PAGES (5 languages)
+# ════════════════════════════════════════════════════════════════════════════
+TERMS_HTML = """\
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>شروط الاستخدام — Atlas News</title>
+<meta name="description" content="شروط وأحكام استخدام موقع Atlas News">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; العودة للرئيسية</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>شروط الاستخدام</h1>
+  <p class="sub">آخر تحديث: 2025 — يُرجى قراءة هذه الشروط بعناية قبل استخدام الموقع</p>
+
+  <h2>1. القبول بالشروط</h2>
+  <p>باستخدامك لموقع <strong>Atlas News</strong> (atlasnews.solvixi.com)، فإنك توافق على الالتزام بهذه الشروط والأحكام. إذا كنت لا توافق على أي من هذه الشروط، يُرجى التوقف عن استخدام الموقع.</p>
+
+  <h2>2. طبيعة الخدمة</h2>
+  <p>Atlas News هو <strong>مجمّع إخباري آلي</strong> يعرض عناوين الأخبار وروابطها من مصادر إخبارية خارجية. نحن:</p>
+  <ul>
+    <li>لا ننشئ أو نحرر أي محتوى إخباري</li>
+    <li>نعرض فقط العناوين مع روابط المصادر الأصلية</li>
+    <li>لسنا مسؤولين عن دقة أو محتوى المقالات الأصلية</li>
+    <li>نحترم حقوق الملكية الفكرية للمصادر الأصلية</li>
+  </ul>
+
+  <h2>3. الملكية الفكرية</h2>
+  <p>جميع عناوين الأخبار وصور المقالات هي ملك لأصحابها الأصليين. يتم عرضها استناداً إلى مبدأ الاقتباس المنصف (Fair Use) لأغراض إخبارية. إذا كنت صاحب محتوى وترغب في إزالته، تواصل معنا على <a href="mailto:report@solvixi.com">report@solvixi.com</a>.</p>
+
+  <h2>4. إخلاء المسؤولية</h2>
+  <p>يُقدَّم الموقع "كما هو" دون أي ضمانات صريحة أو ضمنية. لا نضمن دقة أو اكتمال أو توافر المحتوى في أي وقت. لن نكون مسؤولين عن أي أضرار مباشرة أو غير مباشرة ناتجة عن استخدام الموقع.</p>
+
+  <h2>5. الاستخدامات المحظورة</h2>
+  <p>يُحظر عليك:</p>
+  <ul>
+    <li>كشط أو استخراج البيانات بشكل منهجي من الموقع</li>
+    <li>إعادة نشر محتوى الموقع دون إذن صريح</li>
+    <li>محاولة اختراق أو التدخل في عمل الموقع</li>
+    <li>استخدام الموقع لأغراض غير قانونية</li>
+  </ul>
+
+  <h2>6. الإعلانات</h2>
+  <p>قد يعرض الموقع إعلانات من خلال Google AdSense وشبكات إعلانية أخرى. هذه الإعلانات خاضعة لشروط وسياسات خصوصية مزوديها. لا نتحمل مسؤولية محتوى هذه الإعلانات.</p>
+
+  <h2>7. التعديلات</h2>
+  <p>نحتفظ بحق تعديل هذه الشروط في أي وقت. الاستمرار في استخدام الموقع بعد التعديلات يُعدّ قبولاً بها.</p>
+
+  <h2>8. التواصل</h2>
+  <p>للأسئلة المتعلقة بهذه الشروط: <a href="mailto:contact@solvixi.com">contact@solvixi.com</a></p>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+TERMS_HTML_EN = """\
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>Terms of Use — Atlas News</title>
+<meta name="description" content="Terms and conditions for using Atlas News">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; Back to Home</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>Terms of Use</h1>
+  <p class="sub">Last updated: 2025 — Please read these terms carefully before using the site</p>
+
+  <h2>1. Acceptance of Terms</h2>
+  <p>By accessing <strong>Atlas News</strong> (atlasnews.solvixi.com), you agree to be bound by these Terms of Use. If you do not agree to any of these terms, please discontinue use of the site.</p>
+
+  <h2>2. Nature of Service</h2>
+  <p>Atlas News is an <strong>automated news aggregator</strong> that displays headlines and links from external news sources. We:</p>
+  <ul>
+    <li>Do not create or edit any news content</li>
+    <li>Display only headlines with links to original sources</li>
+    <li>Are not responsible for the accuracy or content of original articles</li>
+    <li>Respect the intellectual property rights of original publishers</li>
+  </ul>
+
+  <h2>3. Intellectual Property</h2>
+  <p>All news headlines and article images are the property of their respective owners. They are displayed under the principle of Fair Use for news aggregation purposes. If you are a content owner and wish to have content removed, contact us at <a href="mailto:report@solvixi.com">report@solvixi.com</a>.</p>
+
+  <h2>4. Disclaimer of Warranties</h2>
+  <p>The site is provided "as is" without any express or implied warranties. We do not guarantee the accuracy, completeness, or availability of content at any time. We shall not be liable for any direct or indirect damages resulting from use of the site.</p>
+
+  <h2>5. Prohibited Uses</h2>
+  <p>You may not:</p>
+  <ul>
+    <li>Systematically scrape or extract data from the site</li>
+    <li>Republish site content without explicit permission</li>
+    <li>Attempt to hack or interfere with site operations</li>
+    <li>Use the site for any unlawful purposes</li>
+  </ul>
+
+  <h2>6. Advertising</h2>
+  <p>The site may display advertisements via Google AdSense and other ad networks. These ads are subject to the terms and privacy policies of their providers. We are not responsible for ad content.</p>
+
+  <h2>7. Modifications</h2>
+  <p>We reserve the right to modify these terms at any time. Continued use of the site after modifications constitutes acceptance of the updated terms.</p>
+
+  <h2>8. Contact</h2>
+  <p>For questions about these terms: <a href="mailto:contact@solvixi.com">contact@solvixi.com</a></p>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+TERMS_HTML_FR = """\
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>Conditions d'utilisation — Atlas News</title>
+<meta name="description" content="Conditions générales d'utilisation d'Atlas News">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; Retour à l'accueil</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>Conditions d'utilisation</h1>
+  <p class="sub">Dernière mise à jour : 2025 — Veuillez lire attentivement ces conditions</p>
+
+  <h2>1. Acceptation des conditions</h2>
+  <p>En accédant à <strong>Atlas News</strong>, vous acceptez d'être lié par ces conditions d'utilisation.</p>
+
+  <h2>2. Nature du service</h2>
+  <p>Atlas News est un <strong>agrégateur d'actualités automatisé</strong> qui affiche des titres et des liens vers des sources d'information externes. Nous ne créons ni n'éditons aucun contenu journalistique.</p>
+
+  <h2>3. Propriété intellectuelle</h2>
+  <p>Tous les titres et images d'articles appartiennent à leurs propriétaires respectifs. Si vous êtes propriétaire d'un contenu et souhaitez qu'il soit retiré, contactez-nous : <a href="mailto:report@solvixi.com">report@solvixi.com</a>.</p>
+
+  <h2>4. Limitation de responsabilité</h2>
+  <p>Le site est fourni "tel quel" sans garantie d'aucune sorte. Nous ne garantissons pas l'exactitude, l'exhaustivité ou la disponibilité du contenu.</p>
+
+  <h2>5. Utilisations interdites</h2>
+  <ul>
+    <li>Extraction systématique de données (scraping)</li>
+    <li>Republication du contenu sans autorisation explicite</li>
+    <li>Tentatives de piratage ou d'interférence avec le site</li>
+    <li>Utilisation à des fins illégales</li>
+  </ul>
+
+  <h2>6. Publicité</h2>
+  <p>Le site peut afficher des publicités via Google AdSense et d'autres réseaux. Nous ne sommes pas responsables du contenu de ces publicités.</p>
+
+  <h2>7. Modifications</h2>
+  <p>Nous nous réservons le droit de modifier ces conditions à tout moment. La poursuite de l'utilisation du site vaut acceptation.</p>
+
+  <h2>8. Contact</h2>
+  <p><a href="mailto:contact@solvixi.com">contact@solvixi.com</a></p>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+TERMS_HTML_ES = """\
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>Términos de uso — Atlas News</title>
+<meta name="description" content="Términos y condiciones de uso de Atlas News">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; Volver al inicio</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>Términos de uso</h1>
+  <p class="sub">Última actualización: 2025 — Por favor lee estos términos detenidamente</p>
+
+  <h2>1. Aceptación de los términos</h2>
+  <p>Al acceder a <strong>Atlas News</strong>, aceptas quedar vinculado por estos Términos de uso.</p>
+
+  <h2>2. Naturaleza del servicio</h2>
+  <p>Atlas News es un <strong>agregador de noticias automatizado</strong> que muestra titulares y enlaces a fuentes de noticias externas. No creamos ni editamos ningún contenido periodístico.</p>
+
+  <h2>3. Propiedad intelectual</h2>
+  <p>Todos los titulares e imágenes pertenecen a sus respectivos propietarios. Si eres propietario de contenido y deseas que sea eliminado, contáctanos: <a href="mailto:report@solvixi.com">report@solvixi.com</a>.</p>
+
+  <h2>4. Limitación de responsabilidad</h2>
+  <p>El sitio se proporciona "tal cual" sin garantías de ningún tipo. No garantizamos la exactitud, integridad o disponibilidad del contenido en ningún momento.</p>
+
+  <h2>5. Usos prohibidos</h2>
+  <ul>
+    <li>Extracción sistemática de datos (scraping)</li>
+    <li>Republicación de contenido sin permiso explícito</li>
+    <li>Intentos de hackear o interferir con el sitio</li>
+    <li>Uso para fines ilegales</li>
+  </ul>
+
+  <h2>6. Publicidad</h2>
+  <p>El sitio puede mostrar publicidad a través de Google AdSense y otras redes. No somos responsables del contenido de dichos anuncios.</p>
+
+  <h2>7. Modificaciones</h2>
+  <p>Nos reservamos el derecho de modificar estos términos en cualquier momento. El uso continuado del sitio implica la aceptación de los términos actualizados.</p>
+
+  <h2>8. Contacto</h2>
+  <p><a href="mailto:contact@solvixi.com">contact@solvixi.com</a></p>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+TERMS_HTML_TR = """\
+<!DOCTYPE html>
+<html lang="tr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>Kullanim Kosullari — Atlas News</title>
+<meta name="description" content="Atlas News kullanim sartlari ve kosullari">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; Ana Sayfaya Don</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>Kullanim Kosullari</h1>
+  <p class="sub">Son guncelleme: 2025 — Siteyi kullanmadan once bu kosullari okuyunuz</p>
+
+  <h2>1. Kosullarin Kabulü</h2>
+  <p><strong>Atlas News</strong>'e erisim saglamaniz, bu Kullanim Kosullarini kabul ettiginiz anlamina gelir.</p>
+
+  <h2>2. Hizmetin Niteligj</h2>
+  <p>Atlas News, harici haber kaynaklarından basliklari ve bağlantilari görüntüleyen bir <strong>otomatik haber toplayicisidir</strong>. Herhangi bir gazetecilik icerigi olusturmuyoruz veya düzenlemiyoruz.</p>
+
+  <h2>3. Fikri Mülkiyet</h2>
+  <p>Tüm haber basliklari ve görseller ilgili sahiplerine aittir. Icerik kaldirma talebi icin: <a href="mailto:report@solvixi.com">report@solvixi.com</a></p>
+
+  <h2>4. Sorumluluk Reddi</h2>
+  <p>Site "oldugu gibi" sunulmaktadir. Icerik dogrulugu, eksiksizligi veya kullanilabilirligi konusunda hicbir garanti vermiyoruz.</p>
+
+  <h2>5. Yasak Kullanimlar</h2>
+  <ul>
+    <li>Sistematik veri cekme (scraping)</li>
+    <li>Acik izin olmaksizin icerik yayinlama</li>
+    <li>Siteyi hackleme veya mudahale girisimleri</li>
+    <li>Yasa disi amaclarla kullanim</li>
+  </ul>
+
+  <h2>6. Reklamcilik</h2>
+  <p>Site, Google AdSense ve diger ag araciligiyla reklam gösterebilir. Bu reklamlarin iceriginden sorumlu degiliz.</p>
+
+  <h2>7. Degisiklikler</h2>
+  <p>Bu kosullari istediğimiz zaman degistirme hakkini sakli tutariz. Siteyi kullanmaya devam etmek degisiklikleri kabul etmek anlamina gelir.</p>
+
+  <h2>8. Iletisim</h2>
+  <p><a href="mailto:contact@solvixi.com">contact@solvixi.com</a></p>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+# ════════════════════════════════════════════════════════════════════════════
+# ADVERTISE PAGES (5 languages)
+# ════════════════════════════════════════════════════════════════════════════
+ADVERTISE_HTML = """\
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>أعلن معنا — Atlas News</title>
+<meta name="description" content="أعلن على Atlas News وصل إلى جمهور عالمي بـ 5 لغات — عروض الإعلانات والشراكات">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; العودة للرئيسية</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>أعلن معنا</h1>
+  <p class="sub">صل إلى جمهور عالمي متنوع بـ 5 لغات في منصة إخبارية موثوقة</p>
+
+  <div class="stat-row">
+    <div class="stat-box2"><div class="stat-box2-val">5</div><div class="stat-box2-lbl">لغات عالمية</div></div>
+    <div class="stat-box2"><div class="stat-box2-val">500+</div><div class="stat-box2-lbl">مصدر إخباري</div></div>
+    <div class="stat-box2"><div class="stat-box2-val">24/7</div><div class="stat-box2-lbl">تحديث مستمر</div></div>
+  </div>
+
+  <h2>لماذا تُعلن معنا؟</h2>
+  <ul>
+    <li><strong>جمهور متعدد اللغات:</strong> العربية، الإنجليزية، الفرنسية، الإسبانية، التركية — تغطية حقيقية لـ 5 مناطق جغرافية مختلفة</li>
+    <li><strong>محتوى ذو صلة:</strong> زوار يبحثون عن أخبار في مجالات السياسة والاقتصاد والتقنية والرياضة وأكثر</li>
+    <li><strong>بيئة آمنة للعلامات التجارية:</strong> محتوى إخباري موثوق ومُصنَّف بدقة</li>
+    <li><strong>PWA + جميع الأجهزة:</strong> يعمل بسلاسة على الموبايل، التابلت، وسطح المكتب</li>
+  </ul>
+
+  <h2>أشكال الإعلانات المتاحة</h2>
+  <div class="ad-format">
+    <span class="ad-format-name">🖼️ بانر الرأس</span>
+    <span class="ad-format-size">728×90 / 320×50 (موبايل)</span>
+  </div>
+  <div class="ad-format">
+    <span class="ad-format-name">📐 مستطيل كبير</span>
+    <span class="ad-format-size">336×280 / 300×250</span>
+  </div>
+  <div class="ad-format">
+    <span class="ad-format-name">📏 عمود جانبي</span>
+    <span class="ad-format-size">160×600 / 300×600</span>
+  </div>
+  <div class="ad-format">
+    <span class="ad-format-name">📌 بين المقالات</span>
+    <span class="ad-format-size">In-feed native ads</span>
+  </div>
+  <div class="ad-format">
+    <span class="ad-format-name">🤝 محتوى مدعوم</span>
+    <span class="ad-format-size">Sponsored content</span>
+  </div>
+
+  <div class="cta-box">
+    <h2>ابدأ الإعلان اليوم</h2>
+    <p>تواصل معنا للحصول على عرض مخصص يناسب ميزانيتك وأهدافك التسويقية</p>
+    <a href="mailto:ads@solvixi.com" class="cta-btn">📧 ads@solvixi.com</a>
+  </div>
+
+  <h2>الشراكات الاستراتيجية</h2>
+  <p>نرحب أيضاً بالشراكات الاستراتيجية مع المنصات الإعلامية والعلامات التجارية والمؤسسات الراغبة في الوصول إلى جمهورنا المتنوع. تواصل معنا لمناقشة فرص التعاون.</p>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+ADVERTISE_HTML_EN = """\
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>Advertise with Us — Atlas News</title>
+<meta name="description" content="Advertise on Atlas News and reach a global audience in 5 languages — ad formats and partnership opportunities">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; Back to Home</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>Advertise with Us</h1>
+  <p class="sub">Reach a diverse global audience across 5 languages on a trusted news platform</p>
+
+  <div class="stat-row">
+    <div class="stat-box2"><div class="stat-box2-val">5</div><div class="stat-box2-lbl">Languages</div></div>
+    <div class="stat-box2"><div class="stat-box2-val">500+</div><div class="stat-box2-lbl">News Sources</div></div>
+    <div class="stat-box2"><div class="stat-box2-val">24/7</div><div class="stat-box2-lbl">Live Updates</div></div>
+  </div>
+
+  <h2>Why Advertise with Atlas News?</h2>
+  <ul>
+    <li><strong>Multilingual audience:</strong> Arabic, English, French, Spanish, Turkish — genuine coverage of 5 distinct geographic markets</li>
+    <li><strong>Engaged readers:</strong> Visitors actively seeking news across politics, economy, tech, sports and more</li>
+    <li><strong>Brand-safe environment:</strong> Trusted, well-categorized news content</li>
+    <li><strong>PWA + all devices:</strong> Seamless experience on mobile, tablet, and desktop</li>
+  </ul>
+
+  <h2>Available Ad Formats</h2>
+  <div class="ad-format">
+    <span class="ad-format-name">🖼️ Leaderboard Banner</span>
+    <span class="ad-format-size">728×90 / 320×50 (mobile)</span>
+  </div>
+  <div class="ad-format">
+    <span class="ad-format-name">📐 Large Rectangle</span>
+    <span class="ad-format-size">336×280 / 300×250</span>
+  </div>
+  <div class="ad-format">
+    <span class="ad-format-name">📏 Sidebar Column</span>
+    <span class="ad-format-size">160×600 / 300×600</span>
+  </div>
+  <div class="ad-format">
+    <span class="ad-format-name">📌 In-feed Ads</span>
+    <span class="ad-format-size">Native in-article placement</span>
+  </div>
+  <div class="ad-format">
+    <span class="ad-format-name">🤝 Sponsored Content</span>
+    <span class="ad-format-size">Branded content integration</span>
+  </div>
+
+  <div class="cta-box">
+    <h2>Start Advertising Today</h2>
+    <p>Contact us for a custom proposal tailored to your budget and marketing goals</p>
+    <a href="mailto:ads@solvixi.com" class="cta-btn">📧 ads@solvixi.com</a>
+  </div>
+
+  <h2>Strategic Partnerships</h2>
+  <p>We also welcome strategic partnerships with media platforms, brands, and organizations looking to reach our diverse audience. Contact us to discuss collaboration opportunities.</p>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+ADVERTISE_HTML_FR = """\
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>Faites de la publicité avec nous — Atlas News</title>
+<meta name="description" content="Faites de la publicité sur Atlas News et touchez un public mondial en 5 langues">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; Retour à l'accueil</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>Publicité avec nous</h1>
+  <p class="sub">Touchez un public mondial diversifié en 5 langues sur une plateforme d'actualités de confiance</p>
+
+  <div class="stat-row">
+    <div class="stat-box2"><div class="stat-box2-val">5</div><div class="stat-box2-lbl">Langues</div></div>
+    <div class="stat-box2"><div class="stat-box2-val">500+</div><div class="stat-box2-lbl">Sources</div></div>
+    <div class="stat-box2"><div class="stat-box2-val">24/7</div><div class="stat-box2-lbl">Mises à jour</div></div>
+  </div>
+
+  <h2>Pourquoi nous choisir ?</h2>
+  <ul>
+    <li><strong>Audience multilingue :</strong> Arabe, anglais, français, espagnol, turc — 5 marchés géographiques distincts</li>
+    <li><strong>Lecteurs engagés :</strong> Visiteurs en quête d'actualités en politique, économie, tech, sport et plus</li>
+    <li><strong>Environnement brand-safe :</strong> Contenu d'actualité fiable et bien catégorisé</li>
+    <li><strong>PWA + tous appareils :</strong> Expérience fluide sur mobile, tablette et bureau</li>
+  </ul>
+
+  <h2>Formats publicitaires disponibles</h2>
+  <div class="ad-format"><span class="ad-format-name">🖼️ Bannière leaderboard</span><span class="ad-format-size">728×90 / 320×50</span></div>
+  <div class="ad-format"><span class="ad-format-name">📐 Grand rectangle</span><span class="ad-format-size">336×280 / 300×250</span></div>
+  <div class="ad-format"><span class="ad-format-name">📏 Colonne latérale</span><span class="ad-format-size">160×600 / 300×600</span></div>
+  <div class="ad-format"><span class="ad-format-name">📌 Publicité in-feed</span><span class="ad-format-size">Native dans les articles</span></div>
+  <div class="ad-format"><span class="ad-format-name">🤝 Contenu sponsorisé</span><span class="ad-format-size">Intégration de marque</span></div>
+
+  <div class="cta-box">
+    <h2>Commencez dès aujourd'hui</h2>
+    <p>Contactez-nous pour une proposition personnalisée adaptée à votre budget</p>
+    <a href="mailto:ads@solvixi.com" class="cta-btn">📧 ads@solvixi.com</a>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+ADVERTISE_HTML_ES = """\
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>Publicidad — Atlas News</title>
+<meta name="description" content="Anúnciate en Atlas News y llega a una audiencia global en 5 idiomas">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; Volver al inicio</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>Publicidad con nosotros</h1>
+  <p class="sub">Llega a una audiencia global diversa en 5 idiomas en una plataforma de noticias de confianza</p>
+
+  <div class="stat-row">
+    <div class="stat-box2"><div class="stat-box2-val">5</div><div class="stat-box2-lbl">Idiomas</div></div>
+    <div class="stat-box2"><div class="stat-box2-val">500+</div><div class="stat-box2-lbl">Fuentes</div></div>
+    <div class="stat-box2"><div class="stat-box2-val">24/7</div><div class="stat-box2-lbl">Actualizaciones</div></div>
+  </div>
+
+  <h2>¿Por qué anunciarte con nosotros?</h2>
+  <ul>
+    <li><strong>Audiencia multilingüe:</strong> Árabe, inglés, francés, español, turco — 5 mercados geográficos distintos</li>
+    <li><strong>Lectores comprometidos:</strong> Visitantes en busca de noticias de política, economía, tecnología, deportes y más</li>
+    <li><strong>Entorno brand-safe:</strong> Contenido informativo fiable y bien categorizado</li>
+    <li><strong>PWA + todos los dispositivos:</strong> Experiencia fluida en móvil, tablet y escritorio</li>
+  </ul>
+
+  <h2>Formatos publicitarios disponibles</h2>
+  <div class="ad-format"><span class="ad-format-name">🖼️ Banner leaderboard</span><span class="ad-format-size">728×90 / 320×50</span></div>
+  <div class="ad-format"><span class="ad-format-name">📐 Rectángulo grande</span><span class="ad-format-size">336×280 / 300×250</span></div>
+  <div class="ad-format"><span class="ad-format-name">📏 Columna lateral</span><span class="ad-format-size">160×600 / 300×600</span></div>
+  <div class="ad-format"><span class="ad-format-name">📌 Anuncios in-feed</span><span class="ad-format-size">Nativo entre artículos</span></div>
+  <div class="ad-format"><span class="ad-format-name">🤝 Contenido patrocinado</span><span class="ad-format-size">Integración de marca</span></div>
+
+  <div class="cta-box">
+    <h2>Empieza hoy</h2>
+    <p>Contáctanos para una propuesta personalizada adaptada a tu presupuesto</p>
+    <a href="mailto:ads@solvixi.com" class="cta-btn">📧 ads@solvixi.com</a>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+ADVERTISE_HTML_TR = """\
+<!DOCTYPE html>
+<html lang="tr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>Reklam Ver — Atlas News</title>
+<meta name="description" content="Atlas News'te reklam verin ve 5 dilde kuresel kitlelere ulasin">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; Ana Sayfaya Don</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>Reklam Verin</h1>
+  <p class="sub">5 dilde guvenilir bir haber platformunda cesitli kuresel kitlelere ulasin</p>
+
+  <div class="stat-row">
+    <div class="stat-box2"><div class="stat-box2-val">5</div><div class="stat-box2-lbl">Dil</div></div>
+    <div class="stat-box2"><div class="stat-box2-val">500+</div><div class="stat-box2-lbl">Kaynak</div></div>
+    <div class="stat-box2"><div class="stat-box2-val">24/7</div><div class="stat-box2-lbl">Guncelleme</div></div>
+  </div>
+
+  <h2>Neden Bizimle Reklam Verin?</h2>
+  <ul>
+    <li><strong>Cok dilli kitle:</strong> Arapca, Ingilizce, Fransizca, Ispanyolca, Turkce — 5 farkli cografya</li>
+    <li><strong>Aktif okuyucular:</strong> Siyaset, ekonomi, teknoloji, spor ve daha fazlasinda haber arayan ziyaretciler</li>
+    <li><strong>Marka guvenligi:</strong> Guvenilir, iyi kategorize edilmis haber icerigi</li>
+    <li><strong>PWA + tum cihazlar:</strong> Mobil, tablet ve masaustu uyumlu kesintisiz deneyim</li>
+  </ul>
+
+  <h2>Mevcut Reklam Formatlari</h2>
+  <div class="ad-format"><span class="ad-format-name">🖼️ Leaderboard Banner</span><span class="ad-format-size">728×90 / 320×50</span></div>
+  <div class="ad-format"><span class="ad-format-name">📐 Buyuk Dikdortgen</span><span class="ad-format-size">336×280 / 300×250</span></div>
+  <div class="ad-format"><span class="ad-format-name">📏 Yan Sutun</span><span class="ad-format-size">160×600 / 300×600</span></div>
+  <div class="ad-format"><span class="ad-format-name">📌 In-feed Reklamlar</span><span class="ad-format-size">Makale arasi yerlesim</span></div>
+  <div class="ad-format"><span class="ad-format-name">🤝 Sponsorlu Icerik</span><span class="ad-format-size">Marka entegrasyonu</span></div>
+
+  <div class="cta-box">
+    <h2>Bugun Baslayin</h2>
+    <p>Butcenize ve pazarlama hedeflerinize uygun ozel bir teklif icin bize ulasin</p>
+    <a href="mailto:ads@solvixi.com" class="cta-btn">📧 ads@solvixi.com</a>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
 ROBOTS_TXT = """\
 User-agent: *
 Allow: /
@@ -2407,11 +3336,20 @@ def _write_static_assets(out_dir: str = OUTPUT_DIR, lang: str = "ar",
         with open(os.path.join(out_dir, filename), "w", encoding="utf-8") as f:
             f.write(content)
 
-    _privacy_map = {"en": PRIVACY_HTML_EN, "fr": PRIVACY_HTML_FR, "es": PRIVACY_HTML_ES, "tr": PRIVACY_HTML_TR}
-    _about_map   = {"en": ABOUT_HTML_EN,   "fr": ABOUT_HTML_FR,   "es": ABOUT_HTML_ES,   "tr": ABOUT_HTML_TR}
-    privacy_src  = _privacy_map.get(lang, PRIVACY_HTML)
-    about_src    = _about_map.get(lang, ABOUT_HTML)
-    for filename, content in [("privacy.html", privacy_src), ("about.html", about_src)]:
+    _privacy_map   = {"en": PRIVACY_HTML_EN,   "fr": PRIVACY_HTML_FR,   "es": PRIVACY_HTML_ES,   "tr": PRIVACY_HTML_TR}
+    _about_map     = {"en": ABOUT_HTML_EN,     "fr": ABOUT_HTML_FR,     "es": ABOUT_HTML_ES,     "tr": ABOUT_HTML_TR}
+    _contact_map   = {"en": CONTACT_HTML_EN,   "fr": CONTACT_HTML_FR,   "es": CONTACT_HTML_ES,   "tr": CONTACT_HTML_TR}
+    _terms_map     = {"en": TERMS_HTML_EN,     "fr": TERMS_HTML_FR,     "es": TERMS_HTML_ES,     "tr": TERMS_HTML_TR}
+    _advertise_map = {"en": ADVERTISE_HTML_EN, "fr": ADVERTISE_HTML_FR, "es": ADVERTISE_HTML_ES, "tr": ADVERTISE_HTML_TR}
+
+    static_pages = [
+        ("privacy.html",   _privacy_map.get(lang, PRIVACY_HTML)),
+        ("about.html",     _about_map.get(lang, ABOUT_HTML)),
+        ("contact.html",   _contact_map.get(lang, CONTACT_HTML)),
+        ("terms.html",     _terms_map.get(lang, TERMS_HTML)),
+        ("advertise.html", _advertise_map.get(lang, ADVERTISE_HTML)),
+    ]
+    for filename, content in static_pages:
         dest = os.path.join(out_dir, filename)
         with open(dest, "w", encoding="utf-8") as f:
             f.write(content)
@@ -2737,8 +3675,11 @@ def _sidebar(categories: list, articles_by_cat: dict,
 <div class="sidebar-widget">
   <h3 class="widget-title">{s["links_widget"]}</h3>
   <ul class="cat-list">
-    <li><a href="about.html" class="cat-link" style="border-inline-start-color:#64748b">{s["about"]}</a></li>
-    <li><a href="privacy.html" class="cat-link" style="border-inline-start-color:#64748b">{s["privacy"]}</a></li>
+    <li><a href="about.html"     class="cat-link" style="border-inline-start-color:#64748b">{s["about"]}</a></li>
+    <li><a href="contact.html"   class="cat-link" style="border-inline-start-color:#64748b">{s["contact"]}</a></li>
+    <li><a href="advertise.html" class="cat-link" style="border-inline-start-color:#f59e0b">{s["advertise"]}</a></li>
+    <li><a href="privacy.html"   class="cat-link" style="border-inline-start-color:#64748b">{s["privacy"]}</a></li>
+    <li><a href="terms.html"     class="cat-link" style="border-inline-start-color:#64748b">{s["terms"]}</a></li>
   </ul>
 </div>
 <div class="sidebar-widget">
@@ -2831,7 +3772,10 @@ def _page(*, title: str, desc: str, nav_html: str,
         <ul>
           <li><a href="index.html">{s["home_bare"]}</a></li>
           <li><a href="about.html">{s["about"]}</a></li>
+          <li><a href="contact.html">{s["contact"]}</a></li>
+          <li><a href="advertise.html">{s["advertise"]}</a></li>
           <li><a href="privacy.html">{s["privacy"]}</a></li>
+          <li><a href="terms.html">{s["terms"]}</a></li>
         </ul>
       </div>
       <div class="footer-section">
@@ -2842,7 +3786,7 @@ def _page(*, title: str, desc: str, nav_html: str,
       </div>
     </div>
     <div class="footer-bottom">
-      <p><a href="privacy.html">{s["privacy"]}</a> · <a href="about.html">{s["about"]}</a> · <a href="{esc(rss_url)}" type="application/rss+xml">RSS</a></p>
+      <p><a href="privacy.html">{s["privacy"]}</a> · <a href="terms.html">{s["terms"]}</a> · <a href="about.html">{s["about"]}</a> · <a href="contact.html">{s["contact"]}</a> · <a href="advertise.html">{s["advertise"]}</a> · <a href="{esc(rss_url)}" type="application/rss+xml">RSS</a></p>
     </div>
   </footer>
   <script src="app.js"></script>
@@ -3485,7 +4429,8 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
     if site_url:
         # site_url already contains the language path (e.g. "https://domain.com/fr")
         _base = site_url.rstrip("/")
-        _sitemap_pages = ["index.html", "about.html", "privacy.html"]
+        _sitemap_pages = ["index.html", "about.html", "privacy.html",
+                          "contact.html", "terms.html", "advertise.html"]
         for cat in categories:
             _slug = cat.get("slug", "")
             if _slug:
