@@ -1,9 +1,11 @@
 import csv
+import glob as _glob
 import hmac
 import io
 import json
 import logging
 import os
+import sqlite3
 import subprocess
 import sys
 import threading
@@ -175,6 +177,68 @@ def _check_all_health(categories: list) -> list:
     return sorted(results, key=lambda x: (not x.get("ok", False), x.get("name", "")))
 
 
+# ── source health (all languages) ────────────────────────────────────────────
+_LANG_CONFIGS = [
+    ("ar", "config/sources.json",    "data/news.db"),
+    ("en", "config/sources-en.json", "data/news-en.db"),
+    ("fr", "config/sources-fr.json", "data/news-fr.db"),
+    ("es", "config/sources-es.json", "data/news-es.db"),
+    ("tr", "config/sources-tr.json", "data/news-tr.db"),
+]
+
+def _source_health_all() -> dict:
+    """Cross-reference all sources*.json with all DBs → per-source article counts."""
+    results: list = []
+    for lang, cfg_rel, db_rel in _LANG_CONFIGS:
+        cfg_path = os.path.join(BASE, cfg_rel)
+        db_path  = os.path.join(BASE, db_rel)
+        if not os.path.exists(cfg_path):
+            continue
+        try:
+            with open(cfg_path, encoding="utf-8") as f:
+                cfg_data = json.load(f)
+        except Exception:
+            continue
+        # collect per-source stats from DB
+        db_stats: dict = {}
+        if os.path.exists(db_path):
+            try:
+                conn = sqlite3.connect(db_path)
+                rows = conn.execute("""
+                    SELECT source_name, COUNT(*) as cnt, MAX(scraped_at) as last
+                    FROM articles
+                    WHERE is_active=1
+                      AND datetime(scraped_at) >= datetime('now','-7 days')
+                    GROUP BY source_name
+                """).fetchall()
+                conn.close()
+                for row in rows:
+                    db_stats[row[0]] = {"count": row[1], "last": (row[2] or "")[:10]}
+            except Exception:
+                pass
+        for cat in cfg_data.get("categories", []):
+            slug = cat.get("slug", "")
+            for src in cat.get("sources", []):
+                name  = src.get("name", "")
+                stats = db_stats.get(name, {"count": 0, "last": ""})
+                results.append({
+                    "lang":  lang,
+                    "cat":   cat.get("name", ""),
+                    "slug":  slug,
+                    "name":  name,
+                    "url":   src.get("url", ""),
+                    "count": stats["count"],
+                    "last":  stats["last"],
+                })
+    # sort: zero-count first, then ascending count
+    results.sort(key=lambda x: (x["count"] > 0, x["count"]))
+    total = len(results)
+    zero  = sum(1 for r in results if r["count"] == 0)
+    low   = sum(1 for r in results if 0 < r["count"] < 5)
+    ok    = sum(1 for r in results if r["count"] >= 5)
+    return {"sources": results, "total": total, "zero": zero, "low": low, "ok": ok}
+
+
 # ── HTTP handler ──────────────────────────────────────────────────────────────
 class AdminHandler(BaseHTTPRequestHandler):
 
@@ -236,6 +300,9 @@ class AdminHandler(BaseHTTPRequestHandler):
         elif path == "/api/generate":
             if not self._require_auth(): return
             self._exec("run.py", "Site generated", ["--generate-only"])
+        elif path == "/api/source-health":
+            if not self._require_auth(): return
+            self._json(_source_health_all())
         elif path.startswith("/static/"):
             self._static(path.lstrip("/"))
         else:
@@ -540,6 +607,23 @@ input.color-pick{width:34px;height:28px;padding:2px;border-radius:6px;cursor:poi
 .db-val{font-size:1.5em;font-weight:800;color:#1e293b}
 .db-lbl{font-size:.72em;color:#64748b;margin-top:4px;font-weight:600}
 
+/* ── SOURCE HEALTH TAB ────────────────────────────────────────────────────── */
+.sh-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.sh-stat{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.sh-stat-val{font-size:1.6em;font-weight:800;line-height:1}
+.sh-stat-lbl{font-size:.72em;color:#64748b;margin-top:6px;font-weight:600}
+.sh-table{width:100%;border-collapse:collapse;font-size:.82em}
+.sh-table th{background:#f1f5f9;padding:8px 10px;text-align:right;font-weight:700;color:#374151;border-bottom:1px solid #e2e8f0;white-space:nowrap}
+.sh-table td{padding:7px 10px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+.sh-table tr:hover td{background:#f8fafc}
+.sh-badge{display:inline-flex;align-items:center;justify-content:center;min-width:58px;padding:3px 9px;border-radius:10px;font-size:.78em;font-weight:700;white-space:nowrap}
+.sh-badge.zero{background:rgba(239,68,68,.12);color:#dc2626;border:1px solid rgba(239,68,68,.3)}
+.sh-badge.low{background:rgba(245,158,11,.12);color:#d97706;border:1px solid rgba(245,158,11,.3)}
+.sh-badge.ok{background:rgba(34,197,94,.12);color:#16a34a;border:1px solid rgba(34,197,94,.3)}
+.sh-lang{display:inline-block;padding:2px 7px;border-radius:6px;font-size:.75em;font-weight:700;background:#dbeafe;color:#1d4ed8}
+.sh-bar-wrap{height:4px;background:#e2e8f0;border-radius:2px;margin-top:4px;width:100%}
+.sh-bar{height:4px;border-radius:2px;background:#22c55e}
+
 /* ── RESPONSIVE ───────────────────────────────────────────────────────────── */
 @media(max-width:768px){
   .scards,.db-cards{grid-template-columns:1fr 1fr}
@@ -591,6 +675,7 @@ input.color-pick{width:34px;height:28px;padding:2px;border-radius:6px;cursor:poi
       <button class="tab"     data-t="db"        onclick="switchTab('db')">🗄️ قاعدة البيانات</button>
       <button class="tab"     data-t="settings"  onclick="switchTab('settings')">⚙️ الإعدادات</button>
       <button class="tab"     data-t="run"       onclick="switchTab('run')">▶️ التشغيل</button>
+      <button class="tab"     data-t="health"    onclick="switchTab('health')">💊 صحة المصادر</button>
     </div>
 
     <!-- ══ DASHBOARD ══ -->
@@ -782,6 +867,53 @@ input.color-pick{width:34px;height:28px;padding:2px;border-radius:6px;cursor:poi
       </div>
     </div>
 
+    <!-- ══ SOURCE HEALTH ══ -->
+    <div id="p-health" class="panel">
+      <div class="sh-stats">
+        <div class="sh-stat"><div class="sh-stat-val" id="sh-total" style="color:#3b82f6">—</div><div class="sh-stat-lbl">إجمالي المصادر (5 لغات)</div></div>
+        <div class="sh-stat"><div class="sh-stat-val" id="sh-ok"    style="color:#22c55e">—</div><div class="sh-stat-lbl">✅ تعمل جيداً (≥5 مقالات)</div></div>
+        <div class="sh-stat"><div class="sh-stat-val" id="sh-low"   style="color:#f59e0b">—</div><div class="sh-stat-lbl">⚠️ قليلة (1–4 مقالات)</div></div>
+        <div class="sh-stat"><div class="sh-stat-val" id="sh-zero"  style="color:#ef4444">—</div><div class="sh-stat-lbl">🔴 صفر مقالات</div></div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:12px 14px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <select id="sh-lang-f" onchange="renderHealth()">
+            <option value="">🌐 كل اللغات</option>
+            <option value="ar">🇸🇦 العربية (AR)</option>
+            <option value="en">🇬🇧 الإنجليزية (EN)</option>
+            <option value="fr">🇫🇷 الفرنسية (FR)</option>
+            <option value="es">🇪🇸 الإسبانية (ES)</option>
+            <option value="tr">🇹🇷 التركية (TR)</option>
+          </select>
+          <select id="sh-status-f" onchange="renderHealth()">
+            <option value="">كل الحالات</option>
+            <option value="zero">🔴 صفر مقالات</option>
+            <option value="low">🟡 قليلة (1–4)</option>
+            <option value="ok">🟢 تعمل (≥5)</option>
+          </select>
+          <input id="sh-search" placeholder="بحث باسم المصدر أو القسم..." style="flex:1;min-width:140px;padding:6px 10px;border-radius:6px;border:1px solid #cbd5e1;background:#fff;color:#1e293b;font-size:.82em;font-family:inherit;outline:none" oninput="renderHealth()">
+          <button class="btn bp sm" onclick="loadHealth()">↻ تحديث</button>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="sh-table">
+            <thead>
+              <tr>
+                <th>المصدر</th>
+                <th>القسم</th>
+                <th>اللغة</th>
+                <th>مقالات (7 أيام)</th>
+                <th>آخر جلب</th>
+                <th>رابط</th>
+              </tr>
+            </thead>
+            <tbody id="sh-tbody">
+              <tr><td colspan="6" style="text-align:center;padding:30px;color:#475569">اضغط ↻ تحديث لتحميل بيانات الصحة من جميع اللغات</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /wrap -->
 </div><!-- /main -->
 
@@ -866,12 +998,13 @@ function updateBadge() {
 })();
 
 // ══ TABS ══════════════════════════════════════════════════════════════════════
-const TAB_INIT = {articles: false, db: false};
+const TAB_INIT = {articles: false, db: false, health: false};
 function switchTab(name) {
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.t===name));
   document.querySelectorAll('.panel').forEach(p => p.classList.toggle('on', p.id==='p-'+name));
   if (name === 'articles' && !TAB_INIT.articles) { TAB_INIT.articles=true; loadArticles(true); }
   if (name === 'db'       && !TAB_INIT.db)       { TAB_INIT.db=true;       loadDbStats(); }
+  if (name === 'health'   && !TAB_INIT.health)   { TAB_INIT.health=true;   loadHealth(); }
 }
 
 // ══ DASHBOARD ════════════════════════════════════════════════════════════════
@@ -1234,6 +1367,61 @@ async function runOp(op, btn) {
     out.scrollTop   = out.scrollHeight;
   }
   if (d.ok) { loadDash(); }
+}
+
+// ══ SOURCE HEALTH ════════════════════════════════════════════════════════════
+let shData = null;
+const SH_FLAGS = {ar:'🇸🇦',en:'🇬🇧',fr:'🇫🇷',es:'🇪🇸',tr:'🇹🇷'};
+
+async function loadHealth() {
+  document.getElementById('sh-tbody').innerHTML =
+    '<tr><td colspan="6" style="text-align:center;padding:30px;color:#475569">⟳ جارٍ قراءة جميع قواعد البيانات...</td></tr>';
+  const d = await api('/api/source-health');
+  if (!d) return;
+  shData = d;
+  document.getElementById('sh-total').textContent = d.total;
+  document.getElementById('sh-ok').textContent    = d.ok;
+  document.getElementById('sh-low').textContent   = d.low;
+  document.getElementById('sh-zero').textContent  = d.zero;
+  renderHealth();
+}
+
+function renderHealth() {
+  if (!shData) return;
+  const lang   = document.getElementById('sh-lang-f').value;
+  const status = document.getElementById('sh-status-f').value;
+  const q      = (document.getElementById('sh-search').value || '').toLowerCase();
+
+  const rows = shData.sources.filter(r => {
+    if (lang   && r.lang !== lang)                           return false;
+    if (status === 'zero' && r.count !== 0)                  return false;
+    if (status === 'low'  && !(r.count > 0 && r.count < 5)) return false;
+    if (status === 'ok'   && r.count < 5)                    return false;
+    if (q && !r.name.toLowerCase().includes(q)
+          && !r.cat.toLowerCase().includes(q))               return false;
+    return true;
+  });
+
+  if (!rows.length) {
+    document.getElementById('sh-tbody').innerHTML =
+      '<tr><td colspan="6" style="text-align:center;padding:28px;color:#475569">لا توجد نتائج مطابقة</td></tr>';
+    return;
+  }
+
+  document.getElementById('sh-tbody').innerHTML = rows.map(r => {
+    const cls   = r.count === 0 ? 'zero' : r.count < 5 ? 'low' : 'ok';
+    const icon  = r.count === 0 ? '🔴' : r.count < 5 ? '⚠️' : '✅';
+    const label = icon + ' ' + (r.count === 0 ? 'صفر' : r.count);
+    const flag  = SH_FLAGS[r.lang] || r.lang.toUpperCase();
+    return `<tr>
+      <td style="font-weight:600;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(r.name)}">${esc(r.name)}</td>
+      <td style="color:#475569;font-size:.82em;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(r.cat)}">${esc(r.cat)}</td>
+      <td><span class="sh-lang">${flag} ${r.lang.toUpperCase()}</span></td>
+      <td><span class="sh-badge ${cls}">${label}</span></td>
+      <td style="color:#64748b;font-size:.82em;direction:ltr;white-space:nowrap">${r.last || '—'}</td>
+      <td><a href="${esc(r.url)}" target="_blank" class="lnk" title="${esc(r.url)}">🔗</a></td>
+    </tr>`;
+  }).join('');
 }
 
 // ══ TOAST ══════════════════════════════════════════════════════════════════════
