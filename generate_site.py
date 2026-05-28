@@ -3958,7 +3958,8 @@ def _source_filter_strip(articles: list[dict], cat_sources: list[dict],
 
 def _card(art: dict, slug: str, use_article_page: bool = True,
           s: dict | None = None,
-          cluster_map: dict | None = None) -> str:
+          cluster_map: dict | None = None,
+          site_url: str = "") -> str:
     import urllib.parse as _up
     color    = CATEGORY_COLORS.get(slug, DEFAULT_COLOR)
     gradient = CATEGORY_GRADIENTS.get(slug, DEFAULT_GRADIENT)
@@ -4009,10 +4010,21 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
 
     # ── Share buttons ────────────────────────────────────────────────────────
     _raw_url  = art["url"]
-    _wa_href  = "https://wa.me/?text=" + _up.quote(title_raw + "\n\n" + _raw_url, safe="")
+    # Share our own article page URL when available (better for traffic & SEO).
+    # Fall back to the original source URL for video/external-only cards.
+    if use_article_page and site_url:
+        import hashlib as _hl2
+        _share_url = (
+            site_url.rstrip("/") + "/article/"
+            + _hl2.md5(_raw_url.encode("utf-8")).hexdigest()[:12]
+            + ".html"
+        )
+    else:
+        _share_url = _raw_url
+    _wa_href  = "https://wa.me/?text=" + _up.quote(title_raw + "\n\n" + _share_url, safe="")
     _x_href   = ("https://x.com/intent/tweet?text=" + _up.quote(title_raw, safe="")
-                 + "&url=" + _up.quote(_raw_url, safe=""))
-    _tg_href  = ("https://t.me/share/url?url=" + _up.quote(_raw_url, safe="")
+                 + "&url=" + _up.quote(_share_url, safe=""))
+    _tg_href  = ("https://t.me/share/url?url=" + _up.quote(_share_url, safe="")
                  + "&text=" + _up.quote(title_raw, safe=""))
     share_html = (
         f'<div class="card-share">'
@@ -4022,7 +4034,7 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
         f'rel="noopener noreferrer" title="X / Twitter" aria-label="X">𝕏</a>'
         f'<a href="{esc(_tg_href)}" class="share-btn share-tg" target="_blank" '
         f'rel="noopener noreferrer" title="Telegram" aria-label="Telegram">✈</a>'
-        f'<button class="share-btn share-copy" data-copy="{esc(_raw_url)}" '
+        f'<button class="share-btn share-copy" data-copy="{esc(_share_url)}" '
         f'title="Copy link" aria-label="Copy link">⧉</button>'
         f'</div>'
     )
@@ -4549,18 +4561,19 @@ def _article_page_html(
             f'</div>'
         )
 
-    # ── Share buttons ─────────────────────────────────────────────────────────
-    _wa  = "https://wa.me/?text=" + _up.quote(title_raw + "\n\n" + ext_url, safe="")
+    # ── Share buttons — use our canonical page URL, fall back to ext_url ────────
+    _share_page = canon_url if canon_url else ext_url
+    _wa  = "https://wa.me/?text=" + _up.quote(title_raw + "\n\n" + _share_page, safe="")
     _x   = ("https://x.com/intent/tweet?text=" + _up.quote(title_raw, safe="")
-            + "&url=" + _up.quote(ext_url, safe=""))
-    _tg  = ("https://t.me/share/url?url=" + _up.quote(ext_url, safe="")
+            + "&url=" + _up.quote(_share_page, safe=""))
+    _tg  = ("https://t.me/share/url?url=" + _up.quote(_share_page, safe="")
             + "&text=" + _up.quote(title_raw, safe=""))
     share_row = (
         f'<div class="art-share-row">'
         f'<a href="{esc(_wa)}" class="share-btn share-wa" target="_blank" rel="noopener noreferrer" title="WhatsApp">W</a>'
         f'<a href="{esc(_x)}" class="share-btn share-x" target="_blank" rel="noopener noreferrer" title="X">𝕏</a>'
         f'<a href="{esc(_tg)}" class="share-btn share-tg" target="_blank" rel="noopener noreferrer" title="Telegram">✈</a>'
-        f'<button class="share-btn share-copy" data-copy="{esc(ext_url)}" title="Copy link">⧉</button>'
+        f'<button class="share-btn share-copy" data-copy="{esc(_share_page)}" title="Copy link">⧉</button>'
         f'</div>'
     )
 
@@ -5308,7 +5321,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             continue
         color   = CATEGORY_COLORS.get(slug, DEFAULT_COLOR)
         preview = cat_data["articles"][:PREVIEW_PER_CAT]
-        cards   = "".join(_card(a, slug, s=s, cluster_map=_cluster_map) for a in preview)
+        cards   = "".join(_card(a, slug, s=s, cluster_map=_cluster_map, site_url=_site_url) for a in preview)
         total   = len(cat_data["articles"])
         more_btn = (
             f'<a href="{esc(slug)}.html" class="more-btn" style="border-color:{esc(color)};color:{esc(color)}">'
@@ -5423,7 +5436,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         if slug in media_slugs_local:
             raw_articles = [a for a in raw_articles if _is_yt_url(a.get("url", ""))]
         if raw_articles:
-            cards      = "".join(_card(a, slug, use_article_page=(slug not in media_slugs_local), s=s, cluster_map=_cluster_map) for a in raw_articles)
+            cards      = "".join(_card(a, slug, use_article_page=(slug not in media_slugs_local), s=s, cluster_map=_cluster_map, site_url=_site_url) for a in raw_articles)
             grid       = f'<div class="articles-grid">{cards}</div>'
             src_filter = _source_filter_strip(
                 raw_articles, cat.get("sources", []), color, s
@@ -5539,7 +5552,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
 
             if cat_data and cat_data["articles"]:
                 preview  = cat_data["articles"][:PREVIEW_PER_CAT]
-                cards    = "".join(_card(a, slug, s=s, cluster_map=_cluster_map) for a in preview)
+                cards    = "".join(_card(a, slug, s=s, cluster_map=_cluster_map, site_url=_site_url) for a in preview)
                 total    = len(cat_data["articles"])
                 more_btn = (
                     f'<a href="{esc(slug)}.html" class="more-btn" '
@@ -5608,7 +5621,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             ]
             if yt_articles:
                 preview  = yt_articles[:PREVIEW_PER_CAT]
-                cards    = "".join(_card(a, slug, use_article_page=False, s=s, cluster_map=_cluster_map) for a in preview)
+                cards    = "".join(_card(a, slug, use_article_page=False, s=s, cluster_map=_cluster_map, site_url=_site_url) for a in preview)
                 total    = len(yt_articles)
                 more_btn = (
                     f'<a href="{esc(slug)}.html" class="more-btn" '
