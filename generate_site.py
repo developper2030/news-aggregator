@@ -514,10 +514,10 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_policy": "سياسة الخصوصية",
         "art_read_orig":    "📖 اقرأ المقال الأصلي",
         "art_related":      "مقالات ذات صلة",
-        "art_summary_lbl":  "🤖 ملخص ذكاء اصطناعي",
+        "art_summary_lbl":  "ملخص",
         "art_by_source":    "المصدر",
         "art_back":         "→ العودة",
-        "art_disclaimer":   "هذا ملخص تلقائي — للمقال الكامل زر المصدر الأصلي",
+        "art_disclaimer":   "للتفاصيل الكاملة زر المصدر الأصلي",
         "cluster_sources":      "📡 {n} مصادر",
         "cluster_sources_1":    "📡 مصدر واحد",
         "spectrum_wire":        "وكالة",
@@ -598,10 +598,10 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_policy": "Privacy Policy",
         "art_read_orig":    "📖 Read full article",
         "art_related":      "Related articles",
-        "art_summary_lbl":  "🤖 AI Summary",
+        "art_summary_lbl":  "Summary",
         "art_by_source":    "Source",
         "art_back":         "← Back",
-        "art_disclaimer":   "This is an AI summary — visit the original source for the full article",
+        "art_disclaimer":   "Visit the original source for the full article",
         "cluster_sources":      "📡 {n} sources",
         "cluster_sources_1":    "📡 1 source",
         "spectrum_wire":        "Agency",
@@ -682,10 +682,10 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_policy": "Politique de confidentialité",
         "art_read_orig":    "📖 Lire l'article complet",
         "art_related":      "Articles liés",
-        "art_summary_lbl":  "🤖 Résumé IA",
+        "art_summary_lbl":  "Résumé",
         "art_by_source":    "Source",
         "art_back":         "← Retour",
-        "art_disclaimer":   "Résumé automatique — visitez la source originale pour l'article complet",
+        "art_disclaimer":   "Visitez la source originale pour l'article complet",
         "cluster_sources":      "📡 {n} sources",
         "cluster_sources_1":    "📡 1 source",
         "spectrum_wire":        "Agence",
@@ -766,10 +766,10 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_policy": "Política de privacidad",
         "art_read_orig":    "📖 Leer artículo completo",
         "art_related":      "Artículos relacionados",
-        "art_summary_lbl":  "🤖 Resumen IA",
+        "art_summary_lbl":  "Resumen",
         "art_by_source":    "Fuente",
         "art_back":         "← Volver",
-        "art_disclaimer":   "Resumen automático — visita la fuente original para el artículo completo",
+        "art_disclaimer":   "Visita la fuente original para el artículo completo",
         "cluster_sources":      "📡 {n} fuentes",
         "cluster_sources_1":    "📡 1 fuente",
         "spectrum_wire":        "Agencia",
@@ -850,10 +850,10 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_policy": "Gizlilik Politikası",
         "art_read_orig":    "📖 Tam makaleyi oku",
         "art_related":      "İlgili makaleler",
-        "art_summary_lbl":  "🤖 YZ Özeti",
+        "art_summary_lbl":  "Özet",
         "art_by_source":    "Kaynak",
         "art_back":         "← Geri",
-        "art_disclaimer":   "Bu otomatik bir özettir — tam makale için orijinal kaynağı ziyaret edin",
+        "art_disclaimer":   "Tam makale için orijinal kaynağı ziyaret edin",
         "cluster_sources":      "📡 {n} kaynak",
         "cluster_sources_1":    "📡 1 kaynak",
         "spectrum_wire":        "Ajans",
@@ -1677,8 +1677,8 @@ body.lang-ltr .nh-text{direction:ltr}
 .dark-mode .sp-independent{background:#052e16;color:#86efac}
 /* ====== ARTICLE PAGES ====== */
 .art-page{max-width:800px;margin:0 auto;padding:28px 16px 48px}
-.art-back{display:inline-flex;align-items:center;gap:6px;color:var(--accent);text-decoration:none;font-size:.9em;font-weight:600;margin-bottom:16px;padding:4px 0}
-.art-back:hover{opacity:.8}
+.art-back{display:inline-flex;align-items:center;gap:8px;color:#fff;background:linear-gradient(135deg,var(--header-start),var(--header-end));text-decoration:none;font-size:.88em;font-weight:700;margin-bottom:24px;padding:10px 22px;border-radius:24px;box-shadow:0 3px 16px rgba(99,102,241,.3);transition:all .22s;border:none;white-space:nowrap}
+.art-back:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(99,102,241,.45);opacity:1}
 .art-breadcrumb{font-size:.8em;color:var(--text-light);margin-bottom:18px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .art-breadcrumb a{color:var(--accent);text-decoration:none}.art-breadcrumb a:hover{text-decoration:underline}
 .art-img{width:100%;border-radius:12px;margin-bottom:22px;object-fit:cover;max-height:400px;display:block}
@@ -4009,12 +4009,11 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
         f'</div>'
     )
 
-    # ── AI summary (shown on hover / always on no-img cards) ─────────────────
+    # ── Summary (shown on hover / always on no-img cards) ───────────────────
     ai_html = ""
     if ai_summary:
         ai_html = (
             f'<div class="card-ai">'
-            f'<span class="ai-badge">🤖 AI</span>'
             f'{esc(ai_summary)}'
             f'</div>'
         )
@@ -4738,7 +4737,7 @@ def _page(*, title: str, desc: str, nav_html: str,
   <!-- Critical CSS — initial skeleton shown instantly before style.css loads.
        MUST come BEFORE <link rel="stylesheet"> so that style.css overrides it
        once loaded. Reversing this order would permanently override style.css. -->
-  <style>*,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}:root{{--header-start:#4f46e5;--header-end:#7c3aed;--nav-bg:rgba(255,255,255,.92);--nav-text:#475569;--accent:#6366f1;--bg:#f8f9fe;--text:#1e293b;--border:#e2e8f0}}body{{font-family:system-ui,sans-serif;background:#f8f9fe;color:#1e293b;direction:{s["dir"]}}}.sticky-header{{position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.12)}}.site-header{{background:linear-gradient(135deg,var(--header-start),var(--header-end));color:#fff;padding:8px 0}}.site-header-inner{{display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1200px;margin:0 auto}}.site-header-title{{font-weight:800;font-size:1.2em;letter-spacing:2px;color:#fff}}.site-nav{{background:var(--nav-bg);backdrop-filter:blur(8px)}}.nav-inner{{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:1px;max-width:1200px;margin:0 auto;padding:0 6px}}.nav-tab{{display:inline-flex;align-items:center;padding:8px 14px;color:var(--nav-text);font-size:.82em;text-decoration:none;white-space:nowrap;flex-shrink:0}}.articles-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;padding:8px 0}}.article-card{{border-radius:14px;overflow:hidden;background:#fff;position:relative;aspect-ratio:16/10}}</style>
+  <style>*,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}:root{{--header-start:#4f46e5;--header-end:#7c3aed;--nav-bg:rgba(255,255,255,.92);--nav-text:#475569;--accent:#6366f1;--bg:#f8f9fe;--text:#1e293b;--border:#e2e8f0}}body{{font-family:system-ui,sans-serif;background:#f8f9fe;color:#1e293b;direction:{s["dir"]}}}.sticky-header{{position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.12)}}.site-header{{background:linear-gradient(135deg,var(--header-start),var(--header-end));color:#fff;padding:8px 0}}.site-header-inner{{display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1200px;margin:0 auto}}.site-header-title{{font-weight:800;font-size:1.2em;letter-spacing:2px;color:#fff}}.site-nav{{background:var(--nav-bg);backdrop-filter:blur(8px)}}.nav-inner{{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:1px;max-width:1200px;margin:0 auto;padding:0 6px}}.nav-tab{{display:inline-flex;align-items:center;padding:8px 14px;color:var(--nav-text);font-size:.82em;text-decoration:none;white-space:nowrap;flex-shrink:0}}.articles-grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}}.article-card{{border-radius:14px;overflow:hidden;background:#fff;position:relative;aspect-ratio:4/3}}</style>
   <!-- Performance: preload critical assets first -->
   <link rel="preload" href="style.css" as="style">
 {(f'  <link rel="preload" href="{esc(lcp_image_url)}" as="image" fetchpriority="high">' if lcp_image_url else "")}
