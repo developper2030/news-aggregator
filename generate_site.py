@@ -4125,7 +4125,8 @@ def _gather_carousel(
     return result[:max_total]
 
 
-def _carousel(articles: list[dict], max_items: int = 12, s: dict = STRINGS["ar"]) -> str:
+def _carousel(articles: list[dict], max_items: int = 12, s: dict = STRINGS["ar"],
+              site_url: str = "") -> str:
     """Hero + sidebar carousel (Hespress/MSN style).
 
     Main panel: one large slide at a time, auto-advances every 5.5 s,
@@ -4133,9 +4134,15 @@ def _carousel(articles: list[dict], max_items: int = 12, s: dict = STRINGS["ar"]
     prev/next arrows, touch swipe.
     Sidebar: first 4 articles after the hero as static article links.
     """
+    import hashlib as _hl_c
     items = [a for a in articles if a.get("image", "").startswith("http")][:max_items]
     if len(items) < 3:
         return ""
+
+    def _art_href(raw_url: str) -> tuple[str, str]:
+        """Return (href, target) — internal article page when possible."""
+        _hash = _hl_c.md5(raw_url.encode("utf-8")).hexdigest()[:12]
+        return f"article/{_hash}.html", ""
 
     # ── slides (all items cycle in the hero) ─────────────────────────────────
     slides_html = ""
@@ -4143,7 +4150,8 @@ def _carousel(articles: list[dict], max_items: int = 12, s: dict = STRINGS["ar"]
     for i, art in enumerate(items):
         gradient = CATEGORY_GRADIENTS.get(art["slug"], DEFAULT_GRADIENT)
         title    = esc(" ".join(art["title"].split()))
-        url      = safe_url(art["url"])
+        raw_url  = art["url"]
+        href, target = _art_href(raw_url)
         image    = safe_url(art["image"])
         source   = esc(SOURCE_AR_NAME.get(art["source"], art["source"]))
         date     = esc(art.get("date", ""))
@@ -4154,7 +4162,7 @@ def _carousel(articles: list[dict], max_items: int = 12, s: dict = STRINGS["ar"]
         priority = ' fetchpriority="high"' if i == 0 else ""
         slides_html += (
             f'<div class="nh-slide{active}" data-idx="{i}">'
-            f'<a href="{url}" target="_blank" rel="noopener noreferrer nofollow">'
+            f'<a href="{esc(href)}"{(" target=\"" + target + "\"") if target else ""}>'
             f'<img src="{image}" alt="{title}" class="nh-img" loading="{loading}"{priority} '
             f'onerror="this.parentElement.style.background=\'#1e293b\';this.style.display=\'none\'">'
             f'<div class="nh-overlay"></div>'
@@ -4176,14 +4184,15 @@ def _carousel(articles: list[dict], max_items: int = 12, s: dict = STRINGS["ar"]
     for art in items[1:5]:
         gradient = CATEGORY_GRADIENTS.get(art["slug"], DEFAULT_GRADIENT)
         title    = esc(" ".join(art["title"].split()))
-        url      = safe_url(art["url"])
+        raw_url  = art["url"]
+        href, target = _art_href(raw_url)
         image    = safe_url(art["image"])
         source   = esc(SOURCE_AR_NAME.get(art["source"], art["source"]))
         date     = esc(art.get("date", ""))
         cat_name = esc(art["cat_name"])
         cat_icon = esc(art["cat_icon"])
         side_html += (
-            f'<a href="{url}" target="_blank" rel="noopener noreferrer nofollow" class="nh-side-item">'
+            f'<a href="{esc(href)}"{(" target=\"" + target + "\"") if target else ""} class="nh-side-item">'
             f'<img src="{image}" alt="{title}" class="nh-side-img" loading="lazy" '
             f'onerror="this.style.display=\'none\'">'
             f'<div class="nh-side-body">'
@@ -5366,7 +5375,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         (a["image"] for a in _home_carousel_arts if a.get("image", "").startswith("http")),
         ""
     )
-    home_carousel = _carousel(_home_carousel_arts, s=s)
+    home_carousel = _carousel(_home_carousel_arts, s=s, site_url=_site_url)
     _wrt("index.html", _page(
         title=site_title,
         nav_html=_nav(categories, articles_by_cat, active="home",
@@ -5491,7 +5500,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             (a["image"] for a in _cat_carousel_arts if a.get("image", "").startswith("http")),
             next((a.get("image", "") for a in raw_articles if a.get("image", "").startswith("http")), ""),
         )
-        cat_carousel = _carousel(_cat_carousel_arts, s=s)
+        cat_carousel = _carousel(_cat_carousel_arts, s=s, site_url=_site_url)
         # Economy tabs widget on economy, business, and travel pages
         # + market data strip on economy page only
         if slug in {"economy", "business", "travel"}:
@@ -5597,7 +5606,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             articles_by_cat,
             [(r["slug"], r["name"], r["icon"]) for r in world_regions],
             per_slug=3,
-        ), s=s)
+        ), s=s, site_url=_site_url)
         _wrt("world.html", _page(
             title=site_title,
             nav_html=_nav(categories, articles_by_cat, active="world",
@@ -5666,7 +5675,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             [(r["slug"], r["name"], r["icon"]) for r in media_regions_list],
             per_slug=3,
             yt_only_slugs=media_slugs_local,
-        ), s=s)
+        ), s=s, site_url=_site_url)
         _wrt("media.html", _page(
             title=site_title,
             nav_html=_nav(categories, articles_by_cat, active="media",
