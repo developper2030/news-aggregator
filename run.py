@@ -74,11 +74,15 @@ def summarize_all():
         ("ar", _AR_DB), ("en", _EN_DB), ("fr", _FR_DB),
         ("es", _ES_DB), ("tr", _TR_DB),
     ]
+    # Gemini free tier: 1500 req/day total.
+    # With 5 languages × 4 CI runs/day → max 75 per language per run to stay under limit.
+    # Groq free tier: 14 400 req/day → can use higher batch if Gemini quota is exceeded.
+    _batch = 75 if gemini_key else 250
     for lang, db_path in langs:
         n = summarize_articles(
             db_path=db_path,
             lang=lang,
-            batch_size=200,
+            batch_size=_batch,
             gemini_key=gemini_key,
             groq_key=groq_key,
         )

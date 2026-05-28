@@ -4735,6 +4735,10 @@ def _page(*, title: str, desc: str, nav_html: str,
   <meta name="theme-color" content="{esc(s.get("theme_color","#1d4ed8"))}">
   <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="{esc(title)}" href="{esc(rss_url)}">
+  <!-- Critical CSS — initial skeleton shown instantly before style.css loads.
+       MUST come BEFORE <link rel="stylesheet"> so that style.css overrides it
+       once loaded. Reversing this order would permanently override style.css. -->
+  <style>*,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}:root{{--header-start:#4f46e5;--header-end:#7c3aed;--nav-bg:rgba(255,255,255,.92);--nav-text:#475569;--accent:#6366f1;--bg:#f8f9fe;--text:#1e293b;--border:#e2e8f0}}body{{font-family:system-ui,sans-serif;background:#f8f9fe;color:#1e293b;direction:{s["dir"]}}}.sticky-header{{position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.12)}}.site-header{{background:linear-gradient(135deg,var(--header-start),var(--header-end));color:#fff;padding:8px 0}}.site-header-inner{{display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1200px;margin:0 auto}}.site-header-title{{font-weight:800;font-size:1.2em;letter-spacing:2px;color:#fff}}.site-nav{{background:var(--nav-bg);backdrop-filter:blur(8px)}}.nav-inner{{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:1px;max-width:1200px;margin:0 auto;padding:0 6px}}.nav-tab{{display:inline-flex;align-items:center;padding:8px 14px;color:var(--nav-text);font-size:.82em;text-decoration:none;white-space:nowrap;flex-shrink:0}}.articles-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;padding:8px 0}}.article-card{{border-radius:14px;overflow:hidden;background:#fff;position:relative;aspect-ratio:16/10}}</style>
   <!-- Performance: preload critical assets first -->
   <link rel="preload" href="style.css" as="style">
 {(f'  <link rel="preload" href="{esc(lcp_image_url)}" as="image" fetchpriority="high">' if lcp_image_url else "")}
@@ -4744,8 +4748,6 @@ def _page(*, title: str, desc: str, nav_html: str,
   <link rel="preload" href="{esc(s["font_url"])}" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link href="{esc(s["font_url"])}" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="style.css">
-  <!-- Critical CSS — above-the-fold skeleton (prevents FOUC while style.css loads) -->
-  <style>*,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}body{{font-family:system-ui,sans-serif;background:#f8fafc;color:#1a1a2e;direction:{s["dir"]}}}:root{{--accent:#1d4ed8;--bg:#f8fafc;--text:#1a1a2e;--border:#e2e8f0}}.sticky-header{{position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.12)}}.site-header{{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 60%,#0f3460 100%);color:#fff;padding:8px 0}}.site-header-inner{{display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1200px;margin:0 auto}}.site-header-title{{font-weight:800;font-size:1.2em;letter-spacing:2px;color:#fff}}.site-nav{{background:rgba(0,0,0,.22);backdrop-filter:blur(8px)}}.nav-inner{{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:1px;max-width:1200px;margin:0 auto;padding:0 6px}}.nav-tab{{display:inline-flex;align-items:center;padding:8px 14px;color:rgba(255,255,255,.82);font-size:.82em;text-decoration:none;white-space:nowrap;flex-shrink:0}}.articles-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;padding:8px 0}}.article-card{{border-radius:14px;overflow:hidden;background:#fff;position:relative;aspect-ratio:16/10}}</style>
   <!-- JSON-LD -->
   <script type="application/ld+json">{sd}</script>
 {extra_json_ld}
