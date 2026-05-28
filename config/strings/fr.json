@@ -92,5 +92,10 @@
   "art_summary_lbl": "🤖 Résumé IA",
   "art_by_source":   "Source",
   "art_back":        "← Retour à",
-  "art_disclaimer":  "Résumé automatique — visitez la source originale pour l'article complet"
+  "art_disclaimer":  "Résumé automatique — visitez la source originale pour l'article complet",
+  "spectrum_wire":        "Agence",
+  "spectrum_public":      "Public",
+  "spectrum_commercial":  "Commercial",
+  "spectrum_state":       "Officiel",
+  "spectrum_independent": "Indépendant"
 }

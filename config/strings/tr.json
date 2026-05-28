@@ -92,5 +92,10 @@
   "art_summary_lbl": "🤖 YZ Özeti",
   "art_by_source":   "Kaynak",
   "art_back":        "← Geri:",
-  "art_disclaimer":  "Bu otomatik bir özettir — tam makale için orijinal kaynağı ziyaret edin"
+  "art_disclaimer":  "Bu otomatik bir özettir — tam makale için orijinal kaynağı ziyaret edin",
+  "spectrum_wire":        "Ajans",
+  "spectrum_public":      "Kamu",
+  "spectrum_commercial":  "Ticari",
+  "spectrum_state":       "Resmi",
+  "spectrum_independent": "Bağımsız"
 }

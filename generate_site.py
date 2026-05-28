@@ -518,6 +518,11 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "art_by_source":    "المصدر",
         "art_back":         "→ العودة",
         "art_disclaimer":   "هذا ملخص تلقائي — للمقال الكامل زر المصدر الأصلي",
+        "spectrum_wire":        "وكالة",
+        "spectrum_public":      "عام",
+        "spectrum_commercial":  "خاص",
+        "spectrum_state":       "رسمي",
+        "spectrum_independent": "مستقل",
     },
     "en": {
         "lang": "en", "dir": "ltr",
@@ -595,6 +600,11 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "art_by_source":    "Source",
         "art_back":         "← Back",
         "art_disclaimer":   "This is an AI summary — visit the original source for the full article",
+        "spectrum_wire":        "Agency",
+        "spectrum_public":      "Public",
+        "spectrum_commercial":  "Commercial",
+        "spectrum_state":       "State",
+        "spectrum_independent": "Independent",
     },
     "fr": {
         "lang": "fr", "dir": "ltr",
@@ -672,6 +682,11 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "art_by_source":    "Source",
         "art_back":         "← Retour",
         "art_disclaimer":   "Résumé automatique — visitez la source originale pour l'article complet",
+        "spectrum_wire":        "Agence",
+        "spectrum_public":      "Public",
+        "spectrum_commercial":  "Commercial",
+        "spectrum_state":       "Officiel",
+        "spectrum_independent": "Indépendant",
     },
     "es": {
         "lang": "es", "dir": "ltr",
@@ -749,6 +764,11 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "art_by_source":    "Fuente",
         "art_back":         "← Volver",
         "art_disclaimer":   "Resumen automático — visita la fuente original para el artículo completo",
+        "spectrum_wire":        "Agencia",
+        "spectrum_public":      "Público",
+        "spectrum_commercial":  "Comercial",
+        "spectrum_state":       "Oficial",
+        "spectrum_independent": "Independiente",
     },
     "tr": {
         "lang": "tr", "dir": "ltr",
@@ -826,6 +846,11 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "art_by_source":    "Kaynak",
         "art_back":         "← Geri",
         "art_disclaimer":   "Bu otomatik bir özettir — tam makale için orijinal kaynağı ziyaret edin",
+        "spectrum_wire":        "Ajans",
+        "spectrum_public":      "Kamu",
+        "spectrum_commercial":  "Ticari",
+        "spectrum_state":       "Resmi",
+        "spectrum_independent": "Bağımsız",
     },
 }
 
@@ -834,6 +859,34 @@ for _lang, _sdict in _STRINGS_FALLBACK.items():
     if _lang not in STRINGS:
         STRINGS[_lang] = _sdict
         logger.warning("Strings: using fallback for lang=%s (JSON file missing)", _lang)
+
+
+def _load_spectrum_map() -> dict[str, str]:
+    """Load config/spectrum_map.json → {source_name: spectrum_type}.
+    Returns an empty dict on failure so the site still generates without badges."""
+    _path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                         "config", "spectrum_map.json")
+    try:
+        with open(_path, "r", encoding="utf-8") as _f:
+            raw = json.load(_f)
+        # Filter out comment/meta keys that start with "_"
+        return {k: v for k, v in raw.items() if not k.startswith("_")}
+    except Exception as _e:
+        logger.warning("spectrum_map.json load failed: %s", _e)
+        return {}
+
+
+# Loaded once at import time
+_SPECTRUM_MAP: dict[str, str] = _load_spectrum_map()
+
+# CSS class per spectrum type
+_SPECTRUM_CSS: dict[str, str] = {
+    "wire":        "sp-wire",
+    "public":      "sp-public",
+    "commercial":  "sp-commercial",
+    "state":       "sp-state",
+    "independent": "sp-independent",
+}
 
 
 def _article_slug(url: str) -> str:
@@ -1595,6 +1648,18 @@ body.lang-ltr .nh-text{direction:ltr}
 .share-copy{background:rgba(255,255,255,.22);color:#fff}
 .card--no-img .share-wa{box-shadow:0 1px 3px rgba(0,0,0,.15)}
 .card--no-img .share-copy{background:var(--border);color:var(--text)}
+/* ====== SPECTRUM BADGE ====== */
+.spectrum-badge{display:inline-flex;align-items:center;font-size:.62em;font-weight:700;letter-spacing:.3px;padding:1px 6px;border-radius:10px;vertical-align:middle;white-space:nowrap;text-transform:uppercase;margin-inline-start:5px;line-height:1.6}
+.sp-wire{background:#e2e8f0;color:#475569}
+.sp-public{background:#dbeafe;color:#1d4ed8}
+.sp-commercial{background:#ffedd5;color:#c2410c}
+.sp-state{background:#fee2e2;color:#b91c1c}
+.sp-independent{background:#dcfce7;color:#15803d}
+.dark-mode .sp-wire{background:#334155;color:#94a3b8}
+.dark-mode .sp-public{background:#1e3a8a;color:#93c5fd}
+.dark-mode .sp-commercial{background:#431407;color:#fb923c}
+.dark-mode .sp-state{background:#450a0a;color:#fca5a5}
+.dark-mode .sp-independent{background:#052e16;color:#86efac}
 /* ====== ARTICLE PAGES ====== */
 .art-page{max-width:800px;margin:0 auto;padding:28px 16px 48px}
 .art-back{display:inline-flex;align-items:center;gap:6px;color:var(--accent);text-decoration:none;font-size:.9em;font-weight:600;margin-bottom:16px;padding:4px 0}
@@ -3856,7 +3921,8 @@ def _source_filter_strip(articles: list[dict], cat_sources: list[dict],
     )
 
 
-def _card(art: dict, slug: str, use_article_page: bool = True) -> str:
+def _card(art: dict, slug: str, use_article_page: bool = True,
+          s: dict | None = None) -> str:
     import urllib.parse as _up
     color    = CATEGORY_COLORS.get(slug, DEFAULT_COLOR)
     gradient = CATEGORY_GRADIENTS.get(slug, DEFAULT_GRADIENT)
@@ -3868,6 +3934,15 @@ def _card(art: dict, slug: str, use_article_page: bool = True) -> str:
     date       = esc(art.get("date", ""))
     image      = safe_url(art.get("image", ""))
     ai_summary = art.get("ai_summary", "")
+
+    # ── Spectrum badge (source classification) ────────────────────────────────
+    _sp_type = _SPECTRUM_MAP.get(source_raw, "")
+    if _sp_type and s:
+        _sp_label = s.get(f"spectrum_{_sp_type}", _sp_type)
+        _sp_css   = _SPECTRUM_CSS.get(_sp_type, "sp-wire")
+        spectrum_badge = f'<span class="spectrum-badge {_sp_css}" title="{esc(_sp_label)}">{esc(_sp_label)}</span>'
+    else:
+        spectrum_badge = ""
 
     if image and image != "#":
         bg_html = (
@@ -3931,7 +4006,7 @@ def _card(art: dict, slug: str, use_article_page: bool = True) -> str:
         f'<div class="card-overlay"></div>'
         f'<div class="card-body">'
         f'<div class="card-meta">'
-        f'<span class="card-source" style="background:{esc(gradient)}">{source}</span>'
+        f'<span class="card-source" style="background:{esc(gradient)}">{source}{spectrum_badge}</span>'
         f'<time class="card-date">{date}</time>'
         f'</div>'
         f'<h3 class="card-title">{title}</h3>'
@@ -4337,6 +4412,14 @@ def _article_page_html(
     ext_url    = art["url"]
     source_raw = art["source"]
     source_esc = esc(SOURCE_AR_NAME.get(source_raw, source_raw))
+    # Spectrum badge for article page
+    _sp_t = _SPECTRUM_MAP.get(source_raw, "")
+    if _sp_t and s:
+        _sp_lbl = s.get(f"spectrum_{_sp_t}", _sp_t)
+        _sp_css = _SPECTRUM_CSS.get(_sp_t, "sp-wire")
+        _art_sp_badge = f'<span class="spectrum-badge {_sp_css}">{esc(_sp_lbl)}</span>'
+    else:
+        _art_sp_badge = ""
     date_str   = art.get("date", "")
     scraped_at = art.get("scraped_at", date_str + "T00:00:00")
     # Build RFC 3339 date for JSON-LD (scraped_at is "YYYY-MM-DD HH:MM:SS")
@@ -4523,7 +4606,7 @@ def _article_page_html(
         {img_html}
         <h1 class="art-title" itemprop="headline">{title_esc}</h1>
         <div class="art-meta">
-          <span class="art-source-badge" itemprop="author">{source_esc}</span>
+          <span class="art-source-badge" itemprop="author">{source_esc}{_art_sp_badge}</span>
           <time class="art-date" datetime="{esc(scraped_dt)}" itemprop="datePublished">{esc(date_str)}</time>
           <span class="art-cat-badge" style="background:{esc(gradient)}">{esc(cat_icon)} {esc(cat_name)}</span>
         </div>
@@ -5141,7 +5224,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             continue
         color   = CATEGORY_COLORS.get(slug, DEFAULT_COLOR)
         preview = cat_data["articles"][:PREVIEW_PER_CAT]
-        cards   = "".join(_card(a, slug) for a in preview)
+        cards   = "".join(_card(a, slug, s=s) for a in preview)
         total   = len(cat_data["articles"])
         more_btn = (
             f'<a href="{esc(slug)}.html" class="more-btn" style="border-color:{esc(color)};color:{esc(color)}">'
@@ -5255,7 +5338,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         if slug in media_slugs_local:
             raw_articles = [a for a in raw_articles if _is_yt_url(a.get("url", ""))]
         if raw_articles:
-            cards      = "".join(_card(a, slug, use_article_page=(slug not in media_slugs_local)) for a in raw_articles)
+            cards      = "".join(_card(a, slug, use_article_page=(slug not in media_slugs_local), s=s) for a in raw_articles)
             grid       = f'<div class="articles-grid">{cards}</div>'
             src_filter = _source_filter_strip(
                 raw_articles, cat.get("sources", []), color, s
@@ -5371,7 +5454,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
 
             if cat_data and cat_data["articles"]:
                 preview  = cat_data["articles"][:PREVIEW_PER_CAT]
-                cards    = "".join(_card(a, slug) for a in preview)
+                cards    = "".join(_card(a, slug, s=s) for a in preview)
                 total    = len(cat_data["articles"])
                 more_btn = (
                     f'<a href="{esc(slug)}.html" class="more-btn" '
@@ -5440,7 +5523,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             ]
             if yt_articles:
                 preview  = yt_articles[:PREVIEW_PER_CAT]
-                cards    = "".join(_card(a, slug, use_article_page=False) for a in preview)
+                cards    = "".join(_card(a, slug, use_article_page=False, s=s) for a in preview)
                 total    = len(yt_articles)
                 more_btn = (
                     f'<a href="{esc(slug)}.html" class="more-btn" '

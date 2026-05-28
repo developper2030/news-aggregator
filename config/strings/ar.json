@@ -92,5 +92,10 @@
   "art_summary_lbl": "🤖 ملخص ذكاء اصطناعي",
   "art_by_source":   "المصدر",
   "art_back":        "→ العودة إلى",
-  "art_disclaimer":  "هذا ملخص تلقائي — للمقال الكامل زر المصدر الأصلي"
+  "art_disclaimer":  "هذا ملخص تلقائي — للمقال الكامل زر المصدر الأصلي",
+  "spectrum_wire":        "وكالة",
+  "spectrum_public":      "عام",
+  "spectrum_commercial":  "خاص",
+  "spectrum_state":       "رسمي",
+  "spectrum_independent": "مستقل"
 }
