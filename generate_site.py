@@ -1251,10 +1251,10 @@ ul,ol{list-style:none}
 .theme-btn:hover{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.5)}
 
 /* ===================== NAVIGATION ===================== */
-.site-nav{background:var(--nav-bg);position:static;z-index:200;box-shadow:0 1px 8px rgba(0,0,0,.07);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
-.nav-inner{max-width:1200px;margin:0 auto;padding:0 6px;display:flex;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;gap:1px;scroll-behavior:smooth}
+.site-nav{background:var(--nav-bg);position:relative;z-index:200;box-shadow:0 1px 8px rgba(0,0,0,.07);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);overflow:hidden}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 6px;display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:1px;scroll-behavior:smooth}
 .nav-inner::-webkit-scrollbar{display:none}
-.nav-tab{display:inline-flex;align-items:center;gap:4px;color:var(--nav-text);padding:8px 10px;font-size:.84em;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;font-weight:700;cursor:pointer;border-radius:6px 6px 0 0;flex-shrink:0}
+.nav-tab{display:inline-flex;align-items:center;gap:4px;color:var(--nav-text);padding:8px 10px;font-size:.84em;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;font-weight:700;cursor:pointer;border-radius:6px 6px 0 0;flex-shrink:0;min-width:0}
 .nav-tab:hover{color:var(--accent);background:rgba(99,102,241,.05)}
 .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(99,102,241,.08)}
 
@@ -1496,22 +1496,28 @@ body.lang-ltr .nh-text{direction:ltr}
   .top-date{display:none}
   .theme-btn{padding:5px 12px;font-size:.88em}
   /* Language row — full-width scrollable strip */
-  .lang-row{padding:4px 10px 5px;justify-content:flex-start;overflow-x:auto;scrollbar-width:none;border-top:1px solid rgba(255,255,255,.12)}
+  .lang-row{padding:4px 10px 5px;justify-content:flex-start;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-top:1px solid rgba(255,255,255,.12)}
   .lang-row::-webkit-scrollbar{display:none}
   .lang-btn{padding:3px 8px;font-size:.72em}
   /* Layout */
   .main-wrapper{padding:14px 10px}
   .section-header{padding:10px 14px;margin-bottom:12px}
   .section-title{font-size:1.05em}
-  /* Highlight active nav tab clearly on mobile */
+  /* Nav: larger touch targets, visible active indicator */
+  .nav-tab{padding:10px 12px;font-size:.83em}
   .nav-tab.active{box-shadow:inset 0 -3px 0 var(--accent)}
+  /* World subnav touch scrolling */
+  .world-subnav-inner{-webkit-overflow-scrolling:touch}
 }
 @media(max-width:480px){
   .articles-grid{grid-template-columns:1fr}
+  .article-card{aspect-ratio:16/9}
   .card-title{font-size:1em}
   .live-time{display:none}
   .section-header{padding:8px 12px}
   .category-section{margin-bottom:28px}
+  /* Nav tabs compact on very small screens */
+  .nav-tab{padding:9px 10px;font-size:.8em}
 }
 
 /* ====== SOURCE FILTER STRIP ====== */
@@ -1631,15 +1637,15 @@ body.lang-ltr .nh-text{direction:ltr}
 .article-card:hover .card-ai{max-height:3em}
 .article-card.card--no-img .card-ai{color:var(--text-muted);max-height:3em}
 /* ====== SHARE BUTTONS — bottom bar, full-width ====== */
-.card-share{position:absolute;bottom:0;inset-inline-start:0;inset-inline-end:0;display:flex;gap:5px;justify-content:center;align-items:center;padding:5px 12px;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s;z-index:10}
+.card-share{position:absolute;bottom:0;left:0;right:0;inset-inline-start:0;inset-inline-end:0;display:flex;gap:5px;justify-content:center;align-items:center;padding:5px 12px;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s;z-index:10}
 .article-card:hover .card-share{opacity:1;transform:translateY(0)}
 /* Push card-body content up on hover so it clears the share bar */
-.article-card:hover .card-body{padding-bottom:38px}
+.article-card:hover .card-body{padding-bottom:42px}
 @media(pointer:coarse){
   /* On touch: share bar always visible, body always leaves room */
   .card-share{opacity:1;transform:none}
-  .card-body{padding-bottom:38px}
-  .share-btn{width:28px;height:28px;font-size:.74em}
+  .card-body{padding-bottom:42px}
+  .share-btn{width:30px;height:30px;font-size:.76em}
 }
 .share-btn{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;font-size:.72em;font-weight:700;text-decoration:none;border:none;cursor:pointer;transition:transform .15s;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .share-btn:hover{transform:scale(1.18)}
@@ -4763,7 +4769,7 @@ def _page(*, title: str, desc: str, nav_html: str,
   <!-- Critical CSS — initial skeleton shown instantly before style.css loads.
        MUST come BEFORE <link rel="stylesheet"> so that style.css overrides it
        once loaded. Reversing this order would permanently override style.css. -->
-  <style>*,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}:root{{--header-start:#4f46e5;--header-end:#7c3aed;--nav-bg:rgba(255,255,255,.92);--nav-text:#475569;--accent:#6366f1;--bg:#f8f9fe;--text:#1e293b;--border:#e2e8f0}}body{{font-family:system-ui,sans-serif;background:#f8f9fe;color:#1e293b;direction:{s["dir"]}}}.sticky-header{{position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.12)}}.site-header{{background:linear-gradient(135deg,var(--header-start),var(--header-end));color:#fff;padding:8px 0}}.site-header-inner{{display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1200px;margin:0 auto}}.site-header-title{{font-weight:800;font-size:1.2em;letter-spacing:2px;color:#fff}}.site-nav{{background:var(--nav-bg);backdrop-filter:blur(8px)}}.nav-inner{{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:1px;max-width:1200px;margin:0 auto;padding:0 6px}}.nav-tab{{display:inline-flex;align-items:center;padding:8px 14px;color:var(--nav-text);font-size:.82em;text-decoration:none;white-space:nowrap;flex-shrink:0}}.articles-grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}}.article-card{{border-radius:14px;overflow:hidden;background:#fff;position:relative;aspect-ratio:4/3}}</style>
+  <style>*,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}:root{{--header-start:#4f46e5;--header-end:#7c3aed;--nav-bg:rgba(255,255,255,.92);--nav-text:#475569;--accent:#6366f1;--bg:#f8f9fe;--text:#1e293b;--border:#e2e8f0}}body{{font-family:system-ui,sans-serif;background:#f8f9fe;color:#1e293b;direction:{s["dir"]}}}.sticky-header{{position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.12)}}.site-header{{background:linear-gradient(135deg,var(--header-start),var(--header-end));color:#fff;padding:8px 0}}.site-header-inner{{display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1200px;margin:0 auto}}.site-header-title{{font-weight:800;font-size:1.2em;letter-spacing:2px;color:#fff}}.site-nav{{background:var(--nav-bg);backdrop-filter:blur(8px);overflow:hidden}}.nav-inner{{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:1px;max-width:1200px;margin:0 auto;padding:0 6px}}.nav-tab{{display:inline-flex;align-items:center;padding:8px 14px;color:var(--nav-text);font-size:.82em;text-decoration:none;white-space:nowrap;flex-shrink:0;min-width:0}}.articles-grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}}.article-card{{border-radius:14px;overflow:hidden;background:#fff;position:relative;aspect-ratio:4/3}}@media(max-width:480px){{.articles-grid{{grid-template-columns:1fr}}.article-card{{aspect-ratio:16/9}}}}</style>
   <!-- Performance: preload critical assets first -->
   <link rel="preload" href="style.css" as="style">
 {(f'  <link rel="preload" href="{esc(lcp_image_url)}" as="image" fetchpriority="high">' if lcp_image_url else "")}
