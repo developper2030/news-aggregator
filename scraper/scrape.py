@@ -445,11 +445,50 @@ def _is_rss_feed_url(url: str) -> bool:
     ))
 
 
+def _clean_rss_desc(raw: str, title: str = "") -> str:
+    """Strip HTML tags, decode entities, truncate to ≤2 sentences (max 280 chars).
+
+    Returns empty string if the description is too short or just repeats the title.
+    """
+    import re as _re, html as _html
+    if not raw or len(raw.strip()) < 20:
+        return ""
+    # Decode HTML entities (&amp; &lt; &nbsp; …)
+    text = _html.unescape(raw)
+    # Strip HTML tags
+    text = _re.sub(r"<[^>]+>", " ", text)
+    # Collapse whitespace
+    text = " ".join(text.split())
+    if len(text) < 30:
+        return ""
+    # If description just repeats the title, strip the duplicated prefix
+    if title:
+        t_lower = title.lower().strip()[:60]
+        if text.lower().startswith(t_lower):
+            text = text[len(t_lower):].lstrip(" .—–-")
+    if len(text) < 30:
+        return ""
+    # Truncate to 2 sentences
+    sentence_ends: list[int] = []
+    for m in _re.finditer(r"[.!?][\s\"')\]]+", text):
+        sentence_ends.append(m.end())
+        if len(sentence_ends) >= 2:
+            break
+    if len(sentence_ends) >= 2:
+        text = text[:sentence_ends[1]].strip()
+    elif len(text) > 280:
+        cut = text.rfind(" ", 0, 280)
+        text = text[:cut if cut > 80 else 280] + "…"
+    return text[:300]
+
+
 def extract_articles_rss(feed_text: str, source_name: str, max_articles: int) -> list[dict]:
     """Parse a generic RSS 2.0 or Atom feed and return article dicts."""
     import xml.etree.ElementTree as ET
-    NS_MEDIA = "http://search.yahoo.com/mrss/"
-    NS_ATOM  = "http://www.w3.org/2005/Atom"
+    NS_MEDIA   = "http://search.yahoo.com/mrss/"
+    NS_ATOM    = "http://www.w3.org/2005/Atom"
+    NS_CONTENT = "http://purl.org/rss/1.0/modules/content/"
+    NS_DC      = "http://purl.org/dc/elements/1.1/"
     articles: list[dict] = []
     try:
         root = ET.fromstring(feed_text)
@@ -460,12 +499,15 @@ def extract_articles_rss(feed_text: str, source_name: str, max_articles: int) ->
                 t = _a(entry, "title")
                 l = entry.find(f"{{{NS_ATOM}}}link[@rel='alternate']") or _a(entry, "link")
                 m = entry.find(f"{{{NS_MEDIA}}}thumbnail")
+                s = _a(entry, "summary") or _a(entry, "content")
                 title = (t.text or "").strip() if t is not None else ""
                 href  = (l.get("href") or l.text or "").strip() if l is not None else ""
                 image = m.get("url", "") if m is not None else ""
+                desc  = _clean_rss_desc((s.text or ""), title) if s is not None else ""
                 if title and href and len(title) >= 5:
                     articles.append({"title": title[:300], "url": href,
-                                     "source": source_name, "image_url": image})
+                                     "source": source_name, "image_url": image,
+                                     "ai_summary": desc})
         # ── RSS 2.0 ─────────────────────────────────────────────────────────
         else:
             channel = root.find("channel") or root
@@ -474,6 +516,8 @@ def extract_articles_rss(feed_text: str, source_name: str, max_articles: int) ->
                 l   = item.find("link")
                 enc = item.find("enclosure")
                 m   = item.find(f"{{{NS_MEDIA}}}thumbnail") or item.find(f"{{{NS_MEDIA}}}content")
+                d   = item.find("description")
+                ce  = item.find(f"{{{NS_CONTENT}}}encoded")
                 title = (t.text or "").strip() if t is not None else ""
                 href  = (l.text or "").strip() if l is not None else ""
                 image = ""
@@ -481,9 +525,17 @@ def extract_articles_rss(feed_text: str, source_name: str, max_articles: int) ->
                     image = enc.get("url", "")
                 if not image and m is not None:
                     image = m.get("url", "")
+                # Prefer <description>, fall back to <content:encoded> (first 500 chars)
+                raw_desc = ""
+                if d is not None and d.text:
+                    raw_desc = d.text
+                elif ce is not None and ce.text:
+                    raw_desc = ce.text[:500]
+                desc = _clean_rss_desc(raw_desc, title)
                 if title and href and len(title) >= 5:
                     articles.append({"title": title[:300], "url": href,
-                                     "source": source_name, "image_url": image})
+                                     "source": source_name, "image_url": image,
+                                     "ai_summary": desc})
     except ET.ParseError as exc:
         logger.warning("RSS feed XML parse error (%s): %s", source_name, exc)
     return articles
@@ -777,6 +829,7 @@ def run(config_path: str | None = None, db_path: str | None = None) -> None:
                     "source":        a["source"],
                     "category_name": cname,
                     "category_slug": cslug,
+                    "ai_summary":    a.get("ai_summary", ""),
                 }
                 for a in filtered
             ]

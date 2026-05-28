@@ -1,10 +1,22 @@
 """
 AI Article Summarizer — Atlas News
-Uses Groq API (llama-3.1-8b-instant) to generate 2-sentence summaries.
+Supports two backends (auto-detected from available API keys):
+
+  1. Google Gemini 2.0 Flash-Lite (preferred)
+       Free tier: 30 req/min, 1 500 req/day
+       No Cloudflare blocking, fastest responses.
+
+  2. Groq llama-3.1-8b-instant (fallback)
+       Free tier: 30 req/min, 14 400 req/day
+       Needs `requests` library to bypass Cloudflare TLS fingerprinting.
+
+Priority: Gemini > Groq.  If neither key is present the step is silently skipped.
 
 - Summaries are stored in the DB and never re-generated for the same article.
-- Rate-limited to stay within Groq free tier (30 req/min).
-- Gracefully skips on API errors — site generation never blocked.
+- RSS descriptions scraped at scrape-time already fill most ai_summary fields;
+  this module upgrades only articles that still have no summary.
+- Rate-limited to stay within free-tier limits.
+- Gracefully skips on API errors — site generation is never blocked.
 """
 
 import time
@@ -15,14 +27,24 @@ try:
     import requests as _requests
     _USE_REQUESTS = True
 except ImportError:
-    import urllib.request as _urlreq
-    import urllib.error as _urlerr
     _USE_REQUESTS = False
 
 logger = logging.getLogger(__name__)
 
+# ── Groq ──────────────────────────────────────────────────────────────────────
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 GROQ_MODEL   = "llama-3.1-8b-instant"
+
+# ── Gemini ────────────────────────────────────────────────────────────────────
+GEMINI_API_URL = (
+    "https://generativelanguage.googleapis.com/v1beta/models/"
+    "gemini-2.0-flash-lite:generateContent"
+)
+
+# Rate limits (per-request sleep to stay under free-tier caps)
+# Groq:   30 req/min → 2.1 s/req
+# Gemini: 30 req/min → 2.1 s/req  (flash-lite has 30 RPM on free tier)
+_REQUEST_DELAY = 2.1
 
 # Language names for the prompt
 _LANG_NAMES = {
@@ -40,9 +62,6 @@ _LANG_NAMES = {
     "zh": "Chinese",
 }
 
-# Groq free tier: 30 req/min → 1 req every 2s to be safe
-_REQUEST_DELAY = 2.1
-
 
 def _build_prompt(title: str, lang: str) -> str:
     lang_name = _LANG_NAMES.get(lang, "English")
@@ -56,6 +75,43 @@ def _build_prompt(title: str, lang: str) -> str:
         f"Headline: {title}"
     )
 
+
+# ── Gemini call ───────────────────────────────────────────────────────────────
+
+def _call_gemini(title: str, lang: str, api_key: str) -> str:
+    """Call Google Gemini API and return the summary text. Raises on failure."""
+    payload = {
+        "contents": [{"parts": [{"text": _build_prompt(title, lang)}]}],
+        "generationConfig": {
+            "maxOutputTokens": 150,
+            "temperature": 0.4,
+        },
+    }
+    url = f"{GEMINI_API_URL}?key={api_key}"
+
+    if _USE_REQUESTS:
+        resp = _requests.post(url, json=payload, timeout=15)
+        resp.raise_for_status()
+        data = resp.json()
+    else:
+        import urllib.request as _ur
+        req = _ur.Request(
+            url,
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with _ur.urlopen(req, timeout=15) as r:
+            data = json.loads(r.read().decode("utf-8"))
+
+    # Parse Gemini response
+    try:
+        return data["candidates"][0]["content"]["parts"][0]["text"].strip()
+    except (KeyError, IndexError) as exc:
+        raise ValueError(f"Unexpected Gemini response structure: {data}") from exc
+
+
+# ── Groq call ─────────────────────────────────────────────────────────────────
 
 def _call_groq(title: str, lang: str, api_key: str) -> str:
     """Call Groq API and return the summary text. Raises on failure."""
@@ -78,28 +134,58 @@ def _call_groq(title: str, lang: str, api_key: str) -> str:
         resp.raise_for_status()
         return resp.json()["choices"][0]["message"]["content"].strip()
     else:
-        import urllib.request as _ur, urllib.error as _ue
-        req = _ur.Request(GROQ_API_URL,
-                          data=json.dumps(payload).encode("utf-8"),
-                          headers=headers, method="POST")
+        import urllib.request as _ur
+        req = _ur.Request(
+            GROQ_API_URL,
+            data=json.dumps(payload).encode("utf-8"),
+            headers=headers,
+            method="POST",
+        )
         with _ur.urlopen(req, timeout=15) as r:
             result = json.loads(r.read().decode("utf-8"))
         return result["choices"][0]["message"]["content"].strip()
 
 
+# ── Unified caller ────────────────────────────────────────────────────────────
+
+def _call_api(title: str, lang: str,
+              gemini_key: str = "", groq_key: str = "") -> str:
+    """Try Gemini first, fall back to Groq. Raises if both fail."""
+    if gemini_key:
+        return _call_gemini(title, lang, gemini_key)
+    if groq_key:
+        return _call_groq(title, lang, groq_key)
+    raise ValueError("No API key provided (gemini or groq)")
+
+
+# ── Public entry-point ────────────────────────────────────────────────────────
+
 def summarize_articles(
     db_path: str,
-    api_key: str,
     lang: str,
     batch_size: int = 200,
+    api_key: str = "",        # Groq key (legacy param kept for back-compat)
+    gemini_key: str = "",
+    groq_key: str = "",
 ) -> int:
     """
-    Find articles without summaries in *db_path*, call Groq, store results.
+    Find articles without summaries in *db_path*, call AI API, store results.
     Returns the number of articles successfully summarized.
+
+    Key priority: gemini_key > groq_key > api_key (legacy).
+    RSS descriptions from the scraper already fill most ai_summary fields;
+    this function handles the remainder.
     """
-    if not api_key:
-        logger.info("Summarizer: no Groq API key — skipping")
+    # Resolve keys (back-compat: positional api_key treated as groq_key)
+    _groq  = groq_key or api_key
+    _gemini = gemini_key
+
+    if not _gemini and not _groq:
+        logger.info("Summarizer [%s]: no API key (Gemini or Groq) — skipping", lang)
         return 0
+
+    provider = "Gemini" if _gemini else "Groq"
+    logger.info("Summarizer [%s]: using %s", lang, provider)
 
     # Import here to allow the module to load even before db is set up
     import sys, os
@@ -119,25 +205,33 @@ def summarize_articles(
 
     for i, art in enumerate(articles):
         try:
-            summary = _call_groq(art["title"], lang, api_key)
+            summary = _call_api(art["title"], lang,
+                                 gemini_key=_gemini, groq_key=_groq)
             update_article_summary(art["url"], summary)
             done += 1
             if (i + 1) % 10 == 0:
                 logger.info("Summarizer [%s]: %d/%d done", lang, done, len(articles))
             time.sleep(_REQUEST_DELAY)
-        except Exception as http_e:
-            # Handle both requests.HTTPError and urllib.error.HTTPError
-            status = getattr(getattr(http_e, "response", None), "status_code",
-                             getattr(http_e, "code", 0))
+
+        except Exception as exc:
+            # Extract HTTP status code from requests or urllib errors
+            status = getattr(getattr(exc, "response", None), "status_code",
+                             getattr(exc, "code", 0))
             body = ""
             try:
-                if hasattr(http_e, "response") and http_e.response is not None:
-                    body = http_e.response.text[:200]
-                elif hasattr(http_e, "read"):
-                    body = http_e.read().decode("utf-8", errors="replace")[:200]
+                if hasattr(exc, "response") and exc.response is not None:
+                    body = exc.response.text[:200]
+                elif hasattr(exc, "read"):
+                    body = exc.read().decode("utf-8", errors="replace")[:200]
             except Exception:
                 pass
-            logger.warning("Summarizer [%s]: HTTP %s — %s", lang, status, body)
+
+            if body:
+                logger.warning("Summarizer [%s]: HTTP %s — %s", lang, status, body)
+            else:
+                logger.warning("Summarizer [%s]: error on '%s': %s",
+                               lang, art["title"][:60], exc)
+
             errors += 1
             if status == 429:
                 logger.info("Summarizer: rate-limited, sleeping 60s…")
@@ -145,12 +239,7 @@ def summarize_articles(
             elif errors >= 5:
                 logger.warning("Summarizer: too many errors, aborting batch")
                 break
-        except Exception as e:
-            logger.warning("Summarizer [%s]: error on '%s': %s", lang, art["title"][:60], e)
-            errors += 1
-            if errors >= 5:
-                logger.warning("Summarizer: too many errors, aborting batch")
-                break
 
-    logger.info("Summarizer [%s]: finished — %d summarized, %d errors", lang, done, errors)
+    logger.info("Summarizer [%s]: finished — %d summarized, %d errors",
+                lang, done, errors)
     return done

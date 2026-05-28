@@ -29,16 +29,19 @@ _ES_OUT    = os.path.join(_ROOT, "static", "es")
 _TR_OUT    = os.path.join(_ROOT, "static", "tr")
 
 
-# Load Groq API key once
-def _load_groq_key() -> str:
+def _load_api_keys() -> dict:
+    """Return {'gemini': '...', 'groq': '...'} from config file + env vars."""
     _keys_path = os.path.join(_ROOT, "config", "api_keys.json")
+    file_keys: dict = {}
     try:
         with open(_keys_path, "r", encoding="utf-8") as f:
-            keys = _json.load(f)
-        key = (keys.get("groq") or os.environ.get("GROQ_API_KEY", "")).strip()
-        return key
+            file_keys = _json.load(f)
     except (FileNotFoundError, _json.JSONDecodeError):
-        return os.environ.get("GROQ_API_KEY", "").strip()
+        pass
+    return {
+        "gemini": (file_keys.get("gemini") or os.environ.get("GEMINI_API_KEY", "")).strip(),
+        "groq":   (file_keys.get("groq")   or os.environ.get("GROQ_API_KEY",   "")).strip(),
+    }
 
 
 def scrape_all():
@@ -55,18 +58,29 @@ def scrape_all():
 
 
 def summarize_all():
-    groq_key = _load_groq_key()
-    if not groq_key:
-        print("\n[AI] No Groq API key — skipping summaries")
+    keys = _load_api_keys()
+    gemini_key = keys["gemini"]
+    groq_key   = keys["groq"]
+
+    if not gemini_key and not groq_key:
+        print("\n[AI] No Gemini or Groq API key — skipping summaries")
         return
-    print("\n[AI] Generating summaries with Groq…")
+
+    provider = "Gemini" if gemini_key else "Groq"
+    print(f"\n[AI] Generating summaries with {provider}…")
+
     langs = [
         ("ar", _AR_DB), ("en", _EN_DB), ("fr", _FR_DB),
         ("es", _ES_DB), ("tr", _TR_DB),
     ]
     for lang, db_path in langs:
-        n = summarize_articles(db_path=db_path, api_key=groq_key,
-                               lang=lang, batch_size=200)
+        n = summarize_articles(
+            db_path=db_path,
+            lang=lang,
+            batch_size=200,
+            gemini_key=gemini_key,
+            groq_key=groq_key,
+        )
         if n:
             print(f"  [{lang.upper()}] {n} articles summarized")
 

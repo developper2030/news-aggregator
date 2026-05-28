@@ -51,16 +51,23 @@ def save_article(title: str, url: str, source_name: str, category_name: str, cat
 
 
 def save_articles_batch(articles: list[dict]) -> int:
-    """Insert many articles in one transaction. Returns number of rows inserted."""
+    """Insert many articles in one transaction. Returns number of rows inserted.
+
+    If an article dict contains a non-empty 'ai_summary' key the value is stored
+    directly (RSS description extracted at scrape time). Existing rows are never
+    overwritten — INSERT OR IGNORE keeps the original summary intact.
+    """
     if not articles:
         return 0
+    # Ensure every dict has the ai_summary key (may be empty string)
+    rows = [{**a, "ai_summary": a.get("ai_summary", "")} for a in articles]
     conn = get_connection()
     try:
         cur = conn.executemany(
             """INSERT OR IGNORE INTO articles
-               (title, url, image_url, source_name, category_name, category_slug)
-               VALUES (:title, :url, :image_url, :source, :category_name, :category_slug)""",
-            articles,
+               (title, url, image_url, source_name, category_name, category_slug, ai_summary)
+               VALUES (:title, :url, :image_url, :source, :category_name, :category_slug, :ai_summary)""",
+            rows,
         )
         conn.commit()
         return cur.rowcount
