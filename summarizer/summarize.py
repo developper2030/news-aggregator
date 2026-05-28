@@ -10,8 +10,14 @@ Uses Groq API (llama-3.1-8b-instant) to generate 2-sentence summaries.
 import time
 import json
 import logging
-import urllib.request
-import urllib.error
+
+try:
+    import requests as _requests
+    _USE_REQUESTS = True
+except ImportError:
+    import urllib.request as _urlreq
+    import urllib.error as _urlerr
+    _USE_REQUESTS = False
 
 logger = logging.getLogger(__name__)
 
@@ -59,18 +65,26 @@ def _call_groq(title: str, lang: str, api_key: str) -> str:
         "max_tokens": 150,
         "temperature": 0.4,
     }
-    req = urllib.request.Request(
-        GROQ_API_URL,
-        data=json.dumps(payload).encode("utf-8"),
-        headers={
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-        },
-        method="POST",
-    )
-    with urllib.request.urlopen(req, timeout=15) as resp:
-        result = json.loads(resp.read().decode("utf-8"))
-    return result["choices"][0]["message"]["content"].strip()
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+        "User-Agent": "python-requests/2.31.0",
+        "Accept": "application/json",
+    }
+
+    if _USE_REQUESTS:
+        resp = _requests.post(GROQ_API_URL, json=payload,
+                              headers=headers, timeout=15)
+        resp.raise_for_status()
+        return resp.json()["choices"][0]["message"]["content"].strip()
+    else:
+        import urllib.request as _ur, urllib.error as _ue
+        req = _ur.Request(GROQ_API_URL,
+                          data=json.dumps(payload).encode("utf-8"),
+                          headers=headers, method="POST")
+        with _ur.urlopen(req, timeout=15) as r:
+            result = json.loads(r.read().decode("utf-8"))
+        return result["choices"][0]["message"]["content"].strip()
 
 
 def summarize_articles(
@@ -111,11 +125,21 @@ def summarize_articles(
             if (i + 1) % 10 == 0:
                 logger.info("Summarizer [%s]: %d/%d done", lang, done, len(articles))
             time.sleep(_REQUEST_DELAY)
-        except urllib.error.HTTPError as e:
-            body = e.read().decode("utf-8", errors="replace")
-            logger.warning("Summarizer [%s]: HTTP %s — %s", lang, e.code, body[:200])
+        except Exception as http_e:
+            # Handle both requests.HTTPError and urllib.error.HTTPError
+            status = getattr(getattr(http_e, "response", None), "status_code",
+                             getattr(http_e, "code", 0))
+            body = ""
+            try:
+                if hasattr(http_e, "response") and http_e.response is not None:
+                    body = http_e.response.text[:200]
+                elif hasattr(http_e, "read"):
+                    body = http_e.read().decode("utf-8", errors="replace")[:200]
+            except Exception:
+                pass
+            logger.warning("Summarizer [%s]: HTTP %s — %s", lang, status, body)
             errors += 1
-            if e.code == 429:
+            if status == 429:
                 logger.info("Summarizer: rate-limited, sleeping 60s…")
                 time.sleep(60)
             elif errors >= 5:
