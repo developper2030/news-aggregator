@@ -312,6 +312,48 @@ def _process_link(
     return True
 
 
+def _find_excerpt(container, min_len: int = 50, max_len: int = 280) -> str:
+    """Extract a brief article excerpt from an article container element.
+
+    Tries named excerpt classes first, then falls back to the first <p> that
+    looks like body copy (not a heading, not navigation text).
+    Returns empty string if nothing usable is found.
+    """
+    if container is None:
+        return ""
+
+    # 1. Try elements with explicit excerpt/lead/teaser class names
+    _EXCERPT_CLASSES = (
+        "excerpt", "description", "teaser", "intro", "summary",
+        "lead", "abstract", "deck", "standfirst", "subheading",
+        "article-body", "article-excerpt", "article-desc",
+        "post-excerpt", "news-excerpt", "entry-summary",
+        "item-excerpt", "card-text", "card-body", "card-description",
+        # Arabic class names (transliterated) found in common CMS themes
+        "mukhtasar", "wasa-topic", "article-summary",
+    )
+    for cls in _EXCERPT_CLASSES:
+        for el in container.find_all(class_=True, limit=20):
+            el_classes = " ".join(el.get("class", [])).lower()
+            if cls in el_classes:
+                text = el.get_text(separator=" ", strip=True)
+                if min_len <= len(text) <= max_len * 3:
+                    return text[:max_len]
+
+    # 2. Fallback: first <p> with enough text that isn't navigation
+    for p in container.find_all("p", limit=5):
+        text = p.get_text(separator=" ", strip=True)
+        if len(text) < min_len or len(text) > max_len * 3:
+            continue
+        if _NAV_HEADER_RE.search(text):
+            continue
+        if _is_junk_title(text[:80]):   # reuse junk-link filter
+            continue
+        return text[:max_len]
+
+    return ""
+
+
 def _find_image(container, source_url: str) -> str:
     """Extract the best image URL from a container element."""
     for img in container.find_all("img", limit=5):
@@ -370,8 +412,11 @@ def extract_articles_bs4(
                     href  = a.get("href")
                     title = heading.get_text(strip=True)
                     if _process_link(href, title, source_url, seen_urls, exclude_classes, exclude_id_pats, min_title_length):
-                        image = _find_image(container, source_url) or og_image
-                        articles.append({"title": title[:300], "url": urljoin(source_url, href), "source": source_name, "image_url": image})
+                        image   = _find_image(container, source_url) or og_image
+                        excerpt = _find_excerpt(container)
+                        articles.append({"title": title[:300], "url": urljoin(source_url, href),
+                                         "source": source_name, "image_url": image,
+                                         "ai_summary": excerpt})
                         if len(articles) >= max_articles:
                             return articles
 
@@ -387,9 +432,12 @@ def extract_articles_bs4(
             href  = a_tag.get("href")
             title = (el.get_text(strip=True) if el.name != "a" else a_tag.get_text(strip=True))
             if _process_link(href, title, source_url, seen_urls, exclude_classes, exclude_id_pats, min_title_length):
-                parent = el.find_parent("article") or el.find_parent("div")
-                image = _find_image(parent, source_url) if parent else og_image
-                articles.append({"title": title[:300], "url": urljoin(source_url, href), "source": source_name, "image_url": image or og_image})
+                parent  = el.find_parent("article") or el.find_parent("div")
+                image   = _find_image(parent, source_url) if parent else og_image
+                excerpt = _find_excerpt(parent)
+                articles.append({"title": title[:300], "url": urljoin(source_url, href),
+                                 "source": source_name, "image_url": image or og_image,
+                                 "ai_summary": excerpt})
                 if len(articles) >= max_articles:
                     return articles
 

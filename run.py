@@ -176,9 +176,12 @@ def main():
         return
 
     # Default: full pipeline
+    # Note: fill_descriptions_all() is NOT run here — use --fill-desc separately.
+    # Homepage-level excerpt extraction (_find_excerpt) runs inside scrape_all()
+    # with zero extra HTTP requests and gives ~30-50% coverage at scrape time.
+    # The manual --fill-desc flag does a larger og:description backfill when needed.
     scrape_all()
-    fill_descriptions_all()   # og:description — free, instant, ~90% coverage
-    summarize_all()            # Gemini/Groq handles the remaining ~10%
+    summarize_all()   # Gemini/Groq for articles still missing summaries
     cluster_all()
     outputs = generate_all()
     print("\n" + "=" * 50)
