@@ -410,8 +410,38 @@ SOURCE_AR_NAME: dict[str, str] = {
     "MAP News": "وكالة ماب",
 }
 
-# UI strings per language — extend this dict to add more languages
-STRINGS: dict[str, dict] = {
+# UI strings per language — loaded dynamically from config/strings/*.json
+# To add a new language: drop a new <lang>.json file in that folder — no code change needed.
+def _load_strings() -> dict[str, dict]:
+    """Auto-discover and load all language string files from config/strings/."""
+    import json as _json
+    _strings_dir = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "config", "strings"
+    )
+    result: dict[str, dict] = {}
+    if not os.path.isdir(_strings_dir):
+        logger.warning("Strings directory not found: %s", _strings_dir)
+        return result
+    for _fname in sorted(os.listdir(_strings_dir)):
+        if not _fname.endswith(".json"):
+            continue
+        _lang = _fname[:-5]
+        _fpath = os.path.join(_strings_dir, _fname)
+        try:
+            with open(_fpath, "r", encoding="utf-8") as _f:
+                result[_lang] = _json.load(_f)
+            logger.debug("Strings: loaded %s (%d keys)", _fname, len(result[_lang]))
+        except Exception as _e:
+            logger.warning("Strings: failed to load %s — %s", _fname, _e)
+    if result:
+        logger.info("Strings: loaded %d language(s): %s", len(result), ", ".join(sorted(result)))
+    return result
+
+
+STRINGS: dict[str, dict] = _load_strings()
+
+# ── LEGACY FALLBACK (kept for safety — remove after full migration confirmed) ──
+_STRINGS_FALLBACK: dict[str, dict] = {
     "ar": {
         "lang": "ar", "dir": "rtl",
         "font_family": "'Cairo','Segoe UI',Tahoma,system-ui,sans-serif",
@@ -768,6 +798,12 @@ STRINGS: dict[str, dict] = {
         "gdpr_policy": "Gizlilik Politikası",
     },
 }
+
+# Merge fallback into STRINGS for any missing language (safety net)
+for _lang, _sdict in _STRINGS_FALLBACK.items():
+    if _lang not in STRINGS:
+        STRINGS[_lang] = _sdict
+        logger.warning("Strings: using fallback for lang=%s (JSON file missing)", _lang)
 
 
 def esc(text: object) -> str:
