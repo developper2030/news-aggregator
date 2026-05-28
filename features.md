@@ -31,16 +31,16 @@
 | 1.5 | **sitemap.xml (5 لغات)** | فهرسة كاملة | ✅ | |
 | 1.6 | **robots.txt** | توجيه الروبوتات | ✅ | |
 | 1.7 | **أزرار المشاركة (WhatsApp, X, Telegram, Copy)** | ترافيك عضوي مجاني | ✅ | 4 أزرار على كل بطاقة خبر |
-| 1.8 | **Google News Sitemap** | إدراج في Google News | 🔴 | يتطلب صفحات مقالات (11.1) + XML خاص بـ 48h فقط |
-| 1.9 | **NewsArticle JSON-LD لكل مقال** | Google News + Rich snippets + Discover | 🔴 | يتطلب صفحات مقالات (11.1) — RFC 3339 مع timezone |
-| 1.10 | **Google News Inclusion** | 100K+ زيارة/يوم | 🔴 | يتطلب 1.8 + 1.9 + 11.1 |
-| 1.11 | **Google Discover** | ملايين impressions | 🔴 | يتطلب صفحات مقالات + LCP < 2.0s |
+| 1.8 | **Google News Sitemap** | إدراج في Google News | ✅ | news-sitemap.xml — 5 لغات — آخر 48h فقط |
+| 1.9 | **NewsArticle JSON-LD لكل مقال** | Google News + Rich snippets + Discover | ✅ | 5,492 صفحة — RFC 3339 + isAccessibleForFree |
+| 1.10 | **Google News Inclusion** | 100K+ زيارة/يوم | 🔴 | يتطلب تسجيل news-sitemap يدوياً في Search Console |
+| 1.11 | **Google Discover** | ملايين impressions | 🟡 | الآن مؤهَّل — يحتاج وقتاً للفهرسة |
 | 1.12 | **Microsoft Bing Webmaster Tools** | 8-12% ترافيك إضافي مجاني | 🟡 | كثير يغفله — نشهتبيجية Bing IndexNow |
 | 1.13 | **Apple News RSS** | جمهور iOS | 🟢 | نص كامل في RSS feed |
 | 1.14 | **Flipboard Publisher** | مئات الآلاف قراء | 🟢 | RED Bolt: load ≤ 1s + no popups |
 | 1.15 | **AMP Pages** | ظهور في Google Discover السريع | 🟢 | Accelerated Mobile Pages |
 | 1.16 | **`standout` link tag** | أولوية في Top Stories | 🟢 | max 7/أسبوع — للحصريات فقط |
-| 1.17 | **`news_keywords` meta** | إشارة SEO خفية | 🔴 | max 12 كلمة — أفضل من meta keywords العادي |
+| 1.17 | **`news_keywords` meta** | إشارة SEO خفية | ✅ | أفضل 10 كلمات من العنوان — على كل صفحة مقالة |
 | 1.18 | **`speakable` schema property** | Google Assistant يقرأ مقالاتك | 🟢 | للـ voice search — مستقبل قريب |
 
 ---
@@ -185,7 +185,7 @@
 | 10.5 | **Security Headers** | حماية + ثقة | ✅ | _headers Cloudflare |
 | 10.6 | **لوحة تحكم (admin.py)** | إدارة المحتوى | ✅ | 8 تبويبات |
 | 10.7 | **تشغيل متوازي للغات في CI** | تسريع عند 10+ لغات | 🟡 | matrix strategy GitHub Actions |
-| 10.8 | **LCP < 2.0s** | Google ranking boost مارس 2026 | 🔴 | كان 2.5s — تشدّد المعيار |
+| 10.8 | **LCP < 2.0s** | Google ranking boost مارس 2026 | ✅ | Async fonts + fetchpriority + critical CSS + preload |
 | 10.9 | **Core Web Vitals** | ترتيب أعلى في Google | 🟡 | LCP/CLS/FID |
 | 10.10 | **IndexNow (Bing/Yandex)** | فهرسة فورية عند كل build | 🟡 | API ping عند النشر |
 
@@ -198,15 +198,15 @@
 
 | # | الميزة | الأثر | الحالة | التقنية |
 |---|--------|-------|--------|---------|
-| 11.1 | **صفحة HTML لكل مقال** `/ar/article/slug.html` | يفتح Google News + Discover + Rich snippets | 🔴 | ~200 سطر في generate_site.py |
-| 11.2 | **NewsArticle JSON-LD كامل** على كل صفحة | Google يفهرس بسرعة | 🔴 | datePublished + RFC 3339 + timezone |
-| 11.3 | **ملخص AI + "اقرأ الأصل ←"** | المستخدم يبقى + يذهب للمصدر | 🔴 | نفس ai_summary من DB |
-| 11.4 | **Related Articles في نهاية كل مقال** | تنقل داخلي + SEO | 🔴 | بناء على نفس القسم + Clustering |
-| 11.5 | **Google News Sitemap** `news-sitemap.xml` | إدراج رسمي في Google News | 🔴 | articles آخر 48h فقط — يُحذف القديم |
-| 11.6 | **`isAccessibleForFree: true`** في schema | يمنع اعتبارك paywall | 🔴 | مهم جداً لعدم الـ penalty |
-| 11.7 | **`dateModified` مع timezone دقيق** | freshness signal صحيح | 🔴 | RFC 3339: 2026-05-28T10:30:00+01:00 |
-| 11.8 | **Open Graph ديناميكي لكل صفحة** | صورة فريدة عند المشاركة | 🟡 | og:image بصورة المقال |
-| 11.9 | **صفحات مقالات لـ 5 لغات** | Google News متعدد اللغات | 🟡 | نفس pipeline لكل لغة |
+| 11.1 | **صفحة HTML لكل مقال** `/ar/article/slug.html` | يفتح Google News + Discover + Rich snippets | ✅ | 5,492 صفحة عبر 5 لغات |
+| 11.2 | **NewsArticle JSON-LD كامل** على كل صفحة | Google يفهرس بسرعة | ✅ | datePublished RFC3339 + timezone |
+| 11.3 | **ملخص AI + "اقرأ الأصل ←"** | المستخدم يبقى + يذهب للمصدر | ✅ | ai_summary من DB + زر أزرق |
+| 11.4 | **Related Articles في نهاية كل مقال** | تنقل داخلي + SEO | ✅ | 4 مقالات من نفس القسم |
+| 11.5 | **Google News Sitemap** `news-sitemap.xml` | إدراج رسمي في Google News | ✅ | articles آخر 48h — 5 لغات |
+| 11.6 | **`isAccessibleForFree: true`** في schema | يمنع اعتبارك paywall | ✅ | موجود في كل NewsArticle |
+| 11.7 | **`dateModified` مع timezone دقيق** | freshness signal صحيح | ✅ | RFC 3339 +00:00 |
+| 11.8 | **Open Graph ديناميكي لكل صفحة** | صورة فريدة عند المشاركة | ✅ | og:image من صورة المقال |
+| 11.9 | **صفحات مقالات لـ 5 لغات** | Google News متعدد اللغات | ✅ | AR/EN/FR/ES/TR |
 
 ---
 
@@ -441,12 +441,12 @@
   └── ✅ 14.x Lang Row منفصل في الهيدر
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-المرحلة الأولى — الأساس (أسبوع)
-  ├── 🔴 11.1  صفحات المقالات HTML — فتاح كل الأبواب
-  ├── 🔴 11.2  NewsArticle JSON-LD كامل
-  ├── 🔴 11.5  Google News Sitemap
-  ├── 🔴 1.17  news_keywords meta
-  └── 🔴 10.8  LCP < 2.0s
+✅ المرحلة الأولى — الأساس (مكتملة 100%)
+  ├── ✅ 11.1  صفحات المقالات HTML — 5,492 صفحة
+  ├── ✅ 11.2  NewsArticle JSON-LD كامل
+  ├── ✅ 11.5  Google News Sitemap (5 لغات)
+  ├── ✅ 1.17  news_keywords meta
+  └── ✅ 10.8  LCP < 2.0s (async fonts + fetchpriority + critical CSS)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 المرحلة الثانية — الذكاء (أسبوعان)
