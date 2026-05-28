@@ -7,7 +7,7 @@ import argparse
 sys.path.insert(0, os.path.dirname(__file__))
 
 import json as _json
-from scraper.scrape import run as run_scraper
+from scraper.scrape import run as run_scraper, fill_article_descriptions
 from generate_site import generate_html
 from summarizer.summarize import summarize_articles
 from clustering.cluster import run_clustering
@@ -56,6 +56,23 @@ def scrape_all():
     run_scraper(config_path=_ES_CONFIG, db_path=_ES_DB)
     print("\n[TR] Scraping Turkish sources...")
     run_scraper(config_path=_TR_CONFIG, db_path=_TR_DB)
+
+
+def fill_descriptions_all(batch_size: int = 300) -> None:
+    """Fill og:description for all articles that still have no summary.
+
+    Runs after scraping and before AI summarisation so Gemini only handles
+    the small remainder that genuinely has no meta description.
+    """
+    print("\n[DESC] Filling article descriptions from og:description…")
+    langs = [
+        ("AR", _AR_DB), ("EN", _EN_DB), ("FR", _FR_DB),
+        ("ES", _ES_DB), ("TR", _TR_DB),
+    ]
+    for label, db_path in langs:
+        n = fill_article_descriptions(db_path, batch_size=batch_size)
+        if n:
+            print(f"  [{label}] {n} descriptions filled")
 
 
 def summarize_all():
@@ -126,11 +143,20 @@ def main():
     parser = argparse.ArgumentParser(description="News aggregator pipeline")
     parser.add_argument("--scrape-only",   action="store_true", help="Scrape only (both languages)")
     parser.add_argument("--generate-only", action="store_true", help="Generate only (both languages)")
+    parser.add_argument("--fill-desc",     action="store_true",
+                        help="Backfill og:description for all unsummarised articles (large batch)")
     args = parser.parse_args()
 
     print("=" * 50)
     print("News Aggregator - Full Pipeline")
     print("=" * 50)
+
+    if args.fill_desc:
+        fill_descriptions_all(batch_size=2000)
+        print("\n" + "=" * 50)
+        print("Description backfill done!")
+        print("=" * 50)
+        return
 
     if args.scrape_only:
         scrape_all()
@@ -151,7 +177,8 @@ def main():
 
     # Default: full pipeline
     scrape_all()
-    summarize_all()
+    fill_descriptions_all()   # og:description — free, instant, ~90% coverage
+    summarize_all()            # Gemini/Groq handles the remaining ~10%
     cluster_all()
     outputs = generate_all()
     print("\n" + "=" * 50)

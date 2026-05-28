@@ -445,6 +445,90 @@ def _is_rss_feed_url(url: str) -> bool:
     ))
 
 
+def _extract_og_desc(html: str, title: str = "") -> str:
+    """Extract og:description (or meta description) from article page HTML.
+
+    Tries in order: og:description → meta[name=description] → twitter:description.
+    Reuses _clean_rss_desc for HTML-stripping and length normalisation.
+    Returns empty string if nothing useful is found.
+    """
+    soup = BeautifulSoup(html, "lxml")
+    for attr, val in [
+        ("property", "og:description"),
+        ("name",     "description"),
+        ("name",     "twitter:description"),
+    ]:
+        tag = soup.find("meta", attrs={attr: val})
+        if not tag:
+            continue
+        raw = (tag.get("content") or "").strip()
+        if raw:
+            cleaned = _clean_rss_desc(raw, title)
+            if cleaned:
+                return cleaned
+    return ""
+
+
+def fill_article_descriptions(
+    db_path: str,
+    batch_size: int = 300,
+    max_workers: int = 8,
+) -> int:
+    """Fetch og:description for articles that have no summary yet.
+
+    Pulls *batch_size* unsummarised articles from *db_path*, visits each URL,
+    extracts the og:description meta tag, and stores it as ai_summary.
+    Uses a thread pool so the batch completes quickly.
+    Returns the number of articles that were updated.
+    """
+    import threading
+    from database.db import (
+        get_unsummarized_articles,
+        update_article_summary,
+        set_db_path as _set_db,
+    )
+
+    _set_db(db_path)
+    articles = get_unsummarized_articles(limit=batch_size)
+    if not articles:
+        logger.info("fill_descriptions [%s]: nothing to fill", os.path.basename(db_path))
+        return 0
+
+    logger.info(
+        "fill_descriptions [%s]: fetching og:description for %d articles…",
+        os.path.basename(db_path), len(articles),
+    )
+    updated = 0
+    _lock = threading.Lock()
+
+    def _fetch_one(art: dict) -> None:
+        nonlocal updated
+        try:
+            time.sleep(random.uniform(0.05, 0.4))
+            html = fetch_html(art["url"], timeout=8)
+            desc = _extract_og_desc(html, art.get("title", ""))
+            if desc:
+                update_article_summary(art["url"], desc)
+                with _lock:
+                    updated += 1
+        except Exception as exc:
+            logger.debug(
+                "fill_desc skipped %s: %s",
+                (art.get("url") or "?")[:70], exc,
+            )
+
+    with ThreadPoolExecutor(max_workers=max_workers) as pool:
+        pool.map(_fetch_one, articles)
+
+    logger.info(
+        "fill_descriptions [%s]: %d/%d updated (%.0f%%)",
+        os.path.basename(db_path),
+        updated, len(articles),
+        updated * 100 / max(len(articles), 1),
+    )
+    return updated
+
+
 def _clean_rss_desc(raw: str, title: str = "") -> str:
     """Strip HTML tags, decode entities, truncate to ≤2 sentences (max 280 chars).
 
