@@ -38,7 +38,7 @@ GROQ_MODEL   = "llama-3.1-8b-instant"
 # ── Gemini ────────────────────────────────────────────────────────────────────
 GEMINI_API_URL = (
     "https://generativelanguage.googleapis.com/v1beta/models/"
-    "gemini-2.0-flash-lite:generateContent"
+    "gemini-2.5-flash:generateContent"
 )
 
 # Rate limits (per-request sleep to stay under free-tier caps)
@@ -82,15 +82,17 @@ def _call_gemini(title: str, lang: str, api_key: str) -> str:
     """Call Google Gemini API and return the summary text. Raises on failure."""
     payload = {
         "contents": [{"parts": [{"text": _build_prompt(title, lang)}]}],
+        # maxOutputTokens 800 gives Gemini 2.5 enough room for internal
+        # thinking tokens + the 2-sentence output (~150 visible tokens).
         "generationConfig": {
-            "maxOutputTokens": 150,
+            "maxOutputTokens": 800,
             "temperature": 0.4,
         },
     }
     url = f"{GEMINI_API_URL}?key={api_key}"
 
     if _USE_REQUESTS:
-        resp = _requests.post(url, json=payload, timeout=15)
+        resp = _requests.post(url, json=payload, timeout=20)
         resp.raise_for_status()
         data = resp.json()
     else:
@@ -101,12 +103,18 @@ def _call_gemini(title: str, lang: str, api_key: str) -> str:
             headers={"Content-Type": "application/json"},
             method="POST",
         )
-        with _ur.urlopen(req, timeout=15) as r:
+        with _ur.urlopen(req, timeout=20) as r:
             data = json.loads(r.read().decode("utf-8"))
 
-    # Parse Gemini response
+    # Parse Gemini response — skip any "thought" parts (internal reasoning)
     try:
-        return data["candidates"][0]["content"]["parts"][0]["text"].strip()
+        parts = data["candidates"][0]["content"]["parts"]
+        text = "".join(
+            p["text"] for p in parts if not p.get("thought", False)
+        ).strip()
+        if not text:
+            raise ValueError("Empty text in Gemini response")
+        return text
     except (KeyError, IndexError) as exc:
         raise ValueError(f"Unexpected Gemini response structure: {data}") from exc
 
