@@ -14,7 +14,7 @@ jobs:
   build-and-deploy:
     name: Scrape → Generate → Deploy
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       # ── 1. تنزيل الكود من GitHub ──────────────────────────────────────
@@ -46,13 +46,14 @@ jobs:
       - name: Ensure data directory exists
         run: mkdir -p data
 
-      # ── 6. تشغيل الكاشط + توليد الموقع (5 لغات) ─────────────────────
-      - name: Run scraper & generate site
+      # ── 6. تشغيل الكاشط + الملخصات AI + توليد الموقع (5 لغات) ──────
+      - name: Run scraper, summarize & generate site
         run: python run.py
         env:
           # مفاتيح API الاختيارية (تُضاف في GitHub Secrets)
           METALPRICEAPI_KEY: ${{ secrets.METALPRICEAPI_KEY }}
           ALPHAVANTAGE_KEY:  ${{ secrets.ALPHAVANTAGE_KEY }}
+          GROQ_API_KEY:      ${{ secrets.GROQ_API_KEY }}
 
       # ── 7. نشر الموقع على Cloudflare Pages ───────────────────────────
       - name: Deploy to Cloudflare Pages
