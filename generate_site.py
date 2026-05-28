@@ -144,17 +144,6 @@ MEDIA_REGIONS = [
 DEFAULT_COLOR = "#6366f1"
 DEFAULT_GRADIENT = "linear-gradient(135deg, #6366f1, #8b5cf6)"
 
-# Currency pairs shown in the economy market strip (code, display_label)
-DEFAULT_MARKET_PAIRS: list[tuple[str, str]] = [
-    # Arab currencies
-    ("MAD", "MAD"), ("DZD", "DZD"), ("TND", "TND"), ("EGP", "EGP"),
-    ("SAR", "SAR"), ("AED", "AED"), ("KWD", "KWD"), ("QAR", "QAR"),
-    ("BHD", "BHD"), ("OMR", "OMR"), ("JOD", "JOD"),
-    # Major world economies
-    ("EUR", "EUR"), ("GBP", "GBP"), ("JPY", "JPY"), ("CNY", "CNY"),
-    ("CHF", "CHF"), ("CAD", "CAD"), ("AUD", "AUD"),
-]
-
 # Path to keyword blacklist managed by the admin panel
 BLACKLIST_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config", "blacklist.json")
 
