@@ -1646,6 +1646,7 @@ body.lang-ltr .nh-text{direction:ltr}
 .share-wa{background:#25d366;color:#fff}
 .share-x{background:rgba(0,0,0,.75);color:#fff}
 .share-tg{background:#229ed9;color:#fff}
+.share-fb{background:#1877f2;color:#fff}
 .share-copy{background:rgba(255,255,255,.22);color:#fff}
 .card--no-img .share-wa{box-shadow:0 1px 3px rgba(0,0,0,.15)}
 .card--no-img .share-copy{background:var(--border);color:var(--text)}
@@ -4015,10 +4016,13 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
                  + "&url=" + _up.quote(_share_url, safe=""))
     _tg_href  = ("https://t.me/share/url?url=" + _up.quote(_share_url, safe="")
                  + "&text=" + _up.quote(title_raw, safe=""))
+    _fb_href  = "https://www.facebook.com/sharer/sharer.php?u=" + _up.quote(_share_url, safe="")
     share_html = (
         f'<div class="card-share">'
         f'<a href="{esc(_wa_href)}" class="share-btn share-wa" target="_blank" '
         f'rel="noopener noreferrer" title="WhatsApp" aria-label="WhatsApp">W</a>'
+        f'<a href="{esc(_fb_href)}" class="share-btn share-fb" target="_blank" '
+        f'rel="noopener noreferrer" title="Facebook" aria-label="Facebook">f</a>'
         f'<a href="{esc(_x_href)}" class="share-btn share-x" target="_blank" '
         f'rel="noopener noreferrer" title="X / Twitter" aria-label="X">𝕏</a>'
         f'<a href="{esc(_tg_href)}" class="share-btn share-tg" target="_blank" '
@@ -4557,9 +4561,11 @@ def _article_page_html(
             + "&url=" + _up.quote(_share_page, safe=""))
     _tg  = ("https://t.me/share/url?url=" + _up.quote(_share_page, safe="")
             + "&text=" + _up.quote(title_raw, safe=""))
+    _fb  = "https://www.facebook.com/sharer/sharer.php?u=" + _up.quote(_share_page, safe="")
     share_row = (
         f'<div class="art-share-row">'
         f'<a href="{esc(_wa)}" class="share-btn share-wa" target="_blank" rel="noopener noreferrer" title="WhatsApp">W</a>'
+        f'<a href="{esc(_fb)}" class="share-btn share-fb" target="_blank" rel="noopener noreferrer" title="Facebook">f</a>'
         f'<a href="{esc(_x)}" class="share-btn share-x" target="_blank" rel="noopener noreferrer" title="X">𝕏</a>'
         f'<a href="{esc(_tg)}" class="share-btn share-tg" target="_blank" rel="noopener noreferrer" title="Telegram">✈</a>'
         f'<button class="share-btn share-copy" data-copy="{esc(_share_page)}" title="Copy link">⧉</button>'
