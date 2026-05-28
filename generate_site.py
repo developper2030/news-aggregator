@@ -1656,6 +1656,11 @@ body.lang-ltr .nh-text{direction:ltr}
 .share-copy{background:rgba(255,255,255,.22);color:#fff}
 .card--no-img .share-wa{box-shadow:0 1px 3px rgba(0,0,0,.15)}
 .card--no-img .share-copy{background:var(--border);color:var(--text)}
+/* ====== VIDEO PLAY BUTTON OVERLAY ====== */
+.card-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.52);border:3px solid rgba(255,255,255,.88);display:flex;align-items:center;justify-content:center;pointer-events:none;transition:transform .2s,background .2s;z-index:5}
+.card-play::after{content:'';display:block;width:0;height:0;border-style:solid;border-width:10px 0 10px 18px;border-color:transparent transparent transparent rgba(255,255,255,.95);margin-inline-start:4px}
+.article-card:hover .card-play{transform:translate(-50%,-60%) scale(1.12);background:rgba(255,0,0,.72)}
+@media(pointer:coarse){.card-play{width:46px;height:46px}}
 /* ====== CLUSTER BADGE ====== */
 .cluster-badge{display:inline-flex;align-items:center;gap:3px;font-size:.72em;font-weight:700;background:linear-gradient(90deg,#0ea5e9,#6366f1);color:#fff;padding:2px 8px;border-radius:10px;white-space:nowrap;cursor:default}
 .cluster-badge:hover{background:linear-gradient(90deg,#0284c7,#4f46e5)}
@@ -4059,12 +4064,15 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
         _card_target = ' target="_blank"'
         _card_rel = ' rel="noopener noreferrer nofollow"'
 
+    _play_btn = '<div class="card-play" aria-hidden="true"></div>' if slug.startswith("vid-") else ""
+
     return (
         f'<article class="article-card{extra_cls}" data-cat="{esc(slug)}" data-title="{title}" '
         f'data-source="{source}" data-url="{url}" data-date="{date}" data-color="{esc(color)}">'
         f'<a href="{esc(_card_href)}"{_card_target}{_card_rel} class="card-link">'
         f'{bg_html}'
         f'<div class="card-overlay"></div>'
+        f'{_play_btn}'
         f'<div class="card-body">'
         f'<div class="card-meta">'
         f'<span class="card-source" style="background:{esc(gradient)}">{source}{spectrum_badge}</span>'
