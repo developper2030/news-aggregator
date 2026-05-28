@@ -93,6 +93,8 @@
   "art_by_source":   "المصدر",
   "art_back":        "→ العودة إلى",
   "art_disclaimer":  "هذا ملخص تلقائي — للمقال الكامل زر المصدر الأصلي",
+  "cluster_sources":      "📡 {n} مصادر",
+  "cluster_sources_1":    "📡 مصدر واحد",
   "spectrum_wire":        "وكالة",
   "spectrum_public":      "عام",
   "spectrum_commercial":  "خاص",

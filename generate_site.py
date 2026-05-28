@@ -518,6 +518,8 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "art_by_source":    "المصدر",
         "art_back":         "→ العودة",
         "art_disclaimer":   "هذا ملخص تلقائي — للمقال الكامل زر المصدر الأصلي",
+        "cluster_sources":      "📡 {n} مصادر",
+        "cluster_sources_1":    "📡 مصدر واحد",
         "spectrum_wire":        "وكالة",
         "spectrum_public":      "عام",
         "spectrum_commercial":  "خاص",
@@ -600,6 +602,8 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "art_by_source":    "Source",
         "art_back":         "← Back",
         "art_disclaimer":   "This is an AI summary — visit the original source for the full article",
+        "cluster_sources":      "📡 {n} sources",
+        "cluster_sources_1":    "📡 1 source",
         "spectrum_wire":        "Agency",
         "spectrum_public":      "Public",
         "spectrum_commercial":  "Commercial",
@@ -682,6 +686,8 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "art_by_source":    "Source",
         "art_back":         "← Retour",
         "art_disclaimer":   "Résumé automatique — visitez la source originale pour l'article complet",
+        "cluster_sources":      "📡 {n} sources",
+        "cluster_sources_1":    "📡 1 source",
         "spectrum_wire":        "Agence",
         "spectrum_public":      "Public",
         "spectrum_commercial":  "Commercial",
@@ -764,6 +770,8 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "art_by_source":    "Fuente",
         "art_back":         "← Volver",
         "art_disclaimer":   "Resumen automático — visita la fuente original para el artículo completo",
+        "cluster_sources":      "📡 {n} fuentes",
+        "cluster_sources_1":    "📡 1 fuente",
         "spectrum_wire":        "Agencia",
         "spectrum_public":      "Público",
         "spectrum_commercial":  "Comercial",
@@ -846,6 +854,8 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "art_by_source":    "Kaynak",
         "art_back":         "← Geri",
         "art_disclaimer":   "Bu otomatik bir özettir — tam makale için orijinal kaynağı ziyaret edin",
+        "cluster_sources":      "📡 {n} kaynak",
+        "cluster_sources_1":    "📡 1 kaynak",
         "spectrum_wire":        "Ajans",
         "spectrum_public":      "Kamu",
         "spectrum_commercial":  "Ticari",
@@ -1648,6 +1658,11 @@ body.lang-ltr .nh-text{direction:ltr}
 .share-copy{background:rgba(255,255,255,.22);color:#fff}
 .card--no-img .share-wa{box-shadow:0 1px 3px rgba(0,0,0,.15)}
 .card--no-img .share-copy{background:var(--border);color:var(--text)}
+/* ====== CLUSTER BADGE ====== */
+.cluster-badge{display:inline-flex;align-items:center;gap:3px;font-size:.72em;font-weight:700;background:linear-gradient(90deg,#0ea5e9,#6366f1);color:#fff;padding:2px 8px;border-radius:10px;white-space:nowrap;cursor:default}
+.cluster-badge:hover{background:linear-gradient(90deg,#0284c7,#4f46e5)}
+.article-card:not(.card--no-img) .cluster-badge{text-shadow:0 1px 2px rgba(0,0,0,.3)}
+.dark-mode .cluster-badge{background:linear-gradient(90deg,#0284c7,#4338ca)}
 /* ====== SPECTRUM BADGE ====== */
 .spectrum-badge{display:inline-flex;align-items:center;font-size:.62em;font-weight:700;letter-spacing:.3px;padding:1px 6px;border-radius:10px;vertical-align:middle;white-space:nowrap;text-transform:uppercase;margin-inline-start:5px;line-height:1.6}
 .sp-wire{background:#e2e8f0;color:#475569}
@@ -1670,6 +1685,8 @@ body.lang-ltr .nh-text{direction:ltr}
 .art-title{font-size:1.65em;font-weight:800;line-height:1.4;margin:0 0 14px;color:var(--text)}
 .art-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:20px;font-size:.85em}
 .art-source-badge{background:var(--accent);color:#fff;padding:3px 10px;border-radius:20px;font-weight:700}
+.art-cluster-bar{display:flex;align-items:center;gap:8px;margin:12px 0;padding:10px 14px;background:linear-gradient(135deg,rgba(14,165,233,.08),rgba(99,102,241,.08));border-inline-start:3px solid #0ea5e9;border-radius:6px}
+.art-cluster-srcs{font-size:.8em;color:var(--text-light);font-weight:500}
 .art-date{color:var(--text-light)}
 .art-cat-badge{padding:3px 10px;border-radius:20px;font-weight:600;font-size:.85em;color:#fff}
 .art-summary-box{background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(139,92,246,.04));border-inline-start:4px solid var(--accent);padding:18px 20px;border-radius:0 10px 10px 0;margin-bottom:24px}
@@ -3922,7 +3939,8 @@ def _source_filter_strip(articles: list[dict], cat_sources: list[dict],
 
 
 def _card(art: dict, slug: str, use_article_page: bool = True,
-          s: dict | None = None) -> str:
+          s: dict | None = None,
+          cluster_map: dict | None = None) -> str:
     import urllib.parse as _up
     color    = CATEGORY_COLORS.get(slug, DEFAULT_COLOR)
     gradient = CATEGORY_GRADIENTS.get(slug, DEFAULT_GRADIENT)
@@ -3943,6 +3961,21 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
         spectrum_badge = f'<span class="spectrum-badge {_sp_css}" title="{esc(_sp_label)}">{esc(_sp_label)}</span>'
     else:
         spectrum_badge = ""
+
+    # ── Cluster badge (multi-source story coverage) ───────────────────────────
+    cluster_badge = ""
+    if cluster_map and s:
+        _cl = cluster_map.get(art.get("url", ""))
+        if _cl and _cl.get("source_count", 0) >= 2:
+            _n = _cl["source_count"]
+            _tpl = s.get("cluster_sources", "📡 {n}")
+            _cl_label = _tpl.format(n=_n)
+            _sources_title = ", ".join(_cl.get("sources", [])[:6])
+            cluster_badge = (
+                f'<span class="cluster-badge" '
+                f'title="{esc(_sources_title)}">'
+                f'{esc(_cl_label)}</span>'
+            )
 
     if image and image != "#":
         bg_html = (
@@ -4009,6 +4042,7 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
         f'<span class="card-source" style="background:{esc(gradient)}">{source}{spectrum_badge}</span>'
         f'<time class="card-date">{date}</time>'
         f'</div>'
+        f'{cluster_badge}'
         f'<h3 class="card-title">{title}</h3>'
         f'</div></a>'
         f'{share_html}'
@@ -4402,6 +4436,7 @@ def _article_page_html(
     site_url: str,
     cat_meta: dict,
     lang: str,
+    cluster_map: dict | None = None,
 ) -> str:
     """Generate a standalone HTML page for a single article (for SEO / Google News)."""
     import urllib.parse as _up
@@ -4432,6 +4467,22 @@ def _article_page_html(
     gradient   = CATEGORY_GRADIENTS.get(slug, DEFAULT_GRADIENT)
 
     cat_name, cat_icon = cat_meta.get(slug, (slug, "📰"))
+
+    # Cluster badge for article page
+    _art_cluster_badge = ""
+    if cluster_map:
+        _acl = cluster_map.get(art.get("url", ""))
+        if _acl and _acl.get("source_count", 0) >= 2:
+            _n = _acl["source_count"]
+            _tpl = s.get("cluster_sources", "📡 {n}")
+            _cl_lbl = _tpl.format(n=_n)
+            _cl_srcs = ", ".join(_acl.get("sources", [])[:8])
+            _art_cluster_badge = (
+                f'<div class="art-cluster-bar">'
+                f'<span class="cluster-badge" title="{esc(_cl_srcs)}">{esc(_cl_lbl)}</span>'
+                f'<span class="art-cluster-srcs">{esc(_cl_srcs)}</span>'
+                f'</div>'
+            )
 
     # Canonical URL for this article page
     art_hash  = hashlib.md5(ext_url.encode("utf-8")).hexdigest()[:12]
@@ -4610,6 +4661,7 @@ def _article_page_html(
           <time class="art-date" datetime="{esc(scraped_dt)}" itemprop="datePublished">{esc(date_str)}</time>
           <span class="art-cat-badge" style="background:{esc(gradient)}">{esc(cat_icon)} {esc(cat_name)}</span>
         </div>
+        {_art_cluster_badge}
         {summary_html}
         <a href="{safe_url(ext_url)}" target="_blank" rel="noopener noreferrer nofollow"
            class="art-read-btn" itemprop="url">
@@ -5126,6 +5178,19 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
     _market_data = _fetch_market_data(_api_keys, cache_path=_cache_path,
                                       force_refresh=True)
 
+    # ── Story clusters (built by run.py → clustering/cluster.py) ─────────────
+    _cluster_file = os.path.join(_root, "data", f"clusters_{lang}.json")
+    _cluster_map: dict = {}
+    try:
+        with open(_cluster_file, "r", encoding="utf-8") as _cf:
+            _cluster_map = json.load(_cf)
+        logger.info("Clusters: loaded %d tagged articles for [%s]",
+                    len(_cluster_map), lang)
+    except FileNotFoundError:
+        pass  # clusters not yet built — badges simply won't show
+    except Exception as _ce:
+        logger.warning("Clusters: failed to load %s: %s", _cluster_file, _ce)
+
     articles_by_cat = get_articles_by_category(days=oldest_days)
     categories      = config["categories"]
     now             = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -5224,7 +5289,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             continue
         color   = CATEGORY_COLORS.get(slug, DEFAULT_COLOR)
         preview = cat_data["articles"][:PREVIEW_PER_CAT]
-        cards   = "".join(_card(a, slug, s=s) for a in preview)
+        cards   = "".join(_card(a, slug, s=s, cluster_map=_cluster_map) for a in preview)
         total   = len(cat_data["articles"])
         more_btn = (
             f'<a href="{esc(slug)}.html" class="more-btn" style="border-color:{esc(color)};color:{esc(color)}">'
@@ -5300,6 +5365,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             site_url=_site_url,
             cat_meta=cat_meta,
             lang=lang,
+            cluster_map=_cluster_map,
         )
         _write(f"article/{_art_hash}.html", _art_html, out_dir)
         art_pages_written += 1
@@ -5338,7 +5404,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         if slug in media_slugs_local:
             raw_articles = [a for a in raw_articles if _is_yt_url(a.get("url", ""))]
         if raw_articles:
-            cards      = "".join(_card(a, slug, use_article_page=(slug not in media_slugs_local), s=s) for a in raw_articles)
+            cards      = "".join(_card(a, slug, use_article_page=(slug not in media_slugs_local), s=s, cluster_map=_cluster_map) for a in raw_articles)
             grid       = f'<div class="articles-grid">{cards}</div>'
             src_filter = _source_filter_strip(
                 raw_articles, cat.get("sources", []), color, s
@@ -5454,7 +5520,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
 
             if cat_data and cat_data["articles"]:
                 preview  = cat_data["articles"][:PREVIEW_PER_CAT]
-                cards    = "".join(_card(a, slug, s=s) for a in preview)
+                cards    = "".join(_card(a, slug, s=s, cluster_map=_cluster_map) for a in preview)
                 total    = len(cat_data["articles"])
                 more_btn = (
                     f'<a href="{esc(slug)}.html" class="more-btn" '
@@ -5523,7 +5589,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             ]
             if yt_articles:
                 preview  = yt_articles[:PREVIEW_PER_CAT]
-                cards    = "".join(_card(a, slug, use_article_page=False, s=s) for a in preview)
+                cards    = "".join(_card(a, slug, use_article_page=False, s=s, cluster_map=_cluster_map) for a in preview)
                 total    = len(yt_articles)
                 more_btn = (
                     f'<a href="{esc(slug)}.html" class="more-btn" '

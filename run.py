@@ -10,6 +10,7 @@ import json as _json
 from scraper.scrape import run as run_scraper
 from generate_site import generate_html
 from summarizer.summarize import summarize_articles
+from clustering.cluster import run_clustering
 
 _ROOT = os.path.dirname(os.path.abspath(__file__))
 _AR_CONFIG = os.path.join(_ROOT, "config", "sources.json")
@@ -85,6 +86,19 @@ def summarize_all():
             print(f"  [{lang.upper()}] {n} articles summarized")
 
 
+_DATA_DIR = os.path.join(_ROOT, "data")
+
+
+def cluster_all():
+    """Cluster articles per language and save results to data/clusters_*.json."""
+    print("\n[Clustering] Building story clusters…")
+    run_clustering("ar", _AR_DB, _DATA_DIR)
+    run_clustering("en", _EN_DB, _DATA_DIR)
+    run_clustering("fr", _FR_DB, _DATA_DIR)
+    run_clustering("es", _ES_DB, _DATA_DIR)
+    run_clustering("tr", _TR_DB, _DATA_DIR)
+
+
 def generate_all():
     print("\n[AR] Generating Arabic site...")
     ar = generate_html(config_path=_AR_CONFIG, db_path=_AR_DB,
@@ -122,6 +136,7 @@ def main():
         return
 
     if args.generate_only:
+        cluster_all()
         outputs = generate_all()
         print("\n" + "=" * 50)
         print("Generation done!")
@@ -133,6 +148,7 @@ def main():
     # Default: full pipeline
     scrape_all()
     summarize_all()
+    cluster_all()
     outputs = generate_all()
     print("\n" + "=" * 50)
     print("Done!")

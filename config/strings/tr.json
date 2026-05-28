@@ -93,6 +93,8 @@
   "art_by_source":   "Kaynak",
   "art_back":        "← Geri:",
   "art_disclaimer":  "Bu otomatik bir özettir — tam makale için orijinal kaynağı ziyaret edin",
+  "cluster_sources":      "📡 {n} kaynak",
+  "cluster_sources_1":    "📡 1 kaynak",
   "spectrum_wire":        "Ajans",
   "spectrum_public":      "Kamu",
   "spectrum_commercial":  "Ticari",

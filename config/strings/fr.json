@@ -93,6 +93,8 @@
   "art_by_source":   "Source",
   "art_back":        "← Retour à",
   "art_disclaimer":  "Résumé automatique — visitez la source originale pour l'article complet",
+  "cluster_sources":      "📡 {n} sources",
+  "cluster_sources_1":    "📡 1 source",
   "spectrum_wire":        "Agence",
   "spectrum_public":      "Public",
   "spectrum_commercial":  "Commercial",
