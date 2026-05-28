@@ -1371,8 +1371,10 @@ ul,ol{list-style:none}
 body.lang-ltr .prices-table th{text-align:left}
 body.lang-ltr .prices-section-header{border-inline-start:5px solid #059669}
 
+/* ===================== LANGUAGE ROW ===================== */
+.lang-row{max-width:1200px;margin:0 auto;padding:0 16px 6px;display:flex;justify-content:flex-end;gap:3px;align-items:center}
 /* ===================== LANGUAGE SWITCHER ===================== */
-.lang-switcher{display:flex;align-items:center;gap:3px;flex-shrink:0}
+.lang-switcher{display:flex;align-items:center;gap:3px}
 .lang-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);padding:4px 8px;border-radius:12px;font-size:.75em;font-weight:700;text-decoration:none;transition:all .2s;letter-spacing:.6px;white-space:nowrap;line-height:1.4}
 .lang-btn:hover{background:rgba(255,255,255,.22);color:#fff;border-color:rgba(255,255,255,.45)}
 .lang-btn.current{background:rgba(255,255,255,.28);color:#fff;border-color:rgba(255,255,255,.55);cursor:default;pointer-events:none}
@@ -1405,6 +1407,10 @@ body.lang-ltr .nh-text{direction:ltr}
   .site-header-title{font-size:1.05em;letter-spacing:1px}
   .top-date{display:none}
   .theme-btn{padding:5px 12px;font-size:.88em}
+  /* Language row — full-width scrollable strip */
+  .lang-row{padding:4px 10px 5px;justify-content:flex-start;overflow-x:auto;scrollbar-width:none;border-top:1px solid rgba(255,255,255,.12)}
+  .lang-row::-webkit-scrollbar{display:none}
+  .lang-btn{padding:3px 8px;font-size:.72em}
   /* Layout */
   .main-wrapper{padding:14px 10px}
   .section-header{padding:10px 14px;margin-bottom:12px}
@@ -4311,11 +4317,11 @@ def _page(*, title: str, desc: str, nav_html: str,
         </div>
         <span class="site-header-title">{esc(title)}</span>
         <div class="header-end">
-          {lang_switcher_html}
           <button id="theme-toggle" class="theme-btn" aria-label="{s["theme_btn_label"]}">🌙</button>
           <button id="search-toggle" class="theme-btn" aria-label="{s.get("search_label","Search")}" aria-expanded="false">🔍</button>
         </div>
       </div>
+      <div class="lang-row">{lang_switcher_html}</div>
     </header>
     <div id="search-bar" class="search-bar" role="search">
       <div class="search-bar-inner">
