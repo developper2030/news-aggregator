@@ -97,6 +97,7 @@ def get_articles_by_category(days: int = 7) -> dict:
             "image":      row["image_url"] or "",
             "source":     row["source_name"],
             "date":       row["scraped_at"][:10],
+            "scraped_at": row["scraped_at"],
             "ai_summary": row["ai_summary"] or "",
         })
     return grouped

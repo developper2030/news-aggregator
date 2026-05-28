@@ -86,5 +86,11 @@
   "gdpr_body": "Nous utilisons des cookies pour améliorer votre expérience et analyser le trafic. Faites votre choix.",
   "gdpr_accept": "Tout accepter",
   "gdpr_reject": "Essentiel uniquement",
-  "gdpr_policy": "Politique de confidentialité"
+  "gdpr_policy": "Politique de confidentialité",
+  "art_read_orig":   "📖 Lire l'article complet",
+  "art_related":     "Articles liés",
+  "art_summary_lbl": "🤖 Résumé IA",
+  "art_by_source":   "Source",
+  "art_back":        "← Retour à",
+  "art_disclaimer":  "Résumé automatique — visitez la source originale pour l'article complet"
 }

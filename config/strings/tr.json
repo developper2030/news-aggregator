@@ -86,5 +86,11 @@
   "gdpr_body": "Deneyiminizi iyileştirmek ve trafiği analiz etmek için çerez kullanıyoruz. Tercihinizi seçin.",
   "gdpr_accept": "Tümünü kabul et",
   "gdpr_reject": "Yalnızca zorunlu",
-  "gdpr_policy": "Gizlilik Politikası"
+  "gdpr_policy": "Gizlilik Politikası",
+  "art_read_orig":   "📖 Tam makaleyi oku",
+  "art_related":     "İlgili makaleler",
+  "art_summary_lbl": "🤖 YZ Özeti",
+  "art_by_source":   "Kaynak",
+  "art_back":        "← Geri:",
+  "art_disclaimer":  "Bu otomatik bir özettir — tam makale için orijinal kaynağı ziyaret edin"
 }

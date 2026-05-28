@@ -512,6 +512,12 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_accept": "قبول الكل",
         "gdpr_reject": "الضروري فقط",
         "gdpr_policy": "سياسة الخصوصية",
+        "art_read_orig":    "📖 اقرأ المقال الأصلي",
+        "art_related":      "مقالات ذات صلة",
+        "art_summary_lbl":  "🤖 ملخص ذكاء اصطناعي",
+        "art_by_source":    "المصدر",
+        "art_back":         "→ العودة",
+        "art_disclaimer":   "هذا ملخص تلقائي — للمقال الكامل زر المصدر الأصلي",
     },
     "en": {
         "lang": "en", "dir": "ltr",
@@ -583,6 +589,12 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_accept": "Accept All",
         "gdpr_reject": "Essential Only",
         "gdpr_policy": "Privacy Policy",
+        "art_read_orig":    "📖 Read full article",
+        "art_related":      "Related articles",
+        "art_summary_lbl":  "🤖 AI Summary",
+        "art_by_source":    "Source",
+        "art_back":         "← Back",
+        "art_disclaimer":   "This is an AI summary — visit the original source for the full article",
     },
     "fr": {
         "lang": "fr", "dir": "ltr",
@@ -654,6 +666,12 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_accept": "Tout accepter",
         "gdpr_reject": "Essentiel uniquement",
         "gdpr_policy": "Politique de confidentialité",
+        "art_read_orig":    "📖 Lire l'article complet",
+        "art_related":      "Articles liés",
+        "art_summary_lbl":  "🤖 Résumé IA",
+        "art_by_source":    "Source",
+        "art_back":         "← Retour",
+        "art_disclaimer":   "Résumé automatique — visitez la source originale pour l'article complet",
     },
     "es": {
         "lang": "es", "dir": "ltr",
@@ -725,6 +743,12 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_accept": "Aceptar todo",
         "gdpr_reject": "Solo esenciales",
         "gdpr_policy": "Política de privacidad",
+        "art_read_orig":    "📖 Leer artículo completo",
+        "art_related":      "Artículos relacionados",
+        "art_summary_lbl":  "🤖 Resumen IA",
+        "art_by_source":    "Fuente",
+        "art_back":         "← Volver",
+        "art_disclaimer":   "Resumen automático — visita la fuente original para el artículo completo",
     },
     "tr": {
         "lang": "tr", "dir": "ltr",
@@ -796,6 +820,12 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_accept": "Tümünü kabul et",
         "gdpr_reject": "Yalnızca zorunlu",
         "gdpr_policy": "Gizlilik Politikası",
+        "art_read_orig":    "📖 Tam makaleyi oku",
+        "art_related":      "İlgili makaleler",
+        "art_summary_lbl":  "🤖 YZ Özeti",
+        "art_by_source":    "Kaynak",
+        "art_back":         "← Geri",
+        "art_disclaimer":   "Bu otomatik bir özettir — tam makale için orijinal kaynağı ziyaret edin",
     },
 }
 
@@ -804,6 +834,12 @@ for _lang, _sdict in _STRINGS_FALLBACK.items():
     if _lang not in STRINGS:
         STRINGS[_lang] = _sdict
         logger.warning("Strings: using fallback for lang=%s (JSON file missing)", _lang)
+
+
+def _article_slug(url: str) -> str:
+    """Return a 12-char hex ID for a URL — used as article page filename."""
+    import hashlib
+    return hashlib.md5(url.encode("utf-8")).hexdigest()[:12]
 
 
 def esc(text: object) -> str:
@@ -1559,6 +1595,35 @@ body.lang-ltr .nh-text{direction:ltr}
 .share-copy{background:rgba(255,255,255,.22);color:#fff}
 .card--no-img .share-wa{box-shadow:0 1px 3px rgba(0,0,0,.15)}
 .card--no-img .share-copy{background:var(--border);color:var(--text)}
+/* ====== ARTICLE PAGES ====== */
+.art-page{max-width:800px;margin:0 auto;padding:28px 16px 48px}
+.art-back{display:inline-flex;align-items:center;gap:6px;color:var(--accent);text-decoration:none;font-size:.9em;font-weight:600;margin-bottom:16px;padding:4px 0}
+.art-back:hover{opacity:.8}
+.art-breadcrumb{font-size:.8em;color:var(--text-light);margin-bottom:18px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.art-breadcrumb a{color:var(--accent);text-decoration:none}.art-breadcrumb a:hover{text-decoration:underline}
+.art-img{width:100%;border-radius:12px;margin-bottom:22px;object-fit:cover;max-height:400px;display:block}
+.art-title{font-size:1.65em;font-weight:800;line-height:1.4;margin:0 0 14px;color:var(--text)}
+.art-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:20px;font-size:.85em}
+.art-source-badge{background:var(--accent);color:#fff;padding:3px 10px;border-radius:20px;font-weight:700}
+.art-date{color:var(--text-light)}
+.art-cat-badge{padding:3px 10px;border-radius:20px;font-weight:600;font-size:.85em;color:#fff}
+.art-summary-box{background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(139,92,246,.04));border-inline-start:4px solid var(--accent);padding:18px 20px;border-radius:0 10px 10px 0;margin-bottom:24px}
+.dark-mode .art-summary-box{background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(139,92,246,.08))}
+.art-summary-lbl{font-size:.78em;font-weight:700;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.art-summary-text{font-size:.95em;line-height:1.75;color:var(--text)}
+.art-disclaimer{font-size:.73em;color:var(--text-light);margin-top:10px;font-style:italic}
+.art-read-btn{display:block;text-align:center;background:var(--accent);color:#fff !important;padding:13px 24px;border-radius:10px;text-decoration:none !important;font-weight:700;font-size:1em;margin-bottom:28px;transition:opacity .2s}
+.art-read-btn:hover{opacity:.88}
+.art-share-row{display:flex;gap:10px;justify-content:center;margin-bottom:32px;flex-wrap:wrap}
+.art-share-row .share-btn{width:36px;height:36px;font-size:.88em}
+.art-related{border-top:1px solid var(--border);padding-top:24px;margin-top:8px}
+.art-related-title{font-size:1.05em;font-weight:700;margin-bottom:14px;color:var(--text)}
+.art-related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.art-rel-card{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;text-decoration:none;color:var(--text);transition:border-color .15s,transform .15s;display:block}
+.art-rel-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.art-rel-title{font-size:.87em;font-weight:600;line-height:1.4;margin-bottom:5px;color:var(--text)}
+.art-rel-meta{font-size:.74em;color:var(--text-light)}
+@media(max-width:600px){.art-title{font-size:1.3em}.art-page{padding:18px 12px 36px}}
 """
 
 APP_JS = r"""
@@ -3791,7 +3856,7 @@ def _source_filter_strip(articles: list[dict], cat_sources: list[dict],
     )
 
 
-def _card(art: dict, slug: str) -> str:
+def _card(art: dict, slug: str, use_article_page: bool = True) -> str:
     import urllib.parse as _up
     color    = CATEGORY_COLORS.get(slug, DEFAULT_COLOR)
     gradient = CATEGORY_GRADIENTS.get(slug, DEFAULT_GRADIENT)
@@ -3846,10 +3911,22 @@ def _card(art: dict, slug: str) -> str:
             f'</div>'
         )
 
+    # Determine card link: internal article page or external URL
+    if use_article_page:
+        import hashlib as _hl
+        _art_hash = _hl.md5(art["url"].encode("utf-8")).hexdigest()[:12]
+        _card_href = f"article/{_art_hash}.html"
+        _card_target = ""
+        _card_rel = ""
+    else:
+        _card_href = url
+        _card_target = ' target="_blank"'
+        _card_rel = ' rel="noopener noreferrer nofollow"'
+
     return (
         f'<article class="article-card{extra_cls}" data-cat="{esc(slug)}" data-title="{title}" '
         f'data-source="{source}" data-url="{url}" data-date="{date}" data-color="{esc(color)}">'
-        f'<a href="{url}" target="_blank" rel="noopener noreferrer nofollow" class="card-link">'
+        f'<a href="{esc(_card_href)}"{_card_target}{_card_rel} class="card-link">'
         f'{bg_html}'
         f'<div class="card-overlay"></div>'
         f'<div class="card-body">'
@@ -4240,6 +4317,231 @@ OG_IMAGE_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630"
 """
 
 
+def _article_page_html(
+    art: dict,
+    slug: str,
+    related: list,
+    s: dict,
+    site_title: str,
+    site_url: str,
+    cat_meta: dict,
+    lang: str,
+) -> str:
+    """Generate a standalone HTML page for a single article (for SEO / Google News)."""
+    import urllib.parse as _up
+    import hashlib
+
+    title_raw  = " ".join(art["title"].split())
+    title_esc  = esc(title_raw)
+    ext_url    = art["url"]
+    source_raw = art["source"]
+    source_esc = esc(SOURCE_AR_NAME.get(source_raw, source_raw))
+    date_str   = art.get("date", "")
+    scraped_at = art.get("scraped_at", date_str + "T00:00:00")
+    # Build RFC 3339 date for JSON-LD (scraped_at is "YYYY-MM-DD HH:MM:SS")
+    scraped_dt = scraped_at.replace(" ", "T")
+    if len(scraped_dt) == 19:
+        scraped_dt += "+00:00"
+    ai_summary = art.get("ai_summary", "")
+    image_url  = art.get("image", "")
+    color      = CATEGORY_COLORS.get(slug, DEFAULT_COLOR)
+    gradient   = CATEGORY_GRADIENTS.get(slug, DEFAULT_GRADIENT)
+
+    cat_name, cat_icon = cat_meta.get(slug, (slug, "📰"))
+
+    # Canonical URL for this article page
+    art_hash  = hashlib.md5(ext_url.encode("utf-8")).hexdigest()[:12]
+    canon_url = f"{site_url.rstrip('/')}/article/{art_hash}.html" if site_url else ""
+
+    # ── JSON-LD: NewsArticle ─────────────────────────────────────────────────
+    _publisher = {
+        "@type": "Organization",
+        "name":  site_title,
+        "logo":  {"@type": "ImageObject", "url": f"{site_url.rstrip('/')}/favicon.svg"} if site_url else {},
+    }
+    _ld = {
+        "@context":         "https://schema.org",
+        "@type":            "NewsArticle",
+        "headline":         title_raw[:110],
+        "datePublished":    scraped_dt,
+        "dateModified":     scraped_dt,
+        "author":           {"@type": "Organization", "name": SOURCE_AR_NAME.get(source_raw, source_raw)},
+        "publisher":        _publisher,
+        "description":      ai_summary[:300] if ai_summary else title_raw[:200],
+        "isAccessibleForFree": True,
+        "inLanguage":       s["in_language"],
+        "url":              canon_url,
+        "mainEntityOfPage": {"@type": "WebPage", "@id": canon_url},
+    }
+    if image_url:
+        _ld["image"] = {"@type": "ImageObject", "url": image_url}
+    json_ld = json.dumps(_ld, ensure_ascii=False)
+
+    # ── Meta description ─────────────────────────────────────────────────────
+    meta_desc = ai_summary[:200] if ai_summary else title_raw[:200]
+
+    # ── Image HTML ───────────────────────────────────────────────────────────
+    img_html = (
+        f'<img class="art-img" src="{safe_url(image_url)}" '
+        f'alt="{title_esc}" loading="eager">'
+    ) if image_url else ""
+
+    # ── AI summary block ─────────────────────────────────────────────────────
+    summary_html = ""
+    if ai_summary:
+        summary_html = (
+            f'<div class="art-summary-box">'
+            f'<div class="art-summary-lbl">{esc(s.get("art_summary_lbl", "AI Summary"))}</div>'
+            f'<p class="art-summary-text">{esc(ai_summary)}</p>'
+            f'<p class="art-disclaimer">{esc(s.get("art_disclaimer", ""))}</p>'
+            f'</div>'
+        )
+
+    # ── Share buttons ─────────────────────────────────────────────────────────
+    _wa  = "https://wa.me/?text=" + _up.quote(title_raw + "\n\n" + ext_url, safe="")
+    _x   = ("https://x.com/intent/tweet?text=" + _up.quote(title_raw, safe="")
+            + "&url=" + _up.quote(ext_url, safe=""))
+    _tg  = ("https://t.me/share/url?url=" + _up.quote(ext_url, safe="")
+            + "&text=" + _up.quote(title_raw, safe=""))
+    share_row = (
+        f'<div class="art-share-row">'
+        f'<a href="{esc(_wa)}" class="share-btn share-wa" target="_blank" rel="noopener noreferrer" title="WhatsApp">W</a>'
+        f'<a href="{esc(_x)}" class="share-btn share-x" target="_blank" rel="noopener noreferrer" title="X">𝕏</a>'
+        f'<a href="{esc(_tg)}" class="share-btn share-tg" target="_blank" rel="noopener noreferrer" title="Telegram">✈</a>'
+        f'<button class="share-btn share-copy" data-copy="{esc(ext_url)}" title="Copy link">⧉</button>'
+        f'</div>'
+    )
+
+    # ── Related articles ──────────────────────────────────────────────────────
+    related_html = ""
+    if related:
+        rel_cards = ""
+        for r in related[:4]:
+            r_hash  = hashlib.md5(r["url"].encode("utf-8")).hexdigest()[:12]
+            r_title = esc(" ".join(r["title"].split()))
+            r_src   = esc(SOURCE_AR_NAME.get(r["source"], r["source"]))
+            rel_cards += (
+                f'<a href="{r_hash}.html" class="art-rel-card">'
+                f'<div class="art-rel-title">{r_title}</div>'
+                f'<div class="art-rel-meta">{r_src} · {esc(r.get("date", ""))}</div>'
+                f'</a>'
+            )
+        related_html = (
+            f'<div class="art-related">'
+            f'<h3 class="art-related-title">{esc(s.get("art_related", "Related"))}</h3>'
+            f'<div class="art-related-grid">{rel_cards}</div>'
+            f'</div>'
+        )
+
+    # ── Breadcrumb ────────────────────────────────────────────────────────────
+    breadcrumb = (
+        f'<div class="art-breadcrumb">'
+        f'<a href="../index.html">{esc(s.get("home_bare", "Home"))}</a>'
+        f'<span>›</span>'
+        f'<a href="../{esc(slug)}.html">{esc(cat_icon)} {esc(cat_name)}</a>'
+        f'<span>›</span>'
+        f'<span>{title_esc[:60]}{"…" if len(title_raw) > 60 else ""}</span>'
+        f'</div>'
+    )
+
+    # ── OG image ─────────────────────────────────────────────────────────────
+    og_img_tags = ""
+    if image_url:
+        og_img_tags = (
+            f'  <meta property="og:image" content="{esc(image_url)}">\n'
+            f'  <meta property="og:image:width" content="1200">\n'
+            f'  <meta name="twitter:image" content="{esc(image_url)}">'
+        )
+
+    # ── News keywords (top words from title) ─────────────────────────────────
+    import re as _re
+    kws = [w for w in _re.split(r'\W+', title_raw) if len(w) > 3][:10]
+    kw_meta = (
+        f'  <meta name="news_keywords" content="{esc(", ".join(kws))}">'
+    ) if kws else ""
+
+    # ── Full HTML ─────────────────────────────────────────────────────────────
+    _dir  = s.get("dir", "ltr")
+    _lang = s.get("lang", lang)
+    _bc   = s.get("body_class", "lang-ltr")
+    _font_url = s.get("font_url", "")
+    return f"""<!DOCTYPE html>
+<html lang="{_lang}" dir="{_dir}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+  <title>{title_esc} — {esc(site_title)}</title>
+  <meta name="description" content="{esc(meta_desc)}">
+{kw_meta}
+  <!-- Open Graph -->
+  <meta property="og:title" content="{title_esc}">
+  <meta property="og:description" content="{esc(meta_desc)}">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="{esc(s.get('og_locale', 'ar_MA'))}">
+  <meta property="og:url" content="{esc(canon_url)}">
+  <meta property="article:published_time" content="{esc(scraped_dt)}">
+{og_img_tags}
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{title_esc}">
+  <meta name="twitter:description" content="{esc(meta_desc)}">
+  <!-- Canonical -->
+  <link rel="canonical" href="{esc(canon_url)}">
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../icon-192.png">
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="{esc(s.get('theme_color', '#1d4ed8'))}">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="{esc(_font_url)}" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <!-- JSON-LD -->
+  <script type="application/ld+json">{json_ld}</script>
+</head>
+<body id="top" class="{_bc}">
+  <div class="sticky-header">
+    <header class="site-header" aria-label="{esc(s.get('header_label', 'Header'))}">
+      <div class="site-header-inner">
+        <div class="header-start">
+          <a href="../index.html" class="art-back">{esc(s.get('art_back', '← Back'))} {esc(site_title)}</a>
+        </div>
+        <div class="header-end">
+          <button id="theme-toggle" class="theme-btn" aria-label="{esc(s.get('theme_btn_label', 'Toggle theme'))}">🌙</button>
+        </div>
+      </div>
+      {breadcrumb}
+    </header>
+  </div>
+  <div class="main-wrapper">
+    <main class="art-page" role="main">
+      <article itemscope itemtype="https://schema.org/NewsArticle">
+        {img_html}
+        <h1 class="art-title" itemprop="headline">{title_esc}</h1>
+        <div class="art-meta">
+          <span class="art-source-badge" itemprop="author">{source_esc}</span>
+          <time class="art-date" datetime="{esc(scraped_dt)}" itemprop="datePublished">{esc(date_str)}</time>
+          <span class="art-cat-badge" style="background:{esc(gradient)}">{esc(cat_icon)} {esc(cat_name)}</span>
+        </div>
+        {summary_html}
+        <a href="{safe_url(ext_url)}" target="_blank" rel="noopener noreferrer nofollow"
+           class="art-read-btn" itemprop="url">
+          {esc(s.get("art_read_orig", "📖 Read full article"))}
+        </a>
+        {share_row}
+        {related_html}
+      </article>
+    </main>
+  </div>
+  <button class="back-to-top" id="back-to-top" aria-label="{esc(s.get('back_to_top', 'Back to top'))}">↑</button>
+  <script src="../app.js"></script>
+</body>
+</html>"""
+
+
 def _page(*, title: str, desc: str, nav_html: str,
           main_html: str, footer_cats: str,
           today_ar: str, now: str, total_articles: int, total_sources: int,
@@ -4392,8 +4694,9 @@ def _page(*, title: str, desc: str, nav_html: str,
 
 
 def _write(filename: str, content: str, out_dir: str = OUTPUT_DIR) -> None:
-    os.makedirs(out_dir, exist_ok=True)
-    with open(os.path.join(out_dir, filename), "w", encoding="utf-8") as f:
+    full_path = os.path.join(out_dir, filename)
+    os.makedirs(os.path.dirname(full_path), exist_ok=True)
+    with open(full_path, "w", encoding="utf-8") as f:
         f.write(content)
 
 
@@ -4570,6 +4873,63 @@ def _round_robin(articles: list[dict], source_order: list[str]) -> list[dict]:
                 result.append(bucket.pop(0))
 
     return result
+
+
+def _generate_news_sitemap(
+    all_articles: list,
+    site_url: str,
+    media_slugs: set,
+    out_dir: str,
+    lang: str = "ar",
+    site_title: str = "Atlas News",
+) -> None:
+    """Generate news-sitemap.xml for Google News (last 48 h articles only)."""
+    from datetime import datetime as _dt, timezone as _tz, timedelta as _td
+    _now = _dt.now(_tz.utc)
+    _cutoff = _now - _td(hours=48)
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"',
+        '        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">',
+    ]
+    included = 0
+    for art in all_articles:
+        slug = art.get("slug", "")
+        if slug in media_slugs:
+            continue
+        scraped_raw = art.get("scraped_at", "")
+        # Parse scraped_at "YYYY-MM-DD HH:MM:SS" → aware datetime
+        try:
+            art_dt = _dt.strptime(scraped_raw[:19], "%Y-%m-%d %H:%M:%S").replace(tzinfo=_tz.utc)
+        except (ValueError, TypeError):
+            art_dt = _now  # fall back to now if parse fails
+        if art_dt < _cutoff:
+            continue
+        art_hash  = _article_slug(art["url"])
+        art_url   = f"{site_url.rstrip('/')}/article/{art_hash}.html"
+        pub_date  = art_dt.strftime("%Y-%m-%dT%H:%M:%S+00:00")
+        title_xml = art["title"].replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        lines += [
+            "  <url>",
+            f"    <loc>{art_url}</loc>",
+            "    <news:news>",
+            "      <news:publication>",
+            f"        <news:name>{site_title.replace('&','&amp;').replace('<','&lt;')[:50]}</news:name>",
+            f"        <news:language>{lang}</news:language>",
+            "      </news:publication>",
+            f"      <news:publication_date>{pub_date}</news:publication_date>",
+            f"      <news:title>{title_xml[:100]}</news:title>",
+            "    </news:news>",
+            f"    <lastmod>{pub_date}</lastmod>",
+            "  </url>",
+        ]
+        included += 1
+        if included >= 1000:  # Google News limit
+            break
+    lines.append("</urlset>")
+    content = "\n".join(lines) + "\n"
+    _write("news-sitemap.xml", content, out_dir)
+    logger.info("News sitemap: %d articles → %s/news-sitemap.xml", included, out_dir)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -4820,6 +5180,43 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         **common,
     ))
 
+    # ── ARTICLE PAGES — one HTML per article (for Google News / SEO) ─────────
+    art_dir = os.path.join(out_dir, "article")
+    os.makedirs(art_dir, exist_ok=True)
+    art_pages_written = 0
+    for art in all_articles:
+        _slug = art.get("slug", "")
+        if _slug in media_slugs_local:
+            continue  # Skip YouTube videos — no article pages needed
+        _related = [
+            a for a in articles_by_cat.get(_slug, {}).get("articles", [])
+            if a["url"] != art["url"]
+        ][:4]
+        _art_hash = _article_slug(art["url"])
+        _art_html = _article_page_html(
+            art=art,
+            slug=_slug,
+            related=_related,
+            s=s,
+            site_title=site_title,
+            site_url=_site_url,
+            cat_meta=cat_meta,
+            lang=lang,
+        )
+        _write(f"article/{_art_hash}.html", _art_html, out_dir)
+        art_pages_written += 1
+    logger.info("Article pages: wrote %d pages in %s/article/", art_pages_written, out_dir)
+
+    # ── NEWS SITEMAP — Google News (last 48h articles only) ───────────────────
+    _generate_news_sitemap(
+        all_articles=all_articles,
+        site_url=_site_url,
+        media_slugs=media_slugs_local,
+        out_dir=out_dir,
+        lang=lang,
+        site_title=site_title,
+    )
+
     # ── CATEGORY PAGES — all articles (generate even for empty categories) ───
     pages_written = 1
     for cat in categories:
@@ -4843,7 +5240,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         if slug in media_slugs_local:
             raw_articles = [a for a in raw_articles if _is_yt_url(a.get("url", ""))]
         if raw_articles:
-            cards      = "".join(_card(a, slug) for a in raw_articles)
+            cards      = "".join(_card(a, slug, use_article_page=(slug not in media_slugs_local)) for a in raw_articles)
             grid       = f'<div class="articles-grid">{cards}</div>'
             src_filter = _source_filter_strip(
                 raw_articles, cat.get("sources", []), color, s
@@ -5021,7 +5418,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             ]
             if yt_articles:
                 preview  = yt_articles[:PREVIEW_PER_CAT]
-                cards    = "".join(_card(a, slug) for a in preview)
+                cards    = "".join(_card(a, slug, use_article_page=False) for a in preview)
                 total    = len(yt_articles)
                 more_btn = (
                     f'<a href="{esc(slug)}.html" class="more-btn" '

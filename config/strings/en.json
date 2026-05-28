@@ -86,5 +86,11 @@
   "gdpr_body": "We use cookies to improve your experience and analyse traffic. Choose what works for you.",
   "gdpr_accept": "Accept All",
   "gdpr_reject": "Essential Only",
-  "gdpr_policy": "Privacy Policy"
+  "gdpr_policy": "Privacy Policy",
+  "art_read_orig":   "📖 Read full article",
+  "art_related":     "Related articles",
+  "art_summary_lbl": "🤖 AI Summary",
+  "art_by_source":   "Source",
+  "art_back":        "← Back to",
+  "art_disclaimer":  "This is an AI summary — visit the original source for the full article"
 }
