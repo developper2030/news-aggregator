@@ -7,7 +7,7 @@ from datetime import datetime
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from config.loader import load_config
-from database.db import get_articles_by_category
+from database.db import get_articles_by_category, init_db as _init_db
 
 logging.basicConfig(
     level=logging.INFO,
@@ -1516,6 +1516,23 @@ body.lang-ltr .nh-text{direction:ltr}
 .market-dn{color:#fca5a5}
 .market-ts{opacity:.55;font-size:.78em;margin-inline-end:auto;padding-inline-end:16px;flex-shrink:0}
 .dark-mode .market-strip{background:linear-gradient(90deg,#065f46,#0f766e)}
+/* ====== AI SUMMARY ====== */
+.card-ai{font-size:.78em;line-height:1.6;color:rgba(255,255,255,.93);padding:8px 12px 10px;background:rgba(0,0,0,.72);border-top:1px solid rgba(255,255,255,.12);display:none;position:relative;z-index:2}
+.article-card:hover .card-ai{display:block}
+.article-card.card--no-img .card-ai{color:var(--text-light);background:var(--bg);border-top:1px solid var(--border);display:block}
+.ai-badge{display:inline-block;font-size:.7em;background:linear-gradient(90deg,#6366f1,#8b5cf6);color:#fff;padding:1px 7px;border-radius:10px;margin-inline-end:5px;vertical-align:middle;white-space:nowrap;font-weight:700}
+/* ====== SHARE BUTTONS ====== */
+.card-share{position:absolute;top:8px;inset-inline-end:8px;display:flex;gap:4px;opacity:0;transform:translateY(-4px);transition:opacity .2s,transform .2s;z-index:10}
+.article-card:hover .card-share{opacity:1;transform:translateY(0)}
+@media(pointer:coarse){.card-share{opacity:1;transform:none}}
+.share-btn{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;font-size:.72em;font-weight:700;text-decoration:none;border:none;cursor:pointer;transition:transform .15s;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.share-btn:hover{transform:scale(1.18)}
+.share-wa{background:#25d366;color:#fff}
+.share-x{background:rgba(0,0,0,.75);color:#fff}
+.share-tg{background:#229ed9;color:#fff}
+.share-copy{background:rgba(255,255,255,.22);color:#fff}
+.card--no-img .share-wa{box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.card--no-img .share-copy{background:var(--border);color:var(--text)}
 """
 
 APP_JS = r"""
@@ -1845,6 +1862,27 @@ function initSourceFilter() {
   if (btnAccept) btnAccept.addEventListener('click', function() { dismiss('accepted'); });
   if (btnReject) btnReject.addEventListener('click', function() { dismiss('rejected'); });
 })();
+
+/* ========== SHARE — copy link ========== */
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('.share-copy');
+  if (!btn) return;
+  var url = btn.getAttribute('data-copy');
+  if (!url) return;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(function() {
+      var orig = btn.textContent;
+      btn.textContent = '✓';
+      setTimeout(function() { btn.textContent = orig; }, 1200);
+    });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  }
+});
 """
 
 PRIVACY_HTML = """\
@@ -3728,14 +3766,18 @@ def _source_filter_strip(articles: list[dict], cat_sources: list[dict],
 
 
 def _card(art: dict, slug: str) -> str:
+    import urllib.parse as _up
     color    = CATEGORY_COLORS.get(slug, DEFAULT_COLOR)
     gradient = CATEGORY_GRADIENTS.get(slug, DEFAULT_GRADIENT)
-    title      = esc(" ".join(art["title"].split()))
+    title_raw  = " ".join(art["title"].split())
+    title      = esc(title_raw)
     url        = safe_url(art["url"])
     source_raw = art["source"]
     source     = esc(SOURCE_AR_NAME.get(source_raw, source_raw))
     date       = esc(art.get("date", ""))
     image      = safe_url(art.get("image", ""))
+    ai_summary = art.get("ai_summary", "")
+
     if image and image != "#":
         bg_html = (
             f'<div class="card-bg">'
@@ -3747,6 +3789,37 @@ def _card(art: dict, slug: str) -> str:
     else:
         bg_html = f'<div class="card-no-img">📰</div>'
         extra_cls = " card--no-img"
+
+    # ── Share buttons ────────────────────────────────────────────────────────
+    _raw_url  = art["url"]
+    _wa_href  = "https://wa.me/?text=" + _up.quote(title_raw + "\n\n" + _raw_url, safe="")
+    _x_href   = ("https://x.com/intent/tweet?text=" + _up.quote(title_raw, safe="")
+                 + "&url=" + _up.quote(_raw_url, safe=""))
+    _tg_href  = ("https://t.me/share/url?url=" + _up.quote(_raw_url, safe="")
+                 + "&text=" + _up.quote(title_raw, safe=""))
+    share_html = (
+        f'<div class="card-share">'
+        f'<a href="{esc(_wa_href)}" class="share-btn share-wa" target="_blank" '
+        f'rel="noopener noreferrer" title="WhatsApp" aria-label="WhatsApp">W</a>'
+        f'<a href="{esc(_x_href)}" class="share-btn share-x" target="_blank" '
+        f'rel="noopener noreferrer" title="X / Twitter" aria-label="X">𝕏</a>'
+        f'<a href="{esc(_tg_href)}" class="share-btn share-tg" target="_blank" '
+        f'rel="noopener noreferrer" title="Telegram" aria-label="Telegram">✈</a>'
+        f'<button class="share-btn share-copy" data-copy="{esc(_raw_url)}" '
+        f'title="Copy link" aria-label="Copy link">⧉</button>'
+        f'</div>'
+    )
+
+    # ── AI summary (shown on hover / always on no-img cards) ─────────────────
+    ai_html = ""
+    if ai_summary:
+        ai_html = (
+            f'<div class="card-ai">'
+            f'<span class="ai-badge">🤖 AI</span>'
+            f'{esc(ai_summary)}'
+            f'</div>'
+        )
+
     return (
         f'<article class="article-card{extra_cls}" data-cat="{esc(slug)}" data-title="{title}" '
         f'data-source="{source}" data-url="{url}" data-date="{date}" data-color="{esc(color)}">'
@@ -3759,7 +3832,10 @@ def _card(art: dict, slug: str) -> str:
         f'<time class="card-date">{date}</time>'
         f'</div>'
         f'<h3 class="card-title">{title}</h3>'
-        f'</div></a></article>'
+        f'</div></a>'
+        f'{share_html}'
+        f'{ai_html}'
+        f'</article>'
     )
 
 
@@ -4486,6 +4562,9 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
     if db_path:
         from database.db import set_db_path
         set_db_path(db_path)
+
+    # ── DB migration (ensure ai_summary column exists) ────────────────────────
+    _init_db()
 
     # ── Language isolation check ───────────────────────────────────────────────
     _check_lang_isolation(config, lang)

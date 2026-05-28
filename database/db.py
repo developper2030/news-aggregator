@@ -26,10 +26,12 @@ def init_db() -> None:
     conn = get_connection()
     with open(schema, "r", encoding="utf-8") as f:
         conn.executescript(f.read())
-    # migrate: add image_url if missing
+    # migrate: add columns if missing
     cols = [r[1] for r in conn.execute("PRAGMA table_info(articles)").fetchall()]
     if "image_url" not in cols:
         conn.execute("ALTER TABLE articles ADD COLUMN image_url TEXT DEFAULT ''")
+    if "ai_summary" not in cols:
+        conn.execute("ALTER TABLE articles ADD COLUMN ai_summary TEXT DEFAULT ''")
     conn.commit()
     conn.close()
 
@@ -83,13 +85,42 @@ def get_articles_by_category(days: int = 7) -> dict:
         if slug not in grouped:
             grouped[slug] = {"name": row["category_name"], "articles": []}
         grouped[slug]["articles"].append({
-            "title":  row["title"],
-            "url":    row["url"],
-            "image":  row["image_url"] or "",
-            "source": row["source_name"],
-            "date":   row["scraped_at"][:10],
+            "title":      row["title"],
+            "url":        row["url"],
+            "image":      row["image_url"] or "",
+            "source":     row["source_name"],
+            "date":       row["scraped_at"][:10],
+            "ai_summary": row["ai_summary"] or "",
         })
     return grouped
+
+
+def get_unsummarized_articles(limit: int = 200) -> list[dict]:
+    """Return articles that have no AI summary yet, newest first."""
+    conn = get_connection()
+    rows = conn.execute(
+        """SELECT id, title, url, category_slug FROM articles
+           WHERE (ai_summary IS NULL OR ai_summary = '')
+             AND is_active = 1
+           ORDER BY scraped_at DESC
+           LIMIT ?""",
+        (limit,),
+    ).fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+def update_article_summary(url: str, summary: str) -> None:
+    """Persist an AI-generated summary for one article."""
+    conn = get_connection()
+    try:
+        conn.execute(
+            "UPDATE articles SET ai_summary = ? WHERE url = ?",
+            (summary.strip(), url),
+        )
+        conn.commit()
+    finally:
+        conn.close()
 
 
 def clean_old_articles(days: int = 30) -> int:

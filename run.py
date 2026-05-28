@@ -6,8 +6,10 @@ import argparse
 # Add project root to path
 sys.path.insert(0, os.path.dirname(__file__))
 
+import json as _json
 from scraper.scrape import run as run_scraper
 from generate_site import generate_html
+from summarizer.summarize import summarize_articles
 
 _ROOT = os.path.dirname(os.path.abspath(__file__))
 _AR_CONFIG = os.path.join(_ROOT, "config", "sources.json")
@@ -27,6 +29,18 @@ _ES_OUT    = os.path.join(_ROOT, "static", "es")
 _TR_OUT    = os.path.join(_ROOT, "static", "tr")
 
 
+# Load Groq API key once
+def _load_groq_key() -> str:
+    _keys_path = os.path.join(_ROOT, "config", "api_keys.json")
+    try:
+        with open(_keys_path, "r", encoding="utf-8") as f:
+            keys = _json.load(f)
+        key = (keys.get("groq") or os.environ.get("GROQ_API_KEY", "")).strip()
+        return key
+    except (FileNotFoundError, _json.JSONDecodeError):
+        return os.environ.get("GROQ_API_KEY", "").strip()
+
+
 def scrape_all():
     print("\n[AR] Scraping Arabic sources...")
     run_scraper(config_path=_AR_CONFIG, db_path=_AR_DB)
@@ -38,6 +52,23 @@ def scrape_all():
     run_scraper(config_path=_ES_CONFIG, db_path=_ES_DB)
     print("\n[TR] Scraping Turkish sources...")
     run_scraper(config_path=_TR_CONFIG, db_path=_TR_DB)
+
+
+def summarize_all():
+    groq_key = _load_groq_key()
+    if not groq_key:
+        print("\n[AI] No Groq API key — skipping summaries")
+        return
+    print("\n[AI] Generating summaries with Groq…")
+    langs = [
+        ("ar", _AR_DB), ("en", _EN_DB), ("fr", _FR_DB),
+        ("es", _ES_DB), ("tr", _TR_DB),
+    ]
+    for lang, db_path in langs:
+        n = summarize_articles(db_path=db_path, api_key=groq_key,
+                               lang=lang, batch_size=200)
+        if n:
+            print(f"  [{lang.upper()}] {n} articles summarized")
 
 
 def generate_all():
@@ -87,6 +118,7 @@ def main():
 
     # Default: full pipeline
     scrape_all()
+    summarize_all()
     outputs = generate_all()
     print("\n" + "=" * 50)
     print("Done!")

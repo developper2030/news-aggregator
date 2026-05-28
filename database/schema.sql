@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS articles (
     category_name TEXT NOT NULL,
     category_slug TEXT NOT NULL,
     scraped_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    is_active INTEGER DEFAULT 1
+    is_active INTEGER DEFAULT 1,
+    ai_summary TEXT DEFAULT ''
 );
 
 CREATE INDEX IF NOT EXISTS idx_articles_category ON articles(category_slug);
