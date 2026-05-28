@@ -1637,17 +1637,19 @@ body.lang-ltr .nh-text{direction:ltr}
 .market-dn{color:#fca5a5}
 .market-ts{opacity:.55;font-size:.78em;margin-inline-end:auto;padding-inline-end:16px;flex-shrink:0}
 .dark-mode .market-strip{background:linear-gradient(90deg,#065f46,#0f766e)}
-/* ====== AI SUMMARY ====== */
-.card-ai{font-size:.78em;line-height:1.6;color:rgba(255,255,255,.93);padding:8px 12px 10px;background:rgba(0,0,0,.72);border-top:1px solid rgba(255,255,255,.12);display:none;position:relative;z-index:2}
-.article-card:hover .card-ai{display:block}
-.article-card.card--no-img .card-ai{color:var(--text-light);background:var(--bg);border-top:1px solid var(--border);display:block}
-.ai-badge{display:inline-block;font-size:.7em;background:linear-gradient(90deg,#6366f1,#8b5cf6);color:#fff;padding:1px 7px;border-radius:10px;margin-inline-end:5px;vertical-align:middle;white-space:nowrap;font-weight:700}
-/* ====== SHARE BUTTONS ====== */
-.card-share{position:absolute;top:8px;inset-inline-end:8px;display:flex;gap:4px;opacity:0;transform:translateY(-4px);transition:opacity .2s,transform .2s;z-index:10}
+/* ====== CARD SUMMARY (inside card-body, above title, 2-line max) ====== */
+.card-ai{font-size:.75em;line-height:1.5;color:rgba(255,255,255,.9);overflow:hidden;max-height:0;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;transition:max-height .2s ease}
+.article-card:hover .card-ai{max-height:3em}
+.article-card.card--no-img .card-ai{color:var(--text-muted);max-height:3em}
+/* ====== SHARE BUTTONS — bottom bar, full-width ====== */
+.card-share{position:absolute;bottom:0;inset-inline-start:0;inset-inline-end:0;display:flex;gap:5px;justify-content:center;align-items:center;padding:5px 12px;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s;z-index:10}
 .article-card:hover .card-share{opacity:1;transform:translateY(0)}
+/* Push card-body content up on hover so it clears the share bar */
+.article-card:hover .card-body{padding-bottom:38px}
 @media(pointer:coarse){
-  .card-share{opacity:1;transform:none;top:auto;bottom:0;inset-inline-end:0;inset-inline-start:0;background:rgba(0,0,0,.52);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);padding:5px 12px;justify-content:center;gap:14px;border-radius:0;z-index:11}
-  .card-body{bottom:36px}
+  /* On touch: share bar always visible, body always leaves room */
+  .card-share{opacity:1;transform:none}
+  .card-body{padding-bottom:38px}
   .share-btn{width:28px;height:28px;font-size:.74em}
 }
 .share-btn{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;font-size:.72em;font-weight:700;text-decoration:none;border:none;cursor:pointer;transition:transform .15s;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
@@ -1710,6 +1712,22 @@ body.lang-ltr .nh-text{direction:ltr}
 
 APP_JS = r"""
 'use strict';
+
+/* ========== ARTICLE BACK LINK ========== */
+// Uses history.back() so the browser restores the exact scroll position
+// (the card the user clicked). Falls back to href (category anchor) when
+// there is no history to go back to (e.g. direct URL from search engine).
+(function () {
+  var link = document.getElementById('art-back-link');
+  if (!link) return;
+  link.addEventListener('click', function (e) {
+    if (history.length > 1) {
+      e.preventDefault();
+      history.back();
+    }
+    // else: let the <a href> navigate to ../index.html#slug normally
+  });
+})();
 
 /* ========== THEME ========== */
 const THEME_KEY = 'news-theme';
@@ -4042,10 +4060,10 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
         f'<time class="card-date">{date}</time>'
         f'</div>'
         f'{cluster_badge}'
+        f'{ai_html}'
         f'<h3 class="card-title">{title}</h3>'
         f'</div></a>'
         f'{share_html}'
-        f'{ai_html}'
         f'</article>'
     )
 
@@ -4641,7 +4659,7 @@ def _article_page_html(
     <header class="site-header" aria-label="{esc(s.get('header_label', 'Header'))}">
       <div class="site-header-inner">
         <div class="header-start">
-          <a href="../index.html" class="art-back">{esc(s.get('art_back', '← Back'))} {esc(site_title)}</a>
+          <a href="../index.html#{esc(slug)}" class="art-back" id="art-back-link">{esc(s.get('art_back', '← Back'))} {esc(site_title)}</a>
         </div>
         <div class="header-end">
           <button id="theme-toggle" class="theme-btn" aria-label="{esc(s.get('theme_btn_label', 'Toggle theme'))}">🌙</button>
