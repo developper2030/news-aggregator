@@ -4006,10 +4006,11 @@ def _carousel(articles: list[dict], max_items: int = 12, s: dict = STRINGS["ar"]
         cat_icon = esc(art["cat_icon"])
         active   = " active" if i == 0 else ""
         loading  = "eager" if i == 0 else "lazy"
+        priority = ' fetchpriority="high"' if i == 0 else ""
         slides_html += (
             f'<div class="nh-slide{active}" data-idx="{i}">'
             f'<a href="{url}" target="_blank" rel="noopener noreferrer nofollow">'
-            f'<img src="{image}" alt="{title}" class="nh-img" loading="{loading}" '
+            f'<img src="{image}" alt="{title}" class="nh-img" loading="{loading}"{priority} '
             f'onerror="this.parentElement.style.background=\'#1e293b\';this.style.display=\'none\'">'
             f'<div class="nh-overlay"></div>'
             f'<div class="nh-text">'
@@ -4553,6 +4554,7 @@ def _page(*, title: str, desc: str, nav_html: str,
           og_image_url: str = "",
           extra_json_ld: str = "",
           ga_id: str = "",
+          lcp_image_url: str = "",
           s: dict) -> str:
     # ── JSON-LD: WebSite ──────────────────────────────────────────────────────
     sd = json.dumps({
@@ -4598,11 +4600,17 @@ def _page(*, title: str, desc: str, nav_html: str,
   <meta name="theme-color" content="{esc(s.get("theme_color","#1d4ed8"))}">
   <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="{esc(title)}" href="{esc(rss_url)}">
-  <!-- Fonts -->
+  <!-- Performance: preload critical assets first -->
+  <link rel="preload" href="style.css" as="style">
+{(f'  <link rel="preload" href="{esc(lcp_image_url)}" as="image" fetchpriority="high">' if lcp_image_url else "")}
+  <!-- Fonts: async (non-render-blocking) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="{esc(s["font_url"])}" rel="stylesheet">
+  <link rel="preload" href="{esc(s["font_url"])}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="{esc(s["font_url"])}" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="style.css">
+  <!-- Critical CSS — above-the-fold skeleton (prevents FOUC while style.css loads) -->
+  <style>*,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}body{{font-family:system-ui,sans-serif;background:#f8fafc;color:#1a1a2e;direction:{s["dir"]}}}:root{{--accent:#1d4ed8;--bg:#f8fafc;--text:#1a1a2e;--border:#e2e8f0}}.sticky-header{{position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.12)}}.site-header{{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 60%,#0f3460 100%);color:#fff;padding:8px 0}}.site-header-inner{{display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1200px;margin:0 auto}}.site-header-title{{font-weight:800;font-size:1.2em;letter-spacing:2px;color:#fff}}.site-nav{{background:rgba(0,0,0,.22);backdrop-filter:blur(8px)}}.nav-inner{{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:1px;max-width:1200px;margin:0 auto;padding:0 6px}}.nav-tab{{display:inline-flex;align-items:center;padding:8px 14px;color:rgba(255,255,255,.82);font-size:.82em;text-decoration:none;white-space:nowrap;flex-shrink:0}}.articles-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;padding:8px 0}}.article-card{{border-radius:14px;overflow:hidden;background:#fff;position:relative;aspect-ratio:16/10}}</style>
   <!-- JSON-LD -->
   <script type="application/ld+json">{sd}</script>
 {extra_json_ld}
@@ -5158,12 +5166,18 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         )
 
     # Home carousel: mix 3 articles per non-region, non-media category
-    home_carousel = _carousel(_gather_carousel(
+    _home_carousel_arts = _gather_carousel(
         articles_by_cat,
         [(c["slug"], c["name"], c.get("icon", ""))
          for c in categories if c["slug"] not in region_slugs and c["slug"] not in media_slugs_local and c["slug"] not in ECON_SUB_SLUGS],
         per_slug=3,
-    ), s=s)
+    )
+    # LCP image = first carousel hero image (preloaded in <head> for speed)
+    _home_lcp_img = next(
+        (a["image"] for a in _home_carousel_arts if a.get("image", "").startswith("http")),
+        ""
+    )
+    home_carousel = _carousel(_home_carousel_arts, s=s)
     _wrt("index.html", _page(
         title=site_title,
         nav_html=_nav(categories, articles_by_cat, active="home",
@@ -5177,6 +5191,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         og_image_url=_og_img_url,
         extra_json_ld=_org_ld,
         lang_switcher_html=_lsw("index.html"),
+        lcp_image_url=_home_lcp_img,
         **common,
     ))
 
@@ -5275,12 +5290,18 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
 
         # Per-category carousel: articles from this category only
         # Pass yt_only_slugs so vid-* carousels skip non-YouTube entries
-        cat_carousel = _carousel(_gather_carousel(
+        _cat_carousel_arts = _gather_carousel(
             articles_by_cat,
             [(slug, cat["name"], cat.get("icon", ""))],
             per_slug=16,
             yt_only_slugs=media_slugs_local if slug in media_slugs_local else None,
-        ), s=s)
+        )
+        # LCP = first image of category carousel (or first article image as fallback)
+        _cat_lcp_img = next(
+            (a["image"] for a in _cat_carousel_arts if a.get("image", "").startswith("http")),
+            next((a.get("image", "") for a in raw_articles if a.get("image", "").startswith("http")), ""),
+        )
+        cat_carousel = _carousel(_cat_carousel_arts, s=s)
         # Economy tabs widget on economy, business, and travel pages
         # + market data strip on economy page only
         if slug in {"economy", "business", "travel"}:
@@ -5314,6 +5335,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             carousel_html=cat_carousel,
             rss_url=cat_rss,
             lang_switcher_html=_lsw(_cat_page_file),
+            lcp_image_url=_cat_lcp_img,
             **_cat_common,
         ))
         pages_written += 1
