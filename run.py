@@ -1,9 +1,32 @@
 #!/usr/bin/env python3
+"""
+News Aggregator — Pipeline Runner
+==================================
+
+Usage examples
+--------------
+Full pipeline (CI / before deployment):
+    python run.py
+
+Quick local test — scrape Arabic only, then generate all:
+    python run.py --lang ar
+
+Scrape two languages:
+    python run.py --lang ar,fr
+
+Just regenerate HTML from existing DB (no scraping, ~30 sec):
+    python run.py --generate-only
+
+Scrape without AI summaries (faster locally):
+    python run.py --lang ar --no-summary
+
+Backfill og:description for articles with no summary:
+    python run.py --fill-desc
+"""
 import sys
 import os
 import argparse
 
-# Add project root to path
 sys.path.insert(0, os.path.dirname(__file__))
 
 import json as _json
@@ -13,25 +36,46 @@ from summarizer.summarize import summarize_articles
 from clustering.cluster import run_clustering
 
 _ROOT = os.path.dirname(os.path.abspath(__file__))
-_AR_CONFIG = os.path.join(_ROOT, "config", "sources.json")
-_EN_CONFIG = os.path.join(_ROOT, "config", "sources-en.json")
-_FR_CONFIG = os.path.join(_ROOT, "config", "sources-fr.json")
-_ES_CONFIG = os.path.join(_ROOT, "config", "sources-es.json")
-_TR_CONFIG = os.path.join(_ROOT, "config", "sources-tr.json")
-_AR_DB     = os.path.join(_ROOT, "data", "news.db")
-_EN_DB     = os.path.join(_ROOT, "data", "news-en.db")
-_FR_DB     = os.path.join(_ROOT, "data", "news-fr.db")
-_ES_DB     = os.path.join(_ROOT, "data", "news-es.db")
-_TR_DB     = os.path.join(_ROOT, "data", "news-tr.db")
-_AR_OUT    = os.path.join(_ROOT, "static", "ar")
-_EN_OUT    = os.path.join(_ROOT, "static")
-_FR_OUT    = os.path.join(_ROOT, "static", "fr")
-_ES_OUT    = os.path.join(_ROOT, "static", "es")
-_TR_OUT    = os.path.join(_ROOT, "static", "tr")
+_DATA = os.path.join(_ROOT, "data")
+
+# ── Language configuration table ──────────────────────────────────────────────
+LANGS = {
+    "ar": {
+        "config": os.path.join(_ROOT, "config", "sources.json"),
+        "db":     os.path.join(_DATA, "news.db"),
+        "out":    os.path.join(_ROOT, "static", "ar"),
+        "label":  "Arabic",
+    },
+    "en": {
+        "config": os.path.join(_ROOT, "config", "sources-en.json"),
+        "db":     os.path.join(_DATA, "news-en.db"),
+        "out":    os.path.join(_ROOT, "static"),
+        "label":  "English",
+    },
+    "fr": {
+        "config": os.path.join(_ROOT, "config", "sources-fr.json"),
+        "db":     os.path.join(_DATA, "news-fr.db"),
+        "out":    os.path.join(_ROOT, "static", "fr"),
+        "label":  "French",
+    },
+    "es": {
+        "config": os.path.join(_ROOT, "config", "sources-es.json"),
+        "db":     os.path.join(_DATA, "news-es.db"),
+        "out":    os.path.join(_ROOT, "static", "es"),
+        "label":  "Spanish",
+    },
+    "tr": {
+        "config": os.path.join(_ROOT, "config", "sources-tr.json"),
+        "db":     os.path.join(_DATA, "news-tr.db"),
+        "out":    os.path.join(_ROOT, "static", "tr"),
+        "label":  "Turkish",
+    },
+}
+ALL_LANGS = list(LANGS.keys())   # ["ar","en","fr","es","tr"]
 
 
 def _load_api_keys() -> dict:
-    """Return {'gemini': '...', 'groq': '...'} from config file + env vars."""
+    """Return API keys from config file + env var overrides."""
     _keys_path = os.path.join(_ROOT, "config", "api_keys.json")
     file_keys: dict = {}
     try:
@@ -45,37 +89,18 @@ def _load_api_keys() -> dict:
     }
 
 
-def scrape_all():
-    print("\n[AR] Scraping Arabic sources...")
-    run_scraper(config_path=_AR_CONFIG, db_path=_AR_DB)
-    print("\n[EN] Scraping English sources...")
-    run_scraper(config_path=_EN_CONFIG, db_path=_EN_DB)
-    print("\n[FR] Scraping French sources...")
-    run_scraper(config_path=_FR_CONFIG, db_path=_FR_DB)
-    print("\n[ES] Scraping Spanish sources...")
-    run_scraper(config_path=_ES_CONFIG, db_path=_ES_DB)
-    print("\n[TR] Scraping Turkish sources...")
-    run_scraper(config_path=_TR_CONFIG, db_path=_TR_DB)
+# ── Pipeline steps ────────────────────────────────────────────────────────────
+
+def scrape(langs: list[str]) -> None:
+    """Scrape the given language(s)."""
+    for code in langs:
+        cfg = LANGS[code]
+        print(f"\n[{code.upper()}] Scraping {cfg['label']} sources...")
+        run_scraper(config_path=cfg["config"], db_path=cfg["db"])
 
 
-def fill_descriptions_all(batch_size: int = 300) -> None:
-    """Fill og:description for all articles that still have no summary.
-
-    Runs after scraping and before AI summarisation so Gemini only handles
-    the small remainder that genuinely has no meta description.
-    """
-    print("\n[DESC] Filling article descriptions from og:description…")
-    langs = [
-        ("AR", _AR_DB), ("EN", _EN_DB), ("FR", _FR_DB),
-        ("ES", _ES_DB), ("TR", _TR_DB),
-    ]
-    for label, db_path in langs:
-        n = fill_article_descriptions(db_path, batch_size=batch_size)
-        if n:
-            print(f"  [{label}] {n} descriptions filled")
-
-
-def summarize_all():
+def summarize(langs: list[str]) -> None:
+    """Run AI summarization for the given language(s)."""
     keys = _load_api_keys()
     gemini_key = keys["gemini"]
     groq_key   = keys["groq"]
@@ -87,107 +112,148 @@ def summarize_all():
     provider = "Gemini" if gemini_key else "Groq"
     print(f"\n[AI] Generating summaries with {provider}…")
 
-    langs = [
-        ("ar", _AR_DB), ("en", _EN_DB), ("fr", _FR_DB),
-        ("es", _ES_DB), ("tr", _TR_DB),
-    ]
-    # Gemini free tier: 1500 req/day total.
-    # With 5 languages × 4 CI runs/day → max 75 per language per run to stay under limit.
-    # Groq free tier: 14 400 req/day → can use higher batch if Gemini quota is exceeded.
+    # Gemini free tier: 1500 req/day ÷ (5 langs × 4 CI runs) = 75/lang/run
     _batch = 75 if gemini_key else 250
-    for lang, db_path in langs:
+    for code in langs:
         n = summarize_articles(
-            db_path=db_path,
-            lang=lang,
+            db_path=LANGS[code]["db"],
+            lang=code,
             batch_size=_batch,
             gemini_key=gemini_key,
             groq_key=groq_key,
         )
         if n:
-            print(f"  [{lang.upper()}] {n} articles summarized")
+            print(f"  [{code.upper()}] {n} articles summarized")
 
 
-_DATA_DIR = os.path.join(_ROOT, "data")
-
-
-def cluster_all():
-    """Cluster articles per language and save results to data/clusters_*.json."""
+def cluster(langs: list[str]) -> None:
+    """Build story clusters for the given language(s)."""
     print("\n[Clustering] Building story clusters…")
-    run_clustering("ar", _AR_DB, _DATA_DIR)
-    run_clustering("en", _EN_DB, _DATA_DIR)
-    run_clustering("fr", _FR_DB, _DATA_DIR)
-    run_clustering("es", _ES_DB, _DATA_DIR)
-    run_clustering("tr", _TR_DB, _DATA_DIR)
+    for code in langs:
+        run_clustering(code, LANGS[code]["db"], _DATA)
 
 
-def generate_all():
-    print("\n[AR] Generating Arabic site...")
-    ar = generate_html(config_path=_AR_CONFIG, db_path=_AR_DB,
-                       output_dir=_AR_OUT, lang="ar")
-    print("\n[EN] Generating English site...")
-    en = generate_html(config_path=_EN_CONFIG, db_path=_EN_DB,
-                       output_dir=_EN_OUT, lang="en")
-    print("\n[FR] Generating French site...")
-    fr = generate_html(config_path=_FR_CONFIG, db_path=_FR_DB,
-                       output_dir=_FR_OUT, lang="fr")
-    print("\n[ES] Generating Spanish site...")
-    es = generate_html(config_path=_ES_CONFIG, db_path=_ES_DB,
-                       output_dir=_ES_OUT, lang="es")
-    print("\n[TR] Generating Turkish site...")
-    tr = generate_html(config_path=_TR_CONFIG, db_path=_TR_DB,
-                       output_dir=_TR_OUT, lang="tr")
-    return ar, en, fr, es, tr
+def generate(langs: list[str]) -> list[str]:
+    """Generate HTML for the given language(s). Returns output paths."""
+    outputs = []
+    for code in langs:
+        cfg = LANGS[code]
+        print(f"\n[{code.upper()}] Generating {cfg['label']} site...")
+        path = generate_html(
+            config_path=cfg["config"],
+            db_path=cfg["db"],
+            output_dir=cfg["out"],
+            lang=code,
+        )
+        outputs.append(path)
+    return outputs
 
+
+def fill_desc(batch_size: int = 2000) -> None:
+    """Backfill og:description for articles with no summary (manual use)."""
+    print("\n[DESC] Backfilling og:description…")
+    for code in ALL_LANGS:
+        n = fill_article_descriptions(LANGS[code]["db"], batch_size=batch_size)
+        if n:
+            print(f"  [{code.upper()}] {n} descriptions filled")
+
+
+# ── CLI ───────────────────────────────────────────────────────────────────────
 
 def main():
-    parser = argparse.ArgumentParser(description="News aggregator pipeline")
-    parser.add_argument("--scrape-only",   action="store_true", help="Scrape only (both languages)")
-    parser.add_argument("--generate-only", action="store_true", help="Generate only (both languages)")
-    parser.add_argument("--fill-desc",     action="store_true",
-                        help="Backfill og:description for all unsummarised articles (large batch)")
+    parser = argparse.ArgumentParser(
+        description="News aggregator pipeline",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python run.py                      Full pipeline — all 5 languages (CI)
+  python run.py --lang ar            Quick: scrape Arabic only, generate all
+  python run.py --lang ar,fr         Scrape Arabic + French, generate all
+  python run.py --generate-only      Regenerate HTML only (~30 sec)
+  python run.py --lang ar --no-summary  Scrape without AI (fastest local test)
+  python run.py --fill-desc          Backfill og:description for old articles
+        """,
+    )
+    parser.add_argument(
+        "--lang",
+        default="",
+        metavar="CODES",
+        help="Comma-separated language codes to scrape (e.g. ar  or  ar,fr). "
+             "Omit to scrape all 5 languages.",
+    )
+    parser.add_argument(
+        "--generate-only",
+        action="store_true",
+        help="Skip scraping — only cluster + generate HTML from existing DB.",
+    )
+    parser.add_argument(
+        "--scrape-only",
+        action="store_true",
+        help="Scrape only, do not generate HTML.",
+    )
+    parser.add_argument(
+        "--no-summary",
+        action="store_true",
+        help="Skip AI summarization step (faster for local testing).",
+    )
+    parser.add_argument(
+        "--fill-desc",
+        action="store_true",
+        help="Backfill og:description for articles with no summary, then exit.",
+    )
     args = parser.parse_args()
 
+    # Resolve which languages to scrape
+    if args.lang:
+        scrape_langs = [c.strip().lower() for c in args.lang.split(",") if c.strip()]
+        invalid = [c for c in scrape_langs if c not in LANGS]
+        if invalid:
+            parser.error(f"Unknown language code(s): {', '.join(invalid)}. Choose from: {', '.join(ALL_LANGS)}")
+    else:
+        scrape_langs = ALL_LANGS
+
     print("=" * 50)
-    print("News Aggregator - Full Pipeline")
+    print("News Aggregator Pipeline")
     print("=" * 50)
 
+    # ── Special modes ──────────────────────────────────────────────────────
     if args.fill_desc:
-        fill_descriptions_all(batch_size=2000)
+        fill_desc()
         print("\n" + "=" * 50)
         print("Description backfill done!")
         print("=" * 50)
         return
 
     if args.scrape_only:
-        scrape_all()
+        scrape(scrape_langs)
         print("\n" + "=" * 50)
-        print("Scraping done!")
+        print(f"Scraping done! ({', '.join(scrape_langs)})")
         print("=" * 50)
         return
 
     if args.generate_only:
-        cluster_all()
-        outputs = generate_all()
+        cluster(ALL_LANGS)
+        outputs = generate(ALL_LANGS)
         print("\n" + "=" * 50)
         print("Generation done!")
-        for path in outputs:
-            print(f"  Open: {path}")
+        for p in outputs:
+            print(f"  {p}")
         print("=" * 50)
         return
 
-    # Default: full pipeline
-    # Note: fill_descriptions_all() is NOT run here — use --fill-desc separately.
-    # Homepage-level excerpt extraction (_find_excerpt) runs inside scrape_all()
-    # with zero extra HTTP requests and gives ~30-50% coverage at scrape time.
-    # The manual --fill-desc flag does a larger og:description backfill when needed.
-    scrape_all()
-    summarize_all()   # Gemini/Groq for articles still missing summaries
-    cluster_all()
-    outputs = generate_all()
+    # ── Default / --lang mode ──────────────────────────────────────────────
+    scrape(scrape_langs)
+
+    if not args.no_summary:
+        summarize(scrape_langs)
+
+    cluster(ALL_LANGS)          # always cluster all (cross-language story links)
+    outputs = generate(ALL_LANGS)  # always generate all (consistent site)
+
     print("\n" + "=" * 50)
     print("Done!")
-    for path in outputs:
-        print(f"  Open: {path}")
+    for p in outputs:
+        print(f"  {p}")
     print("=" * 50)
 
 
