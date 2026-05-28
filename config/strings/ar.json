@@ -99,5 +99,10 @@
   "spectrum_public":      "عام",
   "spectrum_commercial":  "خاص",
   "spectrum_state":       "رسمي",
-  "spectrum_independent": "مستقل"
+  "spectrum_independent": "مستقل",
+  "live_tv_label":   "📡 بث مباشر",
+  "live_tv_title":   "بث مباشر — القنوات الإخبارية",
+  "live_tv_desc":    "تابع القنوات الإخبارية العالمية مباشرةً عبر اليوتيوب",
+  "live_tv_watch":   "▶ شاهد مباشر",
+  "live_tv_on_air":  "على الهواء"
 }

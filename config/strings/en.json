@@ -99,5 +99,10 @@
   "spectrum_public":      "Public",
   "spectrum_commercial":  "Commercial",
   "spectrum_state":       "State",
-  "spectrum_independent": "Independent"
+  "spectrum_independent": "Independent",
+  "live_tv_label":   "📡 Live TV",
+  "live_tv_title":   "Live TV — News Channels",
+  "live_tv_desc":    "Watch global news channels live on YouTube",
+  "live_tv_watch":   "▶ Watch Live",
+  "live_tv_on_air":  "On Air"
 }

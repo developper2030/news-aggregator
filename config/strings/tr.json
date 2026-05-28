@@ -99,5 +99,10 @@
   "spectrum_public":      "Kamu",
   "spectrum_commercial":  "Ticari",
   "spectrum_state":       "Resmi",
-  "spectrum_independent": "Bağımsız"
+  "spectrum_independent": "Bağımsız",
+  "live_tv_label":   "📡 Canlı TV",
+  "live_tv_title":   "Canlı TV — Haber Kanalları",
+  "live_tv_desc":    "YouTube üzerinden dünya haber kanallarını canlı izleyin",
+  "live_tv_watch":   "▶ Canlı İzle",
+  "live_tv_on_air":  "Yayında"
 }

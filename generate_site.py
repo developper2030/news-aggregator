@@ -141,6 +141,57 @@ MEDIA_REGIONS = [
     {"slug": "vid-entertainment", "name": "ترفيه",             "icon": "🎬"},
 ]
 
+# Live TV channels per language — YouTube channel live-stream links
+LIVE_CHANNELS: dict[str, list[dict]] = {
+    "ar": [
+        {"name": "الجزيرة مباشر",   "flag": "🇶🇦", "url": "https://www.youtube.com/@AlJazeeraArabic/live"},
+        {"name": "BBC عربي",         "flag": "🇬🇧", "url": "https://www.youtube.com/@BBCArabic/live"},
+        {"name": "العربية",          "flag": "🇸🇦", "url": "https://www.youtube.com/@AlArabiya/live"},
+        {"name": "سكاي نيوز عربية", "flag": "🇦🇪", "url": "https://www.youtube.com/@skynewsarabia/live"},
+        {"name": "France 24 عربي",   "flag": "🇫🇷", "url": "https://www.youtube.com/@France24Arabic/live"},
+        {"name": "RT عربي",          "flag": "🇷🇺", "url": "https://www.youtube.com/@RTArabic/live"},
+        {"name": "الميادين",         "flag": "🇱🇧", "url": "https://www.youtube.com/@AlMayadeenNews/live"},
+        {"name": "الحرة",            "flag": "🇺🇸", "url": "https://www.youtube.com/@Alhurra/live"},
+    ],
+    "en": [
+        {"name": "Al Jazeera",      "flag": "🇶🇦", "url": "https://www.youtube.com/@AlJazeeraEnglish/live"},
+        {"name": "BBC News",        "flag": "🇬🇧", "url": "https://www.youtube.com/@BBCNews/live"},
+        {"name": "France 24",       "flag": "🇫🇷", "url": "https://www.youtube.com/@France24English/live"},
+        {"name": "DW News",         "flag": "🇩🇪", "url": "https://www.youtube.com/@dwnews/live"},
+        {"name": "Sky News",        "flag": "🇬🇧", "url": "https://www.youtube.com/@SkyNews/live"},
+        {"name": "Euronews",        "flag": "🇪🇺", "url": "https://www.youtube.com/@euronews/live"},
+        {"name": "RT",              "flag": "🇷🇺", "url": "https://www.youtube.com/@RT/live"},
+        {"name": "DW Arabic",       "flag": "🇩🇪", "url": "https://www.youtube.com/@dwarabia/live"},
+    ],
+    "fr": [
+        {"name": "France 24",       "flag": "🇫🇷", "url": "https://www.youtube.com/@France24/live"},
+        {"name": "BFM TV",          "flag": "🇫🇷", "url": "https://www.youtube.com/@bfmtv/live"},
+        {"name": "LCI",             "flag": "🇫🇷", "url": "https://www.youtube.com/@LCI/live"},
+        {"name": "Euronews FR",     "flag": "🇪🇺", "url": "https://www.youtube.com/@euronewsfrancais/live"},
+        {"name": "RFI",             "flag": "🇫🇷", "url": "https://www.youtube.com/@RFI_Officiel/live"},
+        {"name": "Al Jazeera AR",   "flag": "🇶🇦", "url": "https://www.youtube.com/@AlJazeeraArabic/live"},
+        {"name": "DW Français",     "flag": "🇩🇪", "url": "https://www.youtube.com/@dwfrancais/live"},
+    ],
+    "es": [
+        {"name": "DW Español",      "flag": "🇩🇪", "url": "https://www.youtube.com/@dw_espanol/live"},
+        {"name": "RTVE Noticias",   "flag": "🇪🇸", "url": "https://www.youtube.com/@rtvenoticias/live"},
+        {"name": "CNN en Español",  "flag": "🇺🇸", "url": "https://www.youtube.com/@CNNenEspanol/live"},
+        {"name": "France 24 ES",    "flag": "🇫🇷", "url": "https://www.youtube.com/@France24espanol/live"},
+        {"name": "Euronews ES",     "flag": "🇪🇺", "url": "https://www.youtube.com/@euronewses/live"},
+        {"name": "Al Jazeera",      "flag": "🇶🇦", "url": "https://www.youtube.com/@AlJazeeraEnglish/live"},
+        {"name": "TeleSUR",         "flag": "🌎", "url": "https://www.youtube.com/@teleSURtv/live"},
+    ],
+    "tr": [
+        {"name": "TRT Haber",       "flag": "🇹🇷", "url": "https://www.youtube.com/@trthaber/live"},
+        {"name": "NTV",             "flag": "🇹🇷", "url": "https://www.youtube.com/@ntvturkiye/live"},
+        {"name": "CNN Türk",        "flag": "🇹🇷", "url": "https://www.youtube.com/@cnnturk/live"},
+        {"name": "A Haber",         "flag": "🇹🇷", "url": "https://www.youtube.com/@ahaber/live"},
+        {"name": "Euronews TR",     "flag": "🇪🇺", "url": "https://www.youtube.com/@euronewsturkce/live"},
+        {"name": "DW Türkçe",       "flag": "🇩🇪", "url": "https://www.youtube.com/@dwturkce/live"},
+        {"name": "Al Jazeera",      "flag": "🇶🇦", "url": "https://www.youtube.com/@AlJazeeraEnglish/live"},
+    ],
+}
+
 DEFAULT_COLOR = "#6366f1"
 DEFAULT_GRADIENT = "linear-gradient(135deg, #6366f1, #8b5cf6)"
 
@@ -514,6 +565,11 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "spectrum_commercial":  "خاص",
         "spectrum_state":       "رسمي",
         "spectrum_independent": "مستقل",
+        "live_tv_label":   "📡 بث مباشر",
+        "live_tv_title":   "بث مباشر — القنوات الإخبارية",
+        "live_tv_desc":    "تابع القنوات الإخبارية العالمية مباشرةً عبر اليوتيوب",
+        "live_tv_watch":   "▶ شاهد مباشر",
+        "live_tv_on_air":  "على الهواء",
     },
     "en": {
         "lang": "en", "dir": "ltr",
@@ -598,6 +654,11 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "spectrum_commercial":  "Commercial",
         "spectrum_state":       "State",
         "spectrum_independent": "Independent",
+        "live_tv_label":   "📡 Live TV",
+        "live_tv_title":   "Live TV — News Channels",
+        "live_tv_desc":    "Watch global news channels live on YouTube",
+        "live_tv_watch":   "▶ Watch Live",
+        "live_tv_on_air":  "On Air",
     },
     "fr": {
         "lang": "fr", "dir": "ltr",
@@ -682,6 +743,11 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "spectrum_commercial":  "Commercial",
         "spectrum_state":       "Officiel",
         "spectrum_independent": "Indépendant",
+        "live_tv_label":   "📡 TV en direct",
+        "live_tv_title":   "TV en direct — Chaînes d'info",
+        "live_tv_desc":    "Regardez les chaînes d'information mondiales en direct sur YouTube",
+        "live_tv_watch":   "▶ Regarder en direct",
+        "live_tv_on_air":  "En direct",
     },
     "es": {
         "lang": "es", "dir": "ltr",
@@ -766,6 +832,11 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "spectrum_commercial":  "Comercial",
         "spectrum_state":       "Oficial",
         "spectrum_independent": "Independiente",
+        "live_tv_label":   "📡 TV en vivo",
+        "live_tv_title":   "TV en vivo — Canales de noticias",
+        "live_tv_desc":    "Sigue los canales de noticias globales en directo en YouTube",
+        "live_tv_watch":   "▶ Ver en vivo",
+        "live_tv_on_air":  "En el aire",
     },
     "tr": {
         "lang": "tr", "dir": "ltr",
@@ -850,6 +921,11 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "spectrum_commercial":  "Ticari",
         "spectrum_state":       "Resmi",
         "spectrum_independent": "Bağımsız",
+        "live_tv_label":   "📡 Canlı TV",
+        "live_tv_title":   "Canlı TV — Haber Kanalları",
+        "live_tv_desc":    "YouTube üzerinden dünya haber kanallarını canlı izleyin",
+        "live_tv_watch":   "▶ Canlı İzle",
+        "live_tv_on_air":  "Yayında",
     },
 }
 
@@ -1288,7 +1364,31 @@ ul,ol{list-style:none}
 .world-region-btn:nth-child(6){animation-delay:.29s}
 .world-region-btn:nth-child(7){animation-delay:.34s}
 .world-region-btn:nth-child(8){animation-delay:.39s}
+.world-region-btn.live-btn{color:#dc2626;border-bottom-color:transparent}
+.world-region-btn.live-btn:hover{color:#b91c1c;background:rgba(220,38,38,.07);border-bottom-color:rgba(220,38,38,.35)}
+.world-region-btn.live-btn.active-region{color:#dc2626;border-bottom-color:#dc2626;background:rgba(220,38,38,.09)}
+.dark-mode .world-region-btn.live-btn{color:#f87171}
+.dark-mode .world-region-btn.live-btn.active-region{color:#f87171;border-bottom-color:#f87171}
 
+/* ===================== LIVE TV PAGE ===================== */
+.live-page-hdr{display:flex;align-items:center;gap:14px;padding:20px 0 6px;margin-bottom:24px;border-bottom:2px solid var(--border)}
+.live-page-hdr-icon{font-size:2.2em;line-height:1}
+.live-page-hdr h1{font-size:1.45em;font-weight:900;margin:0 0 4px;letter-spacing:-.3px}
+.live-page-hdr p{font-size:.9em;color:var(--text-muted);margin:0}
+.live-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:8px}
+.live-card{border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);box-shadow:var(--card-shadow);overflow:hidden;display:flex;flex-direction:column;align-items:center;padding:22px 16px 18px;gap:10px;text-align:center;transition:transform .25s,box-shadow .25s;animation:cardIn .42s ease both}
+.live-card:hover{transform:translateY(-4px);box-shadow:var(--card-shadow-hover)}
+.live-card-flag{font-size:2.4em;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.18))}
+.live-card-name{font-size:1em;font-weight:800;color:var(--text);line-height:1.3}
+.live-badge{display:inline-flex;align-items:center;gap:5px;background:#fee2e2;color:#b91c1c;font-size:.72em;font-weight:800;padding:3px 9px;border-radius:20px;letter-spacing:.4px;margin-top:2px}
+.live-badge-dot{display:inline-block;width:7px;height:7px;background:#dc2626;border-radius:50%;animation:pulse-dot 1.6s ease infinite;flex-shrink:0}
+.dark-mode .live-badge{background:rgba(220,38,38,.18);color:#fca5a5}
+.live-watch-btn{display:inline-flex;align-items:center;gap:6px;margin-top:6px;padding:8px 18px;background:var(--accent);color:#fff;border-radius:22px;font-size:.85em;font-weight:700;text-decoration:none;transition:background .2s,transform .15s;white-space:nowrap}
+.live-watch-btn:hover{background:#4f46e5;transform:scale(1.04)}
+.dark-mode .live-watch-btn{background:#6366f1}
+@media(max-width:900px){.live-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.live-grid{grid-template-columns:repeat(2,1fr)}.live-card{padding:16px 10px 14px}.live-card-flag{font-size:2em}}
+@media(max-width:380px){.live-grid{grid-template-columns:1fr}}
 
 /* ===================== MAIN LAYOUT ===================== */
 .main-wrapper{max-width:1200px;margin:0 auto;padding:24px 20px}
@@ -4246,16 +4346,58 @@ def _media_subnav(active_slug: str = "", media_regions: list = MEDIA_REGIONS,
     if not media_regions:
         return ""
     buttons = ""
-    for r in media_regions:
+    _live_label = s.get("live_tv_label", "📡 Live TV")
+    _live_active_cls = " active-region" if active_slug == "live" else ""
+    for i, r in enumerate(media_regions):
         active_cls = " active-region" if r["slug"] == active_slug else ""
         buttons += (
             f'<a href="{esc(r["slug"])}.html" class="world-region-btn{active_cls}">'
             f'{esc(r["icon"])} {esc(r["name"])}'
             f'</a>'
         )
+        # Insert live TV button right after the first item (أحداث / Events)
+        if i == 0:
+            buttons += (
+                f'<a href="live.html" class="world-region-btn live-btn{_live_active_cls}">'
+                f'{esc(_live_label)}'
+                f'</a>'
+            )
     return (
         f'<div class="world-subnav" aria-label="{esc(s.get("media_regions_label", "صوت وصورة"))}">'
         f'<div class="world-subnav-inner">{buttons}</div>'
+        f'</div>'
+    )
+
+
+def _live_page_html(lang: str, s: dict, channels: list[dict],
+                    media_regions: list = MEDIA_REGIONS) -> str:
+    """Generate the live TV channels page body."""
+    title      = s.get("live_tv_title", "Live TV")
+    desc       = s.get("live_tv_desc",  "Watch global news channels live")
+    watch_lbl  = s.get("live_tv_watch", "▶ Watch Live")
+    on_air_lbl = s.get("live_tv_on_air", "On Air")
+
+    cards_html = ""
+    for ch in channels:
+        cards_html += (
+            f'<div class="live-card">'
+            f'<div class="live-card-flag">{esc(ch["flag"])}</div>'
+            f'<div class="live-card-name">{esc(ch["name"])}</div>'
+            f'<div class="live-badge"><span class="live-badge-dot"></span>{esc(on_air_lbl)}</div>'
+            f'<a href="{esc(ch["url"])}" class="live-watch-btn" target="_blank" '
+            f'rel="noopener noreferrer">{esc(watch_lbl)}</a>'
+            f'</div>'
+        )
+
+    subnav = _media_subnav(active_slug="live", media_regions=media_regions, s=s)
+    return (
+        f'{subnav}'
+        f'<div class="main-wrapper">'
+        f'<div class="live-page-hdr">'
+        f'<div class="live-page-hdr-icon">📡</div>'
+        f'<div><h1>{esc(title)}</h1><p>{esc(desc)}</p></div>'
+        f'</div>'
+        f'<div class="live-grid">{cards_html}</div>'
         f'</div>'
     )
 
@@ -4279,7 +4421,7 @@ def _nav(categories: list, articles_by_cat: dict, active: str = "home",
 
     # Show media tab when either world_regions or media_regions are configured
     if has_world or has_media:
-        media_active = active in media_slugs or active == "media"
+        media_active = active in media_slugs or active in ("media", "live")
         world_cls = "nav-tab active" if media_active else "nav-tab"
         html += f'<a href="media.html" class="{world_cls}" data-cat="media">{s["world"]}</a>\n'
     return html
@@ -5693,6 +5835,29 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         ))
         pages_written += 1
 
+        # ── LIVE.HTML — live TV channels directory ────────────────────────────
+        _live_channels = LIVE_CHANNELS.get(lang, LIVE_CHANNELS.get("en", []))
+        _live_main = _live_page_html(
+            lang=lang, s=s, channels=_live_channels,
+            media_regions=media_regions_list,
+        )
+        _wrt("live.html", _page(
+            title=s.get("live_tv_title", "Live TV") + " — " + site_title,
+            nav_html=_nav(categories, articles_by_cat, active="live",
+                          s=s, region_slugs=region_slugs, has_world=has_world,
+                          media_slugs=media_slugs_local, has_media=has_media),
+            main_html=_live_main,
+            world_subnav_html="",
+            canonical=_page_canonical("live.html"),
+            hreflang_html=_make_hreflang("live.html"),
+            og_image_url=_og_img_url,
+            extra_json_ld=_org_ld,
+            carousel_html="",
+            lang_switcher_html=_lsw("live.html"),
+            **common,
+        ))
+        pages_written += 1
+
     # ── RSS Feeds ─────────────────────────────────────────────────────────────
     _generate_rss(articles_by_cat, site_title, settings.get("site_url",""),
                   s, categories, out_dir)
@@ -5719,6 +5884,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
                 _sitemap_pages.append(f'{r["slug"]}.html')
         if has_media:
             _sitemap_pages.append("media.html")
+            _sitemap_pages.append("live.html")
             for r in media_regions_list:
                 _sitemap_pages.append(f'{r["slug"]}.html')
         if any(cat.get("slug") == "economy" for cat in categories):
