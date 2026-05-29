@@ -1622,6 +1622,32 @@ body.lang-ltr .nh-text{direction:ltr}
   .nav-tab{padding:9px 10px;font-size:.8em}
   .footer-inner{grid-template-columns:1fr}
 }
+/* ── 360px: very small phones (Galaxy A / older Androids) ──────────────────── */
+@media(max-width:360px){
+  html{font-size:14px}
+  .site-header-title{font-size:.92em;letter-spacing:1px}
+  .card-title{font-size:.9em}
+  .nav-tab{font-size:.76em;padding:8px 8px}
+  .lang-btn{padding:2px 6px;font-size:.68em}
+  .section-title{font-size:1em}
+  .more-btn{font-size:.8em;padding:7px 14px}
+}
+/* ── 320px: iPhone SE 1st gen / Galaxy A02 ─────────────────────────────────── */
+@media(max-width:320px){
+  html{font-size:13px}
+  .site-header-inner{padding:0 8px;gap:6px}
+  .site-header-title{font-size:.85em;letter-spacing:.5px}
+  .card-title{font-size:.85em;-webkit-line-clamp:2}
+  .articles-grid{gap:10px}
+  .main-wrapper{padding:10px 8px}
+  .lang-row{padding:3px 8px}
+}
+/* ── iOS safe-area-inset: notch / Dynamic Island / home bar ─────────────────── */
+@supports(padding-top:env(safe-area-inset-top)){
+  .sticky-header{padding-top:env(safe-area-inset-top)}
+  .back-to-top{bottom:calc(24px + env(safe-area-inset-bottom))}
+  .cookie-banner{padding-bottom:calc(14px + env(safe-area-inset-bottom))}
+}
 
 /* ====== SOURCE FILTER STRIP ====== */
 .src-strip{margin:0 0 18px}
@@ -2263,7 +2289,7 @@ PRIVACY_HTML = """\
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="description" content="سياسة خصوصية Atlas News — مجمّع إخباري متعدد اللغات">
 <title>سياسة الخصوصية — Atlas News</title>
@@ -2335,7 +2361,7 @@ ABOUT_HTML = """\
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="description" content="تعرف على Atlas News — مجمّع إخباري متعدد اللغات يغطي أخبار العالم بـ5 لغات">
 <title>من نحن — Atlas News</title>
@@ -2428,7 +2454,7 @@ PRIVACY_HTML_EN = """\
 <html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="description" content="Atlas News Privacy Policy — multilingual automated news aggregator">
 <title>Privacy Policy — Atlas News</title>
@@ -2493,7 +2519,7 @@ ABOUT_HTML_EN = """\
 <html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="description" content="About Atlas News — a multilingual automated news aggregator covering world news in 5 languages">
 <title>About — Atlas News</title>
@@ -2577,7 +2603,7 @@ PRIVACY_HTML_FR = """\
 <html lang="fr" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="description" content="Politique de confidentialité d'Atlas News — agrégateur d'actualités multilingue automatisé">
 <title>Politique de confidentialité — Atlas News</title>
@@ -2641,7 +2667,7 @@ ABOUT_HTML_FR = """\
 <html lang="fr" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="description" content="À propos d'Atlas News — agrégateur d'actualités multilingue automatisé en 5 langues">
 <title>À propos — Atlas News</title>
@@ -2725,7 +2751,7 @@ PRIVACY_HTML_ES = """\
 <html lang="es" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="description" content="Política de privacidad de Atlas News — agregador de noticias multilingüe automatizado">
 <title>Política de privacidad — Atlas News</title>
@@ -2789,7 +2815,7 @@ ABOUT_HTML_ES = """\
 <html lang="es" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="description" content="Acerca de Atlas News — agregador de noticias multilingüe automatizado en 5 idiomas">
 <title>Acerca de — Atlas News</title>
@@ -2873,7 +2899,7 @@ PRIVACY_HTML_TR = """\
 <html lang="tr" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="description" content="Atlas News gizlilik politikası — çok dilli otomatik haber toplayıcı">
 <title>Gizlilik Politikası — Atlas News</title>
@@ -2937,7 +2963,7 @@ ABOUT_HTML_TR = """\
 <html lang="tr" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="description" content="Atlas News hakkında — 5 dilde otomatik çok dilli haber toplayıcısı">
 <title>Hakkımızda — Atlas News</title>
@@ -3054,7 +3080,7 @@ CONTACT_HTML = """\
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>اتصل بنا — Atlas News</title>
 <meta name="description" content="تواصل مع فريق Atlas News — استفسارات، اقتراحات، وفرص الإعلان">
@@ -3114,7 +3140,7 @@ CONTACT_HTML_EN = """\
 <html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>Contact Us — Atlas News</title>
 <meta name="description" content="Get in touch with Atlas News — inquiries, suggestions, and advertising opportunities">
@@ -3174,7 +3200,7 @@ CONTACT_HTML_FR = """\
 <html lang="fr" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>Contactez-nous — Atlas News</title>
 <meta name="description" content="Contactez l'équipe Atlas News — questions, suggestions et opportunités publicitaires">
@@ -3231,7 +3257,7 @@ CONTACT_HTML_ES = """\
 <html lang="es" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>Contacto — Atlas News</title>
 <meta name="description" content="Contacta con el equipo de Atlas News — consultas, sugerencias y oportunidades publicitarias">
@@ -3288,7 +3314,7 @@ CONTACT_HTML_TR = """\
 <html lang="tr" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>Iletisim — Atlas News</title>
 <meta name="description" content="Atlas News ekibiyle iletisime gecin — sorular, oneriler ve reklam firsatlari">
@@ -3348,7 +3374,7 @@ TERMS_HTML = """\
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>شروط الاستخدام — Atlas News</title>
 <meta name="description" content="شروط وأحكام استخدام موقع Atlas News">
@@ -3411,7 +3437,7 @@ TERMS_HTML_EN = """\
 <html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>Terms of Use — Atlas News</title>
 <meta name="description" content="Terms and conditions for using Atlas News">
@@ -3474,7 +3500,7 @@ TERMS_HTML_FR = """\
 <html lang="fr" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>Conditions d'utilisation — Atlas News</title>
 <meta name="description" content="Conditions générales d'utilisation d'Atlas News">
@@ -3530,7 +3556,7 @@ TERMS_HTML_ES = """\
 <html lang="es" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>Términos de uso — Atlas News</title>
 <meta name="description" content="Términos y condiciones de uso de Atlas News">
@@ -3586,7 +3612,7 @@ TERMS_HTML_TR = """\
 <html lang="tr" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>Kullanim Kosullari — Atlas News</title>
 <meta name="description" content="Atlas News kullanim sartlari ve kosullari">
@@ -3645,7 +3671,7 @@ DMCA_HTML = """\
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>إشعار DMCA وطلبات إزالة المحتوى — Atlas News</title>
 <meta name="description" content="طلبات إزالة المحتوى وإشعارات DMCA على موقع Atlas News — نستجيب خلال 48 ساعة عمل">
@@ -3708,7 +3734,7 @@ DMCA_HTML_EN = """\
 <html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>DMCA Notice &amp; Takedown — Atlas News</title>
 <meta name="description" content="How to submit a DMCA takedown request for content on Atlas News">
@@ -3771,7 +3797,7 @@ DMCA_HTML_FR = """\
 <html lang="fr" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>Avis DMCA &amp; Retrait de contenu — Atlas News</title>
 <meta name="description" content="Comment soumettre une demande de retrait DMCA sur Atlas News">
@@ -3834,7 +3860,7 @@ DMCA_HTML_ES = """\
 <html lang="es" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>Aviso DMCA &amp; Eliminación de contenido — Atlas News</title>
 <meta name="description" content="Cómo enviar una solicitud de eliminación DMCA en Atlas News">
@@ -3897,7 +3923,7 @@ DMCA_HTML_TR = """\
 <html lang="tr" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>DMCA Bildirimi ve Icerik Kaldirma — Atlas News</title>
 <meta name="description" content="Atlas News'de DMCA kaldirma talepleri nasil gonderilir">
@@ -3963,7 +3989,7 @@ ADVERTISE_HTML = """\
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>أعلن معنا — Atlas News</title>
 <meta name="description" content="أعلن على Atlas News وصل إلى جمهور عالمي بـ 5 لغات — عروض الإعلانات والشراكات">
@@ -4034,7 +4060,7 @@ ADVERTISE_HTML_EN = """\
 <html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>Advertise with Us — Atlas News</title>
 <meta name="description" content="Advertise on Atlas News and reach a global audience in 5 languages — ad formats and partnership opportunities">
@@ -4105,7 +4131,7 @@ ADVERTISE_HTML_FR = """\
 <html lang="fr" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>Faites de la publicité avec nous — Atlas News</title>
 <meta name="description" content="Faites de la publicité sur Atlas News et touchez un public mondial en 5 langues">
@@ -4158,7 +4184,7 @@ ADVERTISE_HTML_ES = """\
 <html lang="es" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>Publicidad — Atlas News</title>
 <meta name="description" content="Anúnciate en Atlas News y llega a una audiencia global en 5 idiomas">
@@ -4211,7 +4237,7 @@ ADVERTISE_HTML_TR = """\
 <html lang="tr" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <title>Reklam Ver — Atlas News</title>
 <meta name="description" content="Atlas News'te reklam verin ve 5 dilde kuresel kitlelere ulasin">
@@ -5441,7 +5467,7 @@ def _article_page_html(
 <html lang="{_lang}" dir="{_dir}">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <title>{title_esc} — {esc(site_title)}</title>
   <meta name="description" content="{esc(meta_desc)}">
@@ -5469,6 +5495,10 @@ def _article_page_html(
   <link rel="apple-touch-icon" sizes="180x180" href="../icon-192.png">
   <link rel="manifest" href="../manifest.json">
   <meta name="theme-color" content="{esc(s.get('theme_color', '#1d4ed8'))}">
+  <!-- Apple PWA / iOS Home Screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="{esc(site_title)}">
   <!-- LCP: preload hero image for faster rendering -->
 {(f'  <link rel="preload" href="{esc(image_url)}" as="image" fetchpriority="high">' if image_url else "")}
   <!-- Fonts -->
@@ -5553,7 +5583,7 @@ def _page(*, title: str, desc: str, nav_html: str,
 <html lang="{s["lang"]}" dir="{s["dir"]}">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <meta name="google-site-verification" content="S3p0K9iOQqP3aAeKp_xq8anLJEunF-LDN4cPldiVaUY">
   <title>{esc(title)}</title>
@@ -5579,6 +5609,10 @@ def _page(*, title: str, desc: str, nav_html: str,
   <!-- PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="{esc(s.get("theme_color","#1d4ed8"))}">
+  <!-- Apple PWA / iOS Home Screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="{esc(title)}">
   <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="{esc(title)}" href="{esc(rss_url)}">
   <!-- Critical CSS — initial skeleton shown instantly before style.css loads.
