@@ -4552,7 +4552,7 @@
     },
     {
       "slug": "vid-news",
-      "name": "أحداث",
+      "name": "مرئيات",
       "icon": "📰",
       "sources": [
         {
@@ -4955,7 +4955,7 @@
   "media_regions": [
     {
       "slug": "vid-news",
-      "name": "أحداث",
+      "name": "مرئيات",
       "icon": "📰"
     },
     {

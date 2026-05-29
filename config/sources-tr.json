@@ -634,7 +634,7 @@
     },
     {
       "slug": "vid-news",
-      "name": "Haberler",
+      "name": "Videolar",
       "icon": "📰",
       "sources": [
         {
@@ -953,7 +953,7 @@
   "media_regions": [
     {
       "slug": "vid-news",
-      "name": "Haberler",
+      "name": "Videolar",
       "icon": "📰"
     },
     {

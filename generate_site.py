@@ -6248,6 +6248,26 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
 
     articles_by_cat = get_articles_by_category(days=oldest_days)
     categories      = config["categories"]
+
+    # ── Auto-hide empty video sections (0 configured sources) ─────────────────
+    # A vid-* section with no sources only ever produces an empty page and a dead
+    # link in the media subnav. Remove such sections from categories AND
+    # media_regions so they vanish everywhere (nav, subnav, generation, sitemap).
+    # Their config definition stays intact, so they reappear automatically the
+    # moment sources are added — no code change needed.
+    _src_count = {c["slug"]: len(c.get("sources", [])) for c in categories}
+    _empty_vid = {
+        r["slug"] for r in media_regions_list
+        if _src_count.get(r["slug"], 0) == 0
+    }
+    if _empty_vid:
+        categories         = [c for c in categories if c["slug"] not in _empty_vid]
+        media_regions_list = [r for r in media_regions_list if r["slug"] not in _empty_vid]
+        media_slugs_local  = {r["slug"] for r in media_regions_list}
+        has_media          = bool(media_regions_list)
+        logger.info("Auto-hid %d empty video section(s): %s",
+                    len(_empty_vid), ", ".join(sorted(_empty_vid)))
+
     now             = datetime.now().strftime("%Y-%m-%d %H:%M")
     today_ar        = datetime.now().strftime("%Y/%m/%d")
 

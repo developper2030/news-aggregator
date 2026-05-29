@@ -557,7 +557,7 @@
     },
     {
       "slug": "vid-news",
-      "name": "Actualités",
+      "name": "Vidéos",
       "icon": "📰",
       "sources": [
         {
@@ -863,7 +863,7 @@
   "media_regions": [
     {
       "slug": "vid-news",
-      "name": "Actualités",
+      "name": "Vidéos",
       "icon": "📰"
     },
     {
