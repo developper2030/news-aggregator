@@ -1352,7 +1352,7 @@ ul,ol{list-style:none}
 
 /* ===================== ARTICLE CARD ===================== */
 @keyframes cardIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-.article-card{border-radius:var(--radius);overflow:hidden;box-shadow:var(--card-shadow);transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s;border:1px solid var(--border);animation:cardIn .42s ease both;aspect-ratio:4/3;position:relative;background:#1a2744}
+.article-card{border-radius:var(--radius);overflow:hidden;box-shadow:var(--card-shadow);transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s;border:1px solid var(--border);animation:cardIn .42s ease both;aspect-ratio:4/3;position:relative;background:#1a2744;display:grid;grid-template-rows:1fr}
 .article-card:nth-child(2){animation-delay:.07s}
 .article-card:nth-child(3){animation-delay:.14s}
 .article-card:nth-child(4){animation-delay:.21s}
@@ -1361,7 +1361,7 @@ ul,ol{list-style:none}
 .article-card:nth-child(7){animation-delay:.21s}
 .article-card:nth-child(8){animation-delay:.28s}
 .article-card:hover{transform:translateY(-4px);box-shadow:var(--card-shadow-hover)}
-.card-link{display:block;position:absolute;inset:0;color:inherit;text-decoration:none}
+.card-link{display:block;grid-area:1/1;position:relative;min-height:0;color:inherit;text-decoration:none}
 .card-bg{position:absolute;inset:0;overflow:hidden}
 .card-bg-img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;transition:transform .5s ease}
 .article-card:hover .card-bg-img{transform:scale(1.07)}
@@ -1670,14 +1670,16 @@ body.lang-ltr .nh-text{direction:ltr}
 .card-ai{font-size:.75em;line-height:1.5;color:rgba(255,255,255,.9);overflow:hidden;max-height:0;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;transition:max-height .2s ease}
 .article-card:hover .card-ai{max-height:3em}
 .article-card.card--no-img .card-ai{color:var(--text-muted);max-height:3em}
-/* ====== SHARE BUTTONS — bottom bar, full-width ====== */
-.card-share{position:absolute;bottom:0;left:0;right:0;inset-inline-start:0;inset-inline-end:0;display:flex;gap:5px;justify-content:center;align-items:center;padding:5px 12px;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s;z-index:10}
-.article-card:hover .card-share{opacity:1;transform:translateY(0)}
+/* ====== SHARE BUTTONS — bottom bar, CSS Grid overlay ====== */
+/* grid-area:1/1 overlaps card-link in same cell; align-self:end anchors to bottom.
+   Fixes Safari iOS aspect-ratio bug (absolute+bottom:0 failed on indefinite block-size). */
+.card-share{grid-area:1/1;align-self:end;display:flex;gap:5px;justify-content:center;align-items:center;padding:5px 12px;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;pointer-events:none;transform:translateY(4px);transition:opacity .2s,transform .2s;z-index:2}
+.article-card:hover .card-share{opacity:1;transform:translateY(0);pointer-events:auto}
 /* Push card-body content up on hover so it clears the share bar */
 .article-card:hover .card-body{padding-bottom:42px}
 @media(pointer:coarse){
   /* On touch: share bar always visible, body always leaves room */
-  .card-share{opacity:1;transform:none}
+  .card-share{opacity:1;transform:none;pointer-events:auto}
   .card-body{padding-bottom:42px}
   .share-btn{width:30px;height:30px;font-size:.76em}
 }
