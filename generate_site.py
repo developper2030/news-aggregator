@@ -1386,6 +1386,8 @@ ul,ol{list-style:none}
 .section-header::after{content:'';position:absolute;left:0;top:0;bottom:0;width:40%;background:linear-gradient(90deg,rgba(99,102,241,.04),transparent);pointer-events:none}
 .section-icon{font-size:1.5em}
 .section-title{font-size:1.3em;font-weight:800;letter-spacing:-.3px}
+.section-title-link{color:inherit;text-decoration:none;transition:color .15s}
+.section-title-link:hover{color:var(--accent)}
 
 /* ===================== ARTICLES GRID ===================== */
 .articles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
@@ -4600,7 +4602,7 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
     if image and image != "#":
         bg_html = (
             f'<div class="card-bg">'
-            f'<img class="card-bg-img" src="{image}" alt="" loading="lazy" '
+            f'<img class="card-bg-img" src="{image}" alt="{esc(title_raw)}" loading="lazy" '
             f'onerror="this.closest(\'article\').classList.add(\'card--no-img\')">'
             f'</div>'
         )
@@ -5175,25 +5177,38 @@ def _article_page_html(
     art_hash  = hashlib.md5(ext_url.encode("utf-8")).hexdigest()[:12]
     canon_url = f"{site_url.rstrip('/')}/article/{art_hash}.html" if site_url else ""
 
+    # ── News keywords (title words > 3 chars) — used in JSON-LD + meta ───────
+    import re as _re
+    kws = [w for w in _re.split(r'\W+', title_raw) if len(w) > 3][:10]
+
     # ── JSON-LD: NewsArticle ─────────────────────────────────────────────────
+    _root_for_ld = site_url.rstrip("/").rsplit("/article", 1)[0].rsplit("/ar", 1)[0].rsplit("/fr", 1)[0].rsplit("/es", 1)[0].rsplit("/tr", 1)[0]
     _publisher = {
         "@type": "Organization",
         "name":  site_title,
-        "logo":  {"@type": "ImageObject", "url": f"{site_url.rstrip('/')}/favicon.svg"} if site_url else {},
+        "logo":  {
+            "@type":  "ImageObject",
+            "url":    f"{_root_for_ld}/icon-512.png",
+            "width":  512,
+            "height": 512,
+        } if site_url else {},
     }
+    _author_name = SOURCE_AR_NAME.get(source_raw, source_raw)
     _ld = {
         "@context":         "https://schema.org",
         "@type":            "NewsArticle",
         "headline":         title_raw[:110],
         "datePublished":    scraped_dt,
         "dateModified":     scraped_dt,
-        "author":           {"@type": "Organization", "name": SOURCE_AR_NAME.get(source_raw, source_raw)},
+        "author":           {"@type": "Organization", "name": _author_name, "url": art.get("url", "")},
         "publisher":        _publisher,
         "description":      ai_summary[:300] if ai_summary else title_raw[:200],
         "isAccessibleForFree": True,
         "inLanguage":       s["in_language"],
         "url":              canon_url,
         "mainEntityOfPage": {"@type": "WebPage", "@id": canon_url},
+        "articleSection":   cat_name,
+        "keywords":         ", ".join(kws) if kws else title_raw[:100],
     }
     if image_url:
         _ld["image"] = {"@type": "ImageObject", "url": image_url}
@@ -5278,9 +5293,7 @@ def _article_page_html(
             f'  <meta name="twitter:image" content="{esc(image_url)}">'
         )
 
-    # ── News keywords (top words from title) ─────────────────────────────────
-    import re as _re
-    kws = [w for w in _re.split(r'\W+', title_raw) if len(w) > 3][:10]
+    # ── news_keywords meta tag (kws computed before JSON-LD block above) ──────
     kw_meta = (
         f'  <meta name="news_keywords" content="{esc(", ".join(kws))}">'
     ) if kws else ""
@@ -5306,7 +5319,9 @@ def _article_page_html(
   <meta property="og:locale" content="{esc(s.get('og_locale', 'ar_MA'))}">
   <meta property="og:url" content="{esc(canon_url)}">
   <meta property="article:published_time" content="{esc(scraped_dt)}">
-{og_img_tags}
+  <meta property="article:modified_time" content="{esc(scraped_dt)}">
+  <meta property="article:section" content="{esc(cat_name)}">
+{("  " + chr(10).join(f'<meta property="article:tag" content="{esc(k)}">' for k in kws[:5]) + chr(10)) if kws else ""}{og_img_tags}
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{title_esc}">
@@ -5319,6 +5334,8 @@ def _article_page_html(
   <link rel="apple-touch-icon" sizes="180x180" href="../icon-192.png">
   <link rel="manifest" href="../manifest.json">
   <meta name="theme-color" content="{esc(s.get('theme_color', '#1d4ed8'))}">
+  <!-- LCP: preload hero image for faster rendering -->
+{(f'  <link rel="preload" href="{esc(image_url)}" as="image" fetchpriority="high">' if image_url else "")}
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -6025,7 +6042,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             f'<section class="category-section" id="{esc(slug)}" aria-label="{esc(cat["name"])}">'
             f'<div class="section-header" style="border-inline-start-color:{esc(color)}">'
             f'<span class="section-icon">{esc(cat.get("icon","📰"))}</span>'
-            f'<h2 class="section-title">{esc(cat["name"])}</h2>'
+            f'<h2 class="section-title"><a href="{esc(slug)}.html" class="section-title-link">{esc(cat["name"])}</a></h2>'
             f'</div>'
             f'<div class="articles-grid">{cards}</div>'
             f'{more_btn}'
