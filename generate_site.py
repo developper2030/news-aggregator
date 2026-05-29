@@ -2267,6 +2267,9 @@ ABOUT_HTML = """\
 
   <h2>إخلاء المسؤولية</h2>
   <p>هذا الموقع هو مجمّع إخباري آلي. جميع المقالات مرتبطة بمصادرها الأصلية ونحن لسنا مسؤولين عن محتواها. قد يعرض الموقع إعلانات من خلال Google AdSense، لمزيد من التفاصيل راجع <a href="privacy.html">سياسة الخصوصية</a>.</p>
+
+  <h2>الناشر</h2>
+  <p>Atlas News موقع إخباري مُشغَّل من قِبل <strong>مطور مستقل</strong>. للتواصل: <a href="contact.html">صفحة التواصل</a> أو <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>.</p>
 </div>
 <script src="app.js"></script>
 </body>
@@ -2413,6 +2416,9 @@ body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}
   </ul>
   <h2>Disclaimer</h2>
   <p>This site is an automated news aggregator. All articles link to their original sources and we are not responsible for their content. The site may display ads via Google AdSense; see <a href="privacy.html">Privacy Policy</a> for details.</p>
+
+  <h2>Publisher</h2>
+  <p>Atlas News is operated by an <strong>independent developer</strong>. Contact: <a href="contact.html">contact page</a> or <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>.</p>
 </div>
 <script src="app.js"></script>
 </body>
@@ -2558,6 +2564,9 @@ ABOUT_HTML_FR = """\
   </ul>
   <h2>Avertissement</h2>
   <p>Ce site est un agrégateur automatique. Tous les articles renvoient à leurs sources originales. Consultez la <a href="privacy.html">politique de confidentialité</a> pour les détails sur la publicité.</p>
+
+  <h2>Éditeur</h2>
+  <p>Atlas News est géré par un <strong>développeur indépendant</strong>. Contact : <a href="contact.html">page de contact</a> ou <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>.</p>
 </div>
 <script src="app.js"></script>
 </body>
@@ -2703,6 +2712,9 @@ ABOUT_HTML_ES = """\
   </ul>
   <h2>Aviso legal</h2>
   <p>Este sitio es un agregador automático. Todos los artículos enlazan a sus fuentes originales. Consulta la <a href="privacy.html">política de privacidad</a> para detalles sobre publicidad.</p>
+
+  <h2>Editor</h2>
+  <p>Atlas News es gestionado por un <strong>desarrollador independiente</strong>. Contacto: <a href="contact.html">página de contacto</a> o <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>.</p>
 </div>
 <script src="app.js"></script>
 </body>
@@ -2845,6 +2857,8 @@ ABOUT_HTML_TR = """\
   </ul>
   <h2>Yasal Uyarı</h2>
   <p>Bu site otomatik bir toplayıcıdır. Tüm makaleler orijinal kaynaklarına bağlantı verir. Reklamlar hakkında ayrıntılar için <a href="privacy.html">Gizlilik Politikası</a>'nı inceleyin.</p>
+  <h2>Yayıncı</h2>
+  <p>Atlas News, bir <strong>bağımsız geliştirici</strong> tarafından işletilmektedir. Şeffaflık veya içerik hakkında sorularınız için <a href="contact.html">iletişim sayfamızı</a> ziyaret edin ya da <a href="mailto:contact@solvixi.com">contact@solvixi.com</a> adresine e-posta gönderin.</p>
 </div>
 <script src="app.js"></script>
 </body>
@@ -3217,6 +3231,7 @@ TERMS_HTML = """\
 
   <h2>3. الملكية الفكرية</h2>
   <p>جميع عناوين الأخبار وصور المقالات هي ملك لأصحابها الأصليين. يتم عرضها استناداً إلى مبدأ الاقتباس المنصف (Fair Use) لأغراض إخبارية. إذا كنت صاحب محتوى وترغب في إزالته، تواصل معنا على <a href="mailto:report@solvixi.com">report@solvixi.com</a>.</p>
+  <p>تُولَّد الملخصات الإضافية بواسطة الذكاء الاصطناعي انطلاقاً من <strong>وصف RSS</strong> الذي ينشره الناشر الأصلي عبر خلاصته العامة — وليست نسخاً حرفية من نص المقالة الكاملة.</p>
 
   <h2>4. إخلاء المسؤولية</h2>
   <p>يُقدَّم الموقع "كما هو" دون أي ضمانات صريحة أو ضمنية. لا نضمن دقة أو اكتمال أو توافر المحتوى في أي وقت. لن نكون مسؤولين عن أي أضرار مباشرة أو غير مباشرة ناتجة عن استخدام الموقع.</p>
@@ -3279,6 +3294,7 @@ TERMS_HTML_EN = """\
 
   <h2>3. Intellectual Property</h2>
   <p>All news headlines and article images are the property of their respective owners. They are displayed under the principle of Fair Use for news aggregation purposes. If you are a content owner and wish to have content removed, contact us at <a href="mailto:report@solvixi.com">report@solvixi.com</a>.</p>
+  <p>AI-generated summaries are derived from the <strong>RSS description</strong> published by the original source in their public feed — they are not verbatim copies of the full article text.</p>
 
   <h2>4. Disclaimer of Warranties</h2>
   <p>The site is provided "as is" without any express or implied warranties. We do not guarantee the accuracy, completeness, or availability of content at any time. We shall not be liable for any direct or indirect damages resulting from use of the site.</p>
@@ -3335,6 +3351,7 @@ TERMS_HTML_FR = """\
 
   <h2>3. Propriété intellectuelle</h2>
   <p>Tous les titres et images d'articles appartiennent à leurs propriétaires respectifs. Si vous êtes propriétaire d'un contenu et souhaitez qu'il soit retiré, contactez-nous : <a href="mailto:report@solvixi.com">report@solvixi.com</a>.</p>
+  <p>Les résumés générés par l'IA sont dérivés de la <strong>description RSS</strong> publiée par la source originale dans son flux public — il ne s'agit pas de copies textuelles de l'article complet.</p>
 
   <h2>4. Limitation de responsabilité</h2>
   <p>Le site est fourni "tel quel" sans garantie d'aucune sorte. Nous ne garantissons pas l'exactitude, l'exhaustivité ou la disponibilité du contenu.</p>
@@ -3390,6 +3407,7 @@ TERMS_HTML_ES = """\
 
   <h2>3. Propiedad intelectual</h2>
   <p>Todos los titulares e imágenes pertenecen a sus respectivos propietarios. Si eres propietario de contenido y deseas que sea eliminado, contáctanos: <a href="mailto:report@solvixi.com">report@solvixi.com</a>.</p>
+  <p>Los resúmenes generados por IA se derivan de la <strong>descripción RSS</strong> publicada por la fuente original en su feed público — no son copias literales del texto completo del artículo.</p>
 
   <h2>4. Limitación de responsabilidad</h2>
   <p>El sitio se proporciona "tal cual" sin garantías de ningún tipo. No garantizamos la exactitud, integridad o disponibilidad del contenido en ningún momento.</p>
@@ -3445,6 +3463,7 @@ TERMS_HTML_TR = """\
 
   <h2>3. Fikri Mülkiyet</h2>
   <p>Tüm haber basliklari ve görseller ilgili sahiplerine aittir. Icerik kaldirma talebi icin: <a href="mailto:report@solvixi.com">report@solvixi.com</a></p>
+  <p>Yapay zeka tarafından oluşturulan özetler, orijinal kaynağın genel beslemesinde yayımladığı <strong>RSS açıklamasından</strong> üretilmektedir — bunlar makalenin tam metninin birebir kopyaları değildir.</p>
 
   <h2>4. Sorumluluk Reddi</h2>
   <p>Site "oldugu gibi" sunulmaktadir. Icerik dogrulugu, eksiksizligi veya kullanilabilirligi konusunda hicbir garanti vermiyoruz.</p>
@@ -4094,11 +4113,51 @@ ADVERTISE_HTML_TR = """\
 """
 
 ROBOTS_TXT = """\
-User-agent: *
+# Atlas News — robots.txt
+# https://atlasnews.solvixi.com
+
+User-agent: Googlebot
 Allow: /
 Disallow: /admin
 
-# Sitemap: https://YOUR-DOMAIN/sitemap.xml
+User-agent: Googlebot-News
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin
+Crawl-delay: 5
+
+User-agent: SemrushBot
+Crawl-delay: 30
+Disallow: /article/
+
+User-agent: AhrefsBot
+Crawl-delay: 30
+Disallow: /article/
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: GPTBot
+Crawl-delay: 30
+
+User-agent: PerplexityBot
+Crawl-delay: 30
+
+User-agent: anthropic-ai
+Crawl-delay: 30
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Crawl-delay: 10
+
+Sitemap: https://atlasnews.solvixi.com/sitemap.xml
+Sitemap: https://atlasnews.solvixi.com/news-sitemap.xml
 """
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -6186,12 +6245,41 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         )
         _wrt("sitemap.xml", _sitemap_xml)
 
-        # Update robots.txt with the absolute sitemap URL
+        # Update robots.txt with full bot rules + absolute sitemap URLs
         _robots = (
-            "User-agent: *\n"
+            f"# Atlas News — robots.txt\n"
+            f"# {_base}\n\n"
+            "User-agent: Googlebot\n"
             "Allow: /\n"
             "Disallow: /admin\n\n"
+            "User-agent: Googlebot-News\n"
+            "Allow: /\n\n"
+            "User-agent: Bingbot\n"
+            "Allow: /\n"
+            "Disallow: /admin\n"
+            "Crawl-delay: 5\n\n"
+            "User-agent: SemrushBot\n"
+            "Crawl-delay: 30\n"
+            "Disallow: /article/\n\n"
+            "User-agent: AhrefsBot\n"
+            "Crawl-delay: 30\n"
+            "Disallow: /article/\n\n"
+            "User-agent: MJ12bot\n"
+            "Disallow: /\n\n"
+            "User-agent: DotBot\n"
+            "Disallow: /\n\n"
+            "User-agent: GPTBot\n"
+            "Crawl-delay: 30\n\n"
+            "User-agent: PerplexityBot\n"
+            "Crawl-delay: 30\n\n"
+            "User-agent: anthropic-ai\n"
+            "Crawl-delay: 30\n\n"
+            "User-agent: *\n"
+            "Allow: /\n"
+            "Disallow: /admin\n"
+            "Crawl-delay: 10\n\n"
             f"Sitemap: {_base}/sitemap.xml\n"
+            f"Sitemap: {_base}/news-sitemap.xml\n"
         )
         _wrt("robots.txt", _robots)
         logger.info("SEO: sitemap.xml written for %s", _base)
