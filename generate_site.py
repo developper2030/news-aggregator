@@ -1552,8 +1552,8 @@ body.lang-ltr .nh-text{direction:ltr}
   /* Nav: larger touch targets, visible active indicator */
   .nav-tab{padding:10px 12px;font-size:.83em}
   .nav-tab.active{box-shadow:inset 0 -3px 0 var(--accent)}
-  /* World subnav touch scrolling */
-  .world-subnav-inner{-webkit-overflow-scrolling:touch}
+  /* World subnav: hide on mobile — saves ~32px of sticky header height */
+  .world-subnav{display:none}
 }
 @media(max-width:480px){
   .articles-grid{grid-template-columns:1fr}
