@@ -2265,34 +2265,49 @@ function initSourceFilter() {
 
 /* ========== RELATIVE TIME — "منذ 20 دقيقة" / "2 hours ago" ========== */
 (function() {
-  if (!window.Intl || !Intl.RelativeTimeFormat) return; // old-browser guard
   var lang = document.documentElement.lang || 'en';
-  var rtf  = new Intl.RelativeTimeFormat(lang, {numeric: 'auto'});
+  var hasRTF = window.Intl && Intl.RelativeTimeFormat;
+  var rtf = hasRTF ? new Intl.RelativeTimeFormat(lang, {numeric: 'auto'}) : null;
 
   function toRelative(dtStr) {
     if (!dtStr) return null;
-    var d = new Date(dtStr);
-    if (isNaN(d)) return null;
-    var diffSec = Math.round((d - Date.now()) / 1000);
-    var abs = Math.abs(diffSec);
-    if (abs < 60)   return rtf.format(diffSec,                 'second');
-    var diffMin = Math.round(diffSec / 60);
-    if (abs < 3600) return rtf.format(diffMin,                 'minute');
-    var diffHr  = Math.round(diffMin / 60);
-    if (abs < 86400) return rtf.format(diffHr,                  'hour');
-    var diffDay = Math.round(diffHr / 24);
-    if (abs < 2592000) return rtf.format(diffDay,              'day');
-    return null; // older than 30 days → keep original date string
+    // Accept both "YYYY-MM-DD HH:MM:SS" and ISO formats
+    var norm = dtStr.replace(' ', 'T');
+    if (norm.length === 10) norm += 'T00:00:00Z';         // date only
+    if (norm.length === 19) norm += '+00:00';             // no tz
+    var d = new Date(norm);
+    if (isNaN(d.getTime())) return null;
+    var sec = Math.round((d.getTime() - Date.now()) / 1000);
+    var abs = Math.abs(sec);
+    if (!hasRTF) {
+      // Fallback: simple labels without Intl
+      if (abs < 3600)  return Math.round(abs/60)  + ' min';
+      if (abs < 86400) return Math.round(abs/3600) + ' h';
+      return Math.round(abs/86400) + ' d';
+    }
+    if (abs < 60)      return rtf.format(Math.round(sec),        'second');
+    if (abs < 3600)    return rtf.format(Math.round(sec/60),     'minute');
+    if (abs < 86400)   return rtf.format(Math.round(sec/3600),   'hour');
+    if (abs < 5184000) return rtf.format(Math.round(sec/86400),  'day');   // 60 days
+    return null;
   }
 
-  document.querySelectorAll('time[datetime]').forEach(function(el) {
-    var rel = toRelative(el.getAttribute('datetime'));
-    if (rel) {
-      // Keep original date as tooltip for accessibility
-      if (!el.title) el.title = el.textContent;
-      el.textContent = rel;
-    }
-  });
+  function run() {
+    document.querySelectorAll('time[datetime]').forEach(function(el) {
+      var rel = toRelative(el.getAttribute('datetime'));
+      if (rel) {
+        if (!el.title) el.title = el.textContent.trim();
+        el.textContent = rel;
+      }
+    });
+  }
+
+  // Run immediately + after DOM ready (handles dynamically added content)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
 })();
 
 /* ========== SHARE — copy link ========== */
