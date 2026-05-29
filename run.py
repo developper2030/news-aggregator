@@ -84,8 +84,10 @@ def _load_api_keys() -> dict:
     except (FileNotFoundError, _json.JSONDecodeError):
         pass
     return {
-        "gemini": (file_keys.get("gemini") or os.environ.get("GEMINI_API_KEY", "")).strip(),
-        "groq":   (file_keys.get("groq")   or os.environ.get("GROQ_API_KEY",   "")).strip(),
+        "gemini":      (file_keys.get("gemini")      or os.environ.get("GEMINI_API_KEY",      "")).strip(),
+        "openrouter":  (file_keys.get("openrouter")  or os.environ.get("OPENROUTER_API_KEY",  "")).strip(),
+        "nvidia":      (file_keys.get("nvidia")      or os.environ.get("NVIDIA_API_KEY",      "")).strip(),
+        "groq":        (file_keys.get("groq")        or os.environ.get("GROQ_API_KEY",        "")).strip(),
     }
 
 
@@ -101,27 +103,39 @@ def scrape(langs: list[str]) -> None:
 
 def summarize(langs: list[str]) -> None:
     """Run AI summarization for the given language(s)."""
-    keys = _load_api_keys()
-    gemini_key = keys["gemini"]
-    groq_key   = keys["groq"]
+    keys          = _load_api_keys()
+    gemini_key    = keys["gemini"]
+    openrouter_key= keys["openrouter"]
+    nvidia_key    = keys["nvidia"]
+    groq_key      = keys["groq"]
 
-    if not gemini_key and not groq_key:
-        print("\n[AI] No Gemini or Groq API key — skipping summaries")
+    if not any([gemini_key, openrouter_key, nvidia_key, groq_key]):
+        print("\n[AI] No API key found (Gemini / OpenRouter / NVIDIA / Groq) — skipping summaries")
         return
 
-    provider = "Gemini" if gemini_key else "Groq"
+    # Determine active provider for logging
+    if gemini_key:         provider = "Gemini"
+    elif openrouter_key:   provider = "OpenRouter"
+    elif nvidia_key:       provider = "NVIDIA NIM"
+    else:                  provider = "Groq"
     print(f"\n[AI] Generating summaries with {provider}…")
 
-    # Gemini free tier: 1500 req/day ÷ (5 langs × 4 CI runs) = 75/lang/run
-    # Groq free tier: fast but rate-limited — keep at 100 to fit inside 45-min CI timeout
-    # (250 × 5 langs × ~2.5s = 52 min → exceeds timeout; 100 × 5 × 2.5s = 21 min ✓)
-    _batch = 75 if gemini_key else 100
+    # Batch sizes tuned to free-tier daily limits ÷ (5 langs × 4 CI runs/day):
+    #   Gemini:      1500/day → 75/lang/run  (6 min total)
+    #   OpenRouter:  ~1000/day free → 50/lang/run
+    #   NVIDIA/Groq: generous → 100/lang/run  (21 min total, fits in 75-min timeout)
+    if gemini_key:        _batch = 75
+    elif openrouter_key:  _batch = 50
+    else:                 _batch = 100   # NVIDIA or Groq
+
     for code in langs:
         n = summarize_articles(
             db_path=LANGS[code]["db"],
             lang=code,
             batch_size=_batch,
             gemini_key=gemini_key,
+            openrouter_key=openrouter_key,
+            nvidia_key=nvidia_key,
             groq_key=groq_key,
         )
         if n:

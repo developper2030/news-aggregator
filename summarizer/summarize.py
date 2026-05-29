@@ -1,16 +1,25 @@
 """
 AI Article Summarizer — Atlas News
-Supports two backends (auto-detected from available API keys):
+Supports four backends (auto-selected by available API keys):
 
-  1. Google Gemini 2.0 Flash-Lite (preferred)
+  1. Google Gemini 2.5 Flash  (GEMINI_API_KEY)
        Free tier: 30 req/min, 1 500 req/day
-       No Cloudflare blocking, fastest responses.
+       Fastest + highest quality.  batch=75/lang/run
 
-  2. Groq llama-3.1-8b-instant (fallback)
+  2. OpenRouter               (OPENROUTER_API_KEY)
+       Free tier: models marked :free (Llama 3.3-70B, etc.)
+       Higher quality than Groq 8B.  batch=50/lang/run
+
+  3. NVIDIA NIM               (NVIDIA_API_KEY)
+       Free starter credits, then pay-per-use.
+       High quality 70B models.  batch=100/lang/run
+
+  4. Groq llama-3.1-8b-instant (GROQ_API_KEY)
        Free tier: 30 req/min, 14 400 req/day
-       Needs `requests` library to bypass Cloudflare TLS fingerprinting.
+       Best free daily quota.  batch=100/lang/run
 
-Priority: Gemini > Groq.  If neither key is present the step is silently skipped.
+Priority: Gemini > OpenRouter > NVIDIA > Groq
+If no key is present the step is silently skipped.
 
 - Summaries are stored in the DB and never re-generated for the same article.
 - RSS descriptions scraped at scrape-time already fill most ai_summary fields;
@@ -31,19 +40,29 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-# ── Groq ──────────────────────────────────────────────────────────────────────
-GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
-GROQ_MODEL   = "llama-3.1-8b-instant"
-
 # ── Gemini ────────────────────────────────────────────────────────────────────
 GEMINI_API_URL = (
     "https://generativelanguage.googleapis.com/v1beta/models/"
     "gemini-2.5-flash:generateContent"
 )
 
-# Rate limits (per-request sleep to stay under free-tier caps)
-# Groq:   30 req/min → 2.1 s/req
-# Gemini: 30 req/min → 2.1 s/req  (flash-lite has 30 RPM on free tier)
+# ── OpenRouter (OpenAI-compatible) ────────────────────────────────────────────
+OPENROUTER_API_URL   = "https://openrouter.ai/api/v1/chat/completions"
+OPENROUTER_MODEL     = "meta-llama/llama-3.3-70b-instruct:free"
+OPENROUTER_SITE_URL  = "https://atlasnews.solvixi.com"
+OPENROUTER_SITE_NAME = "Atlas News"
+
+# ── NVIDIA NIM (OpenAI-compatible) ────────────────────────────────────────────
+NVIDIA_API_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
+NVIDIA_MODEL   = "meta/llama-3.1-8b-instruct"
+
+# ── Groq (OpenAI-compatible) ──────────────────────────────────────────────────
+GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
+GROQ_MODEL   = "llama-3.1-8b-instant"
+
+# Rate limits — conservative sleep to stay under free-tier caps
+# All OpenAI-compat providers: ~30 req/min → 2.1 s/req
+# Gemini: 30 req/min → 2.1 s/req
 _REQUEST_DELAY = 2.1
 
 # Language names for the prompt
@@ -119,51 +138,76 @@ def _call_gemini(title: str, lang: str, api_key: str) -> str:
         raise ValueError(f"Unexpected Gemini response structure: {data}") from exc
 
 
-# ── Groq call ─────────────────────────────────────────────────────────────────
+# ── Generic OpenAI-compatible caller (Groq / OpenRouter / NVIDIA) ─────────────
 
-def _call_groq(title: str, lang: str, api_key: str) -> str:
-    """Call Groq API and return the summary text. Raises on failure."""
+def _call_openai_compat(
+    title: str, lang: str, api_key: str,
+    url: str, model: str,
+    extra_headers: dict | None = None,
+) -> str:
+    """Call any OpenAI-compatible /v1/chat/completions endpoint."""
     payload = {
-        "model": GROQ_MODEL,
-        "messages": [{"role": "user", "content": _build_prompt(title, lang)}],
-        "max_tokens": 150,
+        "model":       model,
+        "messages":    [{"role": "user", "content": _build_prompt(title, lang)}],
+        "max_tokens":  150,
         "temperature": 0.4,
     }
     headers = {
         "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-        "User-Agent": "python-requests/2.31.0",
-        "Accept": "application/json",
+        "Content-Type":  "application/json",
+        "User-Agent":    "python-requests/2.31.0",
+        "Accept":        "application/json",
+        **(extra_headers or {}),
     }
-
     if _USE_REQUESTS:
-        resp = _requests.post(GROQ_API_URL, json=payload,
-                              headers=headers, timeout=15)
+        resp = _requests.post(url, json=payload, headers=headers, timeout=20)
         resp.raise_for_status()
         return resp.json()["choices"][0]["message"]["content"].strip()
     else:
         import urllib.request as _ur
-        req = _ur.Request(
-            GROQ_API_URL,
+        _req = _ur.Request(
+            url,
             data=json.dumps(payload).encode("utf-8"),
             headers=headers,
             method="POST",
         )
-        with _ur.urlopen(req, timeout=15) as r:
+        with _ur.urlopen(_req, timeout=20) as r:
             result = json.loads(r.read().decode("utf-8"))
         return result["choices"][0]["message"]["content"].strip()
 
 
 # ── Unified caller ────────────────────────────────────────────────────────────
 
-def _call_api(title: str, lang: str,
-              gemini_key: str = "", groq_key: str = "") -> str:
-    """Try Gemini first, fall back to Groq. Raises if both fail."""
+def _call_api(
+    title: str, lang: str,
+    gemini_key: str = "",
+    openrouter_key: str = "",
+    nvidia_key: str = "",
+    groq_key: str = "",
+) -> str:
+    """Try providers in priority order: Gemini > OpenRouter > NVIDIA > Groq."""
     if gemini_key:
         return _call_gemini(title, lang, gemini_key)
+    if openrouter_key:
+        return _call_openai_compat(
+            title, lang, openrouter_key,
+            url=OPENROUTER_API_URL, model=OPENROUTER_MODEL,
+            extra_headers={
+                "HTTP-Referer": OPENROUTER_SITE_URL,
+                "X-Title":      OPENROUTER_SITE_NAME,
+            },
+        )
+    if nvidia_key:
+        return _call_openai_compat(
+            title, lang, nvidia_key,
+            url=NVIDIA_API_URL, model=NVIDIA_MODEL,
+        )
     if groq_key:
-        return _call_groq(title, lang, groq_key)
-    raise ValueError("No API key provided (gemini or groq)")
+        return _call_openai_compat(
+            title, lang, groq_key,
+            url=GROQ_API_URL, model=GROQ_MODEL,
+        )
+    raise ValueError("No API key provided")
 
 
 # ── Public entry-point ────────────────────────────────────────────────────────
@@ -172,27 +216,31 @@ def summarize_articles(
     db_path: str,
     lang: str,
     batch_size: int = 200,
-    api_key: str = "",        # Groq key (legacy param kept for back-compat)
+    api_key: str = "",          # legacy: Groq key
     gemini_key: str = "",
+    openrouter_key: str = "",
+    nvidia_key: str = "",
     groq_key: str = "",
 ) -> int:
     """
     Find articles without summaries in *db_path*, call AI API, store results.
     Returns the number of articles successfully summarized.
 
-    Key priority: gemini_key > groq_key > api_key (legacy).
-    RSS descriptions from the scraper already fill most ai_summary fields;
-    this function handles the remainder.
+    Key priority: Gemini > OpenRouter > NVIDIA > Groq > api_key (legacy).
     """
-    # Resolve keys (back-compat: positional api_key treated as groq_key)
-    _groq  = groq_key or api_key
-    _gemini = gemini_key
+    _groq       = groq_key or api_key
+    _gemini     = gemini_key
+    _openrouter = openrouter_key
+    _nvidia     = nvidia_key
 
-    if not _gemini and not _groq:
-        logger.info("Summarizer [%s]: no API key (Gemini or Groq) — skipping", lang)
+    if not any([_gemini, _openrouter, _nvidia, _groq]):
+        logger.info("Summarizer [%s]: no API key — skipping", lang)
         return 0
 
-    provider = "Gemini" if _gemini else "Groq"
+    if _gemini:         provider = "Gemini"
+    elif _openrouter:   provider = "OpenRouter"
+    elif _nvidia:       provider = "NVIDIA NIM"
+    else:               provider = "Groq"
     logger.info("Summarizer [%s]: using %s", lang, provider)
 
     # Import here to allow the module to load even before db is set up
@@ -213,8 +261,13 @@ def summarize_articles(
 
     for i, art in enumerate(articles):
         try:
-            summary = _call_api(art["title"], lang,
-                                 gemini_key=_gemini, groq_key=_groq)
+            summary = _call_api(
+                art["title"], lang,
+                gemini_key=_gemini,
+                openrouter_key=_openrouter,
+                nvidia_key=_nvidia,
+                groq_key=_groq,
+            )
             update_article_summary(art["url"], summary)
             done += 1
             if (i + 1) % 10 == 0:
