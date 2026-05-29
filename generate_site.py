@@ -1592,25 +1592,34 @@ body.lang-ltr .nh-text{direction:ltr}
   /* Hide RSS section on mobile — keep brand + categories + links visible */
   .footer-rss{display:none}
   /* Header compact */
-  .site-header{padding:6px 0}
+  .site-header{padding:5px 0}
   .site-header-inner{padding:0 10px;gap:8px}
-  .site-header-title{font-size:1.05em;letter-spacing:1px}
+  .site-header-title{font-size:1.02em;letter-spacing:1px}
   .top-date{display:none}
-  .theme-btn{padding:5px 12px;font-size:.88em}
-  /* Language row — full-width scrollable strip */
-  .lang-row{padding:4px 10px 5px;justify-content:flex-start;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-top:1px solid rgba(255,255,255,.12)}
+  .theme-btn{padding:5px 11px;font-size:.86em}
+  /* Language row — compact full-width scrollable strip */
+  .lang-row{padding:3px 10px 4px;justify-content:flex-start;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-top:1px solid rgba(255,255,255,.12)}
   .lang-row::-webkit-scrollbar{display:none}
-  .lang-btn{padding:3px 8px;font-size:.72em}
+  .lang-btn{padding:3px 8px;font-size:.71em}
   /* Layout */
   .main-wrapper{padding:14px 10px}
   .section-header{padding:10px 14px;margin-bottom:12px}
   .section-title{font-size:1.05em}
-  /* Nav: larger touch targets, visible active indicator */
-  .nav-tab{padding:10px 12px;font-size:.83em}
+  /* Nav: compact touch targets, smooth horizontal scroll, active indicator */
+  .nav-inner{padding:0 4px}
+  .nav-tab{padding:9px 11px;font-size:.82em}
   .nav-tab.active{box-shadow:inset 0 -3px 0 var(--accent)}
-  /* World subnav on HOMEPAGE only: hide on mobile to reduce sticky bar count.
-     Region/Media pages keep their subnav visible (it's the primary navigation) */
-  .world-subnav--home{display:none}
+  /* ALL subnavs (World regions + Media) VISIBLE on mobile — compact and
+     horizontally scrollable (MSN / Google News style). Applies to both the
+     homepage world-subnav AND region/media page subnavs. */
+  .world-subnav{position:relative}
+  .world-subnav-inner{padding:0 8px;-webkit-overflow-scrolling:touch}
+  .world-region-btn{padding:7px 11px;font-size:.8em}
+  /* Right-edge fade hint on the subnav — signals horizontal scrollability.
+     Placed on .world-subnav (the relative parent), NOT on the scrolling inner. */
+  .world-subnav::after{content:'';position:absolute;top:0;bottom:2px;width:26px;pointer-events:none;z-index:1}
+  body.lang-ltr .world-subnav::after{right:0;background:linear-gradient(90deg,transparent,var(--nav-bg))}
+  body.lang-rtl .world-subnav::after{left:0;background:linear-gradient(270deg,transparent,var(--nav-bg))}
 }
 @media(max-width:480px){
   .articles-grid{grid-template-columns:1fr}
