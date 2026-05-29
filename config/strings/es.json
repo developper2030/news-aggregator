@@ -104,5 +104,9 @@
   "live_tv_title":   "TV en vivo — Canales de noticias",
   "live_tv_desc":    "Sigue los canales de noticias globales en directo en YouTube",
   "live_tv_watch":   "▶ Ver en vivo",
-  "live_tv_on_air":  "En el aire"
+  "live_tv_on_air":  "En el aire",
+  "wc_title": "Calendario Mundial 2026",
+  "wc_sub": "Estados Unidos · Canadá · México",
+  "wc_soon": "Calendario próximamente.",
+  "wc_nav": "Mundial 2026"
 }

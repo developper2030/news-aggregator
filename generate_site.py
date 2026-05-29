@@ -340,6 +340,221 @@ def _fetch_market_data(api_keys: dict, cache_path: str = "",
     return data
 
 
+# ──────────────────────────────────────────────────────────────────────────────
+# WORLD CUP 2026 SCHEDULE  (data source: openfootball/worldcup.json — public domain)
+# ──────────────────────────────────────────────────────────────────────────────
+WORLDCUP_JSON_URL = (
+    "https://raw.githubusercontent.com/openfootball/worldcup.json/master/"
+    "2026/worldcup.json"
+)
+
+# Team name translations (English from feed → 5 langs). Falls back to the
+# English name for any team not listed here, so it's always safe to extend.
+_WC_TEAMS: dict[str, dict[str, str]] = {
+    "Mexico":        {"ar": "المكسيك",        "fr": "Mexique",       "es": "México",        "tr": "Meksika"},
+    "United States": {"ar": "الولايات المتحدة","fr": "États-Unis",    "es": "Estados Unidos","tr": "ABD"},
+    "Canada":        {"ar": "كندا",           "fr": "Canada",        "es": "Canadá",        "tr": "Kanada"},
+    "Morocco":       {"ar": "المغرب",          "fr": "Maroc",         "es": "Marruecos",     "tr": "Fas"},
+    "Argentina":     {"ar": "الأرجنتين",       "fr": "Argentine",     "es": "Argentina",     "tr": "Arjantin"},
+    "Brazil":        {"ar": "البرازيل",        "fr": "Brésil",        "es": "Brasil",        "tr": "Brezilya"},
+    "France":        {"ar": "فرنسا",           "fr": "France",        "es": "Francia",       "tr": "Fransa"},
+    "Spain":         {"ar": "إسبانيا",         "fr": "Espagne",       "es": "España",        "tr": "İspanya"},
+    "Germany":       {"ar": "ألمانيا",         "fr": "Allemagne",     "es": "Alemania",      "tr": "Almanya"},
+    "England":       {"ar": "إنجلترا",         "fr": "Angleterre",    "es": "Inglaterra",    "tr": "İngiltere"},
+    "Portugal":      {"ar": "البرتغال",        "fr": "Portugal",      "es": "Portugal",      "tr": "Portekiz"},
+    "Netherlands":   {"ar": "هولندا",          "fr": "Pays-Bas",      "es": "Países Bajos",  "tr": "Hollanda"},
+    "Italy":         {"ar": "إيطاليا",         "fr": "Italie",        "es": "Italia",        "tr": "İtalya"},
+    "Belgium":       {"ar": "بلجيكا",          "fr": "Belgique",      "es": "Bélgica",       "tr": "Belçika"},
+    "Croatia":       {"ar": "كرواتيا",         "fr": "Croatie",       "es": "Croacia",       "tr": "Hırvatistan"},
+    "Japan":         {"ar": "اليابان",         "fr": "Japon",         "es": "Japón",         "tr": "Japonya"},
+    "South Korea":   {"ar": "كوريا الجنوبية",  "fr": "Corée du Sud",  "es": "Corea del Sur", "tr": "Güney Kore"},
+    "Senegal":       {"ar": "السنغال",         "fr": "Sénégal",       "es": "Senegal",       "tr": "Senegal"},
+    "Tunisia":       {"ar": "تونس",            "fr": "Tunisie",       "es": "Túnez",         "tr": "Tunus"},
+    "Algeria":       {"ar": "الجزائر",         "fr": "Algérie",       "es": "Argelia",       "tr": "Cezayir"},
+    "Egypt":         {"ar": "مصر",             "fr": "Égypte",        "es": "Egipto",        "tr": "Mısır"},
+    "Saudi Arabia":  {"ar": "السعودية",        "fr": "Arabie saoudite","es": "Arabia Saudí", "tr": "Suudi Arabistan"},
+    "Australia":     {"ar": "أستراليا",        "fr": "Australie",     "es": "Australia",     "tr": "Avustralya"},
+    "South Africa":  {"ar": "جنوب أفريقيا",    "fr": "Afrique du Sud","es": "Sudáfrica",     "tr": "Güney Afrika"},
+    "Czech Republic":{"ar": "التشيك",          "fr": "Tchéquie",      "es": "Chequia",       "tr": "Çekya"},
+    "Ghana":         {"ar": "غانا",            "fr": "Ghana",         "es": "Ghana",         "tr": "Gana"},
+    "Nigeria":       {"ar": "نيجيريا",         "fr": "Nigéria",       "es": "Nigeria",       "tr": "Nijerya"},
+    "Cameroon":      {"ar": "الكاميرون",       "fr": "Cameroun",      "es": "Camerún",       "tr": "Kamerun"},
+    "Uruguay":       {"ar": "الأوروغواي",      "fr": "Uruguay",       "es": "Uruguay",       "tr": "Uruguay"},
+    "Colombia":      {"ar": "كولومبيا",        "fr": "Colombie",      "es": "Colombia",      "tr": "Kolombiya"},
+    "Mexico City":   {"ar": "مكسيكو سيتي",     "fr": "Mexico",        "es": "Ciudad de México","tr": "Meksiko"},
+}
+
+# Round-name translations
+_WC_ROUNDS: dict[str, dict[str, str]] = {
+    "Round of 32":    {"ar": "دور الـ32",      "fr": "16es de finale", "es": "Dieciseisavos", "tr": "Son 32"},
+    "Round of 16":    {"ar": "دور الـ16",      "fr": "8es de finale",  "es": "Octavos",       "tr": "Son 16"},
+    "Quarter-final":  {"ar": "ربع النهائي",    "fr": "Quart de finale","es": "Cuartos",       "tr": "Çeyrek Final"},
+    "Semi-final":     {"ar": "نصف النهائي",    "fr": "Demi-finale",    "es": "Semifinal",     "tr": "Yarı Final"},
+    "Match for third place": {"ar": "تحديد المركز الثالث","fr": "Petite finale","es": "Tercer puesto","tr": "Üçüncülük"},
+    "Final":          {"ar": "النهائي",        "fr": "Finale",         "es": "Final",         "tr": "Final"},
+}
+
+
+def _wc_team(name: str, lang: str) -> str:
+    """Translate a team name; fall back to the English name. Handles knockout
+    placeholder codes (e.g. '2A', 'W73') by returning them as-is."""
+    if lang == "en" or not name:
+        return name
+    return _WC_TEAMS.get(name, {}).get(lang, name)
+
+
+def _wc_round(name: str, lang: str) -> str:
+    if lang == "en" or not name:
+        return name
+    # "Matchday N" → keep number, translate word
+    if name.startswith("Matchday"):
+        n = name.split()[-1]
+        _md = {"ar": f"الجولة {n}", "fr": f"Journée {n}", "es": f"Jornada {n}", "tr": f"{n}. Maç Günü"}
+        return _md.get(lang, name)
+    return _WC_ROUNDS.get(name, {}).get(lang, name)
+
+
+def _fetch_worldcup(cache_path: str = "", force_refresh: bool = False) -> dict:
+    """Fetch the World Cup 2026 schedule from openfootball (public domain).
+
+    Returns {"name": str, "matches": [...]}; on any failure returns cached data
+    if available, else an empty {"name": "", "matches": []}. Never raises.
+    Cached to *cache_path* with a 6-hour TTL.
+    """
+    import urllib.request as _urlreq
+    import json as _json
+    from datetime import timezone
+
+    empty: dict = {"name": "", "matches": []}
+
+    if cache_path and not force_refresh and os.path.exists(cache_path):
+        try:
+            with open(cache_path, "r", encoding="utf-8") as _f:
+                cached = _json.load(_f)
+            age_h = (datetime.now(timezone.utc).timestamp() -
+                     cached.get("_fetched_at", 0)) / 3600
+            if age_h < 6 and cached.get("matches"):
+                cached.pop("_fetched_at", None)
+                logger.info("World Cup: using cache (%.1fh old, %d matches)",
+                            age_h, len(cached.get("matches", [])))
+                return cached
+        except Exception:
+            pass
+
+    data: dict = dict(empty)
+    try:
+        _req = _urlreq.Request(WORLDCUP_JSON_URL,
+                               headers={"User-Agent": "AtlasNews/1.0"})
+        with _urlreq.urlopen(_req, timeout=12) as _r:
+            obj = _json.loads(_r.read())
+        data["name"] = obj.get("name", "World Cup 2026")
+        data["matches"] = obj.get("matches", [])
+        logger.info("World Cup: fetched %d matches", len(data["matches"]))
+    except Exception as _e:
+        logger.warning("World Cup: fetch failed: %s", _e)
+        # Fall back to stale cache if the live fetch failed
+        if cache_path and os.path.exists(cache_path):
+            try:
+                with open(cache_path, "r", encoding="utf-8") as _f:
+                    cached = _json.load(_f)
+                cached.pop("_fetched_at", None)
+                if cached.get("matches"):
+                    logger.info("World Cup: using stale cache after fetch failure")
+                    return cached
+            except Exception:
+                pass
+        return data
+
+    if cache_path and data.get("matches"):
+        try:
+            os.makedirs(os.path.dirname(cache_path), exist_ok=True)
+            payload = dict(data, _fetched_at=datetime.now(timezone.utc).timestamp())
+            with open(cache_path, "w", encoding="utf-8") as _f:
+                _json.dump(payload, _f, ensure_ascii=False)
+        except Exception as _e:
+            logger.warning("World Cup: cache write failed: %s", _e)
+
+    return data
+
+
+def _worldcup_page_html(data: dict, s: dict, lang: str) -> str:
+    """Build the World Cup 2026 schedule page (matches grouped by date)."""
+    matches = data.get("matches", [])
+    title = s.get("wc_title", "World Cup 2026 Schedule")
+    if not matches:
+        return (f'<div class="main-wrapper">'
+                f'<div class="empty-state"><h2>🏆 {esc(title)}</h2>'
+                f'<p>{esc(s.get("wc_soon", "Schedule coming soon."))}</p></div></div>')
+
+    from collections import OrderedDict
+    by_date: "OrderedDict[str, list]" = OrderedDict()
+    for m in matches:
+        by_date.setdefault(m.get("date", ""), []).append(m)
+
+    _grp_word = {"ar": "المجموعة", "fr": "Groupe", "es": "Grupo", "tr": "Grup"}.get(lang, "Group")
+
+    days_html = ""
+    for date, day_matches in by_date.items():
+        rows = ""
+        for m in day_matches:
+            t1 = esc(_wc_team(m.get("team1", ""), lang))
+            t2 = esc(_wc_team(m.get("team2", ""), lang))
+            tm = esc((m.get("time", "") or "").split()[0])
+            grp = m.get("group", "")
+            if grp:
+                label = esc(grp.replace("Group", _grp_word).strip())
+            else:
+                label = esc(_wc_round(m.get("round", ""), lang))
+            ground = esc(_wc_team(m.get("ground", ""), lang))
+            rows += (
+                f'<div class="wc-match">'
+                f'<span class="wc-time">{tm}</span>'
+                f'<div class="wc-teams">'
+                f'<span class="wc-team wc-t1">{t1}</span>'
+                f'<span class="wc-vs">⚔</span>'
+                f'<span class="wc-team wc-t2">{t2}</span>'
+                f'</div>'
+                f'<span class="wc-grp">{label}</span>'
+                f'<span class="wc-ground">📍 {ground}</span>'
+                f'</div>'
+            )
+        days_html += (
+            f'<section class="wc-day">'
+            f'<h2 class="wc-date">📅 {esc(date)}</h2>'
+            f'<div class="wc-matches">{rows}</div>'
+            f'</section>'
+        )
+
+    return (
+        f'<div class="main-wrapper">'
+        f'<div class="wc-hero"><h1>🏆 {esc(title)}</h1>'
+        f'<p class="wc-sub">{esc(s.get("wc_sub", "United States · Canada · Mexico"))}</p></div>'
+        f'<div class="wc-schedule">{days_html}</div>'
+        f'</div>'
+    )
+
+
+def _sports_subnav(active_slug: str, s: dict, sports_name: str = "Sports",
+                   has_worldcup: bool = True) -> str:
+    """Sub-bar shown on the Sports page and its World Cup branches.
+
+    Mirrors _world_subnav / _media_subnav styling. Branches are added only when
+    they exist (e.g. World Cup schedule only when the feed loaded).
+    """
+    items = [("sports.html", f"⚽ {sports_name}", "sports")]
+    if has_worldcup:
+        items.append(("worldcup.html", f"🏆 {s.get('wc_nav', 'World Cup')}", "worldcup"))
+    if len(items) < 2:
+        return ""  # nothing to branch to → no sub-bar
+    buttons = "".join(
+        f'<a href="{esc(href)}" class="world-region-btn'
+        f'{" active-region" if slug == active_slug else ""}">{esc(label)}</a>'
+        for href, label, slug in items
+    )
+    return (f'<div class="world-subnav" aria-label="{esc(sports_name)}">'
+            f'<div class="world-subnav-inner">{buttons}</div></div>')
+
+
 def _economy_widget(s: dict, active_tab: str = "") -> str:
     """Build the tabbed economy navigation widget (language-aware).
 
@@ -1385,6 +1600,33 @@ ul,ol{list-style:none}
 @media(max-width:900px){.live-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:600px){.live-grid{grid-template-columns:repeat(2,1fr)}.live-card{padding:16px 10px 14px}.live-card-flag{font-size:2em}}
 @media(max-width:380px){.live-grid{grid-template-columns:1fr}}
+
+/* ===================== WORLD CUP 2026 SCHEDULE ===================== */
+.wc-hero{text-align:center;padding:26px 16px;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#fff;border-radius:14px;margin-bottom:22px;box-shadow:var(--card-shadow)}
+.wc-hero h1{font-size:1.7em;font-weight:900;letter-spacing:.5px}
+.wc-sub{opacity:.9;margin-top:6px;font-size:.95em;font-weight:600}
+.wc-schedule{display:flex;flex-direction:column;gap:22px}
+.wc-day{}
+.wc-date{font-size:1.05em;font-weight:800;color:var(--accent);padding:8px 4px;border-bottom:2px solid var(--accent);margin-bottom:12px}
+.wc-matches{display:flex;flex-direction:column;gap:9px}
+.wc-match{display:flex;align-items:center;gap:14px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;flex-wrap:wrap;transition:border-color .15s,transform .15s}
+.wc-match:hover{border-color:var(--accent);transform:translateX(-2px)}
+.wc-time{font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;min-width:52px;font-size:.95em}
+.wc-teams{display:flex;align-items:center;gap:12px;flex:1;font-weight:700;min-width:220px;font-size:1em}
+.wc-team{flex:1}
+.wc-t1{text-align:end}
+.wc-t2{text-align:start}
+.wc-vs{opacity:.45;font-size:.8em;flex:0 0 auto}
+.wc-grp{font-size:.76em;font-weight:700;padding:3px 11px;border-radius:12px;background:rgba(99,102,241,.13);color:var(--accent);white-space:nowrap}
+.wc-ground{font-size:.8em;color:var(--text-muted);white-space:nowrap}
+@media(max-width:600px){
+  .wc-hero h1{font-size:1.35em}
+  .wc-match{gap:8px;padding:11px 12px}
+  .wc-teams{min-width:100%;order:1}
+  .wc-time{order:0}
+  .wc-grp{order:2;font-size:.72em}
+  .wc-ground{order:3;font-size:.74em}
+}
 
 /* ===================== MAIN LAYOUT ===================== */
 .main-wrapper{max-width:1200px;margin:0 auto;padding:24px 20px}
@@ -6245,6 +6487,11 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
     _market_data = _fetch_market_data(_api_keys, cache_path=_cache_path,
                                       force_refresh=True)
 
+    # ── World Cup 2026 schedule (openfootball, public domain) ─────────────────
+    _wc_cache = os.path.join(_root, "data", "worldcup_cache.json")
+    _worldcup_data = _fetch_worldcup(cache_path=_wc_cache)
+    _has_wc = bool(_worldcup_data.get("matches"))
+
     # ── Story clusters (built by run.py → clustering/cluster.py) ─────────────
     _cluster_file = os.path.join(_root, "data", f"clusters_{lang}.json")
     _cluster_map: dict = {}
@@ -6527,7 +6774,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             f'</section>'
         )
 
-        # Region pages get the world subnav; vid-* pages get the media subnav
+        # Region pages → world subnav; vid-* → media subnav; sports → sports subnav
         if slug in media_slugs_local:
             page_world_subnav = _media_subnav(
                 active_slug=slug, media_regions=media_regions_list, s=s
@@ -6535,6 +6782,10 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         elif slug in region_slugs:
             page_world_subnav = _world_subnav(
                 active_slug=slug, world_regions=world_regions, s=s
+            )
+        elif slug == "sports":
+            page_world_subnav = _sports_subnav(
+                "sports", s, sports_name=cat["name"], has_worldcup=_has_wc
             )
         else:
             page_world_subnav = ""
@@ -6619,6 +6870,29 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
                 **common,
             ))
             pages_written += 1
+
+    # ── WORLDCUP.HTML — World Cup 2026 schedule (data page, like prices) ──────
+    if _has_wc:
+        _sports_name = next((c["name"] for c in categories if c["slug"] == "sports"),
+                            s.get("sports", "Sports"))
+        _wrt("worldcup.html", _page(
+            title=s.get("wc_title", "World Cup 2026 Schedule"),
+            nav_html=_nav(categories, articles_by_cat, active="sports",
+                          s=s, region_slugs=region_slugs, has_world=has_world,
+                          media_slugs=media_slugs_local, has_media=has_media),
+            main_html=_worldcup_page_html(_worldcup_data, s, lang),
+            canonical=_page_canonical("worldcup.html"),
+            hreflang_html=_make_hreflang("worldcup.html"),
+            og_image_url=_og_img_url,
+            extra_json_ld=_org_ld,
+            world_subnav_html=_sports_subnav("worldcup", s, _sports_name, _has_wc),
+            carousel_html="",
+            lang_switcher_html=_lsw("worldcup.html"),
+            **{**common, "desc": s.get("wc_title", "World Cup 2026 Schedule")},
+        ))
+        pages_written += 1
+        logger.info("World Cup schedule page written (%d matches)",
+                    len(_worldcup_data["matches"]))
 
     # ── WORLD.HTML — aggregated world-regions landing page ────────────────────
     if has_world:

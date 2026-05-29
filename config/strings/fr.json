@@ -104,5 +104,9 @@
   "live_tv_title":   "TV en direct — Chaînes d'info",
   "live_tv_desc":    "Regardez les chaînes d'information mondiales en direct sur YouTube",
   "live_tv_watch":   "▶ Regarder en direct",
-  "live_tv_on_air":  "En direct"
+  "live_tv_on_air":  "En direct",
+  "wc_title": "Calendrier Coupe du Monde 2026",
+  "wc_sub": "États-Unis · Canada · Mexique",
+  "wc_soon": "Calendrier à venir.",
+  "wc_nav": "Coupe du Monde"
 }

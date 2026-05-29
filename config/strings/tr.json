@@ -104,5 +104,9 @@
   "live_tv_title":   "Canlı TV — Haber Kanalları",
   "live_tv_desc":    "YouTube üzerinden dünya haber kanallarını canlı izleyin",
   "live_tv_watch":   "▶ Canlı İzle",
-  "live_tv_on_air":  "Yayında"
+  "live_tv_on_air":  "Yayında",
+  "wc_title": "2026 Dünya Kupası Fikstürü",
+  "wc_sub": "ABD · Kanada · Meksika",
+  "wc_soon": "Fikstür yakında.",
+  "wc_nav": "Dünya Kupası"
 }
