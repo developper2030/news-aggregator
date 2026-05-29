@@ -110,6 +110,9 @@ jobs:
           # حجم معقول للصفحة الرئيسية (> 5KB يعني محتوى حقيقي لا صفحة خطأ)
           size=$(stat -c%s static/index.html)
           [ "$size" -gt 5000 ] || fail "index.html too small ($size bytes)"
+          # عدد بطاقات المقالات — يمنع نشر موقع شبه فارغ (DB قديمة/كشط متوقف)
+          cards=$(grep -o 'class="article-card' static/index.html | wc -l)
+          [ "$cards" -ge 8 ] || fail "homepage has only $cards article cards — DB stale/empty, refusing to deploy"
           # ملفات SEO الحرجة
           [ -s static/sitemap.xml ] || fail "sitemap.xml missing"
           [ -s static/robots.txt ]  || fail "robots.txt missing"
