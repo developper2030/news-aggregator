@@ -497,7 +497,15 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_body": "نستخدم ملفات تعريف الارتباط لتحسين تجربتك وتحليل حركة الزوار. اختر ما يناسبك.",
         "gdpr_accept": "قبول الكل",
         "gdpr_reject": "الضروري فقط",
+        "gdpr_customize": "تخصيص",
         "gdpr_policy": "سياسة الخصوصية",
+        "gdpr_modal_title": "تفضيلات الخصوصية",
+        "gdpr_necessary": "ضروري دائماً",
+        "gdpr_necessary_desc": "مطلوب لعمل الموقع. لا يمكن تعطيله.",
+        "gdpr_analytics": "التحليلات والأداء",
+        "gdpr_analytics_desc": "يساعدنا على فهم كيفية استخدام الزوار للموقع. بيانات مجهولة الهوية فقط.",
+        "gdpr_always_on": "مفعّل دائماً",
+        "gdpr_save": "حفظ التفضيلات",
         "art_read_orig":    "📖 اقرأ المقال الأصلي",
         "art_related":      "مقالات ذات صلة",
         "art_summary_lbl":  "ملخص",
@@ -586,7 +594,15 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_body": "We use cookies to improve your experience and analyse traffic. Choose what works for you.",
         "gdpr_accept": "Accept All",
         "gdpr_reject": "Essential Only",
+        "gdpr_customize": "Customize",
         "gdpr_policy": "Privacy Policy",
+        "gdpr_modal_title": "Privacy Preferences",
+        "gdpr_necessary": "Strictly Necessary",
+        "gdpr_necessary_desc": "Required for the site to function. Cannot be disabled.",
+        "gdpr_analytics": "Analytics & Performance",
+        "gdpr_analytics_desc": "Helps us understand how visitors use the site. Anonymous data only.",
+        "gdpr_always_on": "Always On",
+        "gdpr_save": "Save Preferences",
         "art_read_orig":    "📖 Read full article",
         "art_related":      "Related articles",
         "art_summary_lbl":  "Summary",
@@ -675,7 +691,15 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_body": "Nous utilisons des cookies pour améliorer votre expérience et analyser le trafic. Faites votre choix.",
         "gdpr_accept": "Tout accepter",
         "gdpr_reject": "Essentiel uniquement",
+        "gdpr_customize": "Personnaliser",
         "gdpr_policy": "Politique de confidentialité",
+        "gdpr_modal_title": "Préférences de confidentialité",
+        "gdpr_necessary": "Strictement nécessaire",
+        "gdpr_necessary_desc": "Requis pour le fonctionnement du site. Ne peut pas être désactivé.",
+        "gdpr_analytics": "Analytique et performance",
+        "gdpr_analytics_desc": "Nous aide à comprendre comment les visiteurs utilisent le site. Données anonymes uniquement.",
+        "gdpr_always_on": "Toujours actif",
+        "gdpr_save": "Enregistrer les préférences",
         "art_read_orig":    "📖 Lire l'article complet",
         "art_related":      "Articles liés",
         "art_summary_lbl":  "Résumé",
@@ -764,7 +788,15 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_body": "Usamos cookies para mejorar tu experiencia y analizar el tráfico. Elige lo que prefieras.",
         "gdpr_accept": "Aceptar todo",
         "gdpr_reject": "Solo esenciales",
+        "gdpr_customize": "Personalizar",
         "gdpr_policy": "Política de privacidad",
+        "gdpr_modal_title": "Preferencias de privacidad",
+        "gdpr_necessary": "Estrictamente necesario",
+        "gdpr_necessary_desc": "Necesario para el funcionamiento del sitio. No se puede desactivar.",
+        "gdpr_analytics": "Analítica y rendimiento",
+        "gdpr_analytics_desc": "Nos ayuda a entender cómo los visitantes usan el sitio. Solo datos anónimos.",
+        "gdpr_always_on": "Siempre activo",
+        "gdpr_save": "Guardar preferencias",
         "art_read_orig":    "📖 Leer artículo completo",
         "art_related":      "Artículos relacionados",
         "art_summary_lbl":  "Resumen",
@@ -853,7 +885,15 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_body": "Deneyiminizi iyileştirmek ve trafiği analiz etmek için çerez kullanıyoruz. Tercihinizi seçin.",
         "gdpr_accept": "Tümünü kabul et",
         "gdpr_reject": "Yalnızca zorunlu",
+        "gdpr_customize": "Özelleştir",
         "gdpr_policy": "Gizlilik Politikası",
+        "gdpr_modal_title": "Gizlilik Tercihleri",
+        "gdpr_necessary": "Zorunlu",
+        "gdpr_necessary_desc": "Sitenin çalışması için gereklidir. Devre dışı bırakılamaz.",
+        "gdpr_analytics": "Analitik ve Performans",
+        "gdpr_analytics_desc": "Ziyaretçilerin siteyi nasıl kullandığını anlamamıza yardımcı olur. Yalnızca anonim veriler.",
+        "gdpr_always_on": "Her zaman açık",
+        "gdpr_save": "Tercihleri kaydet",
         "art_read_orig":    "📖 Tam makaleyi oku",
         "art_related":      "İlgili makaleler",
         "art_summary_lbl":  "Özet",
@@ -1373,11 +1413,14 @@ ul,ol{list-style:none}
 .card-date{font-size:.72em;color:rgba(255,255,255,.75);font-weight:500}
 .card-title{font-size:.95em;font-weight:800;line-height:1.5;color:#fff;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-shadow:0 1px 4px rgba(0,0,0,.6)}
 .article-card:hover .card-title{color:#e0e7ff}
-.article-card.card--no-img{background:#ffffff;border:1px solid var(--border)}
+.article-card.card--no-img{background:var(--surface);border:1px solid var(--border)}
+/* Hide the broken <img> element — onerror fires AFTER download attempt */
+.article-card.card--no-img .card-bg{display:none}
 .article-card.card--no-img .card-overlay{display:none}
 .article-card.card--no-img .card-title{color:var(--text);text-shadow:none}
 .article-card.card--no-img .card-date{color:var(--text-light)}
 .article-card.card--no-img:hover .card-title{color:var(--accent)}
+.article-card.card--no-img .card-source{background:rgba(99,102,241,.12);color:var(--text);border:1px solid var(--border)}
 
 /* ===================== SIDEBAR ===================== */
 .sidebar{position:sticky;top:66px}
@@ -1660,12 +1703,60 @@ body.lang-ltr .nh-text{direction:ltr}
 .cookie-accept{background:#3b82f6;color:#fff}
 .cookie-reject{background:transparent;color:#94a3b8;border:1px solid #475569}
 .cookie-reject:hover{background:#334155;color:#e2e8f0}
+.cookie-customize{background:transparent;color:#93c5fd;border:1px solid #334155;font-size:.78em;padding:7px 14px}
+.cookie-customize:hover{background:#1e3a5f;color:#bfdbfe}
 @media(max-width:600px){
   .cookie-inner{flex-direction:column;align-items:flex-start}
   .cookie-actions{width:100%;justify-content:flex-end}
   .cookie-btn{padding:9px 16px;font-size:.8em}
 }
 .dark-mode .cookie-banner{background:#0f172a;border-color:#2563eb}
+/* ====== GDPR CUSTOMIZE MODAL ====== */
+.consent-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);
+  z-index:9999;align-items:center;justify-content:center;padding:16px
+}
+.consent-overlay.open{display:flex}
+.consent-modal{
+  background:#1e293b;color:#f1f5f9;border-radius:14px;
+  padding:28px 24px;max-width:480px;width:100%;
+  box-shadow:0 8px 40px rgba(0,0,0,.5);
+  border:1px solid #334155
+}
+.consent-modal h3{font-size:1.05em;font-weight:700;margin-bottom:18px;color:#e2e8f0}
+.consent-row{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  padding:14px 0;border-top:1px solid #334155;gap:12px
+}
+.consent-row-text{flex:1}
+.consent-row-text strong{display:block;font-size:.9em;font-weight:700;color:#e2e8f0;margin-bottom:3px}
+.consent-row-text span{font-size:.78em;color:#94a3b8;line-height:1.45}
+.consent-toggle{
+  position:relative;width:44px;height:24px;flex-shrink:0;margin-top:2px
+}
+.consent-toggle input{opacity:0;width:0;height:0;position:absolute}
+.consent-slider{
+  position:absolute;inset:0;border-radius:24px;
+  background:#334155;cursor:pointer;transition:background .2s
+}
+.consent-slider::after{
+  content:'';position:absolute;width:18px;height:18px;
+  border-radius:50%;background:#fff;top:3px;left:3px;
+  transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.3)
+}
+.consent-toggle input:checked+.consent-slider{background:#3b82f6}
+.consent-toggle input:checked+.consent-slider::after{transform:translateX(20px)}
+.consent-toggle input:disabled+.consent-slider{background:#1d4ed8;cursor:not-allowed}
+.consent-always{font-size:.75em;color:#60a5fa;font-weight:600;white-space:nowrap;margin-top:5px}
+.consent-modal-actions{
+  display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap
+}
+.consent-save{
+  background:#3b82f6;color:#fff;border:none;border-radius:7px;
+  padding:9px 22px;font-size:.85em;font-weight:600;cursor:pointer;transition:opacity .15s
+}
+.consent-save:hover{opacity:.88}
+.dark-mode .consent-modal{background:#0f172a;border-color:#1e3a5f}
 /* ====== CARD SUMMARY (inside card-body, above title, 2-line max) ====== */
 .card-ai{font-size:.75em;line-height:1.5;color:rgba(255,255,255,.9);overflow:hidden;max-height:0;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;transition:max-height .2s ease}
 .article-card:hover .card-ai{max-height:3em}
@@ -2062,33 +2153,62 @@ function initSourceFilter() {
 /* ====== GDPR COOKIE CONSENT ====== */
 (function() {
   var CONSENT_KEY = 'atlas_cookie_consent';
-  var banner = document.getElementById('cookie-banner');
+  var banner  = document.getElementById('cookie-banner');
+  var overlay = document.getElementById('consent-overlay');
   if (!banner) return;
 
   /* Already decided — don't show */
   if (localStorage.getItem(CONSENT_KEY)) return;
 
   /* Show after short delay so page feels loaded */
-  setTimeout(function() {
-    banner.classList.add('cb-visible');
-  }, 900);
+  setTimeout(function() { banner.classList.add('cb-visible'); }, 900);
 
-  function dismiss(value) {
-    localStorage.setItem(CONSENT_KEY, value);
-    banner.classList.remove('cb-visible');
-    /* Remove from DOM after animation */
-    setTimeout(function() { banner.remove(); }, 500);
-    /* Activate Google Analytics on accept */
-    if (value === 'accepted' && window.gtag) {
+  function grantAnalytics() {
+    if (window.gtag) {
       gtag('consent', 'update', {'analytics_storage': 'granted'});
       gtag('event', 'page_view');
     }
   }
 
+  function dismiss(value) {
+    localStorage.setItem(CONSENT_KEY, value);
+    banner.classList.remove('cb-visible');
+    if (overlay) overlay.classList.remove('open');
+    setTimeout(function() { banner.remove(); if (overlay) overlay.remove(); }, 500);
+    if (value === 'accepted') grantAnalytics();
+  }
+
+  /* Accept / Reject */
   var btnAccept = document.getElementById('cookie-accept');
   var btnReject = document.getElementById('cookie-reject');
   if (btnAccept) btnAccept.addEventListener('click', function() { dismiss('accepted'); });
   if (btnReject) btnReject.addEventListener('click', function() { dismiss('rejected'); });
+
+  /* Customize — open modal */
+  var btnCustomize = document.getElementById('cookie-customize');
+  if (btnCustomize && overlay) {
+    btnCustomize.addEventListener('click', function() {
+      overlay.classList.add('open');
+    });
+    /* Close on overlay click outside modal */
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) overlay.classList.remove('open');
+    });
+    /* ESC key */
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') overlay.classList.remove('open');
+    });
+    /* Save preferences */
+    var btnSave = document.getElementById('consent-save');
+    var toggleAnalytics = document.getElementById('toggle-analytics');
+    if (btnSave) {
+      btnSave.addEventListener('click', function() {
+        var analyticsOn = toggleAnalytics && toggleAnalytics.checked;
+        var val = analyticsOn ? 'accepted' : 'rejected';
+        dismiss(val);
+      });
+    }
+  }
 })();
 
 /* ========== SHARE — copy link ========== */
@@ -4351,7 +4471,22 @@ def _write_static_assets(out_dir: str = OUTPUT_DIR, lang: str = "ar",
         ("dmca.html",      _dmca_map.get(lang, DMCA_HTML)),
         ("advertise.html", _advertise_map.get(lang, ADVERTISE_HTML)),
     ]
+
+    # Compute root URL for hreflang (strip language prefix from site_url)
+    _surl = site_url.rstrip("/")
+    _lprefix = _LANG_PATHS.get(lang, "")
+    if _surl and _lprefix and _surl.endswith(_lprefix):
+        _sp_root_url = _surl[: -len(_lprefix)].rstrip("/")
+    else:
+        _sp_root_url = _surl  # EN: site_url is already the root
+
     for filename, content in static_pages:
+        # Inject <link rel="canonical"> and hreflang into each static page <head>
+        if _sp_root_url:
+            _canonical = f"{_surl}/{filename}"
+            _hreflang  = _hreflang_links(_sp_root_url, filename)
+            _inject    = f'  <link rel="canonical" href="{_canonical}">\n{_hreflang}\n'
+            content    = content.replace("</head>", _inject + "</head>", 1)
         dest = os.path.join(out_dir, filename)
         with open(dest, "w", encoding="utf-8") as f:
             f.write(content)
@@ -4466,7 +4601,7 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
         bg_html = (
             f'<div class="card-bg">'
             f'<img class="card-bg-img" src="{image}" alt="" loading="lazy" '
-            f'onerror="this.parentElement.parentElement.classList.add(\'card--no-img\')">'
+            f'onerror="this.closest(\'article\').classList.add(\'card--no-img\')">'
             f'</div>'
         )
         extra_cls = ""
@@ -5383,8 +5518,41 @@ def _page(*, title: str, desc: str, nav_html: str,
       </div>
       <div class="cookie-actions">
         <a href="privacy.html" class="cookie-policy-link">{esc(s.get('gdpr_policy','Privacy Policy'))}</a>
+        <button id="cookie-customize" class="cookie-btn cookie-customize">{esc(s.get('gdpr_customize','Customize'))}</button>
         <button id="cookie-reject" class="cookie-btn cookie-reject">{esc(s.get('gdpr_reject','Essential Only'))}</button>
         <button id="cookie-accept" class="cookie-btn cookie-accept">{esc(s.get('gdpr_accept','Accept All'))}</button>
+      </div>
+    </div>
+  </div>
+  <!-- GDPR Customize Modal -->
+  <div id="consent-overlay" class="consent-overlay" role="dialog" aria-modal="true">
+    <div class="consent-modal">
+      <h3>{esc(s.get('gdpr_modal_title','Privacy Preferences'))}</h3>
+      <div class="consent-row">
+        <div class="consent-row-text">
+          <strong>{esc(s.get('gdpr_necessary','Strictly Necessary'))}</strong>
+          <span>{esc(s.get('gdpr_necessary_desc','Required for the site to function.'))}</span>
+        </div>
+        <div style="text-align:center">
+          <label class="consent-toggle" aria-label="necessary">
+            <input type="checkbox" id="toggle-necessary" checked disabled>
+            <span class="consent-slider"></span>
+          </label>
+          <div class="consent-always">{esc(s.get('gdpr_always_on','Always On'))}</div>
+        </div>
+      </div>
+      <div class="consent-row">
+        <div class="consent-row-text">
+          <strong>{esc(s.get('gdpr_analytics','Analytics & Performance'))}</strong>
+          <span>{esc(s.get('gdpr_analytics_desc','Helps us understand how visitors use the site.'))}</span>
+        </div>
+        <label class="consent-toggle" aria-label="analytics">
+          <input type="checkbox" id="toggle-analytics">
+          <span class="consent-slider"></span>
+        </label>
+      </div>
+      <div class="consent-modal-actions">
+        <button id="consent-save" class="consent-save">{esc(s.get('gdpr_save','Save Preferences'))}</button>
       </div>
     </div>
   </div>
