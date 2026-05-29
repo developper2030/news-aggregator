@@ -4904,6 +4904,39 @@ def _live_page_html(lang: str, s: dict, channels: list[dict],
     )
 
 
+def _item_list_json_ld(
+    cat_name: str, cat_url: str, articles: list, site_url: str
+) -> str:
+    """Return an ItemList JSON-LD <script> block for a category page.
+
+    Helps Google understand the page is a list of news articles and index them.
+    """
+    import hashlib as _hl_il
+    items = []
+    for i, art in enumerate(articles[:20], 1):   # Google recommends max 20
+        _h   = _hl_il.md5(art["url"].encode("utf-8")).hexdigest()[:12]
+        _url = f"{site_url.rstrip('/')}/article/{_h}.html"
+        items.append({
+            "@type":    "ListItem",
+            "position": i,
+            "url":      _url,
+            "name":     art["title"][:110],
+        })
+    ld = {
+        "@context":        "https://schema.org",
+        "@type":           "ItemList",
+        "name":            cat_name,
+        "url":             cat_url,
+        "numberOfItems":   len(items),
+        "itemListElement": items,
+    }
+    return (
+        f'  <script type="application/ld+json">'
+        f'{json.dumps(ld, ensure_ascii=False)}'
+        f'</script>'
+    )
+
+
 def _nav(categories: list, articles_by_cat: dict, active: str = "home",
          s: dict = STRINGS["ar"], region_slugs: set = REGION_SLUGS,
          has_world: bool = True, media_slugs: set = MEDIA_SLUGS,
@@ -6206,7 +6239,18 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             if slug not in region_slugs and slug not in media_slugs_local
             else ""
         )
-        _cat_extra_ld = "\n".join(filter(None, [_org_ld, _cat_bc_ld]))
+        # ItemList JSON-LD: tells Google this page is a list of news articles
+        _cat_item_list_ld = (
+            _item_list_json_ld(
+                cat_name=cat["name"],
+                cat_url=_page_canonical(_cat_page_file),
+                articles=raw_articles[:20],
+                site_url=_site_url,
+            )
+            if raw_articles and slug not in media_slugs_local
+            else ""
+        )
+        _cat_extra_ld = "\n".join(filter(None, [_org_ld, _cat_bc_ld, _cat_item_list_ld]))
         # Override desc with category-specific description (common has site_desc)
         _cat_common = {**common, "desc": cat_desc}
         _wrt(_cat_page_file, _page(
@@ -6420,34 +6464,72 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
     if site_url:
         # site_url already contains the language path (e.g. "https://domain.com/fr")
         _base = site_url.rstrip("/")
-        _sitemap_pages = ["index.html", "about.html", "privacy.html",
-                          "contact.html", "terms.html", "advertise.html"]
+        # Compute root URL for cross-language hreflang links in sitemap
+        _sm_prefix = _LANG_PATHS.get(lang, "")
+        if _sm_prefix and _base.endswith(_sm_prefix):
+            _sm_root = _base[: -len(_sm_prefix)].rstrip("/")
+        else:
+            _sm_root = _base  # EN: base IS root
+
+        def _xhtml_links(filename: str) -> str:
+            """<xhtml:link> tags for all 5 language variants of a page."""
+            parts = []
+            for _lc, _lp in _LANG_PATHS.items():
+                _hl   = _LANG_HREFLANG[_lc]
+                _href = f"{_sm_root}{_lp}/{filename}"
+                parts.append(f'    <xhtml:link rel="alternate" hreflang="{_hl}" href="{_href}"/>')
+            parts.append(f'    <xhtml:link rel="alternate" hreflang="x-default" href="{_sm_root}/{filename}"/>')
+            return "\n".join(parts)
+
+        # Page list with (filename, priority, changefreq)
+        _static_pages = [
+            ("index.html",     "1.0", "hourly"),
+            ("about.html",     "0.4", "monthly"),
+            ("privacy.html",   "0.4", "monthly"),
+            ("contact.html",   "0.4", "monthly"),
+            ("terms.html",     "0.4", "monthly"),
+            ("advertise.html", "0.4", "monthly"),
+        ]
+        _cat_pages   = []
+        _region_pages = []
         for cat in categories:
             _slug = cat.get("slug", "")
-            if _slug:
-                _sitemap_pages.append(f"{_slug}.html")
+            if not _slug:
+                continue
+            if _slug in region_slugs or _slug in media_slugs_local:
+                _region_pages.append((_slug + ".html", "0.6", "hourly"))
+            else:
+                _cat_pages.append((_slug + ".html", "0.8", "hourly"))
         if has_world:
-            _sitemap_pages.append("world.html")
+            _cat_pages.append(("world.html",  "0.7", "hourly"))
             for r in world_regions:
-                _sitemap_pages.append(f'{r["slug"]}.html')
+                _region_pages.append((f'{r["slug"]}.html', "0.6", "hourly"))
         if has_media:
-            _sitemap_pages.append("media.html")
-            _sitemap_pages.append("live.html")
+            _cat_pages.append(("media.html",  "0.7", "hourly"))
+            _cat_pages.append(("live.html",   "0.7", "hourly"))
             for r in media_regions_list:
-                _sitemap_pages.append(f'{r["slug"]}.html')
+                _region_pages.append((f'{r["slug"]}.html', "0.6", "hourly"))
         if any(cat.get("slug") == "economy" for cat in categories):
-            _sitemap_pages.append("prices.html")
+            _cat_pages.append(("prices.html", "0.6", "daily"))
 
+        _all_sm_pages = _static_pages + _cat_pages + _region_pages
         _today = datetime.now().strftime("%Y-%m-%d")
-        _urls = "\n".join(
-            f"  <url><loc>{_base}/{p}</loc><lastmod>{_today}</lastmod>"
-            f"<changefreq>hourly</changefreq><priority>0.8</priority></url>"
-            for p in _sitemap_pages
-        )
+        _url_blocks = []
+        for _fname, _pri, _freq in _all_sm_pages:
+            _url_blocks.append(
+                f"  <url>\n"
+                f"    <loc>{_base}/{_fname}</loc>\n"
+                f"    <lastmod>{_today}</lastmod>\n"
+                f"    <changefreq>{_freq}</changefreq>\n"
+                f"    <priority>{_pri}</priority>\n"
+                f"{_xhtml_links(_fname)}\n"
+                f"  </url>"
+            )
         _sitemap_xml = (
             '<?xml version="1.0" encoding="UTF-8"?>\n'
-            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-            f'{_urls}\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n'
+            '        xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
+            + "\n".join(_url_blocks) + "\n"
             '</urlset>\n'
         )
         _wrt("sitemap.xml", _sitemap_xml)
