@@ -1,0 +1,66 @@
+name: Generate & Deploy (no scrape)
+
+# ───────────────────────────────────────────────────────────────────────────
+# يُشغَّل يدوياً فقط (زر "Run workflow" في GitHub Actions)
+# الغرض: إعادة توليد الـ HTML ونشره بعد تعديل الكود/القوالب
+#         دون الحاجة لانتظار دورة الكشط الكاملة (6 ساعات)
+# الوقت المتوقع: ~2–3 دقائق (مقابل ~15 دقيقة للـ workflow الكامل)
+# ───────────────────────────────────────────────────────────────────────────
+on:
+  workflow_dispatch:
+
+jobs:
+  generate-and-deploy:
+    name: Generate → Deploy (skip scrape)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      # ── 1. تنزيل الكود من GitHub ──────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. تثبيت Python 3.12 ──────────────────────────────────────────
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      # ── 3. تثبيت المكتبات ─────────────────────────────────────────────
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      # ── 4. استعادة قاعدة بيانات الأخبار من الـ cache ─────────────────
+      #    (نقرأ الأخبار المخزَّنة من آخر run كامل — لا نكتب شيئاً جديداً)
+      - name: Restore news databases cache
+        uses: actions/cache/restore@v4
+        with:
+          path: data/
+          key: news-databases-${{ github.run_number }}
+          restore-keys: |
+            news-databases-
+
+      # ── 5. إنشاء مجلد data/ إذا لم يكن موجوداً ──────────────────────
+      - name: Ensure data directory exists
+        run: mkdir -p data
+
+      # ── 6. توليد الموقع فقط (بدون كشط أخبار جديدة) ──────────────────
+      - name: Generate site (--generate-only)
+        run: python run.py --generate-only
+
+      # ── 7. نشر الموقع على Cloudflare Pages ───────────────────────────
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken:  ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: pages deploy static --project-name=${{ secrets.CF_PROJECT_NAME }} --commit-dirty=true
+
+      # ── 8. طباعة رابط الموقع بعد النشر ──────────────────────────────
+      - name: Print deployment summary
+        run: |
+          echo "✅ Site generated & deployed successfully!"
+          echo "🌐 Visit: https://${{ secrets.CF_PROJECT_NAME }}.pages.dev"
