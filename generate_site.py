@@ -3472,6 +3472,324 @@ TERMS_HTML_TR = """\
 """
 
 # ════════════════════════════════════════════════════════════════════════════
+# DMCA / TAKEDOWN PAGES (5 languages)
+# ════════════════════════════════════════════════════════════════════════════
+DMCA_HTML = """\
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>إشعار DMCA وطلبات إزالة المحتوى — Atlas News</title>
+<meta name="description" content="طلبات إزالة المحتوى وإشعارات DMCA على موقع Atlas News — نستجيب خلال 48 ساعة عمل">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; العودة للرئيسية</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>إشعار DMCA وطلبات إزالة المحتوى</h1>
+  <p class="sub">آخر تحديث: 2026 — قانون حقوق الملكية الرقمية (DMCA)</p>
+
+  <p><strong>Atlas News</strong> مجمّع إخباري آلي يعرض عناوين المقالات مع روابط تؤدي إلى مصادرها الأصلية. نحترم حقوق الملكية الفكرية ونستجيب لإشعارات DMCA الصحيحة خلال <strong>48–72 ساعة عمل</strong>.</p>
+
+  <h2>1. ماذا نعرض؟</h2>
+  <p>نعرض فقط <strong>عناوين الأخبار</strong> مع روابط مصادرها الأصلية استناداً لمبدأ الاقتباس المنصف (Fair Use) للأغراض الإخبارية. لا نعيد نشر المقالات كاملة.</p>
+
+  <h2>2. كيفية تقديم طلب إزالة</h2>
+  <p>أرسل إشعار DMCA إلى <a href="mailto:report@solvixi.com">report@solvixi.com</a> متضمناً المعلومات التالية:</p>
+  <ul>
+    <li>اسمك الكامل ومعلومات الاتصال (بريد إلكتروني + هاتف)</li>
+    <li>وصف واضح للعمل المحمي بحقوق النشر الذي تملكه</li>
+    <li>الرابط المباشر للمحتوى على موقعنا</li>
+    <li>تصريح بحسن النية: "أؤكد أن الاستخدام غير مرخص من قِبل صاحب الحقوق أو القانون"</li>
+    <li>تصريح بدقة المعلومات تحت طائلة المسؤولية القانونية</li>
+    <li>توقيعك الإلكتروني أو الاسم الكامل</li>
+  </ul>
+
+  <h2>3. الإشعار المضاد (Counter-Notice)</h2>
+  <p>إذا كنت تعتقد أن الإزالة كانت خطأ، يمكنك تقديم إشعار مضاد إلى <a href="mailto:report@solvixi.com">report@solvixi.com</a> يتضمن: معلومات الاتصال، وصف المحتوى المُزال، وموافقتك على الاختصاص القضائي.</p>
+
+  <h2>4. التواصل</h2>
+  <div class="info-card">
+    <span class="info-card-icon">⚠️</span>
+    <div>
+      <h3>الإبلاغ عن محتوى</h3>
+      <p>طلبات DMCA والإبلاغ عن محتوى مشكل — الرد خلال 48–72 ساعة عمل</p>
+      <a href="mailto:report@solvixi.com">report@solvixi.com</a>
+    </div>
+  </div>
+  <div class="info-card">
+    <span class="info-card-icon">📧</span>
+    <div>
+      <h3>الاستفسارات العامة</h3>
+      <p>للأسئلة العامة حول الحقوق والتراخيص</p>
+      <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+DMCA_HTML_EN = """\
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>DMCA Notice &amp; Takedown — Atlas News</title>
+<meta name="description" content="How to submit a DMCA takedown request for content on Atlas News">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; Back to Home</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>DMCA Notice &amp; Content Takedown</h1>
+  <p class="sub">Last updated: 2026 — Digital Millennium Copyright Act</p>
+
+  <p><strong>Atlas News</strong> is an automated news aggregator that displays article headlines with links to their original sources. We respect intellectual property rights and respond to valid DMCA notices within <strong>48–72 business hours</strong>.</p>
+
+  <h2>1. What We Display</h2>
+  <p>We display only <strong>article headlines</strong> with links to original sources, based on the Fair Use principle for news aggregation purposes. We do not republish full articles.</p>
+
+  <h2>2. How to Submit a DMCA Takedown Notice</h2>
+  <p>Send your DMCA notice to <a href="mailto:report@solvixi.com">report@solvixi.com</a> including:</p>
+  <ul>
+    <li>Your full legal name and contact information (email + phone)</li>
+    <li>A clear description of the copyrighted work you own</li>
+    <li>The direct URL of the infringing content on our site</li>
+    <li>A good faith statement: "I have a good faith belief that use of the material is not authorized by the copyright owner, its agent, or the law"</li>
+    <li>A statement that the information is accurate, under penalty of perjury</li>
+    <li>Your electronic or physical signature</li>
+  </ul>
+
+  <h2>3. Counter-Notice</h2>
+  <p>If you believe content was removed in error, you may submit a counter-notice to <a href="mailto:report@solvixi.com">report@solvixi.com</a> including your contact information, a description of the removed content, and consent to jurisdiction.</p>
+
+  <h2>4. Contact</h2>
+  <div class="info-card">
+    <span class="info-card-icon">⚠️</span>
+    <div>
+      <h3>Report Content</h3>
+      <p>DMCA takedown requests and content reports — response within 48–72 business hours</p>
+      <a href="mailto:report@solvixi.com">report@solvixi.com</a>
+    </div>
+  </div>
+  <div class="info-card">
+    <span class="info-card-icon">📧</span>
+    <div>
+      <h3>General Inquiries</h3>
+      <p>For general questions about rights and licensing</p>
+      <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+DMCA_HTML_FR = """\
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>Avis DMCA &amp; Retrait de contenu — Atlas News</title>
+<meta name="description" content="Comment soumettre une demande de retrait DMCA sur Atlas News">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; Retour à l'accueil</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>Avis DMCA &amp; Demandes de retrait</h1>
+  <p class="sub">Dernière mise à jour : 2026 — Digital Millennium Copyright Act</p>
+
+  <p><strong>Atlas News</strong> est un agrégateur d'actualités automatisé affichant des titres d'articles avec des liens vers leurs sources originales. Nous respectons les droits de propriété intellectuelle et répondons aux avis DMCA valides dans un délai de <strong>48–72 heures ouvrables</strong>.</p>
+
+  <h2>1. Ce que nous affichons</h2>
+  <p>Nous affichons uniquement les <strong>titres d'articles</strong> avec des liens vers les sources originales, conformément au principe d'utilisation équitable pour l'agrégation d'actualités. Nous ne republions pas les articles complets.</p>
+
+  <h2>2. Comment soumettre une demande DMCA</h2>
+  <p>Envoyez votre avis DMCA à <a href="mailto:report@solvixi.com">report@solvixi.com</a> en incluant :</p>
+  <ul>
+    <li>Votre nom complet et coordonnées (e-mail + téléphone)</li>
+    <li>Une description claire de l'œuvre protégée par droit d'auteur</li>
+    <li>L'URL directe du contenu litigieux sur notre site</li>
+    <li>Une déclaration de bonne foi : "J'ai la conviction de bonne foi que l'utilisation du contenu n'est pas autorisée par le titulaire, son agent ou la loi"</li>
+    <li>Une déclaration d'exactitude sous peine de parjure</li>
+    <li>Votre signature électronique ou physique</li>
+  </ul>
+
+  <h2>3. Contre-notification</h2>
+  <p>Si vous pensez qu'un contenu a été retiré par erreur, envoyez une contre-notification à <a href="mailto:report@solvixi.com">report@solvixi.com</a> avec vos coordonnées, une description du contenu retiré et votre consentement à la juridiction compétente.</p>
+
+  <h2>4. Contact</h2>
+  <div class="info-card">
+    <span class="info-card-icon">⚠️</span>
+    <div>
+      <h3>Signaler un contenu</h3>
+      <p>Demandes DMCA et signalements — réponse sous 48–72 heures ouvrables</p>
+      <a href="mailto:report@solvixi.com">report@solvixi.com</a>
+    </div>
+  </div>
+  <div class="info-card">
+    <span class="info-card-icon">📧</span>
+    <div>
+      <h3>Questions générales</h3>
+      <p>Pour toute question sur les droits et licences</p>
+      <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+DMCA_HTML_ES = """\
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>Aviso DMCA &amp; Eliminación de contenido — Atlas News</title>
+<meta name="description" content="Cómo enviar una solicitud de eliminación DMCA en Atlas News">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; Volver al inicio</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>Aviso DMCA &amp; Eliminación de contenido</h1>
+  <p class="sub">Última actualización: 2026 — Digital Millennium Copyright Act</p>
+
+  <p><strong>Atlas News</strong> es un agregador de noticias automatizado que muestra titulares de artículos con enlaces a sus fuentes originales. Respetamos los derechos de propiedad intelectual y respondemos a los avisos DMCA válidos en un plazo de <strong>48–72 horas hábiles</strong>.</p>
+
+  <h2>1. Lo que mostramos</h2>
+  <p>Mostramos únicamente <strong>titulares de artículos</strong> con enlaces a las fuentes originales, basándonos en el principio de uso legítimo para la agregación de noticias. No republicamos artículos completos.</p>
+
+  <h2>2. Cómo enviar una solicitud DMCA</h2>
+  <p>Envía tu aviso DMCA a <a href="mailto:report@solvixi.com">report@solvixi.com</a> incluyendo:</p>
+  <ul>
+    <li>Tu nombre completo y datos de contacto (e-mail + teléfono)</li>
+    <li>Una descripción clara de la obra protegida por derechos de autor</li>
+    <li>La URL directa del contenido infractor en nuestro sitio</li>
+    <li>Una declaración de buena fe: "Tengo la convicción de buena fe de que el uso del material no está autorizado por el titular, su agente ni la ley"</li>
+    <li>Una declaración de exactitud bajo pena de perjurio</li>
+    <li>Tu firma electrónica o física</li>
+  </ul>
+
+  <h2>3. Contranotificación</h2>
+  <p>Si crees que un contenido fue eliminado por error, puedes enviar una contranotificación a <a href="mailto:report@solvixi.com">report@solvixi.com</a> con tus datos de contacto, descripción del contenido eliminado y consentimiento de jurisdicción.</p>
+
+  <h2>4. Contacto</h2>
+  <div class="info-card">
+    <span class="info-card-icon">⚠️</span>
+    <div>
+      <h3>Reportar contenido</h3>
+      <p>Solicitudes DMCA y reportes de contenido — respuesta en 48–72 horas hábiles</p>
+      <a href="mailto:report@solvixi.com">report@solvixi.com</a>
+    </div>
+  </div>
+  <div class="info-card">
+    <span class="info-card-icon">📧</span>
+    <div>
+      <h3>Consultas generales</h3>
+      <p>Para preguntas sobre derechos y licencias</p>
+      <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+DMCA_HTML_TR = """\
+<!DOCTYPE html>
+<html lang="tr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>DMCA Bildirimi ve Icerik Kaldirma — Atlas News</title>
+<meta name="description" content="Atlas News'de DMCA kaldirma talepleri nasil gonderilir">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; Ana Sayfaya Don</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>DMCA Bildirimi &amp; Icerik Kaldirma</h1>
+  <p class="sub">Son guncelleme: 2026 — Dijital Milenyum Telif Hakki Yasasi</p>
+
+  <p><strong>Atlas News</strong>, makale basliklarini orijinal kaynaklarina yonlendiren baglantilarla birlikte gosteren otomatik bir haber toplayicisidir. Fikri mulkiyet haklarini saygiyla karsiliyor ve gecerli DMCA bildirimlerine <strong>48-72 is saati</strong> icinde yanit veriyoruz.</p>
+
+  <h2>1. Ne Gosteriyoruz?</h2>
+  <p>Yalnizca haber toplamayi kapsayan adil kullanim ilkesine dayanarak, orijinal kaynaklara baglanan <strong>makale basliklarini</strong> gosteriyoruz. Tam makaleleri yeniden yayinlamiyoruz.</p>
+
+  <h2>2. DMCA Kaldirma Talebi Nasil Gonderilir?</h2>
+  <p>DMCA bildiriminizi asagidaki bilgileri icererek <a href="mailto:report@solvixi.com">report@solvixi.com</a> adresine gonderin:</p>
+  <ul>
+    <li>Tam adiniz ve iletisim bilgileriniz (e-posta + telefon)</li>
+    <li>Sahip oldugunuz telif hakki korumasindaki eserin acik aciklamasi</li>
+    <li>Sitemizde ihlal eden icerigin dogrudan URL'si</li>
+    <li>Iyiniyet beyani: "Materyal kullaniminin telif hakki sahibi, temsilcisi veya yasa tarafindan yetkilendirilmedigine iyiniyetle inaniyorum"</li>
+    <li>Yanlis olma durumunda yasal yaptirima tabi olacagina dair dogru bilgi beyani</li>
+    <li>Elektronik veya fiziksel imzaniz</li>
+  </ul>
+
+  <h2>3. Karsi Bildirim</h2>
+  <p>Bir icerigin yanlistikla kaldirildigina inaniyorsaniz, <a href="mailto:report@solvixi.com">report@solvixi.com</a> adresine iletisim bilgilerinizi, kaldirilan icerigin aciklamasini ve yargi yetkisine riza gosterdiginizi iceren karsi bildirim gonderebilirsiniz.</p>
+
+  <h2>4. Iletisim</h2>
+  <div class="info-card">
+    <span class="info-card-icon">⚠️</span>
+    <div>
+      <h3>Icerik Bildirin</h3>
+      <p>DMCA talepleri ve icerik bildirimleri — 48-72 is saati icinde yanit</p>
+      <a href="mailto:report@solvixi.com">report@solvixi.com</a>
+    </div>
+  </div>
+  <div class="info-card">
+    <span class="info-card-icon">📧</span>
+    <div>
+      <h3>Genel Sorular</h3>
+      <p>Haklar ve lisanslar hakkinda genel sorular icin</p>
+      <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+# ════════════════════════════════════════════════════════════════════════════
 # ADVERTISE PAGES (5 languages)
 # ════════════════════════════════════════════════════════════════════════════
 ADVERTISE_HTML = """\
@@ -3834,22 +4152,27 @@ CLOUDFLARE_HEADERS = """\
 # Replace placeholder publisher IDs with your real IDs before going live.
 ADS_TXT = """\
 # ads.txt — atlasnews.solvixi.com
-# https://iabtechlab.com/ads-txt/
+# Standard: https://iabtechlab.com/ads-txt/
 #
-# ── Google AdSense ────────────────────────────────────────────────────────────
-# Uncomment and replace pub-XXXXXXXXXXXXXXXX with your real Publisher ID:
+# ════════════════════════════════════════════════════════════════════════════
+# HOW TO ACTIVATE:
+#   1. Go to Google AdSense → Account → Account information → Publisher ID
+#   2. Replace pub-XXXXXXXXXXXXXXXX with your real Publisher ID
+#   3. Remove the leading "#" from the google.com line below
+#   4. Commit & push → deploys automatically on next CI run
+# ════════════════════════════════════════════════════════════════════════════
+#
+# ── Google AdSense (uncomment + replace ID when approved) ────────────────────
 # google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
 #
-# ── Media.net ─────────────────────────────────────────────────────────────────
+# ── Media.net (add when account is approved) ──────────────────────────────────
 # media.net, XXXXXXXXX, DIRECT
 #
-# ── Amazon Publisher Services ────────────────────────────────────────────────
+# ── Amazon Publisher Services (add when enrolled) ────────────────────────────
 # amazon.com, XXXXXXXXXXXXXXXXXXXX, DIRECT
 #
-# ── Ezoic ────────────────────────────────────────────────────────────────────
+# ── Ezoic (add when enrolled — includes AdSense reseller line) ───────────────
 # ezoic.com, XXXXXXX, DIRECT, XXXXXXXXXXXXXXXX
-#
-# ── AdSense via Ezoic reseller ───────────────────────────────────────────────
 # google.com, pub-XXXXXXXXXXXXXXXX, RESELLER, f08c47fec0942fa0
 #
 # Contact: ads@solvixi.com
@@ -3936,6 +4259,7 @@ def _write_static_assets(out_dir: str = OUTPUT_DIR, lang: str = "ar",
     _about_map     = {"en": ABOUT_HTML_EN,     "fr": ABOUT_HTML_FR,     "es": ABOUT_HTML_ES,     "tr": ABOUT_HTML_TR}
     _contact_map   = {"en": CONTACT_HTML_EN,   "fr": CONTACT_HTML_FR,   "es": CONTACT_HTML_ES,   "tr": CONTACT_HTML_TR}
     _terms_map     = {"en": TERMS_HTML_EN,     "fr": TERMS_HTML_FR,     "es": TERMS_HTML_ES,     "tr": TERMS_HTML_TR}
+    _dmca_map      = {"en": DMCA_HTML_EN,      "fr": DMCA_HTML_FR,      "es": DMCA_HTML_ES,      "tr": DMCA_HTML_TR}
     _advertise_map = {"en": ADVERTISE_HTML_EN, "fr": ADVERTISE_HTML_FR, "es": ADVERTISE_HTML_ES, "tr": ADVERTISE_HTML_TR}
 
     static_pages = [
@@ -3943,6 +4267,7 @@ def _write_static_assets(out_dir: str = OUTPUT_DIR, lang: str = "ar",
         ("about.html",     _about_map.get(lang, ABOUT_HTML)),
         ("contact.html",   _contact_map.get(lang, CONTACT_HTML)),
         ("terms.html",     _terms_map.get(lang, TERMS_HTML)),
+        ("dmca.html",      _dmca_map.get(lang, DMCA_HTML)),
         ("advertise.html", _advertise_map.get(lang, ADVERTISE_HTML)),
     ]
     for filename, content in static_pages:
