@@ -10,9 +10,9 @@
   },
   "categories": [
     {
-      "name": "Politique",
+      "name": "Événements",
       "slug": "politics",
-      "icon": "🏛️",
+      "icon": "📰",
       "sources": [
         {
           "name": "Le Monde International",

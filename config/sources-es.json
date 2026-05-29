@@ -10,9 +10,9 @@
   },
   "categories": [
     {
-      "name": "Política",
+      "name": "Eventos",
       "slug": "politics",
-      "icon": "🏛️",
+      "icon": "📰",
       "sources": [
         {
           "name": "El País Internacional",

@@ -10,9 +10,9 @@
   },
   "categories": [
     {
-      "name": "Politika",
+      "name": "Olaylar",
       "slug": "politics",
-      "icon": "🏛️",
+      "icon": "📰",
       "sources": [
         {
           "name": "Hürriyet Gündem",

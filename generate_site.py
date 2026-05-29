@@ -2484,7 +2484,7 @@ ABOUT_HTML = """\
 
   <h2>التصنيفات المتاحة</h2>
   <ul>
-    <li>🏛️ <strong>سياسة</strong> — أخبار سياسية عربية ودولية</li>
+    <li>📰 <strong>أحداث</strong> — أهم الأحداث الجارية محلياً ودولياً</li>
     <li>💰 <strong>اقتصاد</strong> — أحداث اقتصادية ومالية</li>
     <li>💻 <strong>تكنولوجيا</strong> — آخر أخبار التقنية والابتكار</li>
     <li>⚽ <strong>رياضة</strong> — أخبار الملاعب والبطولات</li>
@@ -2635,7 +2635,7 @@ body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}
   </div>
   <h2>Categories</h2>
   <ul>
-    <li>🏛️ <strong>Politics</strong> — International political news</li>
+    <li>📰 <strong>Events</strong> — Top current events, local and international</li>
     <li>💰 <strong>Economy</strong> — Financial and economic events</li>
     <li>💻 <strong>Technology</strong> — Latest tech and innovation news</li>
     <li>⚽ <strong>Sports</strong> — Sports and tournament news</li>
@@ -2783,7 +2783,7 @@ ABOUT_HTML_FR = """\
   </div>
   <h2>Catégories</h2>
   <ul>
-    <li>🏛️ <strong>Politique</strong> — Actualités politiques internationales</li>
+    <li>📰 <strong>Événements</strong> — Principaux événements actuels, locaux et internationaux</li>
     <li>💰 <strong>Économie</strong> — Événements financiers et économiques</li>
     <li>💻 <strong>Technologie</strong> — Dernières nouvelles tech et innovation</li>
     <li>⚽ <strong>Sports</strong> — Actualités sportives</li>
@@ -2931,7 +2931,7 @@ ABOUT_HTML_ES = """\
   </div>
   <h2>Categorías</h2>
   <ul>
-    <li>🏛️ <strong>Política</strong> — Noticias políticas internacionales</li>
+    <li>📰 <strong>Eventos</strong> — Principales eventos actuales, locales e internacionales</li>
     <li>💰 <strong>Economía</strong> — Eventos financieros y económicos</li>
     <li>💻 <strong>Tecnología</strong> — Últimas noticias de tecnología e innovación</li>
     <li>⚽ <strong>Deportes</strong> — Noticias deportivas</li>
@@ -3074,7 +3074,7 @@ ABOUT_HTML_TR = """\
   </div>
   <h2>Kapsanan Bölümler hakkında</h2>
   <ul>
-    <li>🏛️ <strong>Politika</strong> — Türkiye ve dünya siyasi haberleri</li>
+    <li>📰 <strong>Olaylar</strong> — Yerel ve uluslararası güncel önemli olaylar</li>
     <li>💰 <strong>Ekonomi</strong> — Finans ve ekonomi haberleri</li>
     <li>💻 <strong>Teknoloji</strong> — Teknoloji ve inovasyon haberleri</li>
     <li>⚽ <strong>Spor</strong> — Spor haberleri</li>

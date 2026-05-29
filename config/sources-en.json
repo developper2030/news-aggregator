@@ -10,9 +10,9 @@
   },
   "categories": [
     {
-      "name": "Politics",
+      "name": "Events",
       "slug": "politics",
-      "icon": "🏛️",
+      "icon": "📰",
       "sources": [
         {
           "name": "BBC World News",

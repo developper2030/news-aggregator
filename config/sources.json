@@ -12,9 +12,9 @@
   },
   "categories": [
     {
-      "name": "سياسة",
+      "name": "أحداث",
       "slug": "politics",
-      "icon": "🏛️",
+      "icon": "📰",
       "sources": [
         {
           "name": "الجزيرة نت",
