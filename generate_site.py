@@ -6549,6 +6549,18 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         logger.info("Auto-hid %d empty video section(s): %s",
                     len(_empty_vid), ", ".join(sorted(_empty_vid)))
 
+    # ── Special-page visibility (admin → Special Pages toggles) ───────────────
+    # show_media    → the whole "صوت وصورة" hub (vid-* sections + media.html + live)
+    # show_worldcup → the World Cup schedule page + its sports-subnav link
+    # Missing flag = shown (so nothing changes unless explicitly turned off).
+    _show_worldcup = settings.get("show_worldcup", True) is not False
+    if settings.get("show_media", True) is False:
+        media_regions_list = []
+        media_slugs_local  = set()
+        has_media          = False
+        categories = [c for c in categories if not c["slug"].startswith("vid-")]
+        logger.info("Special pages: صوت وصورة hidden (show_media=false)")
+
     now             = datetime.now().strftime("%Y-%m-%d %H:%M")
     today_ar        = datetime.now().strftime("%Y/%m/%d")
 
@@ -6794,7 +6806,8 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             )
         elif slug == "sports":
             page_world_subnav = _sports_subnav(
-                "sports", s, sports_name=cat["name"], has_worldcup=_has_wc
+                "sports", s, sports_name=cat["name"],
+                has_worldcup=(_has_wc and _show_worldcup)
             )
         else:
             page_world_subnav = ""
@@ -6881,7 +6894,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             pages_written += 1
 
     # ── WORLDCUP.HTML — World Cup 2026 schedule (data page, like prices) ──────
-    if _has_wc:
+    if _has_wc and _show_worldcup:
         _sports_name = next((c["name"] for c in categories if c["slug"] == "sports"),
                             s.get("sports", "Sports"))
         _wrt("worldcup.html", _page(
@@ -6894,7 +6907,8 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             hreflang_html=_make_hreflang("worldcup.html"),
             og_image_url=_og_img_url,
             extra_json_ld=_org_ld,
-            world_subnav_html=_sports_subnav("worldcup", s, _sports_name, _has_wc),
+            world_subnav_html=_sports_subnav("worldcup", s, _sports_name,
+                                             _has_wc and _show_worldcup),
             carousel_html="",
             lang_switcher_html=_lsw("worldcup.html"),
             **{**common, "desc": s.get("wc_title", "World Cup 2026 Schedule")},

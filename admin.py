@@ -528,6 +528,7 @@ a{color:inherit;text-decoration:none}
 .sec-sl{font-family:monospace;color:#64748b;direction:ltr}
 .sec-ct{text-align:center;font-weight:600}
 .sec-ord{white-space:nowrap}
+.sec-note{color:#94a3b8;font-size:.92em}
 .cat-hdr{background:#f1f5f9;padding:9px 12px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .cat-hdr input{background:#ffffff;border:1px solid #cbd5e1;color:#1e293b;border-radius:5px;padding:4px 8px;font-family:inherit;font-size:.82em;outline:none;font-weight:600}
 .cat-hdr input:focus{border-color:#3b82f6}
@@ -1200,9 +1201,21 @@ function renderSections() {
       <td><button class="btn bd xs" onclick="delCat(${ci});renderSections()" title="حذف القسم نهائياً">✕</button></td>
     </tr>`;
   }).join('');
-  wrap.innerHTML = `<table class="sec-table"><thead><tr>
-    <th>الترتيب</th><th></th><th>الاسم</th><th>المعرّف</th><th>مصادر</th><th>الحالة</th><th>إفراغ</th><th>حذف</th>
-  </tr></thead><tbody>${rows}</tbody></table>`;
+  const sp = cfg.settings || {};
+  const spRow = (icon, name, key, note) => {
+    const off = sp[key] === false;
+    return `<tr class="${off?'sec-off':''}"><td class="sec-ic">${icon}</td><td class="sec-nm">${esc(name)}</td><td class="sec-note">${esc(note)}</td><td><button class="btn ${off?'bo':'bg'} xs" onclick="toggleSpecial('${key}')">${off?'🚫 مخفي':'👁️ ظاهر'}</button></td></tr>`;
+  };
+  wrap.innerHTML =
+    `<table class="sec-table"><thead><tr><th>الترتيب</th><th></th><th>الاسم</th><th>المعرّف</th><th>مصادر</th><th>الحالة</th><th>إفراغ</th><th>حذف</th></tr></thead><tbody>${rows}</tbody></table>`
+    + `<h4 style="margin:22px 0 8px;color:#475569">📄 صفحات خاصة (مولّدة تلقائياً — لا مصادر)</h4>`
+    + `<table class="sec-table"><thead><tr><th></th><th>الصفحة</th><th>ملاحظة</th><th>الحالة</th></tr></thead><tbody>${spRow('🎬','صوت وصورة','show_media','كل أقسام الفيديو + البث المباشر')}${spRow('🏆','برنامج كأس العالم','show_worldcup','جدول مباريات 2026 (تلقائي)')}</tbody></table>`;
+}
+function toggleSpecial(key) {
+  // Toggle a special-page setting (show_media / show_worldcup). Missing = shown.
+  if (!cfg.settings) cfg.settings = {};
+  cfg.settings[key] = (cfg.settings[key] === false);  // false→true ; else→false
+  renderSections();
 }
 function addCat() {
   cfg.categories.push({name:'تصنيف جديد',slug:'cat-'+Date.now(),icon:'📰',color:'#3b82f6',sources:[]});
