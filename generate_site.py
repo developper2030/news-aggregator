@@ -4945,15 +4945,13 @@ def _carousel(articles: list[dict], max_items: int = 12, s: dict = STRINGS["ar"]
 
 
 def _world_subnav(active_slug: str = "", world_regions: list = WORLD_REGIONS,
-                  s: dict = STRINGS["ar"], homepage: bool = False) -> str:
+                  s: dict = STRINGS["ar"]) -> str:
     """Horizontal world-regions strip — sticky inside .sticky-header on index + world + region pages.
 
-    homepage=True adds the 'world-subnav--home' class which is hidden on mobile
-    (homepage already has a full main nav; region pages need it for navigation).
+    Visible on all viewports (compact + horizontally scrollable on mobile).
     """
     if not world_regions:
         return ""
-    extra_cls = " world-subnav--home" if homepage else ""
     buttons = ""
     for r in world_regions:
         active_cls = " active-region" if r["slug"] == active_slug else ""
@@ -4963,7 +4961,7 @@ def _world_subnav(active_slug: str = "", world_regions: list = WORLD_REGIONS,
             f'</a>'
         )
     return (
-        f'<div class="world-subnav{extra_cls}" aria-label="{esc(s["world_regions_label"])}">'
+        f'<div class="world-subnav" aria-label="{esc(s["world_regions_label"])}">'
         f'<div class="world-subnav-inner">{buttons}</div>'
         f'</div>'
     )
@@ -6316,9 +6314,8 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
     def _lsw(page_file: str) -> str:
         return _lang_switcher(lang, page_file)
 
-    # ── World subnav — homepage gets homepage=True so it hides on mobile ────────
-    # (Region/Media pages use their own subnav WITHOUT homepage=True, stays visible)
-    world_subnav = _world_subnav(world_regions=world_regions, s=s, homepage=True)
+    # ── World subnav — visible on all pages incl. homepage (compact on mobile) ──
+    world_subnav = _world_subnav(world_regions=world_regions, s=s)
 
     # Pre-build category lookup: slug → (cat_name, cat_icon)
     cat_meta: dict[str, tuple[str, str]] = {
