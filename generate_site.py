@@ -4455,6 +4455,12 @@ def _write_static_assets(out_dir: str = OUTPUT_DIR, lang: str = "ar",
             f.write(ADS_TXT)
         with open(os.path.join(out_dir, "_headers"), "w", encoding="utf-8") as f:
             f.write(CLOUDFLARE_HEADERS)
+        # og-image.png: write once — user can replace with a Canva-designed PNG
+        # and it will NOT be overwritten on subsequent runs.
+        _og_png_path = os.path.join(out_dir, "og-image.png")
+        if not os.path.exists(_og_png_path):
+            with open(_og_png_path, "wb") as _f:
+                _f.write(_gen_og_png())
     # Minimal 32×32 transparent PNG favicon fallback (only write if not present)
     _FAVICON_32_PNG = (
         b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00 \x00\x00\x00 "
@@ -5145,8 +5151,45 @@ FAVICON_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 # Default OG image path (relative).  Override per-page by passing og_image.
 _DEFAULT_OG_IMAGE_PATH = "og-image.png"
 
-# Default OG image (1200×630 SVG rendered as PNG by most scrapers; we supply
-# the SVG source which doubles as the og-image when no PNG is available).
+
+def _gen_og_png(width: int = 1200, height: int = 630) -> bytes:
+    """Generate a 1200×630 PNG OG image with no external dependencies.
+
+    Creates a gradient from dark navy (#0f172a) at top to brand blue (#1d4ed8)
+    at bottom — matches the site's header palette.
+
+    Written once to static/og-image.png; the user can replace it with a
+    Canva-designed PNG at any time without it being overwritten again.
+    """
+    import struct
+    import zlib as _zl
+
+    def _chunk(tag: bytes, data: bytes) -> bytes:
+        crc = _zl.crc32(tag + data) & 0xFFFFFFFF
+        return struct.pack(">I", len(data)) + tag + data + struct.pack(">I", crc)
+
+    # Gradient: dark navy → brand blue
+    r0, g0, b0 = 0x0f, 0x17, 0x2a   # top  — #0f172a
+    r1, g1, b1 = 0x1d, 0x4e, 0xd8   # bottom — #1d4ed8
+
+    rows = bytearray()
+    for y in range(height):
+        t = y / max(height - 1, 1)
+        r = round(r0 + (r1 - r0) * t)
+        g = round(g0 + (g1 - g0) * t)
+        b = round(b0 + (b1 - b0) * t)
+        # PNG filter byte 0 (None) + raw RGB pixels for this row
+        rows += b'\x00' + bytes([r, g, b] * width)
+
+    return (
+        b'\x89PNG\r\n\x1a\n'
+        + _chunk(b'IHDR', struct.pack('>IIBBBBB', width, height, 8, 2, 0, 0, 0))
+        + _chunk(b'IDAT', _zl.compress(bytes(rows), 9))
+        + _chunk(b'IEND', b'')
+    )
+
+
+# Default OG image (SVG — kept for reference; actual OG meta uses og-image.png)
 OG_IMAGE_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
   <rect width="1200" height="630" fill="#1d4ed8"/>
   <text x="600" y="280" text-anchor="middle" font-family="Arial,sans-serif"
@@ -5983,7 +6026,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
     else:
         _root_url = _site_url  # EN: site_url is already the root
 
-    _og_img_url = f"{_root_url}/og-image.svg" if _root_url else ""
+    _og_img_url = f"{_root_url}/og-image.png" if _root_url else ""
 
     def _make_hreflang(filename: str) -> str:
         """Generate hreflang links using root domain (cross-language links)."""
