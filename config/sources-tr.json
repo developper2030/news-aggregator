@@ -934,6 +934,22 @@
           }
         }
       ]
+    },
+    {
+      "name": "Ürünler",
+      "slug": "products",
+      "icon": "🛍️",
+      "color": "#f59e0b",
+      "enabled": false,
+      "sources": []
+    },
+    {
+      "name": "Dünya Kupası Haberleri",
+      "slug": "worldcup-news",
+      "icon": "🏆",
+      "color": "#16a34a",
+      "enabled": false,
+      "sources": []
     }
   ],
   "media_regions": [

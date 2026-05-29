@@ -851,6 +851,22 @@
           }
         }
       ]
+    },
+    {
+      "name": "Produits",
+      "slug": "products",
+      "icon": "🛍️",
+      "color": "#f59e0b",
+      "enabled": false,
+      "sources": []
+    },
+    {
+      "name": "Actu Coupe du Monde",
+      "slug": "worldcup-news",
+      "icon": "🏆",
+      "color": "#16a34a",
+      "enabled": false,
+      "sources": []
     }
   ],
   "media_regions": [
