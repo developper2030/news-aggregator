@@ -4180,12 +4180,14 @@ CLOUDFLARE_HEADERS = """\
 /*.html
   Cache-Control: public, max-age=3600, stale-while-revalidate=43200
 
-# CSS / JS — long cache (content-hash would be ideal but we use fixed names)
+# CSS / JS — revalidate on every request (fixed filenames, no content-hash in URL)
+# Cloudflare Pages auto-purges edge cache on deploy, so this only affects browser HTTP cache.
+# The SW handles offline caching with a content-hash in the cache name.
 /style.css
-  Cache-Control: public, max-age=604800
+  Cache-Control: no-cache, must-revalidate
 
 /app.js
-  Cache-Control: public, max-age=604800
+  Cache-Control: no-cache, must-revalidate
 
 # Service worker — never cache (must always be fresh)
 /sw.js
@@ -4241,10 +4243,20 @@ ADS_TXT = """\
 
 
 def _make_sw(site_url: str = "") -> str:
-    """Generate a minimal Service Worker for PWA offline caching."""
+    """Generate a minimal Service Worker for PWA offline caching.
+
+    Cache name embeds a content-hash of CSS+JS so it changes automatically
+    on every deploy that modifies styles or scripts.  The activate handler
+    deletes every cache whose name != CACHE, so stale assets are purged the
+    moment the new SW takes control — no manual version bumps needed.
+    """
+    import hashlib as _hl
+    # Hash the two assets that change most often; 8 hex chars is plenty.
+    _h = _hl.md5((STYLE_CSS + APP_JS).encode("utf-8")).hexdigest()[:8]
+    _cache_name = f"news-v1-{_h}"
     base = site_url.rstrip("/") or "."
-    return f"""// Service Worker — auto-generated
-const CACHE = 'news-v1';
+    return f"""// Service Worker — auto-generated (cache: {_cache_name})
+const CACHE = '{_cache_name}';
 const STATIC = [
   '{base}/style.css',
   '{base}/app.js',
@@ -4255,6 +4267,7 @@ self.addEventListener('install', e => {{
   self.skipWaiting();
 }});
 self.addEventListener('activate', e => {{
+  // Delete ALL old caches — any name that isn't the current hash is stale
   e.waitUntil(caches.keys().then(keys =>
     Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
   ));
@@ -4266,7 +4279,7 @@ self.addEventListener('fetch', e => {{
     e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
     return;
   }}
-  // Cache-first for static assets
+  // Cache-first for static assets (CSS/JS are versioned via SW cache name)
   e.respondWith(
     caches.match(e.request).then(cached => {{
       if (cached) return cached;
