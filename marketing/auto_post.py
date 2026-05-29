@@ -5,6 +5,7 @@ Atlas News — Social Auto-Poster  (legitimate, official APIs only)
 
 Reads the site's own RSS feed and posts the newest articles to:
   • Telegram channel   — via the official Bot API (free, built for this)
+  • Facebook Page      — via the official Graph API (your own Page token)
   • Mastodon instance  — via the official REST API (open, free)
 
 This is 100% compliant automation:
@@ -26,6 +27,16 @@ SETUP  (set these as environment variables — never hard-code secrets)
     2. Create a public channel, add the bot as an administrator.
     TELEGRAM_BOT_TOKEN    = "123456:ABC-DEF..."
     TELEGRAM_CHANNEL_ID   = "@atlasnews"        (or numeric -100xxxxxxxxxx)
+
+  Facebook Page (official Graph API):
+    1. Create a Facebook Page for Atlas News.
+    2. developers.facebook.com → Create App (type: Business).
+    3. Add "Facebook Login" / Graph API, then generate a long-lived
+       Page Access Token with permissions: pages_manage_posts, pages_read_engagement.
+       (Graph API Explorer → select your Page → grant scopes → exchange for
+        a long-lived token; see README for the step-by-step.)
+    FACEBOOK_PAGE_ID           = "1234567890"
+    FACEBOOK_PAGE_ACCESS_TOKEN = "EAAB..."
 
   Mastodon (open-source social network):
     1. Your instance → Preferences → Development → New application.
@@ -196,6 +207,30 @@ def post_mastodon(text: str, base_url: str, access_token: str) -> bool:
     return False
 
 
+def post_facebook(message: str, link: str, page_id: str, access_token: str) -> bool:
+    """Publish a Page post via the official Facebook Graph API.
+
+    Posts the article link with a caption; Facebook auto-generates the link
+    preview (uses our og-image.png). The token is sent in the POST body
+    (not the URL) so it never leaks into server/request logs.
+    """
+    import urllib.parse
+    url = f"https://graph.facebook.com/v21.0/{page_id}/feed"
+    payload = urllib.parse.urlencode({
+        "message": message,
+        "link": link,
+        "access_token": access_token,
+    }).encode("utf-8")
+    status, body = _http_post(
+        url, payload,
+        {"Content-Type": "application/x-www-form-urlencoded", "User-Agent": USER_AGENT},
+    )
+    if status == 200:
+        return True
+    print(f"   ⚠️ Facebook HTTP {status}: {body}", file=sys.stderr)
+    return False
+
+
 # ── Message formatting ─────────────────────────────────────────────────────────
 def build_message(item: dict, lang: str, platform: str) -> str:
     tags = HASHTAGS.get(lang, HASHTAGS["en"])
@@ -205,6 +240,10 @@ def build_message(item: dict, lang: str, platform: str) -> str:
         # HTML parse_mode: bold title + link on its own line
         safe = html.escape(title)
         return f"<b>{safe}</b>\n\n{link}\n\n{tags}"
+    if platform == "facebook":
+        # Graph API takes the link separately → caption is title + tags only.
+        # Facebook auto-renders the link preview card (og-image).
+        return f"{title}\n\n{tags}"
     # Mastodon / plain
     return f"{title}\n\n{link}\n\n{tags}"
 
@@ -243,19 +282,24 @@ def main() -> int:
     # Which platforms are configured?
     tg_token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
     tg_chan = os.environ.get("TELEGRAM_CHANNEL_ID", "").strip()
+    fb_page = os.environ.get("FACEBOOK_PAGE_ID", "").strip()
+    fb_tok = os.environ.get("FACEBOOK_PAGE_ACCESS_TOKEN", "").strip()
     md_base = os.environ.get("MASTODON_BASE_URL", "").strip()
     md_tok = os.environ.get("MASTODON_ACCESS_TOKEN", "").strip()
     have_tg = bool(tg_token and tg_chan)
+    have_fb = bool(fb_page and fb_tok)
     have_md = bool(md_base and md_tok)
 
-    if not (have_tg or have_md) and not args.dry_run:
-        print("⚠️ No platform configured. Set TELEGRAM_* and/or MASTODON_* env vars,\n"
-              "   or use --dry-run to preview messages.", file=sys.stderr)
+    if not (have_tg or have_fb or have_md) and not args.dry_run:
+        print("⚠️ No platform configured. Set TELEGRAM_*, FACEBOOK_* and/or MASTODON_*\n"
+              "   env vars, or use --dry-run to preview messages.", file=sys.stderr)
         return 2
 
     targets = []
     if have_tg:
         targets.append("Telegram")
+    if have_fb:
+        targets.append("Facebook")
     if have_md:
         targets.append("Mastodon")
     mode = "DRY-RUN (no posting)" if args.dry_run else f"posting to: {', '.join(targets) or 'none'}"
@@ -276,6 +320,10 @@ def main() -> int:
         if have_tg:
             if post_telegram(build_message(item, lang, "telegram"), tg_token, tg_chan):
                 print("   ✓ Telegram")
+                sent_any = True
+        if have_fb:
+            if post_facebook(build_message(item, lang, "facebook"), item["link"], fb_page, fb_tok):
+                print("   ✓ Facebook")
                 sent_any = True
         if have_md:
             if post_mastodon(build_message(item, lang, "mastodon"), md_base, md_tok):

@@ -28,6 +28,35 @@ export TELEGRAM_BOT_TOKEN="123456:ABC-DEF..."
 export TELEGRAM_CHANNEL_ID="@atlasnews"
 ```
 
+### الإعداد — Facebook Page (Graph API الرسمي)
+
+1. أنشئ **صفحة فيسبوك** باسم `Atlas News` (من حسابك الشخصي).
+2. اذهب إلى [developers.facebook.com](https://developers.facebook.com) → **My Apps → Create App** → نوع **Business**.
+3. في التطبيق: أضف منتج **Graph API** / **Facebook Login**.
+4. افتح **Graph API Explorer**:
+   - اختر تطبيقك، ثم اختر صفحتك من قائمة "User or Page".
+   - امنح الصلاحيات: `pages_manage_posts` + `pages_read_engagement`.
+   - انسخ الـ token (قصير الأمد).
+5. **بدّله بـ token طويل الأمد** (يدوم ~60 يوماً، ويمكن جعله دائماً للصفحة):
+   ```bash
+   # 1) بدّل short → long-lived user token:
+   curl "https://graph.facebook.com/v21.0/oauth/access_token?grant_type=fb_exchange_token&client_id=APP_ID&client_secret=APP_SECRET&fb_exchange_token=SHORT_TOKEN"
+   # 2) اجلب Page token الدائم من الـ long-lived user token:
+   curl "https://graph.facebook.com/v21.0/me/accounts?access_token=LONG_USER_TOKEN"
+   #    → الحقل access_token في النتيجة = Page token دائم
+   ```
+6. احصل على **Page ID** من: إعدادات الصفحة → About → Page ID.
+7. اضبط:
+
+```bash
+export FACEBOOK_PAGE_ID="1234567890"
+export FACEBOOK_PAGE_ACCESS_TOKEN="EAAB..."
+```
+
+> ملاحظة: للنشر على **صفحتك الخاصة** فقط، لا تحتاج عادةً App Review كاملاً —
+> الـ Page token مع الصلاحيتين أعلاه كافٍ. App Review يلزم فقط لو أردت نشر
+> تطبيقك للعامة ليديره آخرون.
+
 ### الإعداد — Mastodon (شبكة مفتوحة المصدر، مجانية)
 
 1. على نسختك (مثلاً mastodon.social): **Preferences → Development → New application**.
