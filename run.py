@@ -121,11 +121,12 @@ def summarize(langs: list[str]) -> None:
     print(f"\n[AI] Generating summaries with {provider}…")
 
     # Batch sizes tuned to free-tier daily limits ÷ (5 langs × 4 CI runs/day):
-    #   Gemini:      1500/day → 75/lang/run  (6 min total)
-    #   OpenRouter:  ~1000/day free → 50/lang/run
+    #   Gemini:      1500/day → 50/lang/run = 1000/day (500 headroom for manual runs)
+    #   OpenRouter:  ~1000/day free → 40/lang/run
     #   NVIDIA/Groq: generous → 100/lang/run  (21 min total, fits in 75-min timeout)
-    if gemini_key:        _batch = 75
-    elif openrouter_key:  _batch = 50
+    # On quota exhaustion (429), code auto-cascades to next provider — no wasted time.
+    if gemini_key:        _batch = 50
+    elif openrouter_key:  _batch = 40
     else:                 _batch = 100   # NVIDIA or Groq
 
     for code in langs:

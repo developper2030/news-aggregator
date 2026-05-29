@@ -259,14 +259,21 @@ def summarize_articles(
     done = 0
     errors = 0
 
+    # Mutable provider keys — on quota exhaustion (429) we clear the failing
+    # provider and cascade to the next one without sleeping.
+    _active_gemini     = _gemini
+    _active_openrouter = _openrouter
+    _active_nvidia     = _nvidia
+    _active_groq       = _groq
+
     for i, art in enumerate(articles):
         try:
             summary = _call_api(
                 art["title"], lang,
-                gemini_key=_gemini,
-                openrouter_key=_openrouter,
-                nvidia_key=_nvidia,
-                groq_key=_groq,
+                gemini_key=_active_gemini,
+                openrouter_key=_active_openrouter,
+                nvidia_key=_active_nvidia,
+                groq_key=_active_groq,
             )
             update_article_summary(art["url"], summary)
             done += 1
@@ -293,13 +300,29 @@ def summarize_articles(
                 logger.warning("Summarizer [%s]: error on '%s': %s",
                                lang, art["title"][:60], exc)
 
-            errors += 1
             if status == 429:
-                logger.info("Summarizer: rate-limited, sleeping 60s…")
-                time.sleep(60)
-            elif errors >= 5:
-                logger.warning("Summarizer: too many errors, aborting batch")
-                break
+                # Quota exhausted — cascade to next provider immediately (no sleep)
+                if _active_gemini:
+                    logger.warning("Summarizer [%s]: Gemini quota exhausted → switching to OpenRouter", lang)
+                    _active_gemini = ""
+                elif _active_openrouter:
+                    logger.warning("Summarizer [%s]: OpenRouter quota exhausted → switching to NVIDIA", lang)
+                    _active_openrouter = ""
+                elif _active_nvidia:
+                    logger.warning("Summarizer [%s]: NVIDIA quota exhausted → switching to Groq", lang)
+                    _active_nvidia = ""
+                elif _active_groq:
+                    logger.warning("Summarizer [%s]: all providers exhausted — sleeping 60s", lang)
+                    _active_groq = ""
+                    time.sleep(60)
+                else:
+                    logger.warning("Summarizer [%s]: no providers left — aborting batch", lang)
+                    break
+            else:
+                errors += 1
+                if errors >= 5:
+                    logger.warning("Summarizer: too many errors, aborting batch")
+                    break
 
     logger.info("Summarizer [%s]: finished — %d summarized, %d errors",
                 lang, done, errors)
