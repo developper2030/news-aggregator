@@ -1,25 +1,38 @@
 name: Update & Deploy News Site
 
-# ───────────────────────────────────────────────
-# متى يعمل هذا الـ workflow؟
-# ───────────────────────────────────────────────
+# ───────────────────────────────────────────────────────────────────────────
+# متى يعمل؟  كل 6 ساعات (00/06/12/18 UTC) + يدوياً عند الحاجة.
+#
+# فلسفة التحصين (ضمان وصول التحديثات إلى Cloudflare دائماً):
+#   1. الكشط/التلخيص "best-effort": مسموح له بالفشل/التأخّر دون إيقاف النشر.
+#   2. التوليد يعمل من بيانات الكاش الموجودة → يلتقط أحدث تعديلات الكود دوماً.
+#   3. بوابة Verify تتحقق من سلامة المخرجات قبل النشر (تمنع نشر موقع مكسور).
+#   4. النشر يحدث فقط بعد نجاح Verify (لا نشر أعمى لموقع ناقص).
+# ───────────────────────────────────────────────────────────────────────────
 on:
   schedule:
-    # كل 6 ساعات: 00:00 / 06:00 / 12:00 / 18:00 UTC
     - cron: '0 0,6,12,18 * * *'
   workflow_dispatch:
-    # تشغيل يدوي من GitHub عند الحاجة (زر "Run workflow")
+
+# منع تداخل عدة runs مجدولة معاً (لا نُلغي كشطاً جارياً — ننتظره)
+concurrency:
+  group: scheduled-update
+  cancel-in-progress: false
+
+# مبدأ الحد الأدنى من الصلاحيات
+permissions:
+  contents: read
 
 jobs:
   build-and-deploy:
-    name: Scrape → Generate → Deploy
+    name: Scrape → Generate → Verify → Deploy
     runs-on: ubuntu-latest
     timeout-minutes: 75
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
-      # ── 1. تنزيل الكود من GitHub ──────────────────────────────────────
+      # ── 1. تنزيل الكود ────────────────────────────────────────────────
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -30,12 +43,13 @@ jobs:
           python-version: '3.12'
           cache: 'pip'
 
-      # ── 3. تثبيت المكتبات (beautifulsoup4, lxml...) ───────────────────
+      # ── 3. تثبيت المكتبات (مع ترقية pip لتجنب أعطال التوافق) ──────────
       - name: Install Python dependencies
-        run: pip install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      # ── 4. استعادة قواعد البيانات من الـ cache ───────────────────────
-      #    (حتى لا نفقد الأخبار القديمة في كل run)
+      # ── 4. استعادة قواعد البيانات من الـ cache (read + write) ────────
       - name: Restore news databases cache
         uses: actions/cache@v4
         with:
@@ -44,19 +58,18 @@ jobs:
           restore-keys: |
             news-databases-
 
-      # ── 5. إنشاء مجلد data/ إذا لم يكن موجوداً ──────────────────────
+      # ── 5. ضمان وجود مجلد data/ ───────────────────────────────────────
       - name: Ensure data directory exists
         run: mkdir -p data
 
-      # ── 6. الكشط + الملخصات (قد يتأخّر/يفشل — لا يمنع النشر) ──────────
-      #    timeout على مستوى الخطوة (50 د): إذا تجاوزها تُقتل الخطوة وحدها
-      #    لكن الـ job يستمر للخطوات التالية (generate + deploy).
+      # ── 6. الكشط + التلخيص — best-effort (لا يمنع النشر إن فشل/تأخّر) ──
+      #    timeout على مستوى الخطوة (50 د) + continue-on-error:
+      #    إن تجاوز الوقت أو فشل، تُقتل الخطوة وحدها والـ job يكمل.
       - name: Scrape & summarize (best-effort)
         timeout-minutes: 50
         continue-on-error: true
         run: python run.py
         env:
-          # مفاتيح API الاختيارية (تُضاف في GitHub Secrets)
           METALPRICEAPI_KEY:   ${{ secrets.METALPRICEAPI_KEY }}
           ALPHAVANTAGE_KEY:    ${{ secrets.ALPHAVANTAGE_KEY }}
           GROQ_API_KEY:        ${{ secrets.GROQ_API_KEY }}
@@ -64,24 +77,44 @@ jobs:
           OPENROUTER_API_KEY:  ${{ secrets.OPENROUTER_API_KEY }}
           NVIDIA_API_KEY:      ${{ secrets.NVIDIA_API_KEY }}
 
-      # ── 6b. توليد الموقع — يعمل دائماً حتى لو فشل/تأخّر الكشط ────────
-      #    يضمن نشر آخر تعديلات الكود (CSS/HTML) من بيانات الكاش الموجودة.
-      - name: Generate site (always runs)
-        if: always()
+      # ── 7. توليد الموقع من بيانات الكاش — يلتقط أحدث تعديلات الكود ────
+      #    لا continue-on-error: إن فشل التوليد (خطأ كود) نوقف قبل النشر.
+      - name: Generate site
         run: python run.py --generate-only
 
-      # ── 7. نشر الموقع على Cloudflare Pages — يعمل دائماً ──────────────
+      # ── 8. بوابة التحقق — تمنع نشر موقع ناقص أو مكسور ─────────────────
+      - name: Verify build output
+        run: |
+          echo "🔍 Verifying generated site…"
+          fail() { echo "❌ $1"; exit 1; }
+          # الصفحة الرئيسية الإنجليزية (الجذر) + الأصول الأساسية
+          [ -s static/index.html ] || fail "static/index.html missing/empty"
+          [ -s static/style.css ]  || fail "static/style.css missing/empty"
+          [ -s static/app.js ]     || fail "static/app.js missing/empty"
+          # صفحات اللغات الأربع الأخرى
+          for d in ar fr es tr; do
+            [ -s "static/$d/index.html" ] || fail "static/$d/index.html missing/empty"
+          done
+          # حجم معقول للصفحة الرئيسية (> 5KB يعني محتوى حقيقي لا صفحة خطأ)
+          size=$(stat -c%s static/index.html)
+          [ "$size" -gt 5000 ] || fail "index.html too small ($size bytes)"
+          # ملفات SEO الحرجة
+          [ -s static/sitemap.xml ] || fail "sitemap.xml missing"
+          [ -s static/robots.txt ]  || fail "robots.txt missing"
+          echo "✅ Build verified — all critical files present (index.html: ${size} bytes)"
+
+      # ── 9. النشر على Cloudflare Pages — فقط بعد نجاح Verify ───────────
       - name: Deploy to Cloudflare Pages
-        if: always()
         uses: cloudflare/wrangler-action@v3
         with:
-          apiToken:       ${{ secrets.CF_API_TOKEN }}
-          accountId:      ${{ secrets.CF_ACCOUNT_ID }}
+          apiToken:        ${{ secrets.CF_API_TOKEN }}
+          accountId:       ${{ secrets.CF_ACCOUNT_ID }}
           wranglerVersion: '3'
           command: pages deploy static --project-name=${{ secrets.CF_PROJECT_NAME }} --commit-dirty=true
 
-      # ── 8. طباعة رابط الموقع بعد النشر ──────────────────────────────
+      # ── 10. ملخص النشر ────────────────────────────────────────────────
       - name: Print deployment summary
+        if: success()
         run: |
           echo "✅ Site deployed successfully!"
           echo "🌐 Visit: https://${{ secrets.CF_PROJECT_NAME }}.pages.dev"

@@ -1,24 +1,32 @@
 name: Generate & Deploy (no scrape)
 
 # ───────────────────────────────────────────────────────────────────────────
-# يُشغَّل يدوياً فقط (زر "Run workflow" في GitHub Actions)
-# الغرض: إعادة توليد الـ HTML ونشره بعد تعديل الكود/القوالب
-#         دون الحاجة لانتظار دورة الكشط الكاملة (6 ساعات)
-# الوقت المتوقع: ~2–3 دقائق (مقابل ~15 دقيقة للـ workflow الكامل)
+# يُشغَّل يدوياً فقط. الغرض: إعادة توليد الـ HTML ونشره بعد تعديل الكود/القوالب
+# دون انتظار دورة الكشط الكاملة. الوقت المتوقع: ~2–3 دقائق.
+#
+# نفس فلسفة التحصين: Verify gate قبل النشر يمنع نشر موقع مكسور.
 # ───────────────────────────────────────────────────────────────────────────
 on:
   workflow_dispatch:
 
+# مجموعة منفصلة عن الـ workflow المجدول؛ آخر تشغيل يدوي يفوز
+concurrency:
+  group: manual-generate
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
   generate-and-deploy:
-    name: Generate → Deploy (skip scrape)
+    name: Generate → Verify → Deploy (skip scrape)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
-      # ── 1. تنزيل الكود من GitHub ──────────────────────────────────────
+      # ── 1. تنزيل الكود ────────────────────────────────────────────────
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -31,10 +39,11 @@ jobs:
 
       # ── 3. تثبيت المكتبات ─────────────────────────────────────────────
       - name: Install Python dependencies
-        run: pip install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      # ── 4. استعادة قاعدة بيانات الأخبار من الـ cache ─────────────────
-      #    (نقرأ الأخبار المخزَّنة من آخر run كامل — لا نكتب شيئاً جديداً)
+      # ── 4. استعادة قواعد البيانات (read-only — لا كشط هنا) ───────────
       - name: Restore news databases cache
         uses: actions/cache/restore@v4
         with:
@@ -43,25 +52,43 @@ jobs:
           restore-keys: |
             news-databases-
 
-      # ── 5. إنشاء مجلد data/ إذا لم يكن موجوداً ──────────────────────
+      # ── 5. ضمان وجود مجلد data/ ───────────────────────────────────────
       - name: Ensure data directory exists
         run: mkdir -p data
 
-      # ── 6. توليد الموقع فقط (بدون كشط أخبار جديدة) ──────────────────
+      # ── 6. توليد الموقع فقط (بدون كشط أخبار جديدة) ────────────────────
       - name: Generate site (--generate-only)
         run: python run.py --generate-only
 
-      # ── 7. نشر الموقع على Cloudflare Pages ───────────────────────────
+      # ── 7. بوابة التحقق — تمنع نشر موقع ناقص أو مكسور ─────────────────
+      - name: Verify build output
+        run: |
+          echo "🔍 Verifying generated site…"
+          fail() { echo "❌ $1"; exit 1; }
+          [ -s static/index.html ] || fail "static/index.html missing/empty"
+          [ -s static/style.css ]  || fail "static/style.css missing/empty"
+          [ -s static/app.js ]     || fail "static/app.js missing/empty"
+          for d in ar fr es tr; do
+            [ -s "static/$d/index.html" ] || fail "static/$d/index.html missing/empty"
+          done
+          size=$(stat -c%s static/index.html)
+          [ "$size" -gt 5000 ] || fail "index.html too small ($size bytes)"
+          [ -s static/sitemap.xml ] || fail "sitemap.xml missing"
+          [ -s static/robots.txt ]  || fail "robots.txt missing"
+          echo "✅ Build verified — all critical files present (index.html: ${size} bytes)"
+
+      # ── 8. النشر على Cloudflare Pages — فقط بعد نجاح Verify ───────────
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
-          apiToken:       ${{ secrets.CF_API_TOKEN }}
-          accountId:      ${{ secrets.CF_ACCOUNT_ID }}
+          apiToken:        ${{ secrets.CF_API_TOKEN }}
+          accountId:       ${{ secrets.CF_ACCOUNT_ID }}
           wranglerVersion: '3'
           command: pages deploy static --project-name=${{ secrets.CF_PROJECT_NAME }} --commit-dirty=true
 
-      # ── 8. طباعة رابط الموقع بعد النشر ──────────────────────────────
+      # ── 9. ملخص النشر ─────────────────────────────────────────────────
       - name: Print deployment summary
+        if: success()
         run: |
           echo "✅ Site generated & deployed successfully!"
           echo "🌐 Visit: https://${{ secrets.CF_PROJECT_NAME }}.pages.dev"
