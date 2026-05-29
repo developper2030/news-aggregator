@@ -1174,7 +1174,7 @@ function emptyCat(ci) {
   const c = cfg.categories[ci];
   const n = (c.sources || []).length;
   if (!n) { alert('القسم "'+c.name+'" فارغ أصلاً.'); return; }
-  if (!confirm('إفراغ "'+c.name+'" من كل مصادره ('+n+' مصدر)؟\nالقسم نفسه يبقى — تضيف مصادر جديدة لاحقاً.')) return;
+  if (!confirm('إفراغ "'+c.name+'" من كل مصادره ('+n+' مصدر)؟ القسم نفسه يبقى.')) return;
   c.sources = [];
   renderSources(); renderSections(); updateBadge();
 }
