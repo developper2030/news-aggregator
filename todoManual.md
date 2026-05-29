@@ -75,15 +75,13 @@ https://atlasnews.solvixi.com/tr/sitemap-articles.xml    ← جديد
 
 ---
 
-### 5. إنشاء حساب Google Analytics 4 + إضافة Measurement ID 🔴 عاجل — بدونه لا قياس
+### 5. ✅ Google Analytics 4 — مكتمل (2026-05-29)
 | | |
 |--|--|
-| **الرابط** | https://analytics.google.com → Create Property |
-| **الخطوات** | إنشاء Property جديد → Web → أدخل `atlasnews.solvixi.com` → انسخ Measurement ID |
-| **الشكل** | `G-XXXXXXXXXX` |
-| **بعد الحصول عليه** | أضفه في `config/sources.json` (ستجد حقل `ga_id` جاهزاً) |
-| **الأهمية** | شرط لـ AdSense + Search Console ربط + قياس الزيارات |
-| **الوقت** | ~15 دقيقة |
+| **Measurement ID** | `G-CXBERJSM8S` |
+| **الحالة** | ✅ مُضاف في الـ5 configs (`ga_id` داخل `settings`) — يظهر في كل الصفحات + المقالات |
+| **التحقق** | بعد نشر الـ workflow، افتح GA4 → Realtime وتصفّح الموقع → ستظهر زيارتك |
+| **يتبقّى** | ربط Search Console بـ GA4 (المهمة 14) |
 
 ---
 
