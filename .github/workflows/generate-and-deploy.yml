@@ -44,17 +44,31 @@ jobs:
           pip install -r requirements.txt
 
       # ── 4. استعادة قواعد البيانات (read-only — لا كشط هنا) ───────────
+      #    ⚠️ حرج: key يستخدم run_id (فريد عام) لا run_number. السبب: run_number
+      #    خاص بكل workflow ويتكرر — كان key=news-databases-{رقم السريع} يطابق
+      #    تماماً كاشاً قديماً جداً أنشأه الـ workflow الكامل بنفس الرقم، فتُستعاد
+      #    DB قديمة وتختفي العناوين الحديثة (>7 أيام تُفلتر). run_id لا يطابق
+      #    exact أبداً → دائماً يسقط لـ restore-keys → يأخذ أحدث كاش من الكامل.
       - name: Restore news databases cache
         uses: actions/cache/restore@v4
         with:
           path: data/
-          key: news-databases-${{ github.run_number }}
+          key: news-databases-${{ github.run_id }}
           restore-keys: |
             news-databases-
 
       # ── 5. ضمان وجود مجلد data/ ───────────────────────────────────────
       - name: Ensure data directory exists
         run: mkdir -p data
+
+      # ── 5b. تشخيص: إظهار نضارة قواعد البيانات بعد الاستعادة ──────────
+      - name: Show database freshness
+        continue-on-error: true
+        run: |
+          for db in data/*.db; do
+            [ -f "$db" ] || continue
+            python -c "import sqlite3,sys; c=sqlite3.connect('$db'); r=c.execute('SELECT COUNT(*), MAX(scraped_at) FROM articles').fetchone(); print(f'  $db → {r[0]} articles, newest: {r[1]}')" 2>/dev/null || echo "  $db → (no articles table)"
+          done
 
       # ── 6. توليد الموقع فقط (بدون كشط أخبار جديدة) ────────────────────
       - name: Generate site (--generate-only)

@@ -50,17 +50,29 @@ jobs:
           pip install -r requirements.txt
 
       # ── 4. استعادة قواعد البيانات من الـ cache (read + write) ────────
+      #    key يستخدم run_id (فريد عبر كل الـ repo) لا run_number (يتكرر بين
+      #    الـ workflows ويسبب exact-match خاطئ لكاش قديم). دائماً key جديد →
+      #    يُحفظ كاش جديد كل run؛ والاستعادة الأولية عبر restore-keys = الأحدث.
       - name: Restore news databases cache
         uses: actions/cache@v4
         with:
           path: data/
-          key: news-databases-${{ github.run_number }}
+          key: news-databases-${{ github.run_id }}
           restore-keys: |
             news-databases-
 
       # ── 5. ضمان وجود مجلد data/ ───────────────────────────────────────
       - name: Ensure data directory exists
         run: mkdir -p data
+
+      # ── 5b. تشخيص: إظهار نضارة قواعد البيانات بعد الاستعادة ──────────
+      - name: Show database freshness
+        continue-on-error: true
+        run: |
+          for db in data/*.db; do
+            [ -f "$db" ] || continue
+            python -c "import sqlite3,sys; c=sqlite3.connect('$db'); r=c.execute('SELECT COUNT(*), MAX(scraped_at) FROM articles').fetchone(); print(f'  $db → {r[0]} articles, newest: {r[1]}')" 2>/dev/null || echo "  $db → (no articles table)"
+          done
 
       # ── 6. الكشط + التلخيص — best-effort (لا يمنع النشر إن فشل/تأخّر) ──
       #    timeout على مستوى الخطوة (50 د) + continue-on-error:
