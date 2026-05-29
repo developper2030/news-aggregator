@@ -1608,8 +1608,9 @@ body.lang-ltr .nh-text{direction:ltr}
   /* Nav: larger touch targets, visible active indicator */
   .nav-tab{padding:10px 12px;font-size:.83em}
   .nav-tab.active{box-shadow:inset 0 -3px 0 var(--accent)}
-  /* World subnav: hide on mobile — saves ~32px of sticky header height */
-  .world-subnav{display:none}
+  /* World subnav on HOMEPAGE only: hide on mobile to reduce sticky bar count.
+     Region/Media pages keep their subnav visible (it's the primary navigation) */
+  .world-subnav--home{display:none}
 }
 @media(max-width:480px){
   .articles-grid{grid-template-columns:1fr}
@@ -4784,7 +4785,7 @@ def _gather_carousel(
 
 
 def _carousel(articles: list[dict], max_items: int = 12, s: dict = STRINGS["ar"],
-              site_url: str = "") -> str:
+              site_url: str = "", media_slugs: set | None = None) -> str:
     """Hero + sidebar carousel (Hespress/MSN style).
 
     Main panel: one large slide at a time, auto-advances every 5.5 s,
@@ -4797,8 +4798,10 @@ def _carousel(articles: list[dict], max_items: int = 12, s: dict = STRINGS["ar"]
     if len(items) < 3:
         return ""
 
-    def _art_href(raw_url: str) -> tuple[str, str]:
-        """Return (href, target) — internal article page when possible."""
+    def _art_href(raw_url: str, slug: str = "") -> tuple[str, str]:
+        """Return (href, target) — YouTube/video: direct link; others: internal page."""
+        if (media_slugs and slug in media_slugs) or _is_yt_url(raw_url):
+            return raw_url, "_blank"
         _hash = _hl_c.md5(raw_url.encode("utf-8")).hexdigest()[:12]
         return f"article/{_hash}.html", ""
 
@@ -4809,7 +4812,7 @@ def _carousel(articles: list[dict], max_items: int = 12, s: dict = STRINGS["ar"]
         gradient = CATEGORY_GRADIENTS.get(art["slug"], DEFAULT_GRADIENT)
         title    = esc(" ".join(art["title"].split()))
         raw_url  = art["url"]
-        href, target = _art_href(raw_url)
+        href, target = _art_href(raw_url, art.get("slug", ""))
         image    = safe_url(art["image"])
         source   = esc(SOURCE_AR_NAME.get(art["source"], art["source"]))
         date     = esc(art.get("date", ""))
@@ -4843,7 +4846,7 @@ def _carousel(articles: list[dict], max_items: int = 12, s: dict = STRINGS["ar"]
         gradient = CATEGORY_GRADIENTS.get(art["slug"], DEFAULT_GRADIENT)
         title    = esc(" ".join(art["title"].split()))
         raw_url  = art["url"]
-        href, target = _art_href(raw_url)
+        href, target = _art_href(raw_url, art.get("slug", ""))
         image    = safe_url(art["image"])
         source   = esc(SOURCE_AR_NAME.get(art["source"], art["source"]))
         date     = esc(art.get("date", ""))
@@ -4879,10 +4882,15 @@ def _carousel(articles: list[dict], max_items: int = 12, s: dict = STRINGS["ar"]
 
 
 def _world_subnav(active_slug: str = "", world_regions: list = WORLD_REGIONS,
-                  s: dict = STRINGS["ar"]) -> str:
-    """Horizontal world-regions strip — sticky inside .sticky-header on index + world + region pages."""
+                  s: dict = STRINGS["ar"], homepage: bool = False) -> str:
+    """Horizontal world-regions strip — sticky inside .sticky-header on index + world + region pages.
+
+    homepage=True adds the 'world-subnav--home' class which is hidden on mobile
+    (homepage already has a full main nav; region pages need it for navigation).
+    """
     if not world_regions:
         return ""
+    extra_cls = " world-subnav--home" if homepage else ""
     buttons = ""
     for r in world_regions:
         active_cls = " active-region" if r["slug"] == active_slug else ""
@@ -4892,7 +4900,7 @@ def _world_subnav(active_slug: str = "", world_regions: list = WORLD_REGIONS,
             f'</a>'
         )
     return (
-        f'<div class="world-subnav" aria-label="{esc(s["world_regions_label"])}">'
+        f'<div class="world-subnav{extra_cls}" aria-label="{esc(s["world_regions_label"])}">'
         f'<div class="world-subnav-inner">{buttons}</div>'
         f'</div>'
     )
@@ -6245,8 +6253,9 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
     def _lsw(page_file: str) -> str:
         return _lang_switcher(lang, page_file)
 
-    # ── World subnav — reused on index + world pages ─────────────────────────
-    world_subnav = _world_subnav(world_regions=world_regions, s=s)
+    # ── World subnav — homepage gets homepage=True so it hides on mobile ────────
+    # (Region/Media pages use their own subnav WITHOUT homepage=True, stays visible)
+    world_subnav = _world_subnav(world_regions=world_regions, s=s, homepage=True)
 
     # Pre-build category lookup: slug → (cat_name, cat_icon)
     cat_meta: dict[str, tuple[str, str]] = {
@@ -6301,7 +6310,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         (a["image"] for a in _home_carousel_arts if a.get("image", "").startswith("http")),
         ""
     )
-    home_carousel = _carousel(_home_carousel_arts, s=s, site_url=_site_url)
+    home_carousel = _carousel(_home_carousel_arts, s=s, site_url=_site_url, media_slugs=media_slugs_local)
     _wrt("index.html", _page(
         title=site_title,
         nav_html=_nav(categories, articles_by_cat, active="home",
@@ -6434,7 +6443,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             (a["image"] for a in _cat_carousel_arts if a.get("image", "").startswith("http")),
             next((a.get("image", "") for a in raw_articles if a.get("image", "").startswith("http")), ""),
         )
-        cat_carousel = _carousel(_cat_carousel_arts, s=s, site_url=_site_url)
+        cat_carousel = _carousel(_cat_carousel_arts, s=s, site_url=_site_url, media_slugs=media_slugs_local)
         # Economy tabs widget on economy, business, and travel pages
         if slug in {"economy", "business", "travel"}:
             cat_ticker = _economy_widget(s, active_tab=slug)
