@@ -508,6 +508,8 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_save": "حفظ التفضيلات",
         "art_read_orig":    "📖 اقرأ المقال الأصلي",
         "art_related":      "مقالات ذات صلة",
+        "art_browse_cat":   "المزيد من أخبار",
+        "art_from_source":  "خبر من",
         "art_summary_lbl":  "ملخص",
         "art_by_source":    "المصدر",
         "art_back":         "→ العودة",
@@ -605,6 +607,8 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_save": "Save Preferences",
         "art_read_orig":    "📖 Read full article",
         "art_related":      "Related articles",
+        "art_browse_cat":   "More news from",
+        "art_from_source":  "Article from",
         "art_summary_lbl":  "Summary",
         "art_by_source":    "Source",
         "art_back":         "← Back",
@@ -702,6 +706,8 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_save": "Enregistrer les préférences",
         "art_read_orig":    "📖 Lire l'article complet",
         "art_related":      "Articles liés",
+        "art_browse_cat":   "Plus d'actualités de",
+        "art_from_source":  "Article de",
         "art_summary_lbl":  "Résumé",
         "art_by_source":    "Source",
         "art_back":         "← Retour",
@@ -799,6 +805,8 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_save": "Guardar preferencias",
         "art_read_orig":    "📖 Leer artículo completo",
         "art_related":      "Artículos relacionados",
+        "art_browse_cat":   "Más noticias de",
+        "art_from_source":  "Artículo de",
         "art_summary_lbl":  "Resumen",
         "art_by_source":    "Fuente",
         "art_back":         "← Volver",
@@ -896,6 +904,8 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "gdpr_save": "Tercihleri kaydet",
         "art_read_orig":    "📖 Tam makaleyi oku",
         "art_related":      "İlgili makaleler",
+        "art_browse_cat":   "Daha fazla haber:",
+        "art_from_source":  "Kaynak:",
         "art_summary_lbl":  "Özet",
         "art_by_source":    "Kaynak",
         "art_back":         "← Geri",
@@ -1830,6 +1840,12 @@ body.lang-ltr .nh-text{direction:ltr}
 .art-cat-badge{padding:3px 10px;border-radius:20px;font-weight:600;font-size:.85em;color:#fff}
 .art-summary-box{background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(139,92,246,.04));border-inline-start:4px solid var(--accent);padding:18px 20px;border-radius:0 10px 10px 0;margin-bottom:24px}
 .dark-mode .art-summary-box{background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(139,92,246,.08))}
+/* Fallback context card shown when no AI summary — prevents thin content */
+.art-context-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:24px;color:var(--text-muted);font-size:.92em;line-height:1.7}
+.art-context-card strong{color:var(--accent)}
+/* Browse category CTA — always shown at bottom of article page */
+.art-browse-cta{display:inline-flex;align-items:center;gap:6px;margin-top:24px;padding:10px 20px;border-radius:8px;background:var(--surface);border:1.5px solid var(--border);color:var(--text-muted);font-size:.88em;font-weight:600;transition:all .18s}
+.art-browse-cta:hover{border-color:var(--accent);color:var(--accent);background:rgba(99,102,241,.06)}
 .art-summary-lbl{font-size:.78em;font-weight:700;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:5px}
 .art-summary-text{font-size:.95em;line-height:1.75;color:var(--text)}
 .art-disclaimer{font-size:.73em;color:var(--text-light);margin-top:10px;font-style:italic}
@@ -5312,7 +5328,7 @@ def _article_page_html(
         f'alt="{title_esc}" loading="eager">'
     ) if image_url else ""
 
-    # ── AI summary block ─────────────────────────────────────────────────────
+    # ── AI summary block (fallback context card for thin-content prevention) ────
     summary_html = ""
     if ai_summary:
         summary_html = (
@@ -5320,6 +5336,17 @@ def _article_page_html(
             f'<div class="art-summary-lbl">{esc(s.get("art_summary_lbl", "AI Summary"))}</div>'
             f'<p class="art-summary-text">{esc(ai_summary)}</p>'
             f'<p class="art-disclaimer">{esc(s.get("art_disclaimer", ""))}</p>'
+            f'</div>'
+        )
+    else:
+        # No AI summary — show a context card so page isn't pure thin content.
+        # Helps Google understand the page topic and avoid "doorway page" signals.
+        _from_lbl = s.get("art_from_source", "Article from")
+        summary_html = (
+            f'<div class="art-context-card">'
+            f'{esc(_from_lbl)} <strong>{source_esc}</strong> · '
+            f'{esc(cat_icon)} <strong>{esc(cat_name)}</strong> · {esc(date_str)}'
+            f'<br><em>{title_esc}</em>'
             f'</div>'
         )
 
@@ -5485,6 +5512,9 @@ def _article_page_html(
         </a>
         {share_row}
         {related_html}
+        <a href="../{esc(slug)}.html" class="art-browse-cta">
+          {esc(s.get("art_browse_cat","More from"))} {esc(cat_icon)} {esc(cat_name)} {s.get("arrow","→")}
+        </a>
       </article>
     </main>
   </div>
