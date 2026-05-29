@@ -5383,6 +5383,24 @@ def _article_page_html(
         f'  <meta name="news_keywords" content="{esc(", ".join(kws))}">'
     ) if kws else ""
 
+    # ── hreflang: self-referential + x-default pointing to site root ──────────
+    # Article pages are language-specific (no direct translation counterpart).
+    # We add a self tag (tells Google this page's language) + x-default (homepage).
+    _art_hl = ""
+    if site_url and canon_url:
+        _hl_code = _LANG_HREFLANG.get(lang, lang)
+        # Compute root URL by stripping language prefix
+        _hl_prefix = _LANG_PATHS.get(lang, "")
+        _hl_base   = site_url.rstrip("/")
+        if _hl_prefix and _hl_base.endswith(_hl_prefix):
+            _hl_root = _hl_base[: -len(_hl_prefix)].rstrip("/")
+        else:
+            _hl_root = _hl_base
+        _art_hl = (
+            f'  <link rel="alternate" hreflang="{_hl_code}" href="{esc(canon_url)}">\n'
+            f'  <link rel="alternate" hreflang="x-default" href="{esc(_hl_root)}/">'
+        )
+
     # ── Full HTML ─────────────────────────────────────────────────────────────
     _dir  = s.get("dir", "ltr")
     _lang = s.get("lang", lang)
@@ -5411,8 +5429,9 @@ def _article_page_html(
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{title_esc}">
   <meta name="twitter:description" content="{esc(meta_desc)}">
-  <!-- Canonical -->
+  <!-- Canonical & hreflang -->
   <link rel="canonical" href="{esc(canon_url)}">
+{_art_hl}
   <!-- Favicons -->
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
