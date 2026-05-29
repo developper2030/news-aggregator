@@ -1181,7 +1181,7 @@ function emptyCat(ci) {
 // ══ SECTIONS MANAGER (dedicated tab — feature: section-only management) ═══════
 function renderSections() {
   const wrap = document.getElementById('sections-wrap');
-  if (!wrap || !window.cfg || !cfg.categories) return;
+  if (!wrap || !cfg || !cfg.categories) return;
   const rows = cfg.categories.map((c, ci) => {
     const off = c.enabled === false;
     const nSrc = (c.sources || []).length;
