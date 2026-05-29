@@ -48,8 +48,12 @@ jobs:
       - name: Ensure data directory exists
         run: mkdir -p data
 
-      # ── 6. تشغيل الكاشط + الملخصات AI + توليد الموقع (5 لغات) ──────
-      - name: Run scraper, summarize & generate site
+      # ── 6. الكشط + الملخصات (قد يتأخّر/يفشل — لا يمنع النشر) ──────────
+      #    timeout على مستوى الخطوة (50 د): إذا تجاوزها تُقتل الخطوة وحدها
+      #    لكن الـ job يستمر للخطوات التالية (generate + deploy).
+      - name: Scrape & summarize (best-effort)
+        timeout-minutes: 50
+        continue-on-error: true
         run: python run.py
         env:
           # مفاتيح API الاختيارية (تُضاف في GitHub Secrets)
@@ -60,8 +64,15 @@ jobs:
           OPENROUTER_API_KEY:  ${{ secrets.OPENROUTER_API_KEY }}
           NVIDIA_API_KEY:      ${{ secrets.NVIDIA_API_KEY }}
 
-      # ── 7. نشر الموقع على Cloudflare Pages ───────────────────────────
+      # ── 6b. توليد الموقع — يعمل دائماً حتى لو فشل/تأخّر الكشط ────────
+      #    يضمن نشر آخر تعديلات الكود (CSS/HTML) من بيانات الكاش الموجودة.
+      - name: Generate site (always runs)
+        if: always()
+        run: python run.py --generate-only
+
+      # ── 7. نشر الموقع على Cloudflare Pages — يعمل دائماً ──────────────
       - name: Deploy to Cloudflare Pages
+        if: always()
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken:       ${{ secrets.CF_API_TOKEN }}
