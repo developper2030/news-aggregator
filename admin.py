@@ -518,6 +518,16 @@ a{color:inherit;text-decoration:none}
 .cat-block{margin-bottom:12px;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;border-left:3px solid #3b82f6}
 .cat-block.cat-disabled{opacity:.6}
 .cat-block.cat-disabled .cat-hdr{background:#fee2e2}
+.sec-table{width:100%;border-collapse:collapse;font-size:.85em}
+.sec-table th{text-align:right;padding:8px 10px;background:#f1f5f9;color:#475569;font-weight:700;border-bottom:2px solid #e2e8f0}
+.sec-table td{padding:7px 10px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+.sec-table tbody tr:hover{background:#f8fafc}
+.sec-table tr.sec-off{opacity:.55;background:#fef2f2}
+.sec-ic{font-size:1.2em;text-align:center}
+.sec-nm{font-weight:700;color:#1e293b}
+.sec-sl{font-family:monospace;color:#64748b;direction:ltr}
+.sec-ct{text-align:center;font-weight:600}
+.sec-ord{white-space:nowrap}
 .cat-hdr{background:#f1f5f9;padding:9px 12px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .cat-hdr input{background:#ffffff;border:1px solid #cbd5e1;color:#1e293b;border-radius:5px;padding:4px 8px;font-family:inherit;font-size:.82em;outline:none;font-weight:600}
 .cat-hdr input:focus{border-color:#3b82f6}
@@ -671,6 +681,7 @@ input.color-pick{width:34px;height:28px;padding:2px;border-radius:6px;cursor:poi
     <!-- TABS -->
     <div class="tabs">
       <button class="tab on"  data-t="dash"      onclick="switchTab('dash')">📊 المعلومات</button>
+      <button class="tab"     data-t="sections"  onclick="switchTab('sections')">📂 إدارة الأقسام</button>
       <button class="tab"     data-t="sources"   onclick="switchTab('sources')">📋 المصادر</button>
       <button class="tab"     data-t="articles"  onclick="switchTab('articles')">📰 المقالات</button>
       <button class="tab"     data-t="blacklist" onclick="switchTab('blacklist')">🔒 الكلمات المحظورة</button>
@@ -717,6 +728,21 @@ input.color-pick{width:34px;height:28px;padding:2px;border-radius:6px;cursor:poi
       <div class="row">
         <button class="btn bp" onclick="saveCfg()">💾 حفظ التغييرات</button>
         <button class="btn bd" onclick="resetCfg()">🔄 استعادة الافتراضي</button>
+      </div>
+    </div>
+
+    <!-- ══ SECTIONS MANAGER ══ -->
+    <div id="p-sections" class="panel">
+      <div class="card">
+        <div class="card-title">
+          📂 إدارة الأقسام
+          <button class="btn bg sm" onclick="addCat();renderSections()">+ قسم جديد</button>
+        </div>
+        <p style="font-size:.82em;color:#64748b;margin:6px 0 14px">تحكّم سريع بكل الأقسام: الترتيب، الإظهار/الإخفاء من الموقع، الإفراغ، الحذف. لإدارة المصادر داخل قسم استخدم تبويب «المصادر».</p>
+        <div id="sections-wrap"></div>
+      </div>
+      <div class="row">
+        <button class="btn bp" onclick="saveCfg()">💾 حفظ التغييرات</button>
       </div>
     </div>
 
@@ -1007,6 +1033,7 @@ function switchTab(name) {
   if (name === 'articles' && !TAB_INIT.articles) { TAB_INIT.articles=true; loadArticles(true); }
   if (name === 'db'       && !TAB_INIT.db)       { TAB_INIT.db=true;       loadDbStats(); }
   if (name === 'health'   && !TAB_INIT.health)   { TAB_INIT.health=true;   loadHealth(); }
+  if (name === 'sections') { renderSections(); }
 }
 
 // ══ DASHBOARD ════════════════════════════════════════════════════════════════
@@ -1140,6 +1167,42 @@ function toggleCat(ci) {
   const c = cfg.categories[ci];
   c.enabled = (c.enabled === false);   // false→true (show) ; true/undefined→false (hide)
   renderSources();
+  renderSections();
+}
+function emptyCat(ci) {
+  // Feature #3 — empty a section of all its sources, keeping the section itself.
+  const c = cfg.categories[ci];
+  const n = (c.sources || []).length;
+  if (!n) { alert('القسم "'+c.name+'" فارغ أصلاً.'); return; }
+  if (!confirm('إفراغ "'+c.name+'" من كل مصادره ('+n+' مصدر)؟\nالقسم نفسه يبقى — تضيف مصادر جديدة لاحقاً.')) return;
+  c.sources = [];
+  renderSources(); renderSections(); updateBadge();
+}
+// ══ SECTIONS MANAGER (dedicated tab — feature: section-only management) ═══════
+function renderSections() {
+  const wrap = document.getElementById('sections-wrap');
+  if (!wrap || !window.cfg || !cfg.categories) return;
+  const rows = cfg.categories.map((c, ci) => {
+    const off = c.enabled === false;
+    const nSrc = (c.sources || []).length;
+    return `<tr class="${off ? 'sec-off' : ''}">
+      <td class="sec-ord">
+        <button class="move-btn" title="رفع"   onclick="moveCat(${ci},-1);renderSections()">▲</button>
+        <button class="move-btn" title="تنزيل" onclick="moveCat(${ci},1);renderSections()">▼</button>
+      </td>
+      <td class="sec-ic">${esc(c.icon || '📰')}</td>
+      <td class="sec-nm">${esc(c.name)}</td>
+      <td class="sec-sl">${esc(c.slug)}</td>
+      <td class="sec-ct">${nSrc}</td>
+      <td><button class="btn ${off ? 'bo' : 'bg'} xs" onclick="toggleCat(${ci})"
+             title="${off ? 'مخفي من الموقع — اضغط للإظهار' : 'ظاهر — اضغط للإخفاء'}">${off ? '🚫 مخفي' : '👁️ ظاهر'}</button></td>
+      <td><button class="btn bo xs" onclick="emptyCat(${ci})" title="حذف كل المصادر، إبقاء القسم">🗑️ إفراغ</button></td>
+      <td><button class="btn bd xs" onclick="delCat(${ci});renderSections()" title="حذف القسم نهائياً">✕</button></td>
+    </tr>`;
+  }).join('');
+  wrap.innerHTML = `<table class="sec-table"><thead><tr>
+    <th>الترتيب</th><th></th><th>الاسم</th><th>المعرّف</th><th>مصادر</th><th>الحالة</th><th>إفراغ</th><th>حذف</th>
+  </tr></thead><tbody>${rows}</tbody></table>`;
 }
 function addCat() {
   cfg.categories.push({name:'تصنيف جديد',slug:'cat-'+Date.now(),icon:'📰',color:'#3b82f6',sources:[]});
