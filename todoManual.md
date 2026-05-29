@@ -75,7 +75,7 @@ https://atlasnews.solvixi.com/tr/sitemap-articles.xml    ← جديد
 
 ---
 
-### 5. إنشاء حساب Google Analytics 4 + إضافة Measurement ID
+### 5. إنشاء حساب Google Analytics 4 + إضافة Measurement ID 🔴 عاجل — بدونه لا قياس
 | | |
 |--|--|
 | **الرابط** | https://analytics.google.com → Create Property |

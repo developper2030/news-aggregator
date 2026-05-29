@@ -5210,6 +5210,7 @@ def _article_page_html(
     cat_meta: dict,
     lang: str,
     cluster_map: dict | None = None,
+    ga_id: str = "",
 ) -> str:
     """Generate a standalone HTML page for a single article (for SEO / Google News)."""
     import urllib.parse as _up
@@ -5427,6 +5428,7 @@ def _article_page_html(
   <link rel="stylesheet" href="../style.css">
   <!-- JSON-LD -->
   <script type="application/ld+json">{json_ld}</script>
+{_ga4_head(ga_id)}
 </head>
 <body id="top" class="{_bc}">
   <div class="sticky-header">
@@ -6253,6 +6255,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             cat_meta=cat_meta,
             lang=lang,
             cluster_map=_cluster_map,
+            ga_id=_ga_id,
         )
         _write(f"article/{_art_hash}.html", _art_html, out_dir)
         art_pages_written += 1
