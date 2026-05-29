@@ -6508,6 +6508,15 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
     articles_by_cat = get_articles_by_category(days=oldest_days)
     categories      = config["categories"]
 
+    # ── Manual enable/disable (admin panel) ───────────────────────────────────
+    # A section with "enabled": false in config is hidden everywhere (nav, pages,
+    # sitemap). Missing flag = enabled (so existing sections are unaffected).
+    _disabled = [c["slug"] for c in categories if c.get("enabled", True) is False]
+    if _disabled:
+        categories = [c for c in categories if c.get("enabled", True) is not False]
+        logger.info("Manually disabled %d section(s): %s",
+                    len(_disabled), ", ".join(_disabled))
+
     # ── Re-home articles from retired/merged slugs ────────────────────────────
     # When a section is merged (e.g. science→tech), older articles already stored
     # in the DB under the old slug would orphan (old section gone, new section has

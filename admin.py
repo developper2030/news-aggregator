@@ -516,6 +516,8 @@ a{color:inherit;text-decoration:none}
 
 /* ── SOURCES ──────────────────────────────────────────────────────────────── */
 .cat-block{margin-bottom:12px;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;border-left:3px solid #3b82f6}
+.cat-block.cat-disabled{opacity:.6}
+.cat-block.cat-disabled .cat-hdr{background:#fee2e2}
 .cat-hdr{background:#f1f5f9;padding:9px 12px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .cat-hdr input{background:#ffffff;border:1px solid #cbd5e1;color:#1e293b;border-radius:5px;padding:4px 8px;font-family:inherit;font-size:.82em;outline:none;font-weight:600}
 .cat-hdr input:focus{border-color:#3b82f6}
@@ -1038,7 +1040,7 @@ function renderSources() {
   document.getElementById('cats-wrap').innerHTML = cfg.categories.map((c,ci) => {
     const color = c.color || '#3b82f6';
     return `
-    <div class="cat-block" data-ci="${ci}" style="border-left-color:${esc(color)}">
+    <div class="cat-block ${c.enabled===false?'cat-disabled':''}" data-ci="${ci}" style="border-left-color:${esc(color)}">
       <div class="cat-hdr">
         <input type="color" class="color-pick" value="${esc(color)}"
                oninput="cfg.categories[${ci}].color=this.value;this.closest('.cat-block').style.borderLeftColor=this.value">
@@ -1050,6 +1052,8 @@ function renderSources() {
                oninput="cfg.categories[${ci}].slug=this.value.replace(/[^a-z0-9-]/g,'')">
         <button class="move-btn" title="رفع" onclick="moveCat(${ci},-1)">▲</button>
         <button class="move-btn" title="تنزيل" onclick="moveCat(${ci},1)">▼</button>
+        <button class="btn ${c.enabled===false?'bo':'bg'} xs" onclick="toggleCat(${ci})"
+                title="${c.enabled===false?'مخفي من الموقع — اضغط للإظهار':'ظاهر — اضغط للإخفاء من الموقع'}">${c.enabled===false?'🚫 مخفي':'👁️ ظاهر'}</button>
         <button class="btn bd xs" onclick="delCat(${ci})">✕ حذف</button>
       </div>
       <div class="cat-body">
@@ -1130,6 +1134,13 @@ function delCat(ci) {
   if (!confirm('حذف التصنيف "'+cfg.categories[ci].name+'" وجميع مصادره؟')) return;
   cfg.categories.splice(ci,1); renderSources(); updateBadge();
 }
+function toggleCat(ci) {
+  // Toggle section visibility on the live site (enabled:false hides it everywhere).
+  // Missing flag = enabled; first click hides it.
+  const c = cfg.categories[ci];
+  c.enabled = (c.enabled === false);   // false→true (show) ; true/undefined→false (hide)
+  renderSources();
+}
 function addCat() {
   cfg.categories.push({name:'تصنيف جديد',slug:'cat-'+Date.now(),icon:'📰',color:'#3b82f6',sources:[]});
   renderSources(); updateBadge();
@@ -1141,7 +1152,7 @@ function addSrc(ci) {
   const name = document.getElementById('nn-'+ci).value.trim();
   const url  = document.getElementById('nu-'+ci).value.trim();
   if (!name||!url) { alert('يرجى ملء الاسم والرابط'); return; }
-  if (!/^https?:\/\//i.test(url)) { alert('يجب أن يبدأ الرابط بـ https://'); return; }
+  if (!/^https?:\\/\\//i.test(url)) { alert('يجب أن يبدأ الرابط بـ https://'); return; }
   cfg.categories[ci].sources.push({name, url, selectors:{
     article_selector:'article, .post, .article, .news-item',
     heading_tags:['h2','h3'],
