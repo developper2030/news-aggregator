@@ -447,7 +447,7 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "theme_btn_label": "تبديل الوضع", "live_label": "مباشر",
         "nav_label": "الأقسام", "header_label": "عنوان الموقع",
         "back_to_top": "العودة للأعلى", "theme_color": "#1d4ed8",
-        "updated": "آخر تحديث", "footer_links": "روابط",
+        "updated": "آخر تحديث", "footer_links": "روابط", "footer_cats_title": "الأقسام",
         "rss_feeds": "تغذيات RSS", "rss_all": "كل الأخبار",
         "search_label": "بحث", "search_placeholder": "ابحث في العناوين...",
         "search_no_results": "لا نتائج للبحث",
@@ -544,7 +544,7 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "theme_btn_label": "Toggle theme", "live_label": "Live",
         "nav_label": "Sections", "header_label": "Site header",
         "back_to_top": "Back to top", "theme_color": "#2563eb",
-        "updated": "Last updated", "footer_links": "Links",
+        "updated": "Last updated", "footer_links": "Links", "footer_cats_title": "Sections",
         "rss_feeds": "RSS Feeds", "rss_all": "All News",
         "search_label": "Search", "search_placeholder": "Search headlines...",
         "search_no_results": "No results found",
@@ -641,7 +641,7 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "theme_btn_label": "Changer le thème", "live_label": "En direct",
         "nav_label": "Sections", "header_label": "En-tête",
         "back_to_top": "Retour en haut", "theme_color": "#1d4ed8",
-        "updated": "Mise à jour", "footer_links": "Liens",
+        "updated": "Mise à jour", "footer_links": "Liens", "footer_cats_title": "Rubriques",
         "rss_feeds": "Flux RSS", "rss_all": "Toutes les actualités",
         "search_label": "Recherche", "search_placeholder": "Rechercher des titres...",
         "search_no_results": "Aucun résultat",
@@ -738,7 +738,7 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "theme_btn_label": "Cambiar tema", "live_label": "En vivo",
         "nav_label": "Secciones", "header_label": "Encabezado",
         "back_to_top": "Volver arriba", "theme_color": "#c2410c",
-        "updated": "Actualizado", "footer_links": "Enlaces",
+        "updated": "Actualizado", "footer_links": "Enlaces", "footer_cats_title": "Secciones",
         "rss_feeds": "Fuentes RSS", "rss_all": "Todas las noticias",
         "search_label": "Buscar", "search_placeholder": "Buscar titulares...",
         "search_no_results": "Sin resultados",
@@ -835,7 +835,7 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "theme_btn_label": "Temayı değiştir", "live_label": "Canlı",
         "nav_label": "Bölümler", "header_label": "Site başlığı",
         "back_to_top": "Başa dön", "theme_color": "#dc2626",
-        "updated": "Son güncelleme", "footer_links": "Bağlantılar",
+        "updated": "Son güncelleme", "footer_links": "Bağlantılar", "footer_cats_title": "Bölümler",
         "rss_feeds": "RSS Beslemeleri", "rss_all": "Tüm haberler",
         "search_label": "Arama", "search_placeholder": "Başlıklarda ara...",
         "search_no_results": "Sonuç bulunamadı",
@@ -1460,7 +1460,7 @@ ul,ol{list-style:none}
 /* ===================== FOOTER ===================== */
 .site-footer{background:var(--footer-bg);color:var(--footer-text);margin-top:50px;padding-top:48px;position:relative}
 .site-footer::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#6366f1,#8b5cf6,#ec4899,#f59e0b)}
-.footer-inner{max-width:1200px;margin:0 auto;padding:0 20px 36px;display:grid;grid-template-columns:2fr 1fr;gap:36px}
+.footer-inner{max-width:1200px;margin:0 auto;padding:0 20px 36px;display:grid;grid-template-columns:2fr 1.2fr 1fr 1fr;gap:28px}
 .footer-brand h3{color:#fff;font-size:1.1em;margin-bottom:10px}
 .footer-brand p{font-size:.85em;line-height:1.8;opacity:.8}
 .footer-section h4{color:#fff;font-size:.88em;margin-bottom:14px;letter-spacing:.5px}
@@ -1578,8 +1578,9 @@ body.lang-ltr .nh-text{direction:ltr}
 }
 @media(max-width:768px){
   .articles-grid{grid-template-columns:repeat(2,1fr)}
-  .footer-inner{grid-template-columns:1fr}
-  .footer-section:last-child{display:none}
+  .footer-inner{grid-template-columns:1fr 1fr}
+  /* Hide RSS section on mobile — keep brand + categories + links visible */
+  .footer-rss{display:none}
   /* Header compact */
   .site-header{padding:6px 0}
   .site-header-inner{padding:0 10px;gap:8px}
@@ -1609,6 +1610,7 @@ body.lang-ltr .nh-text{direction:ltr}
   .category-section{margin-bottom:28px}
   /* Nav tabs compact on very small screens */
   .nav-tab{padding:9px 10px;font-size:.8em}
+  .footer-inner{grid-template-columns:1fr}
 }
 
 /* ====== SOURCE FILTER STRIP ====== */
@@ -1812,6 +1814,11 @@ body.lang-ltr .nh-text{direction:ltr}
 .art-back{display:inline-flex;align-items:center;gap:8px;color:#fff;background:linear-gradient(135deg,var(--header-start),var(--header-end));text-decoration:none;font-size:.88em;font-weight:700;margin-bottom:24px;padding:10px 22px;border-radius:24px;box-shadow:0 3px 16px rgba(99,102,241,.3);transition:all .22s;border:none;white-space:nowrap}
 .art-back:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(99,102,241,.45);opacity:1}
 .art-breadcrumb{font-size:.8em;color:var(--text-light);margin-bottom:18px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+/* Category page breadcrumb */
+.cat-breadcrumb{font-size:.82em;color:var(--text-muted);margin-bottom:14px;padding:8px 0;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.cat-breadcrumb a{color:var(--text-muted);text-decoration:none;transition:color .15s}
+.cat-breadcrumb a:hover{color:var(--accent)}
+.bc-sep{opacity:.4;font-size:.9em}
 .art-breadcrumb a{color:var(--accent);text-decoration:none}.art-breadcrumb a:hover{text-decoration:underline}
 .art-img{width:100%;border-radius:12px;margin-bottom:22px;object-fit:cover;max-height:400px;display:block}
 .art-title{font-size:1.65em;font-weight:800;line-height:1.4;margin:0 0 14px;color:var(--text)}
@@ -4282,6 +4289,7 @@ Crawl-delay: 10
 
 Sitemap: https://atlasnews.solvixi.com/sitemap.xml
 Sitemap: https://atlasnews.solvixi.com/news-sitemap.xml
+Sitemap: https://atlasnews.solvixi.com/sitemap-articles.xml
 """
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -5538,6 +5546,10 @@ def _page(*, title: str, desc: str, nav_html: str,
         <p style="margin-top:8px;font-size:.8em">{s["updated"]}: {esc(now)}</p>
       </div>
       <div class="footer-section">
+        <h4>{s.get("footer_cats_title","Sections")}</h4>
+        <ul>{footer_cats}</ul>
+      </div>
+      <div class="footer-section">
         <h4>{s["footer_links"]}</h4>
         <ul>
           <li><a href="index.html">{s["home_bare"]}</a></li>
@@ -5548,7 +5560,7 @@ def _page(*, title: str, desc: str, nav_html: str,
           <li><a href="terms.html">{s["terms"]}</a></li>
         </ul>
       </div>
-      <div class="footer-section">
+      <div class="footer-section footer-rss">
         <h4>{s.get("rss_feeds","RSS")}</h4>
         <ul>
           <li><a href="{esc(rss_url)}" type="application/rss+xml">📡 {s.get("rss_all","All news")}</a></li>
@@ -5848,6 +5860,63 @@ def _generate_news_sitemap(
     content = "\n".join(lines) + "\n"
     _write("news-sitemap.xml", content, out_dir)
     logger.info("News sitemap: %d articles → %s/news-sitemap.xml", included, out_dir)
+
+
+def _generate_article_sitemap(
+    all_articles: list,
+    site_url: str,
+    media_slugs: set,
+    out_dir: str,
+) -> None:
+    """Generate sitemap-articles.xml — ALL article pages for Google indexing.
+
+    Unlike news-sitemap.xml (48h only, Google News format), this covers every
+    article page so Googlebot can discover and index older articles.
+    Google's sitemap limit is 50,000 URLs per file.
+    """
+    from datetime import datetime as _dt
+    base = site_url.rstrip("/")
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+    included = 0
+    # Sort newest-first so Google prioritises fresh content on first crawl
+    sorted_arts = sorted(
+        all_articles,
+        key=lambda a: a.get("scraped_at", ""),
+        reverse=True,
+    )
+    for art in sorted_arts:
+        if art.get("slug", "") in media_slugs:
+            continue
+        art_hash = _article_slug(art["url"])
+        art_url  = f"{base}/article/{art_hash}.html"
+        # Use scraped_at for lastmod (already RFC 3339-compatible with T+Z)
+        raw_dt   = art.get("scraped_at", "")
+        if raw_dt:
+            try:
+                _parsed = _dt.strptime(raw_dt[:19], "%Y-%m-%d %H:%M:%S")
+                lastmod = _parsed.strftime("%Y-%m-%dT%H:%M:%S+00:00")
+            except (ValueError, TypeError):
+                lastmod = raw_dt[:10]
+        else:
+            lastmod = _dt.now().strftime("%Y-%m-%d")
+        lines += [
+            "  <url>",
+            f"    <loc>{art_url}</loc>",
+            f"    <lastmod>{lastmod}</lastmod>",
+            "    <changefreq>never</changefreq>",
+            "    <priority>0.5</priority>",
+            "  </url>",
+        ]
+        included += 1
+        if included >= 50000:  # Google sitemap limit
+            break
+    lines.append("</urlset>")
+    content = "\n".join(lines) + "\n"
+    _write("sitemap-articles.xml", content, out_dir)
+    logger.info("Article sitemap: %d URLs → %s/sitemap-articles.xml", included, out_dir)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -6154,6 +6223,13 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         out_dir=out_dir,
         lang=lang,
         site_title=site_title,
+    )
+    # Full article sitemap — helps Google discover older articles (>48h)
+    _generate_article_sitemap(
+        all_articles=all_articles,
+        site_url=_site_url,
+        media_slugs=media_slugs_local,
+        out_dir=out_dir,
     )
 
     # ── CATEGORY PAGES — all articles (generate even for empty categories) ───
@@ -6569,6 +6645,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             "Crawl-delay: 10\n\n"
             f"Sitemap: {_base}/sitemap.xml\n"
             f"Sitemap: {_base}/news-sitemap.xml\n"
+            f"Sitemap: {_base}/sitemap-articles.xml\n"
         )
         _wrt("robots.txt", _robots)
         logger.info("SEO: sitemap.xml written for %s", _base)

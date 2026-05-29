@@ -25,20 +25,25 @@
 | **الـ sitemaps المطلوبة (10)** | |
 
 ```
-https://atlasnews.solvixi.com/sitemap.xml          ← AR
-https://atlasnews.solvixi.com/news-sitemap.xml      ← AR
+https://atlasnews.solvixi.com/sitemap.xml               ← AR pages
+https://atlasnews.solvixi.com/news-sitemap.xml           ← AR articles (48h)
+https://atlasnews.solvixi.com/sitemap-articles.xml       ← AR articles (all) ← جديد
 
 https://atlasnews.solvixi.com/en/sitemap.xml
 https://atlasnews.solvixi.com/en/news-sitemap.xml
+https://atlasnews.solvixi.com/en/sitemap-articles.xml    ← جديد
 
 https://atlasnews.solvixi.com/fr/sitemap.xml
 https://atlasnews.solvixi.com/fr/news-sitemap.xml
+https://atlasnews.solvixi.com/fr/sitemap-articles.xml    ← جديد
 
 https://atlasnews.solvixi.com/es/sitemap.xml
 https://atlasnews.solvixi.com/es/news-sitemap.xml
+https://atlasnews.solvixi.com/es/sitemap-articles.xml    ← جديد
 
 https://atlasnews.solvixi.com/tr/sitemap.xml
 https://atlasnews.solvixi.com/tr/news-sitemap.xml
+https://atlasnews.solvixi.com/tr/sitemap-articles.xml    ← جديد
 ```
 | **الوقت** | ~10 دقائق |
 
