@@ -2226,8 +2226,9 @@ function initSourceFilter() {
 
   function grantAnalytics() {
     if (window.gtag) {
+      // Upgrade to full tracking. No manual page_view — send_page_view is on,
+      // so GA4 already counted this visit (cookieless); this just unlocks cookies.
       gtag('consent', 'update', {'analytics_storage': 'granted'});
-      gtag('event', 'page_view');
     }
   }
 
@@ -5223,28 +5224,38 @@ def _breadcrumb_json_ld(site_title: str, cat_name: str,
 
 
 def _ga4_head(ga_id: str) -> str:
-    """Return GA4 <head> snippet with GDPR consent mode.
+    """Return GA4 <head> snippet with ADVANCED Google Consent Mode v2.
 
-    - Starts with analytics_storage=denied (no data until user accepts).
-    - If the user already accepted (localStorage), grants immediately.
-    - When ga_id is empty, returns empty string (no tracking).
+    GDPR-compliant AND captures (modeled) data from users who decline cookies:
+    - Default consent = denied for storage. In this state gtag.js sends
+      *cookieless pings* (no identifiers, nothing stored on device) which GA4
+      uses for behavioural modelling — legal under GDPR.
+    - send_page_view stays ON: every visit pings GA4 (cookieless if denied,
+      full if granted). This is why declined visitors still get counted.
+    - wait_for_update gives the consent state a moment to load before the
+      first hit, so granted users aren't mis-bucketed.
+    - On accept, app.js calls consent update → granted (full tracking).
+    - When ga_id is empty, returns empty string (no tracking at all).
     """
     if not ga_id:
         return ""
     _id = esc(ga_id)
     return f"""\
-  <!-- Google Analytics 4 — consent mode enabled -->
+  <!-- Google Analytics 4 — Advanced Consent Mode v2 (GDPR + cookieless modelling) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id={_id}"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){{dataLayer.push(arguments);}}
-    gtag('consent', 'default', {{'analytics_storage': 'denied', 'ad_storage': 'denied'}});
+    var _granted = localStorage.getItem('atlas_cookie_consent') === 'accepted';
+    gtag('consent', 'default', {{
+      'analytics_storage': _granted ? 'granted' : 'denied',
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'wait_for_update': 500
+    }});
     gtag('js', new Date());
-    gtag('config', '{_id}', {{'anonymize_ip': true, 'send_page_view': false}});
-    if (localStorage.getItem('atlas_cookie_consent') === 'accepted') {{
-      gtag('consent', 'update', {{'analytics_storage': 'granted'}});
-      gtag('event', 'page_view');
-    }}
+    gtag('config', '{_id}', {{'anonymize_ip': true}});
   </script>"""
 
 
