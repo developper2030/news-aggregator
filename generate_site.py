@@ -6261,6 +6261,19 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
     articles_by_cat = get_articles_by_category(days=oldest_days)
     categories      = config["categories"]
 
+    # ── Re-home articles from retired/merged slugs ────────────────────────────
+    # When a section is merged (e.g. science→tech), older articles already stored
+    # in the DB under the old slug would orphan (old section gone, new section has
+    # a different slug). Move them into the target so they show immediately —
+    # no waiting for the next scrape. Mirrors the config merge + _redirects.
+    _MERGED_SLUGS = {"science": "tech"}
+    for _old, _new in _MERGED_SLUGS.items():
+        _old_data = articles_by_cat.pop(_old, None)
+        if _old_data and _old_data.get("articles") and _new in articles_by_cat:
+            articles_by_cat[_new]["articles"].extend(_old_data["articles"])
+            logger.info("Re-homed %d article(s): %s -> %s",
+                        len(_old_data["articles"]), _old, _new)
+
     # ── Auto-hide empty video sections (0 configured sources) ─────────────────
     # A vid-* section with no sources only ever produces an empty page and a dead
     # link in the media subnav. Remove such sections from categories AND
