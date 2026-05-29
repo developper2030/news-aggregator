@@ -5231,10 +5231,14 @@ def _article_page_html(
         _art_sp_badge = ""
     date_str   = art.get("date", "")
     scraped_at = art.get("scraped_at", date_str + "T00:00:00")
-    # Build RFC 3339 date for JSON-LD (scraped_at is "YYYY-MM-DD HH:MM:SS")
+    # scraped_dt — RFC 3339 of when WE scraped the article (used for dateModified)
     scraped_dt = scraped_at.replace(" ", "T")
     if len(scraped_dt) == 19:
         scraped_dt += "+00:00"
+    # pub_dt — actual RSS publication date (used for datePublished)
+    # date_str is "YYYY-MM-DD" from the RSS <pubDate>; use T00:00:00 as the
+    # time component when no finer granularity is available.
+    pub_dt = f"{date_str}T00:00:00+00:00" if date_str else scraped_dt
     ai_summary = art.get("ai_summary", "")
     image_url  = art.get("image", "")
     color      = CATEGORY_COLORS.get(slug, DEFAULT_COLOR)
@@ -5283,8 +5287,8 @@ def _article_page_html(
         "@context":         "https://schema.org",
         "@type":            "NewsArticle",
         "headline":         title_raw[:110],
-        "datePublished":    scraped_dt,
-        "dateModified":     scraped_dt,
+        "datePublished":    pub_dt,      # actual RSS publish date
+        "dateModified":     scraped_dt,  # when we last scraped/processed it
         "author":           {"@type": "Organization", "name": _author_name, "url": art.get("url", "")},
         "publisher":        _publisher,
         "description":      ai_summary[:300] if ai_summary else title_raw[:200],
@@ -5421,7 +5425,7 @@ def _article_page_html(
   <meta property="og:type" content="article">
   <meta property="og:locale" content="{esc(s.get('og_locale', 'ar_MA'))}">
   <meta property="og:url" content="{esc(canon_url)}">
-  <meta property="article:published_time" content="{esc(scraped_dt)}">
+  <meta property="article:published_time" content="{esc(pub_dt)}">
   <meta property="article:modified_time" content="{esc(scraped_dt)}">
   <meta property="article:section" content="{esc(cat_name)}">
 {("  " + chr(10).join(f'<meta property="article:tag" content="{esc(k)}">' for k in kws[:5]) + chr(10)) if kws else ""}{og_img_tags}
@@ -5470,7 +5474,7 @@ def _article_page_html(
         <h1 class="art-title" itemprop="headline">{title_esc}</h1>
         <div class="art-meta">
           <span class="art-source-badge" itemprop="author">{source_esc}{_art_sp_badge}</span>
-          <time class="art-date" datetime="{esc(scraped_dt)}" itemprop="datePublished">{esc(date_str)}</time>
+          <time class="art-date" datetime="{esc(pub_dt)}" itemprop="datePublished">{esc(date_str)}</time>
           <span class="art-cat-badge" style="background:{esc(gradient)}">{esc(cat_icon)} {esc(cat_name)}</span>
         </div>
         {_art_cluster_badge}
