@@ -164,7 +164,7 @@
       ]
     },
     {
-      "name": "Teknoloji",
+      "name": "Teknoloji & Bilim",
       "slug": "tech",
       "icon": "💻",
       "sources": [
@@ -227,6 +227,34 @@
         {
           "name": "Hürriyet Teknoloji",
           "url": "https://www.hurriyet.com.tr/teknoloji/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.hurriyet.com.tr"
+        },
+        {
+          "name": "NTV Bilim",
+          "url": "https://www.ntv.com.tr/bilim-teknoloji",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.ntv.com.tr"
+        },
+        {
+          "name": "Bilim Fili",
+          "url": "https://www.bilimfili.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.bilimfili.com"
+        },
+        {
+          "name": "National Geographic TR",
+          "url": "https://www.nationalgeographic.com.tr/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.nationalgeographic.com.tr"
+        },
+        {
+          "name": "Hürriyet Bilim",
+          "url": "https://www.hurriyet.com.tr/dunya/",
           "article_selector": "h3",
           "link_selector": "a",
           "base_url": "https://www.hurriyet.com.tr"
@@ -321,48 +349,6 @@
           "article_selector": "h3",
           "link_selector": "a",
           "base_url": "https://www.trthaber.com"
-        }
-      ]
-    },
-    {
-      "name": "Bilim",
-      "slug": "science",
-      "icon": "🧪",
-      "sources": [
-        {
-          "name": "NTV Bilim",
-          "url": "https://www.ntv.com.tr/bilim-teknoloji",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.ntv.com.tr"
-        },
-        {
-          "name": "Bilim Fili",
-          "url": "https://www.bilimfili.com/",
-          "article_selector": "h2",
-          "link_selector": "a",
-          "base_url": "https://www.bilimfili.com"
-        },
-        {
-          "name": "National Geographic TR",
-          "url": "https://www.nationalgeographic.com.tr/",
-          "article_selector": "h2",
-          "link_selector": "a",
-          "base_url": "https://www.nationalgeographic.com.tr"
-        },
-        {
-          "name": "TRT Haber Bilim",
-          "url": "https://www.trthaber.com/haber/bilim-teknoloji/",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.trthaber.com"
-        },
-        {
-          "name": "Hürriyet Bilim",
-          "url": "https://www.hurriyet.com.tr/dunya/",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.hurriyet.com.tr"
         }
       ]
     },

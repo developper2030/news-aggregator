@@ -87,7 +87,7 @@
       ]
     },
     {
-      "name": "Tecnología",
+      "name": "Tecnología y Ciencia",
       "slug": "tech",
       "icon": "💻",
       "sources": [
@@ -139,6 +139,27 @@
           "article_selector": "h2",
           "link_selector": "a",
           "base_url": "https://www.fayerwayer.com"
+        },
+        {
+          "name": "El País Ciencia",
+          "url": "https://elpais.com/ciencia/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://elpais.com"
+        },
+        {
+          "name": "National Geographic ES",
+          "url": "https://www.nationalgeographic.com.es/ciencia/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.nationalgeographic.com.es"
+        },
+        {
+          "name": "Agencia SINC",
+          "url": "https://www.agenciasinc.es/Noticias",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.agenciasinc.es"
         }
       ]
     },
@@ -188,34 +209,6 @@
           "article_selector": "h2",
           "link_selector": "a",
           "base_url": "https://www.elconfidencial.com"
-        }
-      ]
-    },
-    {
-      "name": "Ciencia",
-      "slug": "science",
-      "icon": "🧪",
-      "sources": [
-        {
-          "name": "El País Ciencia",
-          "url": "https://elpais.com/ciencia/",
-          "article_selector": "h2",
-          "link_selector": "a",
-          "base_url": "https://elpais.com"
-        },
-        {
-          "name": "National Geographic ES",
-          "url": "https://www.nationalgeographic.com.es/ciencia/",
-          "article_selector": "h2",
-          "link_selector": "a",
-          "base_url": "https://www.nationalgeographic.com.es"
-        },
-        {
-          "name": "Agencia SINC",
-          "url": "https://www.agenciasinc.es/Noticias",
-          "article_selector": "h2",
-          "link_selector": "a",
-          "base_url": "https://www.agenciasinc.es"
         }
       ]
     },

@@ -73,7 +73,7 @@
       ]
     },
     {
-      "name": "Technology",
+      "name": "Technology & Science",
       "slug": "tech",
       "icon": "💻",
       "sources": [
@@ -111,6 +111,20 @@
           "article_selector": "h3",
           "link_selector": "a",
           "base_url": "https://www.digitaltrends.com"
+        },
+        {
+          "name": "BBC Science",
+          "url": "https://www.bbc.com/news/science_and_environment",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "Reuters Science",
+          "url": "https://www.reuters.com/science/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.reuters.com"
         }
       ]
     },
@@ -160,27 +174,6 @@
           "article_selector": "h3",
           "link_selector": "a",
           "base_url": "https://www.bbc.com"
-        }
-      ]
-    },
-    {
-      "name": "Science",
-      "slug": "science",
-      "icon": "🧪",
-      "sources": [
-        {
-          "name": "BBC Science",
-          "url": "https://www.bbc.com/news/science_and_environment",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.bbc.com"
-        },
-        {
-          "name": "Reuters Science",
-          "url": "https://www.reuters.com/science/",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.reuters.com"
         }
       ]
     },

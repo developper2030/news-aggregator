@@ -1033,7 +1033,7 @@ _SLUG_XMAP: dict[str, dict[str, str | None]] = {
     "us-en":           {"ar": None,         "en": "us-en",       "fr": None,          "es": None,          "tr": None},
     # ── Main categories only in some languages (→ index.html elsewhere) ──────
     "society":         {"ar": "society",    "en": None,          "fr": None,          "es": None,          "tr": None},
-    "science":         {"ar": None,         "en": "science",     "fr": "science",     "es": "science",     "tr": "science"},
+    # science merged into tech in all languages (2026-05-29) — slug retired, see _redirects
     # ── New universal categories (same slug in all languages) ─────────────────
     "environment":     {"ar": "environment","en": "environment", "fr": "environment", "es": "environment", "tr": "environment"},
     "business":        {"ar": "business",   "en": "business",    "fr": "business",    "es": "business",    "tr": "business"},
@@ -3076,10 +3076,9 @@ ABOUT_HTML_TR = """\
   <ul>
     <li>📰 <strong>Olaylar</strong> — Yerel ve uluslararası güncel önemli olaylar</li>
     <li>💰 <strong>Ekonomi</strong> — Finans ve ekonomi haberleri</li>
-    <li>💻 <strong>Teknoloji</strong> — Teknoloji ve inovasyon haberleri</li>
+    <li>💻 <strong>Teknoloji &amp; Bilim</strong> — Teknoloji, bilim ve inovasyon haberleri</li>
     <li>⚽ <strong>Spor</strong> — Spor haberleri</li>
     <li>🔬 <strong>Sağlık</strong> — Tıbbi haberler ve sağlık bilgileri</li>
-    <li>🧪 <strong>Bilim</strong> — Bilim ve araştırma haberleri</li>
     <li>🎬 <strong>Kültür &amp; Sanat</strong> — Kültür ve sanat haberleri</li>
     <li>🎓 <strong>Eğitim</strong> — Eğitim ve akademik haberler</li>
     <li>🌿 <strong>Çevre</strong> — Çevre ve iklim değişikliği haberleri</li>
@@ -4448,6 +4447,17 @@ CLOUDFLARE_HEADERS = """\
   Cache-Control: public, max-age=1800, stale-while-revalidate=7200
 """
 
+# Cloudflare Pages _redirects — 301s for merged/renamed sections (preserve SEO).
+# Written to the domain root (EN build). Add a line whenever a slug is retired.
+CLOUDFLARE_REDIRECTS = """\
+# Section merges — 301 permanent redirects (keep old URLs alive for SEO)
+# science merged into tech (2026-05-29)
+/science.html      /tech.html      301
+/fr/science.html   /fr/tech.html   301
+/es/science.html   /es/tech.html   301
+/tr/science.html   /tr/tech.html   301
+"""
+
 # ads.txt — placed at the DOMAIN ROOT only (written during EN generation).
 # Replace placeholder publisher IDs with your real IDs before going live.
 ADS_TXT = """\
@@ -4555,6 +4565,8 @@ def _write_static_assets(out_dir: str = OUTPUT_DIR, lang: str = "ar",
             f.write(ADS_TXT)
         with open(os.path.join(out_dir, "_headers"), "w", encoding="utf-8") as f:
             f.write(CLOUDFLARE_HEADERS)
+        with open(os.path.join(out_dir, "_redirects"), "w", encoding="utf-8") as f:
+            f.write(CLOUDFLARE_REDIRECTS)
         # og-image.png: write once — user can replace with a Canva-designed PNG
         # and it will NOT be overwritten on subsequent runs.
         _og_png_path = os.path.join(out_dir, "og-image.png")

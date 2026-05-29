@@ -101,7 +101,7 @@
       ]
     },
     {
-      "name": "Technologie",
+      "name": "Technologie & Science",
       "slug": "tech",
       "icon": "💻",
       "sources": [
@@ -153,6 +153,27 @@
           "article_selector": "h2",
           "link_selector": "a",
           "base_url": "https://www.macg.co"
+        },
+        {
+          "name": "Le Monde Sciences",
+          "url": "https://www.lemonde.fr/sciences/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.lemonde.fr"
+        },
+        {
+          "name": "Futura Sciences",
+          "url": "https://www.futura-sciences.com/sciences/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.futura-sciences.com"
+        },
+        {
+          "name": "Sciences et Avenir",
+          "url": "https://www.sciencesetavenir.fr/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.sciencesetavenir.fr"
         }
       ]
     },
@@ -223,34 +244,6 @@
           "article_selector": "h2",
           "link_selector": "a",
           "base_url": "https://www.santemagazine.fr"
-        }
-      ]
-    },
-    {
-      "name": "Science",
-      "slug": "science",
-      "icon": "🧪",
-      "sources": [
-        {
-          "name": "Le Monde Sciences",
-          "url": "https://www.lemonde.fr/sciences/",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.lemonde.fr"
-        },
-        {
-          "name": "Futura Sciences",
-          "url": "https://www.futura-sciences.com/sciences/",
-          "article_selector": "h2",
-          "link_selector": "a",
-          "base_url": "https://www.futura-sciences.com"
-        },
-        {
-          "name": "Sciences et Avenir",
-          "url": "https://www.sciencesetavenir.fr/",
-          "article_selector": "h2",
-          "link_selector": "a",
-          "base_url": "https://www.sciencesetavenir.fr"
         }
       ]
     },
