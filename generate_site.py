@@ -5975,44 +5975,43 @@ def _generate_manifest(site_title: str, site_desc: str, site_url: str,
 # ROUND-ROBIN SOURCE ORDERING
 # ──────────────────────────────────────────────────────────────────────────────
 
-def _round_robin(articles: list[dict], source_order: list[str]) -> list[dict]:
-    """Re-order articles so sources are interleaved in round-robin fashion.
+def _order_freshness_first(articles: list[dict]) -> list[dict]:
+    """Order articles NEWEST-FIRST, with light source diversity.
 
-    Algorithm:
-      1. Group articles by source_name, preserving newest-first order within each group.
-      2. Arrange groups in the order listed in *source_order* (config order).
-         Sources not found in the config are appended at the end.
-      3. Pop one article at a time from each group in turn until all are exhausted.
+    Priority is RECENCY:
+      - Position 0 is the globally newest article (by scraped_at), regardless
+        of which source it came from. Breaking news leads the page.
 
-    Result: article[0] = source1's latest, article[1] = source2's latest,
-            article[2] = source3's latest, article[3] = source1's 2nd latest …
+    Soft source diversity (the "interleave when possible" part):
+      - To stop one prolific source from dominating the top slots, we avoid
+        placing the same source in two CONSECUTIVE positions *when* a slightly
+        older article from a different source is available.
+      - If only one source has articles left, we simply keep taking its newest.
+
+    Net effect: "freshest first, then rotate sources when we can" — the latest
+    story always wins position 0, but the top of the page stays varied.
     """
-    from collections import defaultdict
+    # Guarantee newest-first input (scraped_at is "YYYY-MM-DD HH:MM:SS",
+    # so lexical sort == chronological sort). DB already returns DESC, but we
+    # re-sort defensively so ordering never depends on upstream behaviour.
+    remaining = sorted(
+        articles,
+        key=lambda a: a.get("scraped_at", "") or a.get("date", ""),
+        reverse=True,
+    )
 
-    # Group by source, newest first (DB already returns them in scraped_at DESC order)
-    buckets: dict[str, list[dict]] = defaultdict(list)
-    for art in articles:
-        buckets[art["source"]].append(art)
-
-    # Build ordered list-of-lists following config source order
-    ordered: list[list[dict]] = []
-    seen: set[str] = set()
-    for src_name in source_order:
-        if src_name in buckets and src_name not in seen:
-            ordered.append(buckets[src_name])
-            seen.add(src_name)
-
-    # Append any sources present in DB but not declared in config
-    for src_name, bucket in buckets.items():
-        if src_name not in seen:
-            ordered.append(bucket)
-
-    # Round-robin interleave
     result: list[dict] = []
-    while any(ordered):
-        for bucket in ordered:
-            if bucket:
-                result.append(bucket.pop(0))
+    while remaining:
+        last_src = result[-1]["source"] if result else None
+        pick = 0  # default: the newest remaining article
+        if last_src is not None:
+            # Find the newest remaining article from a DIFFERENT source
+            for i, art in enumerate(remaining):
+                if art.get("source") != last_src:
+                    pick = i
+                    break
+            # else (loop didn't break): all remaining share last_src → pick=0
+        result.append(remaining.pop(pick))
 
     return result
 
@@ -6274,19 +6273,13 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         if removed:
             logger.info("Blacklist: removed %d article(s) matching %d keyword(s)", removed, len(blacklist_kws))
 
-    # ── Round-robin source ordering ───────────────────────────────────────────
-    # Re-order each category's articles so sources are interleaved in config
-    # order rather than purely chronologically.  One article from source-1,
-    # then one from source-2, … cycling until all articles are placed.
-    cat_source_order: dict[str, list[str]] = {
-        cat["slug"]: [src["name"] for src in cat.get("sources", [])]
-        for cat in categories
-    }
+    # ── Freshness-first ordering (newest leads, sources rotated when possible) ──
+    # Priority is recency: the globally newest article tops each category, with
+    # light source diversity to keep the top of the page varied.
     for slug, cat_data in articles_by_cat.items():
-        src_order = cat_source_order.get(slug, [])
-        if src_order and cat_data["articles"]:
-            cat_data["articles"] = _round_robin(cat_data["articles"], src_order)
-    logger.info("Round-robin ordering applied to %d category(ies)", len(articles_by_cat))
+        if cat_data["articles"]:
+            cat_data["articles"] = _order_freshness_first(cat_data["articles"])
+    logger.info("Freshness-first ordering applied to %d category(ies)", len(articles_by_cat))
 
     # ── Per-category color overrides from sources.json ────────────────────────
     # The admin panel lets users pick a custom color per category and saves it
