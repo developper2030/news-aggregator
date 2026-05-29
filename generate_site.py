@@ -4180,14 +4180,21 @@ CLOUDFLARE_HEADERS = """\
 /*.html
   Cache-Control: public, max-age=3600, stale-while-revalidate=43200
 
-# CSS / JS — revalidate on every request (fixed filenames, no content-hash in URL)
-# Cloudflare Pages auto-purges edge cache on deploy, so this only affects browser HTTP cache.
-# The SW handles offline caching with a content-hash in the cache name.
+# CSS / JS — short browser cache + background revalidation.
+# SW handles stale-asset busting via content-hash in cache name (news-v1-XXXXXXXX).
+# Cloudflare Pages edge cache is auto-purged on every deploy.
+# 1-hour max-age prevents network failures on slow connections from breaking layout.
 /style.css
-  Cache-Control: no-cache, must-revalidate
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+/*/style.css
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 
 /app.js
-  Cache-Control: no-cache, must-revalidate
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+/*/app.js
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 
 # Service worker — never cache (must always be fresh)
 /sw.js
@@ -5286,7 +5293,7 @@ def _page(*, title: str, desc: str, nav_html: str,
   <!-- Critical CSS — initial skeleton shown instantly before style.css loads.
        MUST come BEFORE <link rel="stylesheet"> so that style.css overrides it
        once loaded. Reversing this order would permanently override style.css. -->
-  <style>*,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}:root{{--header-start:#4f46e5;--header-end:#7c3aed;--nav-bg:rgba(255,255,255,.92);--nav-text:#475569;--accent:#6366f1;--bg:#f8f9fe;--text:#1e293b;--border:#e2e8f0}}body{{font-family:system-ui,sans-serif;background:#f8f9fe;color:#1e293b;direction:{s["dir"]}}}.sticky-header{{position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.12)}}.site-header{{background:linear-gradient(135deg,var(--header-start),var(--header-end));color:#fff;padding:8px 0}}.site-header-inner{{display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1200px;margin:0 auto}}.site-header-title{{font-weight:800;font-size:1.2em;letter-spacing:2px;color:#fff}}.site-nav{{background:var(--nav-bg);backdrop-filter:blur(8px);overflow:hidden}}.nav-inner{{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:1px;max-width:1200px;margin:0 auto;padding:0 6px}}.nav-tab{{display:inline-flex;align-items:center;padding:8px 14px;color:var(--nav-text);font-size:.82em;text-decoration:none;white-space:nowrap;flex-shrink:0;min-width:0}}.articles-grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}}.article-card{{border-radius:14px;overflow:hidden;background:#fff;position:relative;aspect-ratio:4/3}}@media(max-width:480px){{.articles-grid{{grid-template-columns:1fr}}.article-card{{aspect-ratio:16/9}}}}</style>
+  <style>*,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}:root{{--header-start:#4f46e5;--header-end:#7c3aed;--nav-bg:rgba(255,255,255,.92);--nav-text:#475569;--accent:#6366f1;--bg:#f8f9fe;--text:#1e293b;--border:#e2e8f0}}body{{font-family:system-ui,sans-serif;background:#f8f9fe;color:#1e293b;direction:{s["dir"]}}}.sticky-header{{position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.12)}}.site-header{{background:linear-gradient(135deg,var(--header-start),var(--header-end));color:#fff;padding:8px 0}}.site-header-inner{{display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1200px;margin:0 auto}}.site-header-title{{font-weight:800;font-size:1.2em;letter-spacing:2px;color:#fff}}.site-nav{{background:var(--nav-bg);backdrop-filter:blur(8px);overflow:hidden}}.nav-inner{{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:1px;max-width:1200px;margin:0 auto;padding:0 6px}}.nav-tab{{display:inline-flex;align-items:center;padding:8px 14px;color:var(--nav-text);font-size:.82em;text-decoration:none;white-space:nowrap;flex-shrink:0;min-width:0}}.articles-grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}}.article-card{{border-radius:14px;overflow:hidden;background:#fff;position:relative;aspect-ratio:4/3}}@media(max-width:900px){{.articles-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:480px){{.articles-grid{{grid-template-columns:1fr}}.article-card{{aspect-ratio:16/9}}}}@media(max-width:768px){{.top-date{{display:none}}.site-header-inner{{padding:0 10px;gap:8px}}}}@media(max-width:480px){{.live-time{{display:none}}}}</style>
   <!-- Performance: preload critical assets first -->
   <link rel="preload" href="style.css" as="style">
 {(f'  <link rel="preload" href="{esc(lcp_image_url)}" as="image" fetchpriority="high">' if lcp_image_url else "")}
