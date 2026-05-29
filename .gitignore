@@ -22,6 +22,9 @@ static/
 # Secrets — NEVER commit these
 config/api_keys.json
 
+# Marketing auto-poster state (per-machine, tracks what's been posted)
+marketing/.posted.json
+
 # OS
 .DS_Store
 Thumbs.db
