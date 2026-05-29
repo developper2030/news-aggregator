@@ -89,6 +89,18 @@ jobs:
           OPENROUTER_API_KEY:  ${{ secrets.OPENROUTER_API_KEY }}
           NVIDIA_API_KEY:      ${{ secrets.NVIDIA_API_KEY }}
 
+      # ── 6c. نسخ احتياطي دائم لقواعد البيانات (artifact، 30 يوماً) ─────
+      #    شبكة أمان ضد فقدان الكاش المؤقت. إن ضاعت كل الكاشات، نزّل آخر
+      #    artifact من تبويب Actions → استخرجه إلى data/ → استعدت كل المقالات.
+      - name: Backup databases (artifact)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: news-databases-backup
+          path: data/*.db
+          retention-days: 30
+          if-no-files-found: warn
+
       # ── 7. توليد الموقع من بيانات الكاش — يلتقط أحدث تعديلات الكود ────
       #    لا continue-on-error: إن فشل التوليد (خطأ كود) نوقف قبل النشر.
       - name: Generate site
