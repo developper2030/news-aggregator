@@ -14,7 +14,7 @@ jobs:
   build-and-deploy:
     name: Scrape → Generate → Deploy
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 75
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 

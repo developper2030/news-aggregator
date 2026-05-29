@@ -6,10 +6,11 @@
 
 ## 🔴 فوري — يعطّل وظائف حالية
 
-### 1. إضافة `GEMINI_API_KEY` في GitHub Secrets
+### 1. إضافة `GEMINI_API_KEY` في GitHub Secrets 🔥 يسبب timeout الآن!
 | | |
 |--|--|
-| **الأثر** | AI summaries معطّلة في كل run على CI — الموقع يُنشر بدون ملخصات |
+| **الأثر** | بدون Gemini: GROQ يُلخّص 100 مقال/لغة × 5 لغات = ~21 دقيقة (OK). **مع Gemini: 75/لغة × 5 = ~6 دقائق فقط** |
+| **السبب** | بدون `GEMINI_API_KEY`: الكود يستخدم GROQ مع batch=250 → 52 دقيقة → timeout! (تم تخفيضه لـ 100 مؤقتاً) |
 | **الخطوات** | github.com → repo → Settings → Secrets and variables → Actions → New repository secret |
 | **الاسم** | `GEMINI_API_KEY` |
 | **القيمة** | `AIzaSyBL5mjg1N793EgtUj4iK-fdYTGSfshTR_0` |

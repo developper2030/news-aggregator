@@ -113,7 +113,9 @@ def summarize(langs: list[str]) -> None:
     print(f"\n[AI] Generating summaries with {provider}…")
 
     # Gemini free tier: 1500 req/day ÷ (5 langs × 4 CI runs) = 75/lang/run
-    _batch = 75 if gemini_key else 250
+    # Groq free tier: fast but rate-limited — keep at 100 to fit inside 45-min CI timeout
+    # (250 × 5 langs × ~2.5s = 52 min → exceeds timeout; 100 × 5 × 2.5s = 21 min ✓)
+    _batch = 75 if gemini_key else 100
     for code in langs:
         n = summarize_articles(
             db_path=LANGS[code]["db"],
