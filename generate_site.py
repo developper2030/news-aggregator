@@ -2118,7 +2118,8 @@ PRIVACY_HTML = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow">
-<title>سياسة الخصوصية</title>
+<meta name="description" content="سياسة خصوصية Atlas News — مجمّع إخباري متعدد اللغات">
+<title>سياسة الخصوصية — Atlas News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -2143,15 +2144,15 @@ PRIVACY_HTML = """\
 </div>
 <div class="page">
   <h1>سياسة الخصوصية</h1>
-  <p class="sub">آخر تحديث: 2025</p>
+  <p class="sub">آخر تحديث: 2026</p>
 
-  <p>نرحب بك في <strong>ملخص الأخبار الأسبوعي</strong>. نلتزم بحماية خصوصيتك وفيما يلي توضيح كامل لسياستنا.</p>
+  <p>نرحب بك في <strong>Atlas News</strong>. نلتزم بحماية خصوصيتك وفيما يلي توضيح كامل لسياستنا.</p>
 
   <h2>1. المعلومات التي نجمعها</h2>
   <p>هذا الموقع لا يجمع أي بيانات شخصية مباشرة. نحن موقع تجميع إخباري يعرض عناوين من مصادر أخرى.</p>
   <ul>
     <li>لا نطلب تسجيلاً أو اشتراكاً</li>
-    <li>لا نستخدم ملفات تعريف الارتباط (Cookies) الخاصة بنا</li>
+    <li>نستخدم التخزين المحلي للمتصفح (localStorage) فقط لحفظ تفضيلاتك (مثل الوضع المظلم) — لا نستخدم ملفات تعريف ارتباط تتبع خاصة بنا</li>
     <li>لا نجمع عناوين IP أو بيانات التصفح</li>
   </ul>
 
@@ -2189,7 +2190,8 @@ ABOUT_HTML = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow">
-<title>من نحن</title>
+<meta name="description" content="تعرف على Atlas News — مجمّع إخباري متعدد اللغات يغطي أخبار العالم بـ5 لغات">
+<title>من نحن — Atlas News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -2219,16 +2221,16 @@ ABOUT_HTML = """\
 </div>
 <div class="page">
   <h1>من نحن</h1>
-  <p class="sub">ملخص الأخبار الأسبوعي — مجمّع إخباري آلي</p>
+  <p class="sub">Atlas News — مجمّع إخباري آلي متعدد اللغات</p>
 
-  <p><strong>ملخص الأخبار الأسبوعي</strong> هو موقع تجميع إخباري يجمع أهم العناوين من مصادر عربية وعالمية موثوقة في مكان واحد، دون الحاجة إلى زيارة عشرات المواقع يومياً.</p>
+  <p><strong>Atlas News</strong> هو موقع تجميع إخباري يجمع أهم العناوين من مصادر عربية وعالمية موثوقة في مكان واحد، دون الحاجة إلى زيارة عشرات المواقع يومياً.</p>
 
   <h2>كيف يعمل الموقع</h2>
   <div class="steps">
-    <div class="step"><span class="step-num">1</span><span>يتم جلب العناوين بشكل آلي يومياً من المصادر المحددة</span></div>
+    <div class="step"><span class="step-num">1</span><span>يتم جلب العناوين بشكل آلي كل 6 ساعات من المصادر المحددة</span></div>
     <div class="step"><span class="step-num">2</span><span>يتم تصفية العناوين غير ذات الصلة وإزالة المكررات تلقائياً</span></div>
     <div class="step"><span class="step-num">3</span><span>يعرض الموقع العنوان ورابط المصدر الأصلي فقط — لا يتم تعديل أي محتوى</span></div>
-    <div class="step"><span class="step-num">4</span><span>يتجدد الموقع تلقائياً عبر GitHub Actions كل يوم</span></div>
+    <div class="step"><span class="step-num">4</span><span>يتجدد الموقع تلقائياً عبر GitHub Actions كل 6 ساعات</span></div>
   </div>
 
   <h2>مصادرنا</h2>
@@ -2241,12 +2243,12 @@ ABOUT_HTML = """\
     <span class="chip">🏛️ اليوم 24</span>
     <span class="chip">💰 العربية</span>
     <span class="chip">💰 سكاي نيوز عربية</span>
-    <span class="chip">💻 TechRadar</span>
-    <span class="chip">💻 Wired</span>
+    <span class="chip">💻 تك عربي</span>
+    <span class="chip">💻 عرب هاردوير</span>
     <span class="chip">⚽ كورة</span>
     <span class="chip">⚽ يلا كورة</span>
-    <span class="chip">🔬 WebMD</span>
-    <span class="chip">🔬 Nature</span>
+    <span class="chip">🔬 صحة ويب</span>
+    <span class="chip">🔬 ساينس مغ</span>
   </div>
 
   <h2>التصنيفات المتاحة</h2>
@@ -2258,6 +2260,9 @@ ABOUT_HTML = """\
     <li>🔬 <strong>صحة وعلوم</strong> — اكتشافات طبية وعلمية</li>
     <li>🎬 <strong>ثقافة وفن</strong> — أخبار الثقافة والفنون والإبداع</li>
     <li>🎓 <strong>تربية وتعليم</strong> — أخبار التعليم والأكاديميا</li>
+    <li>🌿 <strong>بيئة ومناخ</strong> — أخبار البيئة والتغير المناخي</li>
+    <li>💼 <strong>مال وأعمال</strong> — أخبار الأسواق والشركات</li>
+    <li>✈️ <strong>سياحة وسفر</strong> — أخبار السياحة والوجهات العالمية</li>
   </ul>
 
   <h2>إخلاء المسؤولية</h2>
@@ -2275,7 +2280,8 @@ PRIVACY_HTML_EN = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow">
-<title>Privacy Policy</title>
+<meta name="description" content="Atlas News Privacy Policy — multilingual automated news aggregator">
+<title>Privacy Policy — Atlas News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -2301,13 +2307,13 @@ body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}
 </div>
 <div class="page">
   <h1>Privacy Policy</h1>
-  <p class="sub">Last updated: 2025</p>
-  <p>Welcome to <strong>World News</strong>. We are committed to protecting your privacy.</p>
+  <p class="sub">Last updated: 2026</p>
+  <p>Welcome to <strong>Atlas News</strong>. We are committed to protecting your privacy.</p>
   <h2>1. Information We Collect</h2>
   <p>This site does not collect personal data directly. We are a news aggregator that displays headlines from other sources.</p>
   <ul>
     <li>No registration or subscription required</li>
-    <li>We do not use our own cookies</li>
+    <li>We use browser local storage only to save your preferences (e.g., dark mode) — we do not use our own tracking cookies</li>
     <li>We do not collect IP addresses or browsing data</li>
   </ul>
   <h2>2. Google AdSense</h2>
@@ -2339,7 +2345,8 @@ ABOUT_HTML_EN = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow">
-<title>About</title>
+<meta name="description" content="About Atlas News — a multilingual automated news aggregator covering world news in 5 languages">
+<title>About — Atlas News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -2369,14 +2376,14 @@ body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}
 </div>
 <div class="page">
   <h1>About</h1>
-  <p class="sub">World News — Automated news aggregator</p>
-  <p><strong>World News</strong> is a news aggregator that gathers the most important headlines from trusted international sources in one place, without needing to visit dozens of sites every day.</p>
+  <p class="sub">Atlas News — Automated multilingual news aggregator</p>
+  <p><strong>Atlas News</strong> is a news aggregator that gathers the most important headlines from trusted international sources in one place, without needing to visit dozens of sites every day.</p>
   <h2>How It Works</h2>
   <div class="steps">
-    <div class="step"><span class="step-num">1</span><span>Headlines are fetched automatically every day from configured sources</span></div>
+    <div class="step"><span class="step-num">1</span><span>Headlines are fetched automatically every 6 hours from configured sources</span></div>
     <div class="step"><span class="step-num">2</span><span>Irrelevant headlines are filtered and duplicates are removed automatically</span></div>
     <div class="step"><span class="step-num">3</span><span>The site displays the headline and a link to the original source only — no content is modified</span></div>
-    <div class="step"><span class="step-num">4</span><span>The site is refreshed automatically via GitHub Actions every day</span></div>
+    <div class="step"><span class="step-num">4</span><span>The site is refreshed automatically via GitHub Actions every 6 hours</span></div>
   </div>
   <h2>Our Sources</h2>
   <p>We aggregate news from well-known, diverse sources:</p>
@@ -2400,6 +2407,9 @@ body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}
     <li>⚽ <strong>Sports</strong> — Sports and tournament news</li>
     <li>🔬 <strong>Health</strong> — Medical and scientific discoveries</li>
     <li>🎓 <strong>Education</strong> — Academic news and learning resources</li>
+    <li>🌿 <strong>Environment</strong> — Environmental and climate change news</li>
+    <li>💼 <strong>Business</strong> — Market and corporate news</li>
+    <li>✈️ <strong>Travel</strong> — Tourism and global destinations news</li>
   </ul>
   <h2>Disclaimer</h2>
   <p>This site is an automated news aggregator. All articles link to their original sources and we are not responsible for their content. The site may display ads via Google AdSense; see <a href="privacy.html">Privacy Policy</a> for details.</p>
@@ -2416,7 +2426,8 @@ PRIVACY_HTML_FR = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow">
-<title>Politique de confidentialité</title>
+<meta name="description" content="Politique de confidentialité d'Atlas News — agrégateur d'actualités multilingue automatisé">
+<title>Politique de confidentialité — Atlas News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -2441,13 +2452,13 @@ PRIVACY_HTML_FR = """\
 </div>
 <div class="page">
   <h1>Politique de confidentialité</h1>
-  <p class="sub">Dernière mise à jour : 2025</p>
-  <p>Bienvenue sur <strong>Actualités Mondiales</strong>. Nous nous engageons à protéger votre vie privée.</p>
+  <p class="sub">Dernière mise à jour : 2026</p>
+  <p>Bienvenue sur <strong>Atlas News</strong>. Nous nous engageons à protéger votre vie privée.</p>
   <h2>1. Informations collectées</h2>
   <p>Ce site ne collecte aucune donnée personnelle directement. Nous sommes un agrégateur de nouvelles qui affiche des titres provenant d'autres sources.</p>
   <ul>
     <li>Aucune inscription ou abonnement requis</li>
-    <li>Nous n'utilisons pas nos propres cookies</li>
+    <li>Nous utilisons le stockage local du navigateur uniquement pour sauvegarder vos préférences (ex : mode sombre) — nous n'utilisons pas nos propres cookies de suivi</li>
     <li>Nous ne collectons pas d'adresses IP ni de données de navigation</li>
   </ul>
   <h2>2. Google AdSense</h2>
@@ -2479,7 +2490,8 @@ ABOUT_HTML_FR = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow">
-<title>À propos</title>
+<meta name="description" content="À propos d'Atlas News — agrégateur d'actualités multilingue automatisé en 5 langues">
+<title>À propos — Atlas News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -2508,14 +2520,14 @@ ABOUT_HTML_FR = """\
 </div>
 <div class="page">
   <h1>À propos</h1>
-  <p class="sub">Actualités Mondiales — Agrégateur d'actualités automatique</p>
-  <p><strong>Actualités Mondiales</strong> est un agrégateur de nouvelles qui rassemble les titres les plus importants de sources internationales fiables en un seul endroit.</p>
+  <p class="sub">Atlas News — Agrégateur d'actualités multilingue automatique</p>
+  <p><strong>Atlas News</strong> est un agrégateur de nouvelles qui rassemble les titres les plus importants de sources internationales fiables en un seul endroit.</p>
   <h2>Comment ça fonctionne</h2>
   <div class="steps">
-    <div class="step"><span class="step-num">1</span><span>Les titres sont récupérés automatiquement chaque jour depuis les sources configurées</span></div>
+    <div class="step"><span class="step-num">1</span><span>Les titres sont récupérés automatiquement toutes les 6 heures depuis les sources configurées</span></div>
     <div class="step"><span class="step-num">2</span><span>Les titres non pertinents sont filtrés et les doublons supprimés automatiquement</span></div>
     <div class="step"><span class="step-num">3</span><span>Le site affiche le titre et un lien vers la source originale uniquement</span></div>
-    <div class="step"><span class="step-num">4</span><span>Le site est mis à jour automatiquement via GitHub Actions chaque jour</span></div>
+    <div class="step"><span class="step-num">4</span><span>Le site est mis à jour automatiquement via GitHub Actions toutes les 6 heures</span></div>
   </div>
   <h2>Nos sources</h2>
   <p>Nous agrégeons les actualités de sources reconnues et diverses :</p>
@@ -2540,6 +2552,9 @@ ABOUT_HTML_FR = """\
     <li>⚽ <strong>Sports</strong> — Actualités sportives</li>
     <li>🔬 <strong>Santé</strong> — Découvertes médicales et scientifiques</li>
     <li>🎓 <strong>Éducation</strong> — Actualités académiques et pédagogiques</li>
+    <li>🌿 <strong>Environnement</strong> — Actualités environnementales et climatiques</li>
+    <li>💼 <strong>Business</strong> — Actualités des marchés et des entreprises</li>
+    <li>✈️ <strong>Tourisme</strong> — Actualités touristiques et destinations mondiales</li>
   </ul>
   <h2>Avertissement</h2>
   <p>Ce site est un agrégateur automatique. Tous les articles renvoient à leurs sources originales. Consultez la <a href="privacy.html">politique de confidentialité</a> pour les détails sur la publicité.</p>
@@ -2556,7 +2571,8 @@ PRIVACY_HTML_ES = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow">
-<title>Política de privacidad</title>
+<meta name="description" content="Política de privacidad de Atlas News — agregador de noticias multilingüe automatizado">
+<title>Política de privacidad — Atlas News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -2581,13 +2597,13 @@ PRIVACY_HTML_ES = """\
 </div>
 <div class="page">
   <h1>Política de privacidad</h1>
-  <p class="sub">Última actualización: 2025</p>
-  <p>Bienvenido a <strong>Noticias Mundiales</strong>. Estamos comprometidos a proteger tu privacidad.</p>
+  <p class="sub">Última actualización: 2026</p>
+  <p>Bienvenido a <strong>Atlas News</strong>. Estamos comprometidos a proteger tu privacidad.</p>
   <h2>1. Información que recopilamos</h2>
   <p>Este sitio no recopila datos personales directamente. Somos un agregador de noticias que muestra titulares de otras fuentes.</p>
   <ul>
     <li>No se requiere registro ni suscripción</li>
-    <li>No usamos nuestras propias cookies</li>
+    <li>Usamos el almacenamiento local del navegador solo para guardar tus preferencias (p. ej., modo oscuro) — no usamos cookies de seguimiento propias</li>
     <li>No recopilamos direcciones IP ni datos de navegación</li>
   </ul>
   <h2>2. Google AdSense</h2>
@@ -2619,7 +2635,8 @@ ABOUT_HTML_ES = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow">
-<title>Acerca de</title>
+<meta name="description" content="Acerca de Atlas News — agregador de noticias multilingüe automatizado en 5 idiomas">
+<title>Acerca de — Atlas News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -2648,14 +2665,14 @@ ABOUT_HTML_ES = """\
 </div>
 <div class="page">
   <h1>Acerca de</h1>
-  <p class="sub">Noticias Mundiales — Agregador de noticias automatizado</p>
-  <p><strong>Noticias Mundiales</strong> es un agregador de noticias que reúne los titulares más importantes de fuentes internacionales confiables en un solo lugar.</p>
+  <p class="sub">Atlas News — Agregador de noticias multilingüe automatizado</p>
+  <p><strong>Atlas News</strong> es un agregador de noticias que reúne los titulares más importantes de fuentes internacionales confiables en un solo lugar.</p>
   <h2>Cómo funciona</h2>
   <div class="steps">
-    <div class="step"><span class="step-num">1</span><span>Los titulares se obtienen automáticamente cada día desde las fuentes configuradas</span></div>
+    <div class="step"><span class="step-num">1</span><span>Los titulares se obtienen automáticamente cada 6 horas desde las fuentes configuradas</span></div>
     <div class="step"><span class="step-num">2</span><span>Los titulares irrelevantes se filtran y los duplicados se eliminan automáticamente</span></div>
     <div class="step"><span class="step-num">3</span><span>El sitio muestra el titular y un enlace a la fuente original únicamente</span></div>
-    <div class="step"><span class="step-num">4</span><span>El sitio se actualiza automáticamente mediante GitHub Actions cada día</span></div>
+    <div class="step"><span class="step-num">4</span><span>El sitio se actualiza automáticamente mediante GitHub Actions cada 6 horas</span></div>
   </div>
   <h2>Nuestras fuentes</h2>
   <p>Agregamos noticias de fuentes reconocidas y diversas:</p>
@@ -2680,6 +2697,9 @@ ABOUT_HTML_ES = """\
     <li>⚽ <strong>Deportes</strong> — Noticias deportivas</li>
     <li>🔬 <strong>Salud</strong> — Descubrimientos médicos y científicos</li>
     <li>🎓 <strong>Educación</strong> — Noticias académicas y recursos educativos</li>
+    <li>🌿 <strong>Medio Ambiente</strong> — Noticias medioambientales y climáticas</li>
+    <li>💼 <strong>Negocios</strong> — Noticias de mercados y empresas</li>
+    <li>✈️ <strong>Turismo</strong> — Noticias de turismo y destinos globales</li>
   </ul>
   <h2>Aviso legal</h2>
   <p>Este sitio es un agregador automático. Todos los artículos enlazan a sus fuentes originales. Consulta la <a href="privacy.html">política de privacidad</a> para detalles sobre publicidad.</p>
@@ -2696,7 +2716,8 @@ PRIVACY_HTML_TR = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow">
-<title>Gizlilik Politikası</title>
+<meta name="description" content="Atlas News gizlilik politikası — çok dilli otomatik haber toplayıcı">
+<title>Gizlilik Politikası — Atlas News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -2721,13 +2742,13 @@ PRIVACY_HTML_TR = """\
 </div>
 <div class="page">
   <h1>Gizlilik Politikası</h1>
-  <p class="sub">Son güncelleme: 2025</p>
-  <p><strong>Dünya Haberleri</strong>'ne hoş geldiniz. Gizliliğinizi korumaya kararlıyız.</p>
+  <p class="sub">Son güncelleme: 2026</p>
+  <p><strong>Atlas News</strong>'e hoş geldiniz. Gizliliğinizi korumaya kararlıyız.</p>
   <h2>1. Topladığımız Bilgiler</h2>
   <p>Bu site doğrudan kişisel veri toplamaz. Diğer kaynaklardan haber başlıklarını gösteren bir haber toplayıcısıyız.</p>
   <ul>
     <li>Kayıt veya abonelik gerekmez</li>
-    <li>Kendi çerezlerimizi kullanmıyoruz</li>
+    <li>Yalnızca tercihlerinizi kaydetmek için tarayıcı yerel depolama alanı kullanıyoruz (ör. karanlık mod) — kendi izleme çerezlerimizi kullanmıyoruz</li>
     <li>IP adresi veya tarama verisi toplamıyoruz</li>
   </ul>
   <h2>2. Google AdSense</h2>
@@ -2759,7 +2780,8 @@ ABOUT_HTML_TR = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow">
-<title>Hakkımızda</title>
+<meta name="description" content="Atlas News hakkında — 5 dilde otomatik çok dilli haber toplayıcısı">
+<title>Hakkımızda — Atlas News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -2788,11 +2810,11 @@ ABOUT_HTML_TR = """\
 </div>
 <div class="page">
   <h1>Hakkımızda</h1>
-  <p class="sub">Dünya Haberleri — Otomatik haber toplayıcısı</p>
+  <p class="sub">Atlas News — Otomatik çok dilli haber toplayıcısı</p>
   <p>Bu site, Türkiye ve dünyadan birden fazla güvenilir kaynaktan haberleri otomatik olarak toplayan bir <strong>haber toplayıcısıdır</strong>. Her içerik parçası, tam makaleye orijinal kaynağında bağlantı verir.</p>
   <h2>Nasıl Çalışır?</h2>
   <div class="steps">
-    <div class="step"><div class="step-num">1</div><div>Otomatik sistem, onlarca güvenilir Türk ve uluslararası haber kaynağını düzenli olarak tarar.</div></div>
+    <div class="step"><div class="step-num">1</div><div>Otomatik sistem, onlarca güvenilir Türk ve uluslararası haber kaynağını her 6 saatte bir tarar.</div></div>
     <div class="step"><div class="step-num">2</div><div>Haber başlıkları ve bağlantıları toplanır, filtrelenir ve kategorilere göre düzenlenir.</div></div>
     <div class="step"><div class="step-num">3</div><div>Statik HTML sayfaları oluşturulur ve maksimum hız ile güvenilirlik için sunulur.</div></div>
   </div>
@@ -2817,6 +2839,9 @@ ABOUT_HTML_TR = """\
     <li>🧪 <strong>Bilim</strong> — Bilim ve araştırma haberleri</li>
     <li>🎬 <strong>Kültür &amp; Sanat</strong> — Kültür ve sanat haberleri</li>
     <li>🎓 <strong>Eğitim</strong> — Eğitim ve akademik haberler</li>
+    <li>🌿 <strong>Çevre</strong> — Çevre ve iklim değişikliği haberleri</li>
+    <li>💼 <strong>İş Dünyası</strong> — Piyasa ve şirket haberleri</li>
+    <li>✈️ <strong>Turizm</strong> — Turizm ve küresel destinasyonlar haberleri</li>
   </ul>
   <h2>Yasal Uyarı</h2>
   <p>Bu site otomatik bir toplayıcıdır. Tüm makaleler orijinal kaynaklarına bağlantı verir. Reklamlar hakkında ayrıntılar için <a href="privacy.html">Gizlilik Politikası</a>'nı inceleyin.</p>
@@ -3176,7 +3201,7 @@ TERMS_HTML = """\
 </div></div>
 <div class="page">
   <h1>شروط الاستخدام</h1>
-  <p class="sub">آخر تحديث: 2025 — يُرجى قراءة هذه الشروط بعناية قبل استخدام الموقع</p>
+  <p class="sub">آخر تحديث: 2026 — يُرجى قراءة هذه الشروط بعناية قبل استخدام الموقع</p>
 
   <h2>1. القبول بالشروط</h2>
   <p>باستخدامك لموقع <strong>Atlas News</strong> (atlasnews.solvixi.com)، فإنك توافق على الالتزام بهذه الشروط والأحكام. إذا كنت لا توافق على أي من هذه الشروط، يُرجى التوقف عن استخدام الموقع.</p>
@@ -3238,7 +3263,7 @@ TERMS_HTML_EN = """\
 </div></div>
 <div class="page">
   <h1>Terms of Use</h1>
-  <p class="sub">Last updated: 2025 — Please read these terms carefully before using the site</p>
+  <p class="sub">Last updated: 2026 — Please read these terms carefully before using the site</p>
 
   <h2>1. Acceptance of Terms</h2>
   <p>By accessing <strong>Atlas News</strong> (atlasnews.solvixi.com), you agree to be bound by these Terms of Use. If you do not agree to any of these terms, please discontinue use of the site.</p>
@@ -3300,7 +3325,7 @@ TERMS_HTML_FR = """\
 </div></div>
 <div class="page">
   <h1>Conditions d'utilisation</h1>
-  <p class="sub">Dernière mise à jour : 2025 — Veuillez lire attentivement ces conditions</p>
+  <p class="sub">Dernière mise à jour : 2026 — Veuillez lire attentivement ces conditions</p>
 
   <h2>1. Acceptation des conditions</h2>
   <p>En accédant à <strong>Atlas News</strong>, vous acceptez d'être lié par ces conditions d'utilisation.</p>
@@ -3355,7 +3380,7 @@ TERMS_HTML_ES = """\
 </div></div>
 <div class="page">
   <h1>Términos de uso</h1>
-  <p class="sub">Última actualización: 2025 — Por favor lee estos términos detenidamente</p>
+  <p class="sub">Última actualización: 2026 — Por favor lee estos términos detenidamente</p>
 
   <h2>1. Aceptación de los términos</h2>
   <p>Al acceder a <strong>Atlas News</strong>, aceptas quedar vinculado por estos Términos de uso.</p>
@@ -3410,7 +3435,7 @@ TERMS_HTML_TR = """\
 </div></div>
 <div class="page">
   <h1>Kullanim Kosullari</h1>
-  <p class="sub">Son guncelleme: 2025 — Siteyi kullanmadan once bu kosullari okuyunuz</p>
+  <p class="sub">Son guncelleme: 2026 — Siteyi kullanmadan once bu kosullari okuyunuz</p>
 
   <h2>1. Kosullarin Kabulü</h2>
   <p><strong>Atlas News</strong>'e erisim saglamaniz, bu Kullanim Kosullarini kabul ettiginiz anlamina gelir.</p>
