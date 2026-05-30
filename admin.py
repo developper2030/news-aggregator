@@ -1111,6 +1111,58 @@ let artPage = 1, artCat = '', artQ = '';
 let blist = [];
 let activeLang = 'ar';
 
+// ── Special-pages labels per language ────────────────────────────────────────
+// [icon, settings_key, display_name, note]
+const SP_LABELS = {
+  ar: [
+    ['🎬','show_media',    'صوت وصورة',              'كل أقسام الفيديو + البث المباشر'],
+    ['🏆','show_worldcup', 'برنامج كأس العالم',       'جدول مباريات 2026 (تلقائي)'],
+    ['💱','show_prices',   'أسعار الصرف',             'صفحة prices.html — بيانات 18 عملة'],
+    ['📈','show_bourse',   'بورصات',                  'تبويب داخل الاقتصاد — قريباً'],
+    ['📊','show_stats',    'إحصاءات وأرقام',          'تبويب داخل الاقتصاد — قريباً'],
+    ['🏢','show_biz',      'دليل الشركات',            'تبويب داخل الاقتصاد — قريباً'],
+  ],
+  en: [
+    ['🎬','show_media',    'Audio & Video',           'All video sections + live streams'],
+    ['🏆','show_worldcup', 'World Cup Schedule',      'FIFA World Cup 2026 fixtures (auto)'],
+    ['💱','show_prices',   'Exchange Rates',          'prices.html — 18 currency pairs'],
+    ['📈','show_bourse',   'Markets',                 'Economy tab — coming soon'],
+    ['📊','show_stats',    'Statistics',              'Economy tab — coming soon'],
+    ['🏢','show_biz',      'Business Directory',      'Economy tab — coming soon'],
+  ],
+  fr: [
+    ['🎬','show_media',    'Audio & Vidéo',           'Toutes sections vidéo + direct'],
+    ['🏆','show_worldcup', 'Programme Coupe du Monde','Matchs FIFA 2026 (automatique)'],
+    ['💱','show_prices',   'Taux de Change',          'prices.html — 18 paires de devises'],
+    ['📈','show_bourse',   'Bourses',                 'Onglet économie — bientôt'],
+    ['📊','show_stats',    'Statistiques',            'Onglet économie — bientôt'],
+    ['🏢','show_biz',      'Répertoire des entreprises','Onglet économie — bientôt'],
+  ],
+  es: [
+    ['🎬','show_media',    'Audio y Video',           'Todas las secciones de video + directo'],
+    ['🏆','show_worldcup', 'Programa Copa Mundial',   'Partidos FIFA 2026 (automático)'],
+    ['💱','show_prices',   'Tipos de Cambio',         'prices.html — 18 divisas'],
+    ['📈','show_bourse',   'Bolsas',                  'Pestaña economía — próximamente'],
+    ['📊','show_stats',    'Estadísticas',            'Pestaña economía — próximamente'],
+    ['🏢','show_biz',      'Directorio de Empresas',  'Pestaña economía — próximamente'],
+  ],
+  tr: [
+    ['🎬','show_media',    'Ses & Görüntü',           'Tüm video bölümleri + canlı yayın'],
+    ['🏆','show_worldcup', 'Dünya Kupası Programı',   'FIFA 2026 fikstürü (otomatik)'],
+    ['💱','show_prices',   'Döviz Kurları',           'prices.html — 18 döviz çifti'],
+    ['📈','show_bourse',   'Borsalar',                'Ekonomi sekmesi — yakında'],
+    ['📊','show_stats',    'İstatistikler',           'Ekonomi sekmesi — yakında'],
+    ['🏢','show_biz',      'Şirket Rehberi',          'Ekonomi sekmesi — yakında'],
+  ],
+};
+const SP_UI = {
+  ar: {header:'📄 صفحات خاصة (مولّدة تلقائياً — لا مصادر)', hidden:'🚫 مخفي',  visible:'👁️ ظاهر'},
+  en: {header:'📄 Special Pages (auto-generated — no sources)',   hidden:'🚫 Hidden', visible:'👁️ Visible'},
+  fr: {header:'📄 Pages spéciales (générées auto — sans sources)',hidden:'🚫 Masqué',visible:'👁️ Visible'},
+  es: {header:'📄 Páginas especiales (auto — sin fuentes)',       hidden:'🚫 Oculto', visible:'👁️ Visible'},
+  tr: {header:'📄 Özel Sayfalar (otomatik — kaynak yok)',         hidden:'🚫 Gizli',  visible:'👁️ Görünür'},
+};
+
 // ══ AUTH ══════════════════════════════════════════════════════════════════════
 async function doLogin() {
   const pwd = document.getElementById('pwd').value;
@@ -1384,15 +1436,17 @@ function renderSections() {
       <td><button class="btn bd xs" onclick="delCat(${ci});renderSections()" title="حذف القسم نهائياً">✕</button></td>
     </tr>`;
   }).join('');
-  const sp = cfg.settings || {};
-  const spRow = (icon, name, key, note) => {
+  const sp    = cfg.settings || {};
+  const ui    = SP_UI[activeLang]     || SP_UI.ar;
+  const pages = SP_LABELS[activeLang] || SP_LABELS.ar;
+  const spRow = ([icon, key, name, note]) => {
     const off = sp[key] === false;
-    return `<tr class="${off?'sec-off':''}"><td class="sec-ic">${icon}</td><td class="sec-nm">${esc(name)}</td><td class="sec-note">${esc(note)}</td><td><button class="btn ${off?'bo':'bg'} xs" onclick="toggleSpecial('${key}')">${off?'🚫 مخفي':'👁️ ظاهر'}</button></td></tr>`;
+    return `<tr class="${off?'sec-off':''}"><td class="sec-ic">${icon}</td><td class="sec-nm">${esc(name)}</td><td class="sec-note">${esc(note)}</td><td><button class="btn ${off?'bo':'bg'} xs" onclick="toggleSpecial('${key}')">${off?ui.hidden:ui.visible}</button></td></tr>`;
   };
   wrap.innerHTML =
     `<table class="sec-table"><thead><tr><th>الترتيب</th><th></th><th>الاسم</th><th>المعرّف</th><th>مصادر</th><th>الحالة</th><th>إفراغ</th><th>حذف</th></tr></thead><tbody>${rows}</tbody></table>`
-    + `<h4 style="margin:22px 0 8px;color:#475569">📄 صفحات خاصة (مولّدة تلقائياً — لا مصادر)</h4>`
-    + `<table class="sec-table"><thead><tr><th></th><th>الصفحة</th><th>ملاحظة</th><th>الحالة</th></tr></thead><tbody>${spRow('🎬','صوت وصورة','show_media','كل أقسام الفيديو + البث المباشر')}${spRow('🏆','برنامج كأس العالم','show_worldcup','جدول مباريات 2026 (تلقائي)')}${spRow('💱','أسعار الصرف','show_prices','صفحة prices.html — بيانات 18 عملة')}${spRow('📈','بورصات','show_bourse','تبويب داخل الاقتصاد — قريباً')}${spRow('📊','إحصاءات وأرقام','show_stats','تبويب داخل الاقتصاد — قريباً')}${spRow('🏢','دليل الشركات','show_biz','تبويب داخل الاقتصاد — قريباً')}</tbody></table>`;
+    + `<h4 style="margin:22px 0 8px;color:#475569">${esc(ui.header)}</h4>`
+    + `<table class="sec-table"><thead><tr><th></th><th>الصفحة</th><th>ملاحظة</th><th>الحالة</th></tr></thead><tbody>${pages.map(spRow).join('')}</tbody></table>`;
 }
 function toggleSpecial(key) {
   // Toggle a special-page setting (show_media / show_worldcup). Missing = shown.
