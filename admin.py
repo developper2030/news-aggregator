@@ -70,6 +70,14 @@ def _valid_session(cookie_header: str) -> bool:
     return False
 
 
+# ── Async run state ──────────────────────────────────────────────────────────
+_run_state: dict = {
+    "running": False, "op": "", "stdout": "",
+    "stderr": "", "returncode": None, "started_at": 0.0,
+}
+_run_lock = threading.Lock()
+
+
 # ── DB helpers ───────────────────────────────────────────────────────────────
 def _db_stats(lang: str = 'ar') -> dict:
     cfg_path, db_path = _lang_paths(lang)
@@ -286,6 +294,55 @@ def _source_health_all() -> dict:
     return {"sources": results, "total": total, "zero": zero, "low": low, "ok": ok}
 
 
+# ── Async script runner ──────────────────────────────────────────────────────
+def _exec_async(script: str, op_label: str, args: list = []) -> dict:
+    """Start a project script in a background thread; return immediately.
+
+    The caller polls /api/run-status for progress and final output.
+    Only one operation can run at a time.
+    """
+    script_path = os.path.normpath(os.path.join(BASE, script))
+    real_base   = os.path.realpath(BASE)
+    real_script = os.path.realpath(script_path)
+    if not real_script.startswith(real_base + os.sep) or not os.path.isfile(real_script):
+        return {"ok": False, "error": f"Script not found: {script}"}
+    with _run_lock:
+        if _run_state["running"]:
+            elapsed = int(time.time() - _run_state["started_at"])
+            return {"ok": False,
+                    "error": f'عملية "{_run_state["op"]}" قيد التشغيل ({elapsed}s) — انتظر حتى تنتهي'}
+        _run_state.update(running=True, op=op_label, stdout="",
+                          stderr="", returncode=None, started_at=time.time())
+
+    def _worker():
+        try:
+            r = subprocess.run(
+                [PYTHON, real_script] + args,
+                capture_output=True, text=True, timeout=3600,
+                cwd=BASE, encoding="utf-8", errors="replace",
+            )
+            with _run_lock:
+                _run_state.update(stdout=r.stdout[-8000:],
+                                  stderr=r.stderr[-2000:],
+                                  returncode=r.returncode)
+        except subprocess.TimeoutExpired:
+            with _run_lock:
+                _run_state.update(stdout="(انتهت مهلة التنفيذ — ساعة كاملة)",
+                                  returncode=-1)
+        except Exception as exc:
+            with _run_lock:
+                _run_state.update(stdout=str(exc), returncode=-1)
+        finally:
+            with _run_lock:
+                _run_state["running"] = False
+            logger.info("Async op finished: %s (code=%s)", op_label,
+                        _run_state.get("returncode"))
+
+    threading.Thread(target=_worker, daemon=True).start()
+    logger.info("Async op started: %s %s", script, args)
+    return {"ok": True, "msg": f"بدأ: {op_label}"}
+
+
 # ── HTTP handler ──────────────────────────────────────────────────────────────
 class AdminHandler(BaseHTTPRequestHandler):
 
@@ -352,13 +409,26 @@ class AdminHandler(BaseHTTPRequestHandler):
             self.end_headers(); self.wfile.write(data)
         elif path == "/api/run":
             if not self._require_auth(): return
-            self._exec("run.py", "Pipeline finished")
+            self._json(_exec_async("run.py", "تشغيل الكل"))
         elif path == "/api/scrape":
             if not self._require_auth(): return
-            self._exec("run.py", "Scraping done", ["--scrape-only"])
+            self._json(_exec_async("run.py", "جلب الأخبار", ["--scrape-only"]))
         elif path == "/api/generate":
             if not self._require_auth(): return
-            self._exec("run.py", "Site generated", ["--generate-only"])
+            self._json(_exec_async("run.py", "توليد الموقع", ["--generate-only"]))
+        elif path == "/api/run-status":
+            if not self._require_auth(): return
+            with _run_lock:
+                st = dict(_run_state)
+            self._json({
+                "running":    st["running"],
+                "op":         st["op"],
+                "stdout":     st["stdout"],
+                "stderr":     st["stderr"],
+                "returncode": st["returncode"],
+                "ok":         st["returncode"] == 0 if st["returncode"] is not None else None,
+                "elapsed":    int(time.time() - st["started_at"]) if st["started_at"] else 0,
+            })
         elif path == "/api/source-health":
             if not self._require_auth(): return
             self._json(_source_health_all())
@@ -1086,6 +1156,8 @@ function showMain() {
   document.getElementById('overlay').style.display = 'none';
   document.getElementById('main').style.display = 'block';
   loadAll();
+  // Resume polling if a background op was already running
+  api('/api/run-status').then(s => { if (s?.running) _startPolling(); });
 }
 
 async function loadAll() {
@@ -1545,26 +1617,72 @@ async function importConfig() {
 
 // ══ RUN ═══════════════════════════════════════════════════════════════════════
 const OP_LABELS = {scrape:'🕷️ جلب الأخبار', generate:'🌐 توليد الموقع', run:'▶️ تشغيل الكل'};
+let _runPoller = null;
 
-async function runOp(op, btn) {
-  btn.disabled = true; btn.textContent = '⟳ جارٍ...';
+function _fmtElapsed(sec) {
+  if (!sec) return '';
+  const m = Math.floor(sec / 60), s = sec % 60;
+  return ` (${m}:${String(s).padStart(2,'0')})`;
+}
+
+function _startPolling() {
+  if (_runPoller) clearInterval(_runPoller);
   const dot = document.getElementById('dot');
   const st  = document.getElementById('run-status');
   const out = document.getElementById('run-out');
-  if (dot) { dot.className='dot run'; st.textContent='جارٍ: '+OP_LABELS[op]; }
-  if (out) { out.className='out'; out.textContent='الرجاء الانتظار...'; }
+  _runPoller = setInterval(async () => {
+    const s = await api('/api/run-status');
+    if (!s) return;
+    const el = _fmtElapsed(s.elapsed);
+    if (dot) dot.className = 'dot ' + (s.running ? 'run' : s.ok ? 'ok' : 'fail');
+    if (st)  st.textContent = s.running
+      ? `⟳ جارٍ: ${s.op}${el}`
+      : s.ok !== null
+        ? (s.ok ? `✅ اكتمل — ${s.op}${el}` : `❌ فشل (كود: ${s.returncode}) — ${s.op}${el}`)
+        : st.textContent;
+    if (out && (s.stdout || s.stderr)) {
+      out.textContent = (s.stdout||'') + (s.stderr ? '\\n\\n[STDERR]\\n'+s.stderr : '');
+      out.className   = 'out' + (s.running ? '' : s.ok ? '' : ' fail');
+      out.scrollTop   = out.scrollHeight;
+    }
+    if (!s.running && s.ok !== null) {
+      clearInterval(_runPoller); _runPoller = null;
+      if (s.ok) loadDash();
+    }
+  }, 3000);
+}
+
+async function runOp(op, btn) {
   switchTab('run');
+  const dot = document.getElementById('dot');
+  const st  = document.getElementById('run-status');
+  const out = document.getElementById('run-out');
+
+  // Check if already running — just watch it
+  const cur = await api('/api/run-status');
+  if (cur?.running) {
+    if(dot) dot.className='dot run';
+    if(st)  st.textContent='⟳ جارٍ بالفعل: '+cur.op;
+    toast('⚠️ عملية جارية بالفعل — يمكنك متابعتها هنا');
+    _startPolling();
+    return;
+  }
+
+  btn.disabled = true; btn.textContent = '⟳ جارٍ...';
+  if(dot) { dot.className='dot run'; st.textContent='⟳ جارٍ التهيئة...'; }
+  if(out) { out.className='out'; out.textContent='⟳ جارٍ التهيئة...'; }
+
   const d = await api('/api/'+op);
   btn.disabled = false; btn.textContent = OP_LABELS[op];
-  if (!d) { if(dot) dot.className='dot fail'; if(st) st.textContent='فشل الاتصال'; return; }
-  if (dot) { dot.className='dot '+(d.ok?'ok':'fail'); }
-  if (st)  { st.textContent = d.ok ? '✅ اكتمل بنجاح' : '❌ فشل (كود: '+(d.returncode??'؟')+')'; }
-  if (out) {
-    out.textContent = (d.stdout||'') + (d.stderr ? '\\n\\n[STDERR]\\n'+d.stderr : '') || d.msg || d.error || '(لا مخرجات)';
-    out.className   = 'out'+(d.ok?'':' fail');
-    out.scrollTop   = out.scrollHeight;
+
+  if (!d || !d.ok) {
+    if(dot) dot.className='dot fail';
+    if(st)  st.textContent='❌ '+(d?.error||'فشل الاتصال');
+    if(out) { out.textContent=d?.error||'فشل الاتصال'; out.className='out fail'; }
+    return;
   }
-  if (d.ok) { loadDash(); }
+  if(st) st.textContent='⟳ '+d.msg;
+  _startPolling();
 }
 
 // ══ SOURCE HEALTH ════════════════════════════════════════════════════════════
