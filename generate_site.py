@@ -561,36 +561,46 @@ def _sports_subnav(active_slug: str, s: dict, wcnews_name: str = "",
             f'<div class="world-subnav-inner">{buttons}</div></div>')
 
 
-def _economy_widget(s: dict, active_tab: str = "") -> str:
+def _economy_widget(s: dict, active_tab: str = "",
+                    show_prices: bool = True, show_bourse: bool = True,
+                    show_stats: bool = True, show_biz: bool = True) -> str:
     """Build the tabbed economy navigation widget (language-aware).
 
     active_tab: "prices" | "business" | "travel" to highlight the active link tab.
+    show_* flags: controlled by admin Special Pages toggles (per language).
     """
     prices_cls   = "econ-tab active" if active_tab == "prices"   else "econ-tab"
     business_cls = "econ-tab active" if active_tab == "business" else "econ-tab"
     travel_cls   = "econ-tab active" if active_tab == "travel"   else "econ-tab"
 
-    # ── Tab panels (coming-soon placeholders) ────────────────────────────────
-    stats_panel  = f'<div class="econ-soon">{esc(s["econ_stats_soon"])}</div>'
-    bourse_panel = f'<div class="econ-soon">{esc(s["econ_bourse_soon"])}</div>'
-    biz_panel    = f'<div class="econ-soon">{esc(s["econ_biz_soon"])}</div>'
+    # ── Conditional tabs/panels based on admin toggles ────────────────────────
+    prices_tab  = (f'<a href="prices.html" class="{prices_cls}">{esc(s["econ_prices"])}</a>'
+                   if show_prices else "")
+    stats_tab   = (f'<button class="econ-tab" data-panel="econ-stats">{esc(s["econ_stats_btn"])}</button>'
+                   if show_stats else "")
+    bourse_tab  = (f'<button class="econ-tab" data-panel="econ-bourse">{esc(s["econ_bourse_btn"])}</button>'
+                   if show_bourse else "")
+    biz_tab     = (f'<button class="econ-tab" data-panel="econ-biz">{esc(s["econ_biz_btn"])}</button>'
+                   if show_biz else "")
+    stats_panel_h  = (f'<div class="econ-panel" id="econ-stats"><div class="econ-soon">{esc(s["econ_stats_soon"])}</div></div>'
+                      if show_stats else "")
+    bourse_panel_h = (f'<div class="econ-panel" id="econ-bourse"><div class="econ-soon">{esc(s["econ_bourse_soon"])}</div></div>'
+                      if show_bourse else "")
+    biz_panel_h    = (f'<div class="econ-panel" id="econ-biz"><div class="econ-soon">{esc(s["econ_biz_soon"])}</div></div>'
+                      if show_biz else "")
 
     return (
         f'<div class="econ-widget" role="complementary" aria-label="{esc(s["econ_widget_label"])}">'
         f'<div class="econ-tab-nav">'
         f'<div class="econ-tab-nav-inner">'
-        f'<a href="prices.html"   class="{prices_cls}">{esc(s["econ_prices"])}</a>'
+        f'{prices_tab}'
         f'<a href="business.html" class="{business_cls}">{esc(s["econ_business_btn"])}</a>'
         f'<a href="travel.html"   class="{travel_cls}">{esc(s["econ_travel_btn"])}</a>'
-        f'<button class="econ-tab" data-panel="econ-stats">{esc(s["econ_stats_btn"])}</button>'
-        f'<button class="econ-tab" data-panel="econ-bourse">{esc(s["econ_bourse_btn"])}</button>'
-        f'<button class="econ-tab" data-panel="econ-biz">{esc(s["econ_biz_btn"])}</button>'
+        f'{stats_tab}{bourse_tab}{biz_tab}'
         f'</div>'
         f'</div>'
         f'<div class="econ-panels">'
-        f'<div class="econ-panel" id="econ-stats">{stats_panel}</div>'
-        f'<div class="econ-panel" id="econ-bourse">{bourse_panel}</div>'
-        f'<div class="econ-panel" id="econ-biz">{biz_panel}</div>'
+        f'{stats_panel_h}{bourse_panel_h}{biz_panel_h}'
         f'</div>'
         f'</div>'
     )
@@ -6567,6 +6577,20 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         categories = [c for c in categories if not c["slug"].startswith("vid-")]
         logger.info("Special pages: صوت وصورة hidden (show_media=false)")
 
+    # Economy sub-page visibility (admin Special Pages toggles — per language)
+    _show_prices = settings.get("show_prices", True) is not False
+    _show_bourse = settings.get("show_bourse", True) is not False
+    _show_stats  = settings.get("show_stats",  True) is not False
+    _show_biz    = settings.get("show_biz",    True) is not False
+    if not _show_prices:
+        logger.info("Special pages: prices.html hidden [%s] (show_prices=false)", lang)
+    if not _show_bourse:
+        logger.info("Special pages: bourse tab hidden [%s] (show_bourse=false)", lang)
+    if not _show_stats:
+        logger.info("Special pages: stats tab hidden [%s] (show_stats=false)", lang)
+    if not _show_biz:
+        logger.info("Special pages: biz tab hidden [%s] (show_biz=false)", lang)
+
     now             = datetime.now().strftime("%Y-%m-%d %H:%M")
     today_ar        = datetime.now().strftime("%Y/%m/%d")
 
@@ -6836,7 +6860,9 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         cat_carousel = _carousel(_cat_carousel_arts, s=s, site_url=_site_url, media_slugs=media_slugs_local)
         # Economy tabs widget on economy, business, and travel pages
         if slug in {"economy", "business", "travel"}:
-            cat_ticker = _economy_widget(s, active_tab=slug)
+            cat_ticker = _economy_widget(s, active_tab=slug,
+                                         show_prices=_show_prices, show_bourse=_show_bourse,
+                                         show_stats=_show_stats, show_biz=_show_biz)
         else:
             cat_ticker = ""
         # RSS link: category-specific feed when available
@@ -6881,8 +6907,8 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         ))
         pages_written += 1
 
-        # ── PRICES.HTML — sub-page of economy ────────────────────────────────
-        if slug == "economy":
+        # ── PRICES.HTML — sub-page of economy (hidden when show_prices=false) ─
+        if slug == "economy" and _show_prices:
             _wrt("prices.html", _page(
                 title=site_title,
                 nav_html=_nav(categories, articles_by_cat, active="economy",
@@ -6894,7 +6920,9 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
                 og_image_url=_og_img_url,
                 extra_json_ld=_org_ld,
                 world_subnav_html="",
-                ticker_html=_economy_widget(s, active_tab="prices"),
+                ticker_html=_economy_widget(s, active_tab="prices",
+                                            show_prices=_show_prices, show_bourse=_show_bourse,
+                                            show_stats=_show_stats, show_biz=_show_biz),
                 carousel_html="",
                 lang_switcher_html=_lsw("prices.html"),
                 **common,
@@ -7143,7 +7171,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             _cat_pages.append(("live.html",   "0.7", "hourly"))
             for r in media_regions_list:
                 _region_pages.append((f'{r["slug"]}.html', "0.6", "hourly"))
-        if any(cat.get("slug") == "economy" for cat in categories):
+        if _show_prices and any(cat.get("slug") == "economy" for cat in categories):
             _cat_pages.append(("prices.html", "0.6", "daily"))
 
         _all_sm_pages = _static_pages + _cat_pages + _region_pages
