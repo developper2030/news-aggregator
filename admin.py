@@ -55,10 +55,11 @@ def _valid_session(cookie_header: str) -> bool:
 
 
 # ── DB helpers ───────────────────────────────────────────────────────────────
-def _db_stats() -> dict:
-    if not os.path.exists(DB_PATH):
+def _db_stats(lang: str = 'ar') -> dict:
+    cfg_path, db_path = _lang_paths(lang)
+    if not os.path.exists(db_path):
         return {"total": 0, "by_cat": [], "oldest": "", "newest": "", "db_size_kb": 0, "total_sources": 0}
-    conn   = _db_conn()
+    conn   = sqlite3.connect(db_path)
     total  = conn.execute("SELECT COUNT(*) FROM articles WHERE is_active=1").fetchone()[0]
     by_cat = conn.execute("""
         SELECT category_slug, category_name, COUNT(*) cnt
@@ -68,22 +69,28 @@ def _db_stats() -> dict:
     oldest = conn.execute("SELECT MIN(scraped_at) FROM articles WHERE is_active=1").fetchone()[0] or ""
     newest = conn.execute("SELECT MAX(scraped_at) FROM articles WHERE is_active=1").fetchone()[0] or ""
     conn.close()
-    cfg    = load_config()
-    nsrc   = sum(len(c.get("sources", [])) for c in cfg.get("categories", []))
+    try:
+        with open(cfg_path, encoding="utf-8") as f:
+            cfg_data = json.load(f)
+        nsrc = sum(len(c.get("sources", [])) for c in cfg_data.get("categories", []))
+    except Exception:
+        nsrc = 0
     return {
         "total":         total,
         "by_cat":        [{"slug": r[0], "name": r[1], "count": r[2]} for r in by_cat],
         "oldest":        oldest[:10],
         "newest":        newest[:10],
-        "db_size_kb":    os.path.getsize(DB_PATH) // 1024,
+        "db_size_kb":    os.path.getsize(db_path) // 1024,
         "total_sources": nsrc,
     }
 
 
-def _db_articles(cat: str = "", q: str = "", page: int = 1, limit: int = 25) -> dict:
-    if not os.path.exists(DB_PATH):
+def _db_articles(lang: str = 'ar', cat: str = "", q: str = "", page: int = 1, limit: int = 25) -> dict:
+    _, db_path = _lang_paths(lang)
+    if not os.path.exists(db_path):
         return {"items": [], "total": 0, "page": 1, "pages": 1}
-    conn   = _db_conn()
+    conn   = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
     where  = ["is_active=1"]
     params: list = []
     if cat:
@@ -107,19 +114,21 @@ def _db_articles(cat: str = "", q: str = "", page: int = 1, limit: int = 25) -> 
     }
 
 
-def _db_delete_article(art_id: int) -> bool:
-    if not os.path.exists(DB_PATH):
+def _db_delete_article(art_id: int, lang: str = 'ar') -> bool:
+    _, db_path = _lang_paths(lang)
+    if not os.path.exists(db_path):
         return False
-    conn = _db_conn()
+    conn = sqlite3.connect(db_path)
     conn.execute("UPDATE articles SET is_active=0 WHERE id=?", (art_id,))
     conn.commit(); conn.close()
     return True
 
 
-def _db_export_csv() -> str:
-    if not os.path.exists(DB_PATH):
+def _db_export_csv(lang: str = 'ar') -> str:
+    _, db_path = _lang_paths(lang)
+    if not os.path.exists(db_path):
         return "id,title,url,source,category,scraped_at\n"
-    conn = _db_conn()
+    conn = sqlite3.connect(db_path)
     rows = conn.execute(
         "SELECT id,title,url,source_name,category_name,scraped_at "
         "FROM articles WHERE is_active=1 ORDER BY scraped_at DESC"
@@ -185,6 +194,28 @@ _LANG_CONFIGS = [
     ("es", "config/sources-es.json", "data/news-es.db"),
     ("tr", "config/sources-tr.json", "data/news-tr.db"),
 ]
+
+_VALID_LANGS = {l for l, _, _ in _LANG_CONFIGS}
+
+def _lang_paths(lang: str):
+    for l, cfg_rel, db_rel in _LANG_CONFIGS:
+        if l == lang:
+            return os.path.join(BASE, cfg_rel), os.path.join(BASE, db_rel)
+    return os.path.join(BASE, "config/sources.json"), os.path.join(BASE, "data/news.db")
+
+def _load_lang_config(lang: str) -> dict:
+    cfg_path, _ = _lang_paths(lang)
+    try:
+        with open(cfg_path, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {"categories": [], "settings": {}}
+
+def _save_lang_config(lang: str, data: dict) -> None:
+    cfg_path, _ = _lang_paths(lang)
+    with open(cfg_path, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
 
 def _source_health_all() -> dict:
     """Cross-reference all sources*.json with all DBs → per-source article counts."""
@@ -260,13 +291,20 @@ class AdminHandler(BaseHTTPRequestHandler):
             self._html(ADMIN_HTML)
         elif path == "/api/config":
             if not self._require_auth(): return
-            self._json(load_config())
+            lang = qs.get("lang", ["ar"])[0]
+            if lang not in _VALID_LANGS: lang = "ar"
+            self._json(_load_lang_config(lang))
         elif path == "/api/stats":
             if not self._require_auth(): return
-            self._json(_db_stats())
+            lang = qs.get("lang", ["ar"])[0]
+            if lang not in _VALID_LANGS: lang = "ar"
+            self._json(_db_stats(lang))
         elif path == "/api/articles":
             if not self._require_auth(): return
+            lang = qs.get("lang", ["ar"])[0]
+            if lang not in _VALID_LANGS: lang = "ar"
             self._json(_db_articles(
+                lang  = lang,
                 cat   = qs.get("cat",   [""])[0],
                 q     = qs.get("q",     [""])[0],
                 page  = int(qs.get("page",  ["1"])[0]),
@@ -277,18 +315,23 @@ class AdminHandler(BaseHTTPRequestHandler):
             self._json(_load_blacklist())
         elif path == "/api/db/export":
             if not self._require_auth(): return
-            data = _db_export_csv().encode("utf-8-sig")
+            lang = qs.get("lang", ["ar"])[0]
+            if lang not in _VALID_LANGS: lang = "ar"
+            data = _db_export_csv(lang).encode("utf-8-sig")
             self.send_response(200)
             self.send_header("Content-Type",        "text/csv; charset=utf-8")
-            self.send_header("Content-Disposition", 'attachment; filename="articles.csv"')
+            self.send_header("Content-Disposition", f'attachment; filename="articles-{lang}.csv"')
             self.send_header("Content-Length",      str(len(data)))
             self.end_headers(); self.wfile.write(data)
         elif path == "/api/export/config":
             if not self._require_auth(): return
-            data = json.dumps(load_config(), ensure_ascii=False, indent=2).encode("utf-8")
+            lang  = qs.get("lang", ["ar"])[0]
+            if lang not in _VALID_LANGS: lang = "ar"
+            fname = "sources.json" if lang == "ar" else f"sources-{lang}.json"
+            data  = json.dumps(_load_lang_config(lang), ensure_ascii=False, indent=2).encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type",        "application/json; charset=utf-8")
-            self.send_header("Content-Disposition", 'attachment; filename="sources.json"')
+            self.send_header("Content-Disposition", f'attachment; filename="{fname}"')
             self.send_header("Content-Length",      str(len(data)))
             self.end_headers(); self.wfile.write(data)
         elif path == "/api/run":
@@ -310,8 +353,10 @@ class AdminHandler(BaseHTTPRequestHandler):
 
     # ── POST ──────────────────────────────────────────────────────────────────
     def do_POST(self):
-        path = urlparse(self.path).path
-        body = self._read_body()
+        parsed = urlparse(self.path)
+        path   = parsed.path
+        qs     = parse_qs(parsed.query)
+        body   = self._read_body()
 
         if path == "/api/login":
             pwd = body.get("password", "")
@@ -334,7 +379,9 @@ class AdminHandler(BaseHTTPRequestHandler):
         if path == "/api/config":
             if not isinstance(body, dict) or "categories" not in body:
                 self._json({"ok": False, "error": "Invalid config"}, 400); return
-            save_config(body); self._json({"ok": True})
+            lang = qs.get("lang", ["ar"])[0]
+            if lang not in _VALID_LANGS: lang = "ar"
+            _save_lang_config(lang, body); self._json({"ok": True})
         elif path == "/api/config/reset":
             reset_config(); self._json({"ok": True, "msg": "Reset to defaults"})
         elif path == "/api/logout":
@@ -344,9 +391,11 @@ class AdminHandler(BaseHTTPRequestHandler):
             self._json({"ok": True})
         elif path == "/api/article/delete":
             art_id = body.get("id")
+            lang   = body.get("lang", "ar")
+            if lang not in _VALID_LANGS: lang = "ar"
             if not isinstance(art_id, int):
                 self._json({"ok": False, "error": "Invalid id"}, 400); return
-            _db_delete_article(art_id); self._json({"ok": True})
+            _db_delete_article(art_id, lang); self._json({"ok": True})
         elif path == "/api/health":
             url = body.get("url")
             if url:
@@ -369,7 +418,9 @@ class AdminHandler(BaseHTTPRequestHandler):
         elif path == "/api/import/config":
             if not isinstance(body, dict) or "categories" not in body:
                 self._json({"ok": False, "error": "ملف غير صالح"}, 400); return
-            save_config(body); self._json({"ok": True, "msg": "تم الاستيراد"})
+            lang = qs.get("lang", ["ar"])[0]
+            if lang not in _VALID_LANGS: lang = "ar"
+            _save_lang_config(lang, body); self._json({"ok": True, "msg": "تم الاستيراد"})
         else:
             self.send_error(404)
 
@@ -650,6 +701,14 @@ input.color-pick{width:34px;height:28px;padding:2px;border-radius:6px;cursor:poi
   .scards,.db-cards{grid-template-columns:1fr}
   .art-src,.art-date{display:none}
 }
+
+/* ── LANG SWITCHER ─────────────────────────────────────────────────────────── */
+.lang-bar{background:#f8fafc;border-bottom:1px solid #e2e8f0;padding:6px 20px;display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;position:sticky;top:49px;z-index:99}
+.lang-bar::-webkit-scrollbar{display:none}
+.lang-bar-lbl{font-size:.73em;color:#94a3b8;font-weight:600;white-space:nowrap;margin-left:4px;flex-shrink:0}
+.lang-btn{padding:3px 12px;border:1.5px solid #e2e8f0;border-radius:20px;cursor:pointer;background:#ffffff;color:#475569;font-size:.77em;font-family:inherit;transition:.15s;white-space:nowrap;font-weight:600}
+.lang-btn:hover{border-color:#3b82f6;color:#1d4ed8}
+.lang-btn.active{background:#3b82f6;color:#ffffff;border-color:#3b82f6;box-shadow:0 1px 4px rgba(59,130,246,.35)}
 </style>
 </head>
 <body>
@@ -677,6 +736,17 @@ input.color-pick{width:34px;height:28px;padding:2px;border-radius:6px;cursor:poi
       <button class="btn bo sm" onclick="doLogout()">خروج</button>
     </div>
   </div>
+
+  <!-- ══ LANG SWITCHER (Approach A) ══ -->
+  <div class="lang-bar" id="lang-bar">
+    <span class="lang-bar-lbl">🌐 اللغة:</span>
+    <button class="lang-btn active" data-lang="ar" onclick="switchLang('ar')">🇸🇦 العربية</button>
+    <button class="lang-btn" data-lang="en" onclick="switchLang('en')">🇬🇧 English</button>
+    <button class="lang-btn" data-lang="fr" onclick="switchLang('fr')">🇫🇷 Français</button>
+    <button class="lang-btn" data-lang="es" onclick="switchLang('es')">🇪🇸 Español</button>
+    <button class="lang-btn" data-lang="tr" onclick="switchLang('tr')">🇹🇷 Türkçe</button>
+  </div>
+
   <div class="wrap">
 
     <!-- TABS -->
@@ -953,6 +1023,7 @@ input.color-pick{width:34px;height:28px;padding:2px;border-radius:6px;cursor:poi
 let cfg = null;
 let artPage = 1, artCat = '', artQ = '';
 let blist = [];
+let activeLang = 'ar';
 
 // ══ AUTH ══════════════════════════════════════════════════════════════════════
 async function doLogin() {
@@ -1002,10 +1073,11 @@ function showMain() {
 }
 
 async function loadAll() {
-  const d = await api('/api/config');
+  const d = await api('/api/config?lang=' + activeLang);
   if (!d) return;
   cfg = d;
   renderSources();
+  renderSections();
   loadSettings();
   updateBadge();
   loadDash();
@@ -1018,9 +1090,32 @@ function updateBadge() {
   document.getElementById('src-badge').textContent = n + ' مصدر';
 }
 
+// ══ LANGUAGE SWITCHER (Approach A) ════════════════════════════════════════════
+async function switchLang(lang) {
+  if (lang === activeLang) return;
+  activeLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.lang === lang));
+  const d = await api('/api/config?lang=' + lang);
+  if (!d) return;
+  cfg = d;
+  renderSources();
+  renderSections();
+  loadSettings();
+  updateBadge();
+  // Reset articles category filter for new lang
+  document.getElementById('art-cat').innerHTML = '<option value="">كل الأقسام</option>';
+  populateCatFilter();
+  if (TAB_INIT.articles) { artPage = 1; loadArticles(true); }
+  loadDash();
+  if (TAB_INIT.db) loadDbStats();
+  const LABELS = {ar:'🇸🇦 العربية',en:'🇬🇧 English',fr:'🇫🇷 Français',es:'🇪🇸 Español',tr:'🇹🇷 Türkçe'};
+  toast('🌐 ' + (LABELS[lang] || lang));
+}
+
 (async function boot() {
   try {
-    const r = await fetch('/api/config', {credentials:'same-origin'});
+    const r = await fetch('/api/config?lang=' + activeLang, {credentials:'same-origin'});
     if (r.ok) { const d = await r.json(); if (d?.categories) { cfg=d; showMain(); return; } }
   } catch(e) {}
   document.getElementById('pwd').focus();
@@ -1039,7 +1134,7 @@ function switchTab(name) {
 
 // ══ DASHBOARD ════════════════════════════════════════════════════════════════
 async function loadDash() {
-  const d = await api('/api/stats');
+  const d = await api('/api/stats?lang=' + activeLang);
   if (!d) return;
   document.getElementById('st-arts').textContent = d.total;
   document.getElementById('st-src').textContent  = d.total_sources;
@@ -1209,7 +1304,7 @@ function renderSections() {
   wrap.innerHTML =
     `<table class="sec-table"><thead><tr><th>الترتيب</th><th></th><th>الاسم</th><th>المعرّف</th><th>مصادر</th><th>الحالة</th><th>إفراغ</th><th>حذف</th></tr></thead><tbody>${rows}</tbody></table>`
     + `<h4 style="margin:22px 0 8px;color:#475569">📄 صفحات خاصة (مولّدة تلقائياً — لا مصادر)</h4>`
-    + `<table class="sec-table"><thead><tr><th></th><th>الصفحة</th><th>ملاحظة</th><th>الحالة</th></tr></thead><tbody>${spRow('🎬','صوت وصورة','show_media','كل أقسام الفيديو + البث المباشر')}${spRow('🏆','برنامج كأس العالم','show_worldcup','جدول مباريات 2026 (تلقائي)')}</tbody></table>`;
+    + `<table class="sec-table"><thead><tr><th></th><th>الصفحة</th><th>ملاحظة</th><th>الحالة</th></tr></thead><tbody>${spRow('🎬','صوت وصورة','show_media','كل أقسام الفيديو + البث المباشر')}${spRow('🏆','برنامج كأس العالم','show_worldcup','جدول مباريات 2026 (تلقائي)')}${spRow('💱','أسعار الصرف','show_prices','صفحة prices.html — بيانات 18 عملة')}${spRow('📈','بورصات','show_bourse','تبويب داخل الاقتصاد — قريباً')}${spRow('📊','إحصاءات وأرقام','show_stats','تبويب داخل الاقتصاد — قريباً')}${spRow('🏢','دليل الشركات','show_biz','تبويب داخل الاقتصاد — قريباً')}</tbody></table>`;
 }
 function toggleSpecial(key) {
   // Toggle a special-page setting (show_media / show_worldcup). Missing = shown.
@@ -1240,7 +1335,7 @@ function addSrc(ci) {
 }
 
 async function saveCfg() {
-  const d = await api('/api/config',{method:'POST',body:JSON.stringify(cfg)});
+  const d = await api('/api/config?lang='+activeLang,{method:'POST',body:JSON.stringify(cfg)});
   if (d?.ok) toast('✅ تم الحفظ بنجاح');
   else alert('خطأ: '+(d?.error||'؟'));
 }
@@ -1300,7 +1395,7 @@ async function loadArticles(reset=false) {
   if (reset) artPage = 1;
   artCat = document.getElementById('art-cat').value;
   artQ   = document.getElementById('art-q').value.trim();
-  const url = '/api/articles?cat='+encodeURIComponent(artCat)+'&q='+encodeURIComponent(artQ)+'&page='+artPage+'&limit=25';
+  const url = '/api/articles?lang='+activeLang+'&cat='+encodeURIComponent(artCat)+'&q='+encodeURIComponent(artQ)+'&page='+artPage+'&limit=25';
   const d   = await api(url);
   if (!d) return;
   const tbody = document.getElementById('art-tbody');
@@ -1326,7 +1421,7 @@ async function loadArticles(reset=false) {
 
 async function deleteArt(id, btn) {
   btn.disabled = true;
-  const d = await api('/api/article/delete',{method:'POST',body:JSON.stringify({id})});
+  const d = await api('/api/article/delete',{method:'POST',body:JSON.stringify({id, lang: activeLang})});
   if (d?.ok) btn.closest('tr').remove();
   else btn.disabled = false;
 }
@@ -1375,7 +1470,7 @@ async function saveBlacklist() {
 
 // ══ DATABASE ══════════════════════════════════════════════════════════════════
 async function loadDbStats() {
-  const d = await api('/api/stats');
+  const d = await api('/api/stats?lang=' + activeLang);
   if (!d) return;
   document.getElementById('db-total').textContent  = d.total;
   document.getElementById('db-size').textContent   = d.db_size_kb+' KB';
