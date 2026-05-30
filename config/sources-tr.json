@@ -6,7 +6,10 @@
     "site_url": "https://atlasnews.solvixi.com/tr",
     "lang_code": "tr",
     "ga_id": "G-CXBERJSM8S",
-    "lang_rule": "Turkish only — all sources must publish content in Turkish"
+    "lang_rule": "Turkish only — all sources must publish content in Turkish",
+    "show_biz": false,
+    "show_stats": false,
+    "show_bourse": false
   },
   "categories": [
     {
@@ -940,7 +943,7 @@
       "slug": "products",
       "icon": "🛍️",
       "color": "#f59e0b",
-      "enabled": false,
+      "enabled": true,
       "sources": []
     },
     {
@@ -948,7 +951,7 @@
       "slug": "worldcup-news",
       "icon": "🏆",
       "color": "#16a34a",
-      "enabled": false,
+      "enabled": true,
       "sources": []
     }
   ],

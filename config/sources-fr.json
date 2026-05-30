@@ -6,7 +6,10 @@
     "site_url": "https://atlasnews.solvixi.com/fr",
     "lang_code": "fr",
     "ga_id": "G-CXBERJSM8S",
-    "lang_rule": "French only — all sources must publish content in French"
+    "lang_rule": "French only — all sources must publish content in French",
+    "show_biz": false,
+    "show_stats": false,
+    "show_bourse": false
   },
   "categories": [
     {
@@ -857,7 +860,7 @@
       "slug": "products",
       "icon": "🛍️",
       "color": "#f59e0b",
-      "enabled": false,
+      "enabled": true,
       "sources": []
     },
     {
@@ -865,7 +868,7 @@
       "slug": "worldcup-news",
       "icon": "🏆",
       "color": "#16a34a",
-      "enabled": false,
+      "enabled": true,
       "sources": []
     }
   ],

@@ -8,7 +8,10 @@
     "site_url": "https://atlasnews.solvixi.com/ar",
     "lang_code": "ar",
     "ga_id": "G-CXBERJSM8S",
-    "lang_rule": "Arabic only — all sources must publish content in Arabic"
+    "lang_rule": "Arabic only — all sources must publish content in Arabic",
+    "show_biz": false,
+    "show_stats": false,
+    "show_bourse": false
   },
   "categories": [
     {
@@ -4971,9 +4974,28 @@
           "url": "https://www.beinsports.com/ar/football/fifa-world-cup/",
           "selectors": {
             "article_selector": "article, .article-card, .content-card, .news-item",
-            "heading_tags": ["h2", "h3", "h4"],
-            "exclude_classes": ["footer", "nav", "menu", "header", "sidebar", "widget", "banner", "ad"],
-            "exclude_id_patterns": ["footer", "nav", "menu", "header", "sidebar"],
+            "heading_tags": [
+              "h2",
+              "h3",
+              "h4"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner",
+              "ad"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
             "min_title_length": 20
           }
         },
@@ -4982,9 +5004,24 @@
           "url": "https://www.aljazeera.net/sports/",
           "selectors": {
             "article_selector": "article, .article-card, .featured-article",
-            "heading_tags": ["h2", "h3"],
-            "exclude_classes": ["footer", "nav", "sidebar", "widget", "ad", "promo"],
-            "exclude_id_patterns": ["footer", "nav", "header", "sidebar"],
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "sidebar",
+              "widget",
+              "ad",
+              "promo"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "header",
+              "sidebar"
+            ],
             "min_title_length": 20
           }
         },
@@ -4993,9 +5030,24 @@
           "url": "https://www.goal.com/ar/",
           "selectors": {
             "article_selector": "article, .js-article-list-item, .article-item",
-            "heading_tags": ["h2", "h3"],
-            "exclude_classes": ["footer", "nav", "header", "sidebar", "ad", "widget"],
-            "exclude_id_patterns": ["footer", "nav", "header", "sidebar"],
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "header",
+              "sidebar",
+              "ad",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "header",
+              "sidebar"
+            ],
             "min_title_length": 20
           }
         },
@@ -5004,9 +5056,25 @@
           "url": "https://www.filgoal.com/",
           "selectors": {
             "article_selector": "article, .article, .news-card, .post",
-            "heading_tags": ["h2", "h3"],
-            "exclude_classes": ["footer", "nav", "menu", "header", "sidebar", "widget"],
-            "exclude_id_patterns": ["footer", "nav", "menu", "header", "sidebar"],
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
             "min_title_length": 20
           }
         },
@@ -5015,9 +5083,23 @@
           "url": "https://www.skynewsarabia.com/sport/football",
           "selectors": {
             "article_selector": "article, .article-box, .story-card",
-            "heading_tags": ["h2", "h3"],
-            "exclude_classes": ["footer", "nav", "sidebar", "widget", "ad"],
-            "exclude_id_patterns": ["footer", "nav", "header", "sidebar"],
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "sidebar",
+              "widget",
+              "ad"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "header",
+              "sidebar"
+            ],
             "min_title_length": 20
           }
         }
