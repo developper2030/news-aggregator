@@ -1,0 +1,32 @@
+#!/bin/sh
+# Reject commit messages containing non-ASCII characters.
+# Cloudflare Pages API rejects non-ASCII with error [code: 8000111].
+
+# Find Python (python3 or python)
+PYTHON=""
+if command -v python3 >/dev/null 2>&1; then
+    PYTHON="python3"
+elif command -v python >/dev/null 2>&1; then
+    PYTHON="python"
+fi
+
+# If Python not found, skip check (fail-open — better than blocking all commits)
+if [ -z "$PYTHON" ]; then
+    exit 0
+fi
+
+$PYTHON -c "
+import sys
+with open(sys.argv[1], encoding='utf-8', errors='replace') as f:
+    msg = f.read()
+try:
+    msg.encode('ascii')
+except UnicodeEncodeError:
+    print('')
+    print('ERROR: Non-ASCII characters in commit message.')
+    print('  Cloudflare Pages API rejects non-ASCII => deploy fails [code: 8000111]')
+    print('  Use English/ASCII only. Example:')
+    print('    feat(admin): add visibility controls (media / worldcup)')
+    print('')
+    sys.exit(1)
+" "$1"

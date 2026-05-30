@@ -59,6 +59,27 @@ jobs:
           restore-keys: |
             news-databases-
 
+      # ── 4b. فحص رسالة الـ commit — تحصين ضد الأحرف غير ASCII ──────────
+      #    Cloudflare Pages API يرفض الأحرف غير ASCII [code: 8000111].
+      #    هذا الفحص يُنبّه فقط (warning) — لن يوقف النشر لأن wrangler
+      #    يستخدم --commit-message="deploy SHA" بدلاً من رسالة git.
+      - name: Warn on non-ASCII commit message
+        continue-on-error: true
+        run: |
+          MSG=$(git log -1 --pretty=%B)
+          python3 -c "
+          import sys
+          msg = '''$MSG'''
+          try:
+              msg.encode('ascii')
+              print('Commit message is ASCII-safe.')
+          except UnicodeEncodeError:
+              print('WARNING: Commit message contains non-ASCII characters.')
+              print('  This is safe (wrangler uses SHA as commit-message),')
+              print('  but violates project conventions. Use ASCII only.')
+              print(f'  Message: {msg[:80]}')
+          "
+
       # ── 5. ضمان وجود مجلد data/ ───────────────────────────────────────
       - name: Ensure data directory exists
         run: mkdir -p data

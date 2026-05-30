@@ -55,6 +55,23 @@ jobs:
           restore-keys: |
             news-databases-
 
+      # ── 4b. فحص رسالة الـ commit — تحصين ضد الأحرف غير ASCII ──────────
+      - name: Warn on non-ASCII commit message
+        continue-on-error: true
+        run: |
+          MSG=$(git log -1 --pretty=%B)
+          python3 -c "
+          import sys
+          msg = '''$MSG'''
+          try:
+              msg.encode('ascii')
+              print('Commit message is ASCII-safe.')
+          except UnicodeEncodeError:
+              print('WARNING: Commit message contains non-ASCII characters.')
+              print('  Safe (wrangler uses SHA), but violates project conventions.')
+              print(f'  Message: {msg[:80]}')
+          "
+
       # ── 5. ضمان وجود مجلد data/ ───────────────────────────────────────
       - name: Ensure data directory exists
         run: mkdir -p data
