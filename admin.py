@@ -17,7 +17,23 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse, parse_qs
 
 BASE    = os.path.dirname(os.path.abspath(__file__))
-PYTHON  = sys.executable or "python"
+
+def _find_project_python() -> str:
+    """Prefer venv Python (has project deps); fall back to sys.executable."""
+    for _rel in (".venv/Scripts/python.exe", ".venv/bin/python",
+                 "venv/Scripts/python.exe",  "venv/bin/python"):
+        _candidate = os.path.join(BASE, _rel)
+        if os.path.isfile(_candidate):
+            try:
+                r = subprocess.run([_candidate, "-c", "import bs4"],
+                                   capture_output=True, timeout=5)
+                if r.returncode == 0:
+                    return _candidate
+            except Exception:
+                pass
+    return sys.executable or "python"
+
+PYTHON = _find_project_python()
 sys.path.insert(0, BASE)
 
 from config.loader import load_config, save_config, reset_config
