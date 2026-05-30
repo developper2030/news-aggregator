@@ -28,8 +28,6 @@ jobs:
     name: Scrape → Generate → Verify → Deploy
     runs-on: ubuntu-latest
     timeout-minutes: 75
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       # ── 1. تنزيل الكود ────────────────────────────────────────────────
@@ -136,7 +134,6 @@ jobs:
         with:
           apiToken:        ${{ secrets.CF_API_TOKEN }}
           accountId:       ${{ secrets.CF_ACCOUNT_ID }}
-          wranglerVersion: '3'
           command: pages deploy static --project-name=${{ secrets.CF_PROJECT_NAME }} --commit-dirty=true
 
       # ── 10. ملخص النشر ────────────────────────────────────────────────
