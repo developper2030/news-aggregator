@@ -3,7 +3,7 @@
     "max_articles_per_source": 10,
     "oldest_days": 7,
     "output_file": "static/index.html",
-    "site_title": "اخر الأخبار",
+    "site_title": "أطلس الأخبار",
     "site_description": "أهم العناوين من مصادر متعددة في مكان واحد",
     "site_url": "https://atlasnews.solvixi.com/ar",
     "lang_code": "ar",
@@ -4956,7 +4956,7 @@
       "slug": "products",
       "icon": "🛍️",
       "color": "#f59e0b",
-      "enabled": false,
+      "enabled": true,
       "sources": []
     },
     {
@@ -4964,8 +4964,64 @@
       "slug": "worldcup-news",
       "icon": "🏆",
       "color": "#16a34a",
-      "enabled": false,
-      "sources": []
+      "enabled": true,
+      "sources": [
+        {
+          "name": "beIN Sports - كأس العالم",
+          "url": "https://www.beinsports.com/ar/football/fifa-world-cup/",
+          "selectors": {
+            "article_selector": "article, .article-card, .content-card, .news-item",
+            "heading_tags": ["h2", "h3", "h4"],
+            "exclude_classes": ["footer", "nav", "menu", "header", "sidebar", "widget", "banner", "ad"],
+            "exclude_id_patterns": ["footer", "nav", "menu", "header", "sidebar"],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "الجزيرة - رياضة",
+          "url": "https://www.aljazeera.net/sports/",
+          "selectors": {
+            "article_selector": "article, .article-card, .featured-article",
+            "heading_tags": ["h2", "h3"],
+            "exclude_classes": ["footer", "nav", "sidebar", "widget", "ad", "promo"],
+            "exclude_id_patterns": ["footer", "nav", "header", "sidebar"],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "Goal - عربي",
+          "url": "https://www.goal.com/ar/",
+          "selectors": {
+            "article_selector": "article, .js-article-list-item, .article-item",
+            "heading_tags": ["h2", "h3"],
+            "exclude_classes": ["footer", "nav", "header", "sidebar", "ad", "widget"],
+            "exclude_id_patterns": ["footer", "nav", "header", "sidebar"],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "FilGoal",
+          "url": "https://www.filgoal.com/",
+          "selectors": {
+            "article_selector": "article, .article, .news-card, .post",
+            "heading_tags": ["h2", "h3"],
+            "exclude_classes": ["footer", "nav", "menu", "header", "sidebar", "widget"],
+            "exclude_id_patterns": ["footer", "nav", "menu", "header", "sidebar"],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "سكاي نيوز - رياضة",
+          "url": "https://www.skynewsarabia.com/sport/football",
+          "selectors": {
+            "article_selector": "article, .article-box, .story-card",
+            "heading_tags": ["h2", "h3"],
+            "exclude_classes": ["footer", "nav", "sidebar", "widget", "ad"],
+            "exclude_id_patterns": ["footer", "nav", "header", "sidebar"],
+            "min_title_length": 20
+          }
+        }
+      ]
     }
   ],
   "media_regions": [

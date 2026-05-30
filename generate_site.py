@@ -117,6 +117,8 @@ def _is_yt_url(url: str) -> bool:
 
 # Slugs that are economy sub-sections (hidden from main nav & home — accessible only via economy strip)
 ECON_SUB_SLUGS: set[str] = {"business", "travel"}
+# Sections shown in the Sports sub-bar (not the main nav, not the home grid)
+SPORTS_SUB_SLUGS: set[str] = {"worldcup-news"}
 
 # Ordered world-region display data
 WORLD_REGIONS = [
@@ -534,24 +536,28 @@ def _worldcup_page_html(data: dict, s: dict, lang: str) -> str:
     )
 
 
-def _sports_subnav(active_slug: str, s: dict, sports_name: str = "Sports",
-                   has_worldcup: bool = True) -> str:
-    """Sub-bar shown on the Sports page and its World Cup branches.
+def _sports_subnav(active_slug: str, s: dict, wcnews_name: str = "",
+                   has_schedule: bool = True) -> str:
+    """Sub-bar under the Sports section — World Cup branches only.
 
-    Mirrors _world_subnav / _media_subnav styling. Branches are added only when
-    they exist (e.g. World Cup schedule only when the feed loaded).
+    No redundant 'Sports' button (you reach Sports from the main nav). Shows:
+      • أخبار المونديال (worldcup-news) — when that section is enabled
+      • برنامج المونديال (worldcup.html) — when the schedule feed loaded
+    Returns "" if neither branch exists.
     """
-    items = [("sports.html", f"⚽ {sports_name}", "sports")]
-    if has_worldcup:
-        items.append(("worldcup.html", f"🏆 {s.get('wc_nav', 'World Cup')}", "worldcup"))
-    if len(items) < 2:
-        return ""  # nothing to branch to → no sub-bar
+    items = []
+    if wcnews_name:
+        items.append(("worldcup-news.html", f"🏆 {wcnews_name}", "worldcup-news"))
+    if has_schedule:
+        items.append(("worldcup.html", f"📅 {s.get('wc_nav', 'World Cup')}", "worldcup"))
+    if not items:
+        return ""
     buttons = "".join(
         f'<a href="{esc(href)}" class="world-region-btn'
         f'{" active-region" if slug == active_slug else ""}">{esc(label)}</a>'
         for href, label, slug in items
     )
-    return (f'<div class="world-subnav" aria-label="{esc(sports_name)}">'
+    return (f'<div class="world-subnav" aria-label="{esc(s.get("sports", "Sports"))}">'
             f'<div class="world-subnav-inner">{buttons}</div></div>')
 
 
@@ -5326,8 +5332,8 @@ def _nav(categories: list, articles_by_cat: dict, active: str = "home",
 
     for cat in categories:
         slug = cat["slug"]
-        if slug in region_slugs or slug in media_slugs or slug in ECON_SUB_SLUGS:
-            continue  # regions/media/econ-sub live in subnav, not main nav
+        if slug in region_slugs or slug in media_slugs or slug in ECON_SUB_SLUGS or slug in SPORTS_SUB_SLUGS:
+            continue  # regions/media/econ-sub/sports-sub live in subnav, not main nav
         cls = "nav-tab active" if active == slug else "nav-tab"
         html += (
             f'<a href="{esc(slug)}.html" class="{cls}" data-cat="{esc(slug)}">'
@@ -6644,8 +6650,8 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
     home_sections = ""
     for cat in categories:
         slug     = cat["slug"]
-        if slug in region_slugs or slug in media_slugs_local or slug in ECON_SUB_SLUGS:
-            continue  # regions/media/econ-sub shown elsewhere, not home
+        if slug in region_slugs or slug in media_slugs_local or slug in ECON_SUB_SLUGS or slug in SPORTS_SUB_SLUGS:
+            continue  # regions/media/econ-sub/sports-sub shown elsewhere, not home
         cat_data = articles_by_cat.get(slug)
         if not cat_data or not cat_data["articles"]:
             continue
@@ -6679,7 +6685,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
     _home_carousel_arts = _gather_carousel(
         articles_by_cat,
         [(c["slug"], c["name"], c.get("icon", ""))
-         for c in categories if c["slug"] not in region_slugs and c["slug"] not in media_slugs_local and c["slug"] not in ECON_SUB_SLUGS],
+         for c in categories if c["slug"] not in region_slugs and c["slug"] not in media_slugs_local and c["slug"] not in ECON_SUB_SLUGS and c["slug"] not in SPORTS_SUB_SLUGS],
         per_slug=3,
     )
     # LCP image = first carousel hero image (preloaded in <head> for speed)
@@ -6804,10 +6810,12 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             page_world_subnav = _world_subnav(
                 active_slug=slug, world_regions=world_regions, s=s
             )
-        elif slug == "sports":
+        elif slug == "sports" or slug in SPORTS_SUB_SLUGS:
+            _wcnews_cat = next((c for c in categories if c["slug"] == "worldcup-news"), None)
+            _wcnews_name = _wcnews_cat["name"] if _wcnews_cat else ""
             page_world_subnav = _sports_subnav(
-                "sports", s, sports_name=cat["name"],
-                has_worldcup=(_has_wc and _show_worldcup)
+                slug, s, wcnews_name=_wcnews_name,
+                has_schedule=(_has_wc and _show_worldcup)
             )
         else:
             page_world_subnav = ""
@@ -6907,8 +6915,10 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             hreflang_html=_make_hreflang("worldcup.html"),
             og_image_url=_og_img_url,
             extra_json_ld=_org_ld,
-            world_subnav_html=_sports_subnav("worldcup", s, _sports_name,
-                                             _has_wc and _show_worldcup),
+            world_subnav_html=_sports_subnav(
+                "worldcup", s,
+                wcnews_name=next((c["name"] for c in categories if c["slug"] == "worldcup-news"), ""),
+                has_schedule=_has_wc and _show_worldcup),
             carousel_html="",
             lang_switcher_html=_lsw("worldcup.html"),
             **{**common, "desc": s.get("wc_title", "World Cup 2026 Schedule")},
