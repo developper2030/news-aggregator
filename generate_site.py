@@ -2118,7 +2118,13 @@ body.lang-ltr .nh-text{direction:ltr}
 .art-read-btn{display:block;text-align:center;background:var(--accent);color:#fff !important;padding:13px 24px;border-radius:10px;text-decoration:none !important;font-weight:700;font-size:1em;margin-bottom:28px;transition:opacity .2s}
 .art-read-btn:hover{opacity:.88}
 .art-share-row{display:flex;gap:10px;justify-content:center;margin-bottom:32px;flex-wrap:wrap}
-.art-share-row .share-btn{width:36px;height:36px;font-size:.88em}
+.share-btn{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;font-size:1.15em;font-weight:700;color:#fff !important;text-decoration:none !important;transition:transform .15s,opacity .15s;line-height:1;font-style:normal}
+.share-btn:hover{transform:scale(1.1);opacity:.88;color:#fff !important}
+.share-wa{background:#25D366}
+.share-fb{background:#1877F2}
+.share-x{background:#000}
+.share-tg{background:#229ED9}
+.share-copy{background:var(--accent)}
 .art-related{border-top:1px solid var(--border);padding-top:24px;margin-top:8px}
 .art-related-title{font-size:1.05em;font-weight:700;margin-bottom:14px;color:var(--text)}
 .art-related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
