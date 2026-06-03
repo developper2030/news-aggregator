@@ -2059,10 +2059,7 @@ body.lang-ltr .nh-text{direction:ltr}
 }
 .consent-save:hover{opacity:.88}
 .dark-mode .consent-modal{background:#0f172a;border-color:#1e3a5f}
-/* ====== CARD SUMMARY (inside card-body, above title, 2-line max) ====== */
-.card-ai{font-size:.75em;line-height:1.5;color:rgba(255,255,255,.9);overflow:hidden;max-height:0;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;transition:max-height .2s ease}
-.article-card:hover .card-ai{max-height:3em}
-.article-card.card--no-img .card-ai{color:var(--text-muted);max-height:3em}
+/* Card AI summaries removed from cards (kept on article pages only) */
 /* Share buttons removed from cards (kept on article pages only) */
 /* ====== VIDEO PLAY BUTTON OVERLAY ====== */
 .card-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.52);border:3px solid rgba(255,255,255,.88);display:flex;align-items:center;justify-content:center;pointer-events:none;transition:transform .2s,background .2s;z-index:5}
@@ -4988,14 +4985,7 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
 
     share_html = ""  # Share buttons removed from cards
 
-    # ── Summary (shown on hover / always on no-img cards) ───────────────────
-    ai_html = ""
-    if ai_summary:
-        ai_html = (
-            f'<div class="card-ai">'
-            f'{esc(ai_summary)}'
-            f'</div>'
-        )
+    ai_html = ""  # AI summaries removed from cards (kept on article pages only)
 
     # Determine card link: internal article page or external URL
     if use_article_page:
