@@ -1873,6 +1873,8 @@ body.lang-ltr .nh-text{direction:ltr}
   .world-subnav::after{content:'';position:absolute;top:0;bottom:2px;width:26px;pointer-events:none;z-index:1}
   body.lang-ltr .world-subnav::after{right:0;background:linear-gradient(90deg,transparent,var(--nav-bg))}
   body.lang-rtl .world-subnav::after{left:0;background:linear-gradient(270deg,transparent,var(--nav-bg))}
+  /* No-image cards on mobile: hide the placeholder area — show only source + date + title */
+  .article-card.card--no-img .card-no-img{display:none}
 }
 @media(max-width:480px){
   .articles-grid{grid-template-columns:1fr}
