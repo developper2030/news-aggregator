@@ -2096,7 +2096,7 @@ body.lang-ltr .nh-text{direction:ltr}
 .cat-breadcrumb a:hover{color:var(--accent)}
 .bc-sep{opacity:.4;font-size:.9em}
 .art-breadcrumb a{color:var(--accent);text-decoration:none}.art-breadcrumb a:hover{text-decoration:underline}
-.art-img{width:100%;border-radius:12px;margin-bottom:22px;object-fit:cover;max-height:400px;display:block}
+.art-img{width:100%;aspect-ratio:16/9;border-radius:12px;margin-bottom:22px;object-fit:cover;display:block}
 .art-title{font-size:1.65em;font-weight:800;line-height:1.4;margin:0 0 14px;color:var(--text)}
 .art-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:20px;font-size:.85em}
 .art-source-badge{background:var(--accent);color:#fff;padding:3px 10px;border-radius:20px;font-weight:700}
@@ -2126,7 +2126,21 @@ body.lang-ltr .nh-text{direction:ltr}
 .art-rel-card:hover{border-color:var(--accent);transform:translateY(-2px)}
 .art-rel-title{font-size:.87em;font-weight:600;line-height:1.4;margin-bottom:5px;color:var(--text)}
 .art-rel-meta{font-size:.74em;color:var(--text-light)}
-@media(max-width:600px){.art-title{font-size:1.3em}.art-page{padding:18px 12px 36px}}
+@media(max-width:600px){
+  .art-page{padding:14px 12px 32px}
+  .art-img{border-radius:8px;margin-bottom:14px}
+  .art-title{font-size:1.25em;margin-bottom:10px}
+  .art-meta{gap:5px;font-size:.8em;margin-bottom:14px}
+  .art-source-badge,.art-cat-badge{padding:2px 8px;font-size:.78em}
+  .art-summary-box{padding:13px 14px;margin-bottom:16px}
+  .art-context-card{padding:12px 14px;margin-bottom:16px;font-size:.88em}
+  .art-read-btn{padding:11px 18px;font-size:.93em;margin-bottom:20px;border-radius:8px}
+  .art-related{padding-top:18px}
+  .art-related-title{font-size:.97em;margin-bottom:10px}
+  .art-rel-card{padding:10px}
+  .art-browse-cta{display:flex;justify-content:center;margin-top:16px;padding:9px 16px;font-size:.84em}
+  .art-back{padding:7px 14px;font-size:.8em;margin-bottom:16px}
+}
 """
 
 # Content-hash version — changes automatically whenever STYLE_CSS is modified.
