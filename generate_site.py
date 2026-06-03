@@ -2412,8 +2412,12 @@ document.addEventListener('DOMContentLoaded', () => {
   initSourceFilter();
   initSearch();
   // Register Service Worker for PWA offline support
+  // reg.update() forces an immediate sw.js freshness check on every page load,
+  // so Chrome picks up the new SW (and its purged cache) without waiting 24h.
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
+    navigator.serviceWorker.register('sw.js').then(function(reg) {
+      reg.update();
+    }).catch(function() {});
   }
 });
 
@@ -4654,25 +4658,26 @@ CLOUDFLARE_HEADERS = """\
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
 
-# HTML pages — short cache, revalidate quickly (site updates every 6h in CI)
+# HTML pages — always revalidate via ETag (304 = no body, just headers = fast).
+# Removed stale-while-revalidate: was causing Chrome to serve 12h-old HTML
+# that still referenced unversioned style.css, keeping stale CSS alive.
 /*.html
-  Cache-Control: public, max-age=3600, stale-while-revalidate=43200
+  Cache-Control: no-cache, must-revalidate
 
-# CSS / JS — short browser cache + background revalidation.
-# SW handles stale-asset busting via content-hash in cache name (news-v1-XXXXXXXX).
-# Cloudflare Pages edge cache is auto-purged on every deploy.
-# 1-hour max-age prevents network failures on slow connections from breaking layout.
+# CSS / JS — no-cache so Chrome always revalidates.
+# With versioned URLs (?v=content-hash) the server returns 304 instantly.
+# Without stale-while-revalidate, no old CSS is ever served in background.
 /style.css
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  Cache-Control: no-cache, must-revalidate
 
 /*/style.css
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  Cache-Control: no-cache, must-revalidate
 
 /app.js
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  Cache-Control: no-cache, must-revalidate
 
 /*/app.js
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  Cache-Control: no-cache, must-revalidate
 
 # Service worker — never cache (must always be fresh)
 /sw.js
