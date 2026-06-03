@@ -1220,6 +1220,14 @@ LANG_FLAGS: dict[str, str] = {
 LANG_FULL_NAMES: dict[str, str] = {
     "en": "English", "ar": "العربية", "fr": "Français", "es": "Español", "tr": "Türkçe",
 }
+# Bottom nav labels per language: (home, world, worldcup, prices)
+_BN_LABELS: dict[str, tuple] = {
+    "ar": ("الرئيسية", "العالم",  "كأس العالم", "الأسعار"),
+    "en": ("Home",      "World",   "World Cup",   "Prices"),
+    "fr": ("Accueil",   "Monde",   "Coupe du Monde", "Prix"),
+    "es": ("Inicio",    "Mundo",   "Mundial",     "Precios"),
+    "tr": ("Ana Sayfa", "Dünya",   "Dünya Kupası","Fiyatlar"),
+}
 
 # Cross-language slug equivalency map.
 # Each entry maps a slug to its equivalent slug in every language.
@@ -1335,6 +1343,30 @@ def _lang_switcher(current_lang: str, page_file: str) -> str:
         f'\U0001f310 {current_label} ▾</button>'
         f'<div class="lang-drop" id="lang-drop" role="listbox">{items}</div>'
         f'</div>'
+    )
+
+
+def _bottom_nav(s: dict, active: str = "home") -> str:
+    """Fixed bottom navigation bar — mobile only (hidden on desktop via CSS)."""
+    lang   = s.get("lang", "ar")
+    labels = _BN_LABELS.get(lang, _BN_LABELS["ar"])
+    home_l, world_l, wc_l, prices_l = labels
+
+    def _item(href: str, icon: str, label: str, slug: str) -> str:
+        cls = "bn-item bn-active" if active == slug else "bn-item"
+        return (
+            f'<a href="{href}" class="{cls}" data-slug="{slug}">'
+            f'<span class="bn-icon">{icon}</span>'
+            f'<span class="bn-label">{esc(label)}</span></a>'
+        )
+
+    return (
+        '<nav class="bottom-nav" aria-label="navigation">'
+        + _item("index.html",    "🏠", home_l,    "home")
+        + _item("world.html",    "🌍", world_l,   "world")
+        + _item("worldcup.html", "🏆", wc_l,      "worldcup")
+        + _item("prices.html",   "💱", prices_l,  "prices")
+        + '</nav>'
     )
 
 
@@ -1941,6 +1973,38 @@ body.lang-ltr .nh-text{direction:ltr}
   .cookie-banner{padding-bottom:calc(14px + env(safe-area-inset-bottom))}
 }
 
+/* ===================== BOTTOM NAV (mobile only) ===================== */
+.bottom-nav{display:none}
+@media(max-width:768px){
+  /* ── Bottom nav bar ─────────────────────────────────────────────── */
+  .bottom-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:400;background:var(--surface);border-top:1px solid var(--border);box-shadow:0 -2px 16px rgba(0,0,0,.08);height:58px}
+  .bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:var(--text-light);text-decoration:none;font-size:.62em;font-weight:700;padding:6px 2px 4px;transition:color .18s;position:relative;line-height:1}
+  .bn-item:hover,.bn-item.bn-active{color:var(--accent)}
+  .bn-item.bn-active::before{content:'';position:absolute;top:0;left:20%;right:20%;height:3px;background:var(--accent);border-radius:0 0 3px 3px}
+  .bn-icon{font-size:1.5em;line-height:1;display:block}
+  /* Push content above bottom nav */
+  .main-wrapper{padding-bottom:calc(58px + 10px)}
+  .site-footer{padding-bottom:calc(58px + 4px)}
+  /* ── Mobile list layout ─────────────────────────────────────────── */
+  .articles-grid{grid-template-columns:1fr;gap:0}
+  .article-card{border-radius:0;box-shadow:none;animation:cardIn .22s ease both;border-left:none;border-right:none;border-top:none}
+  .article-card:first-child{border-top:1px solid var(--border)}
+  .card-link{display:flex;flex-direction:row;align-items:center;gap:12px;padding:11px 14px}
+  .card-bg{width:88px;height:66px;flex-shrink:0;border-radius:8px;aspect-ratio:unset}
+  .card-body{padding:0;flex:1;min-width:0;gap:3px}
+  .card-title{font-size:.88em;-webkit-line-clamp:2}
+  .card-meta{flex-wrap:nowrap;gap:6px}
+  .card-source{max-width:110px}
+  .category-section{margin-bottom:10px}
+}
+@supports(padding-bottom:env(safe-area-inset-bottom)){
+  @media(max-width:768px){
+    .bottom-nav{height:calc(58px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom)}
+    .main-wrapper{padding-bottom:calc(68px + env(safe-area-inset-bottom))}
+    .site-footer{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
+  }
+}
+
 /* ====== SOURCE FILTER STRIP ====== */
 .src-strip{margin:0 0 18px}
 .src-chips{
@@ -2434,6 +2498,24 @@ function _applySearch(query) {
 }
 
 /* ========== INIT ========== */
+/* ========== BOTTOM NAV ========== */
+function initBottomNav() {
+  var items = document.querySelectorAll('.bn-item[data-slug]');
+  if (!items.length) return;
+  var path = window.location.pathname;
+  var page = path.split('/').pop() || 'index.html';
+  var slugMap = {
+    'index.html': 'home', '': 'home',
+    'world.html': 'world', 'media.html': 'world', 'live.html': 'world',
+    'worldcup.html': 'worldcup',
+    'prices.html': 'prices',
+  };
+  var active = slugMap[page] || 'home';
+  items.forEach(function(item) {
+    if (item.dataset.slug === active) item.classList.add('bn-active');
+  });
+}
+
 /* ========== LANGUAGE DROPDOWN ========== */
 function initLangDrop() {
   var btn  = document.getElementById('lang-globe-btn');
@@ -2471,6 +2553,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSourceFilter();
   initSearch();
   initLangDrop();
+  initBottomNav();
   // Register Service Worker for PWA offline support
   // reg.update() forces an immediate sw.js freshness check on every page load,
   // so Chrome picks up the new SW (and its purged cache) without waiting 24h.
@@ -5937,6 +6020,7 @@ def _page(*, title: str, desc: str, nav_html: str,
           extra_json_ld: str = "",
           ga_id: str = "",
           lcp_image_url: str = "",
+          bn_active: str = "home",
           s: dict) -> str:
     # ── JSON-LD: WebSite ──────────────────────────────────────────────────────
     sd = json.dumps({
@@ -6122,6 +6206,7 @@ def _page(*, title: str, desc: str, nav_html: str,
       </div>
     </div>
   </div>
+  {_bottom_nav(s, bn_active)}
   <script src="app.js"></script>
 </body>
 </html>"""
@@ -6941,6 +7026,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
                               s=s, region_slugs=region_slugs, has_world=has_world,
                               media_slugs=media_slugs_local),
                 main_html=_prices_main_html(_market_data, s=s),
+                bn_active="prices",
                 canonical=_page_canonical("prices.html"),
                 hreflang_html=_make_hreflang("prices.html"),
                 og_image_url=_og_img_url,
@@ -6965,6 +7051,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
                           s=s, region_slugs=region_slugs, has_world=has_world,
                           media_slugs=media_slugs_local, has_media=has_media),
             main_html=_worldcup_page_html(_worldcup_data, s, lang),
+            bn_active="worldcup",
             canonical=_page_canonical("worldcup.html"),
             hreflang_html=_make_hreflang("worldcup.html"),
             og_image_url=_og_img_url,
@@ -7035,6 +7122,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
                           s=s, region_slugs=region_slugs, has_world=has_world,
                           media_slugs=media_slugs_local, has_media=has_media),
             main_html=world_sections,
+            bn_active="world",
             world_subnav_html=_world_subnav(world_regions=world_regions, s=s),
             canonical=_page_canonical("world.html"),
             hreflang_html=_make_hreflang("world.html"),
