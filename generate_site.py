@@ -5805,11 +5805,13 @@ def _article_page_html(
   <meta name="apple-mobile-web-app-title" content="{esc(site_title)}">
   <!-- LCP: preload hero image for faster rendering -->
 {(f'  <link rel="preload" href="{esc(image_url)}" as="image" fetchpriority="high">' if image_url else "")}
+  <!-- Preload stylesheet for faster render (cache-busted via content hash) -->
+  <link rel="preload" href="../style.css?v={_CSS_VER}" as="style">
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="{esc(_font_url)}" rel="stylesheet">
-  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../style.css?v={_CSS_VER}">
   <!-- JSON-LD -->
   <script type="application/ld+json">{json_ld}</script>
 {_ga4_head(ga_id)}
