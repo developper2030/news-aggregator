@@ -1214,6 +1214,12 @@ LANG_DIRS: dict[str, str] = {
 LANG_LABELS: dict[str, str] = {
     "en": "EN", "ar": "AR", "fr": "FR", "es": "ES", "tr": "TR",
 }
+LANG_FLAGS: dict[str, str] = {
+    "en": "🇬🇧", "ar": "🇸🇦", "fr": "🇫🇷", "es": "🇪🇸", "tr": "🇹🇷",
+}
+LANG_FULL_NAMES: dict[str, str] = {
+    "en": "English", "ar": "العربية", "fr": "Français", "es": "Español", "tr": "Türkçe",
+}
 
 # Cross-language slug equivalency map.
 # Each entry maps a slug to its equivalent slug in every language.
@@ -1300,24 +1306,36 @@ def _xslug(slug: str, target_lang: str) -> str:
 
 
 def _lang_switcher(current_lang: str, page_file: str) -> str:
-    """Build a compact multi-language switcher for the site header.
-
-    Always links to the homepage (index.html) of the target language.
-    """
+    """Globe dropdown language selector embedded in the site header."""
+    current_label = LANG_LABELS[current_lang]
     items = ""
     for lang, prefix in LANG_DIRS.items():
-        label = LANG_LABELS[lang]
+        flag      = LANG_FLAGS[lang]
+        full_name = LANG_FULL_NAMES[lang]
         if lang == current_lang:
-            items += f'<span class="lang-btn current">{label}</span>'
+            items += (
+                f'<span class="lang-drop-item lang-drop-active" aria-selected="true">'
+                f'{flag} {esc(full_name)}</span>'
+            )
         else:
             if current_lang == "en":
-                href = f"{prefix}index.html"     # root → subdir/index.html
+                href = f"{prefix}index.html"
             elif lang == "en":
-                href = "../index.html"           # subdir → root/index.html
+                href = "../index.html"
             else:
-                href = f"../{prefix}index.html"  # subdir → ../other/index.html
-            items += f'<a href="{href}" class="lang-btn">{label}</a>'
-    return f'<div class="lang-switcher">{items}</div>'
+                href = f"../{prefix}index.html"
+            items += (
+                f'<a href="{href}" class="lang-drop-item" aria-selected="false">'
+                f'{flag} {esc(full_name)}</a>'
+            )
+    return (
+        f'<div class="lang-globe-wrap" id="lang-globe-wrap">'
+        f'<button class="lang-globe-btn" id="lang-globe-btn" '
+        f'aria-haspopup="listbox" aria-expanded="false" aria-label="Language / اللغة">'
+        f'\U0001f310 {current_label} ▾</button>'
+        f'<div class="lang-drop" id="lang-drop" role="listbox">{items}</div>'
+        f'</div>'
+    )
 
 
 def _prices_main_html(market_data: dict,
@@ -1820,13 +1838,23 @@ body.lang-rtl .more-btn:hover{transform:translateX(4px)}
 body.lang-ltr .prices-table th{text-align:left}
 body.lang-ltr .prices-section-header{border-inline-start:5px solid #059669}
 
-/* ===================== LANGUAGE ROW ===================== */
-.lang-row{max-width:1200px;margin:0 auto;padding:0 16px 6px;display:flex;justify-content:flex-end;gap:3px;align-items:center}
-/* ===================== LANGUAGE SWITCHER ===================== */
-.lang-switcher{display:flex;align-items:center;gap:3px}
-.lang-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);padding:4px 8px;border-radius:12px;font-size:.75em;font-weight:700;text-decoration:none;transition:all .2s;letter-spacing:.6px;white-space:nowrap;line-height:1.4}
-.lang-btn:hover{background:rgba(255,255,255,.22);color:#fff;border-color:rgba(255,255,255,.45)}
-.lang-btn.current{background:rgba(255,255,255,.28);color:#fff;border-color:rgba(255,255,255,.55);cursor:default;pointer-events:none}
+/* ===================== LANGUAGE GLOBE DROPDOWN ===================== */
+.lang-globe-wrap{position:relative;flex-shrink:0}
+.lang-globe-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;cursor:pointer;padding:5px 10px;border-radius:20px;font-size:.78em;font-weight:700;transition:all .2s;display:inline-flex;align-items:center;gap:4px;line-height:1;font-family:inherit;white-space:nowrap;letter-spacing:.4px}
+.lang-globe-btn:hover{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.5)}
+.lang-globe-btn[aria-expanded="true"]{background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.6)}
+.lang-drop{display:none;position:absolute;top:calc(100% + 8px);inset-inline-end:0;background:#fff;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.18);border:1px solid #e2e8f0;min-width:155px;overflow:hidden;z-index:600;animation:dropIn .16s ease}
+.lang-drop.open{display:block}
+@keyframes dropIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.lang-drop-item{display:flex;align-items:center;gap:10px;padding:10px 16px;color:#1e293b;font-size:.86em;font-weight:600;text-decoration:none;transition:background .15s;white-space:nowrap}
+.lang-drop-item:hover{background:#f1f5f9;color:#1e293b}
+.lang-drop-item.lang-drop-active{background:#eef2ff;color:#4f46e5;font-weight:700;cursor:default}
+.lang-drop-item.lang-drop-active::after{content:'✓';margin-inline-start:auto;font-size:.85em;color:#6366f1}
+.dark-mode .lang-drop{background:#1e1b3a;border-color:#312e81;box-shadow:0 8px 32px rgba(0,0,0,.45)}
+.dark-mode .lang-drop-item{color:#e2e8f0}
+.dark-mode .lang-drop-item:hover{background:#2a2654;color:#e2e8f0}
+.dark-mode .lang-drop-item.lang-drop-active{background:#312e81;color:#a5b4fc}
+.dark-mode .lang-drop-item.lang-drop-active::after{color:#a5b4fc}
 
 /* ===================== LTR OVERRIDES ===================== */
 body.lang-ltr .more-btn:hover{transform:translateX(4px)}
@@ -1856,10 +1884,6 @@ body.lang-ltr .nh-text{direction:ltr}
   .site-header-title{font-size:1.02em;letter-spacing:1px}
   .top-date{display:none}
   .theme-btn{padding:5px 11px;font-size:.86em}
-  /* Language row — compact full-width scrollable strip */
-  .lang-row{padding:3px 10px 4px;justify-content:flex-start;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-top:1px solid rgba(255,255,255,.12)}
-  .lang-row::-webkit-scrollbar{display:none}
-  .lang-btn{padding:3px 8px;font-size:.71em}
   /* Layout */
   .main-wrapper{padding:14px 10px}
   .section-header{padding:10px 14px;margin-bottom:12px}
@@ -1898,7 +1922,6 @@ body.lang-ltr .nh-text{direction:ltr}
   .site-header-title{font-size:.92em;letter-spacing:1px}
   .card-title{font-size:.9em}
   .nav-tab{font-size:.76em;padding:8px 8px}
-  .lang-btn{padding:2px 6px;font-size:.68em}
   .section-title{font-size:1em}
   .more-btn{font-size:.8em;padding:7px 14px}
 }
@@ -1910,7 +1933,6 @@ body.lang-ltr .nh-text{direction:ltr}
   .card-title{font-size:.85em;-webkit-line-clamp:2}
   .articles-grid{gap:10px}
   .main-wrapper{padding:10px 8px}
-  .lang-row{padding:3px 8px}
 }
 /* ── iOS safe-area-inset: notch / Dynamic Island / home bar ─────────────────── */
 @supports(padding-top:env(safe-area-inset-top)){
@@ -2412,6 +2434,31 @@ function _applySearch(query) {
 }
 
 /* ========== INIT ========== */
+/* ========== LANGUAGE DROPDOWN ========== */
+function initLangDrop() {
+  var btn  = document.getElementById('lang-globe-btn');
+  var drop = document.getElementById('lang-drop');
+  var wrap = document.getElementById('lang-globe-wrap');
+  if (!btn || !drop) return;
+  btn.addEventListener('click', function() {
+    var open = drop.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('click', function(e) {
+    if (wrap && !wrap.contains(e.target) && drop.classList.contains('open')) {
+      drop.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && drop.classList.contains('open')) {
+      drop.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.focus();
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
@@ -2423,6 +2470,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initEconTabs();
   initSourceFilter();
   initSearch();
+  initLangDrop();
   // Register Service Worker for PWA offline support
   // reg.update() forces an immediate sw.js freshness check on every page load,
   // so Chrome picks up the new SW (and its purged cache) without waiting 24h.
@@ -5967,11 +6015,11 @@ def _page(*, title: str, desc: str, nav_html: str,
         </div>
         <span class="site-header-title">{esc(title)}</span>
         <div class="header-end">
+          {lang_switcher_html}
           <button id="theme-toggle" class="theme-btn" aria-label="{s["theme_btn_label"]}">🌙</button>
           <button id="search-toggle" class="theme-btn" aria-label="{s.get("search_label","Search")}" aria-expanded="false">🔍</button>
         </div>
       </div>
-      <div class="lang-row">{lang_switcher_html}</div>
     </header>
     <div id="search-bar" class="search-bar" role="search">
       <div class="search-bar-inner">
