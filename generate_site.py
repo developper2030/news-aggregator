@@ -1662,7 +1662,7 @@ ul,ol{list-style:none}
 
 /* ===================== ARTICLE CARD ===================== */
 @keyframes cardIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-.article-card{border-radius:var(--radius);overflow:hidden;box-shadow:var(--card-shadow);transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s;border:1px solid var(--border);animation:cardIn .42s ease both;aspect-ratio:4/3;position:relative;background:#1a2744;display:grid;grid-template-rows:1fr}
+.article-card{border-radius:var(--radius);overflow:hidden;box-shadow:var(--card-shadow);transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s;border:1px solid var(--border);animation:cardIn .42s ease both;background:var(--surface);display:flex;flex-direction:column}
 .article-card:nth-child(2){animation-delay:.07s}
 .article-card:nth-child(3){animation-delay:.14s}
 .article-card:nth-child(4){animation-delay:.21s}
@@ -1671,26 +1671,20 @@ ul,ol{list-style:none}
 .article-card:nth-child(7){animation-delay:.21s}
 .article-card:nth-child(8){animation-delay:.28s}
 .article-card:hover{transform:translateY(-4px);box-shadow:var(--card-shadow-hover)}
-.card-link{display:block;grid-area:1/1;position:relative;min-height:0;color:inherit;text-decoration:none}
-.card-bg{position:absolute;inset:0;overflow:hidden}
-.card-bg-img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;transition:transform .5s ease}
+.card-link{display:flex;flex-direction:column;flex:1;color:inherit;text-decoration:none}
+.card-bg{aspect-ratio:16/9;overflow:hidden;flex-shrink:0;position:relative}
+.card-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;display:block;transition:transform .5s ease}
 .article-card:hover .card-bg-img{transform:scale(1.07)}
-.card-no-img{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3.5em;opacity:.2}
-.card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.55) 42%,rgba(0,0,0,.1) 72%,transparent 100%);pointer-events:none}
-.card-body{position:absolute;bottom:0;left:0;right:0;padding:12px 14px 15px;display:flex;flex-direction:column;gap:7px}
+.card-no-img{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:3.5em;opacity:.2;background:var(--surface-2)}
+.card-overlay{display:none}
+.card-body{padding:10px 14px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
 .card-meta{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
-.card-source{font-size:.74em;font-weight:700;padding:2px 9px;border-radius:20px;color:#fff;white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis;background:rgba(255,255,255,.18);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.2)}
-.card-date{font-size:.72em;color:rgba(255,255,255,.75);font-weight:500}
-.card-title{font-size:.95em;font-weight:800;line-height:1.5;color:#fff;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-shadow:0 1px 4px rgba(0,0,0,.6)}
-.article-card:hover .card-title{color:#e0e7ff}
-.article-card.card--no-img{background:var(--surface);border:1px solid var(--border)}
-/* Hide the broken <img> element — onerror fires AFTER download attempt */
+.card-source{font-size:.74em;font-weight:700;padding:2px 9px;border-radius:20px;color:var(--text);white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis;background:var(--surface-2);border:1px solid var(--border)}
+.card-date{font-size:.72em;color:var(--text-muted);font-weight:500}
+.card-title{font-size:.95em;font-weight:800;line-height:1.5;color:var(--text);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.article-card:hover .card-title{color:var(--accent)}
+/* No-image card: hide empty image container */
 .article-card.card--no-img .card-bg{display:none}
-.article-card.card--no-img .card-overlay{display:none}
-.article-card.card--no-img .card-title{color:var(--text);text-shadow:none}
-.article-card.card--no-img .card-date{color:var(--text-light)}
-.article-card.card--no-img:hover .card-title{color:var(--accent)}
-.article-card.card--no-img .card-source{background:rgba(99,102,241,.12);color:var(--text);border:1px solid var(--border)}
 
 /* ===================== SIDEBAR ===================== */
 .sidebar{position:sticky;top:66px}
@@ -1881,7 +1875,6 @@ body.lang-ltr .nh-text{direction:ltr}
 }
 @media(max-width:480px){
   .articles-grid{grid-template-columns:1fr}
-  .article-card{aspect-ratio:16/9}
   .card-title{font-size:1em}
   .live-time{display:none}
   .section-header{padding:8px 12px}
@@ -2069,28 +2062,7 @@ body.lang-ltr .nh-text{direction:ltr}
 .card-ai{font-size:.75em;line-height:1.5;color:rgba(255,255,255,.9);overflow:hidden;max-height:0;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;transition:max-height .2s ease}
 .article-card:hover .card-ai{max-height:3em}
 .article-card.card--no-img .card-ai{color:var(--text-muted);max-height:3em}
-/* ====== SHARE BUTTONS — bottom bar, CSS Grid overlay ====== */
-/* grid-area:1/1 overlaps card-link in same cell; align-self:end anchors to bottom.
-   Fixes Safari iOS aspect-ratio bug (absolute+bottom:0 failed on indefinite block-size). */
-.card-share{grid-area:1/1;align-self:end;display:flex;gap:5px;justify-content:center;align-items:center;padding:5px 12px;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;pointer-events:none;transform:translateY(4px);transition:opacity .2s,transform .2s;z-index:2}
-.article-card:hover .card-share{opacity:1;transform:translateY(0);pointer-events:auto}
-/* Push card-body content up on hover so it clears the share bar */
-.article-card:hover .card-body{padding-bottom:42px}
-@media(pointer:coarse){
-  /* On touch: share bar always visible, body always leaves room */
-  .card-share{opacity:1;transform:none;pointer-events:auto}
-  .card-body{padding-bottom:42px}
-  .share-btn{width:30px;height:30px;font-size:.76em}
-}
-.share-btn{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;font-size:.72em;font-weight:700;text-decoration:none;border:none;cursor:pointer;transition:transform .15s;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-.share-btn:hover{transform:scale(1.18)}
-.share-wa{background:#25d366;color:#fff}
-.share-x{background:rgba(0,0,0,.75);color:#fff}
-.share-tg{background:#229ed9;color:#fff}
-.share-fb{background:#1877f2;color:#fff}
-.share-copy{background:rgba(255,255,255,.22);color:#fff}
-.card--no-img .share-wa{box-shadow:0 1px 3px rgba(0,0,0,.15)}
-.card--no-img .share-copy{background:var(--border);color:var(--text)}
+/* Share buttons removed from cards (kept on article pages only) */
 /* ====== VIDEO PLAY BUTTON OVERLAY ====== */
 .card-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.52);border:3px solid rgba(255,255,255,.88);display:flex;align-items:center;justify-content:center;pointer-events:none;transition:transform .2s,background .2s;z-index:5}
 .card-play::after{content:'';display:block;width:0;height:0;border-style:solid;border-width:10px 0 10px 18px;border-color:transparent transparent transparent rgba(255,255,255,.95);margin-inline-start:4px}
@@ -2578,7 +2550,7 @@ function initSourceFilter() {
   }
 })();
 
-/* ========== SHARE — copy link ========== */
+/* Share copy-link handler kept for article pages only */
 document.addEventListener('click', function(e) {
   var btn = e.target.closest('.share-copy');
   if (!btn) return;
@@ -4990,11 +4962,15 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
                 f'{esc(_cl_label)}</span>'
             )
 
+    # ── Play button (vid-* cards) — computed before bg_html so it embeds in image container
+    _play_btn = '<div class="card-play" aria-hidden="true"></div>' if slug.startswith("vid-") else ""
+
     if image and image != "#":
         bg_html = (
             f'<div class="card-bg">'
             f'<img class="card-bg-img" src="{image}" alt="{esc(title_raw)}" loading="lazy" '
             f'onerror="this.closest(\'article\').classList.add(\'card--no-img\')">'
+            f'{_play_btn}'
             f'</div>'
         )
         extra_cls = ""
@@ -5002,39 +4978,7 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
         bg_html = f'<div class="card-no-img">📰</div>'
         extra_cls = " card--no-img"
 
-    # ── Share buttons ────────────────────────────────────────────────────────
-    _raw_url  = art["url"]
-    # Share our own article page URL when available (better for traffic & SEO).
-    # Fall back to the original source URL for video/external-only cards.
-    if use_article_page and site_url:
-        import hashlib as _hl2
-        _share_url = (
-            site_url.rstrip("/") + "/article/"
-            + _hl2.md5(_raw_url.encode("utf-8")).hexdigest()[:12]
-            + ".html"
-        )
-    else:
-        _share_url = _raw_url
-    _wa_href  = "https://wa.me/?text=" + _up.quote(title_raw + "\n\n" + _share_url, safe="")
-    _x_href   = ("https://x.com/intent/tweet?text=" + _up.quote(title_raw, safe="")
-                 + "&url=" + _up.quote(_share_url, safe=""))
-    _tg_href  = ("https://t.me/share/url?url=" + _up.quote(_share_url, safe="")
-                 + "&text=" + _up.quote(title_raw, safe=""))
-    _fb_href  = "https://www.facebook.com/sharer/sharer.php?u=" + _up.quote(_share_url, safe="")
-    share_html = (
-        f'<div class="card-share">'
-        f'<a href="{esc(_wa_href)}" class="share-btn share-wa" target="_blank" '
-        f'rel="noopener noreferrer" title="WhatsApp" aria-label="WhatsApp">W</a>'
-        f'<a href="{esc(_fb_href)}" class="share-btn share-fb" target="_blank" '
-        f'rel="noopener noreferrer" title="Facebook" aria-label="Facebook">f</a>'
-        f'<a href="{esc(_x_href)}" class="share-btn share-x" target="_blank" '
-        f'rel="noopener noreferrer" title="X / Twitter" aria-label="X">𝕏</a>'
-        f'<a href="{esc(_tg_href)}" class="share-btn share-tg" target="_blank" '
-        f'rel="noopener noreferrer" title="Telegram" aria-label="Telegram">✈</a>'
-        f'<button class="share-btn share-copy" data-copy="{esc(_share_url)}" '
-        f'title="Copy link" aria-label="Copy link">⧉</button>'
-        f'</div>'
-    )
+    share_html = ""  # Share buttons removed from cards
 
     # ── Summary (shown on hover / always on no-img cards) ───────────────────
     ai_html = ""
@@ -5057,15 +5001,11 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
         _card_target = ' target="_blank"'
         _card_rel = ' rel="noopener noreferrer nofollow"'
 
-    _play_btn = '<div class="card-play" aria-hidden="true"></div>' if slug.startswith("vid-") else ""
-
     return (
         f'<article class="article-card{extra_cls}" data-cat="{esc(slug)}" data-title="{title}" '
         f'data-source="{source}" data-url="{url}" data-date="{date}" data-color="{esc(color)}">'
         f'<a href="{esc(_card_href)}"{_card_target}{_card_rel} class="card-link">'
         f'{bg_html}'
-        f'<div class="card-overlay"></div>'
-        f'{_play_btn}'
         f'<div class="card-body">'
         f'<div class="card-meta">'
         f'<span class="card-source" style="background:{esc(gradient)}">{source}{spectrum_badge}</span>'
@@ -5075,7 +5015,6 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
         f'{ai_html}'
         f'<h3 class="card-title">{title}</h3>'
         f'</div></a>'
-        f'{share_html}'
         f'</article>'
     )
 
@@ -6844,20 +6783,24 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         else:
             page_world_subnav = ""
 
-        # Per-category carousel: articles from this category only
-        # Pass yt_only_slugs so vid-* carousels skip non-YouTube entries
-        _cat_carousel_arts = _gather_carousel(
-            articles_by_cat,
-            [(slug, cat["name"], cat.get("icon", ""))],
-            per_slug=16,
-            yt_only_slugs=media_slugs_local if slug in media_slugs_local else None,
-        )
-        # LCP = first image of category carousel (or first article image as fallback)
-        _cat_lcp_img = next(
-            (a["image"] for a in _cat_carousel_arts if a.get("image", "").startswith("http")),
-            next((a.get("image", "") for a in raw_articles if a.get("image", "").startswith("http")), ""),
-        )
-        cat_carousel = _carousel(_cat_carousel_arts, s=s, site_url=_site_url, media_slugs=media_slugs_local)
+        # Per-category carousel: skip for vid-* (videos shown directly on page)
+        if slug in media_slugs_local:
+            cat_carousel = ""
+            _cat_lcp_img = next(
+                (a.get("image", "") for a in raw_articles if a.get("image", "").startswith("http")), ""
+            )
+        else:
+            _cat_carousel_arts = _gather_carousel(
+                articles_by_cat,
+                [(slug, cat["name"], cat.get("icon", ""))],
+                per_slug=16,
+            )
+            # LCP = first image of category carousel (or first article image as fallback)
+            _cat_lcp_img = next(
+                (a["image"] for a in _cat_carousel_arts if a.get("image", "").startswith("http")),
+                next((a.get("image", "") for a in raw_articles if a.get("image", "").startswith("http")), ""),
+            )
+            cat_carousel = _carousel(_cat_carousel_arts, s=s, site_url=_site_url, media_slugs=media_slugs_local)
         # Economy tabs widget on economy, business, and travel pages
         if slug in {"economy", "business", "travel"}:
             cat_ticker = _economy_widget(s, active_tab=slug,
@@ -7066,12 +7009,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
                 f'</section>'
             )
 
-        media_carousel = _carousel(_gather_carousel(
-            articles_by_cat,
-            [(r["slug"], r["name"], r["icon"]) for r in media_regions_list],
-            per_slug=3,
-            yt_only_slugs=media_slugs_local,
-        ), s=s, site_url=_site_url)
+        media_carousel = ""  # No carousel on media page — videos shown directly
         _wrt("media.html", _page(
             title=site_title,
             nav_html=_nav(categories, articles_by_cat, active="media",
