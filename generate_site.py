@@ -1536,6 +1536,11 @@ body.lang-rtl{direction:rtl;font-family:'Cairo','Segoe UI',Tahoma,system-ui,sans
 body.lang-ltr{direction:ltr;font-family:'Roboto','Segoe UI',Arial,system-ui,sans-serif}
 a{text-decoration:none;color:inherit}
 ul,ol{list-style:none}
+/* Screen-reader only (visually hidden but accessible) */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+/* Keyboard focus ring */
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:4px}
+.share-btn:focus-visible,.art-read-btn:focus-visible,.more-btn:focus-visible,.nav-tab:focus-visible,.cookie-btn:focus-visible,.lang-btn:focus-visible,.theme-btn:focus-visible{outline-color:rgba(255,255,255,.9);outline-offset:2px}
 
 /* ===================== STICKY WRAPPER ===================== */
 .sticky-header{position:sticky;top:0;z-index:500}
@@ -1699,16 +1704,18 @@ ul,ol{list-style:none}
 .cat-list{display:flex;flex-direction:column;gap:6px}
 .cat-link{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:10px;color:var(--text);font-size:.9em;font-weight:600;border-inline-start:4px solid transparent;background:var(--surface-2);transition:all .2s}
 .cat-link:hover{background:rgba(99,102,241,.08);transform:translateX(-3px)}
+body.lang-rtl .cat-link:hover{transform:translateX(3px)}
 .cat-count{background:var(--surface);border:1px solid var(--border);color:var(--text-muted);font-size:.75em;padding:2px 9px;border-radius:12px;font-weight:600}
 
 /* ===================== BACK TO TOP ===================== */
-.back-to-top{position:fixed;bottom:24px;left:24px;width:48px;height:48px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;border-radius:50%;font-size:1.2em;cursor:pointer;box-shadow:0 4px 18px rgba(99,102,241,.35);transition:all .3s;opacity:0;visibility:hidden;z-index:500;line-height:1}
+.back-to-top{position:fixed;bottom:24px;right:24px;width:48px;height:48px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;border-radius:50%;font-size:1.2em;cursor:pointer;box-shadow:0 4px 18px rgba(99,102,241,.35);transition:all .3s;opacity:0;visibility:hidden;z-index:500;line-height:1}
 .back-to-top.visible{opacity:1;visibility:visible}
 .back-to-top:hover{transform:translateY(-4px);box-shadow:0 8px 25px rgba(99,102,241,.45)}
 
 /* ===================== MORE BUTTON ===================== */
 .more-btn{display:inline-flex;align-items:center;gap:6px;margin-top:16px;padding:10px 22px;border-radius:50px;border:2px solid;font-size:.92em;font-weight:700;transition:all .25s;background:transparent}
 .more-btn:hover{background:var(--accent);color:#fff!important;border-color:var(--accent);transform:translateX(-4px)}
+body.lang-rtl .more-btn:hover{transform:translateX(4px)}
 
 /* ===================== BREADCRUMB ===================== */
 .breadcrumb{display:flex;align-items:center;gap:8px;padding:10px 0 18px;font-size:.88em;color:var(--text-muted)}
@@ -1840,7 +1847,6 @@ body.lang-ltr .nh-text{direction:ltr}
   .articles-grid{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:768px){
-  .articles-grid{grid-template-columns:repeat(2,1fr)}
   .footer-inner{grid-template-columns:1fr 1fr}
   /* Hide RSS section on mobile — keep brand + categories + links visible */
   .footer-rss{display:none}
@@ -5984,6 +5990,7 @@ def _page(*, title: str, desc: str, nav_html: str,
   <div class="main-wrapper">
     {carousel_html}
     <main class="content-area" role="main">
+      <h1 class="sr-only">{esc(title)}</h1>
       {main_html}
     </main>
   </div>
