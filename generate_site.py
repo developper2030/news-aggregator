@@ -1,3 +1,4 @@
+import hashlib
 import html as _html_lib
 import json
 import logging
@@ -2128,6 +2129,11 @@ body.lang-ltr .nh-text{direction:ltr}
 .art-rel-meta{font-size:.74em;color:var(--text-light)}
 @media(max-width:600px){.art-title{font-size:1.3em}.art-page{padding:18px 12px 36px}}
 """
+
+# Content-hash version — changes automatically whenever STYLE_CSS is modified.
+# Used as ?v= query param on every <link href="style.css"> so browsers and CDN
+# are forced to fetch the new file instead of serving the cached old version.
+_CSS_VER = hashlib.md5(STYLE_CSS.encode("utf-8")).hexdigest()[:8]
 
 APP_JS = r"""
 'use strict';
@@ -4735,7 +4741,7 @@ def _make_sw(site_url: str = "") -> str:
     return f"""// Service Worker — auto-generated (cache: {_cache_name})
 const CACHE = '{_cache_name}';
 const STATIC = [
-  '{base}/style.css',
+  '{base}/style.css?v={_CSS_VER}',
   '{base}/app.js',
 ];
 
@@ -4845,6 +4851,8 @@ def _write_static_assets(out_dir: str = OUTPUT_DIR, lang: str = "ar",
             _hreflang  = _hreflang_links(_sp_root_url, filename)
             _inject    = f'  <link rel="canonical" href="{_canonical}">\n{_hreflang}\n'
             content    = content.replace("</head>", _inject + "</head>", 1)
+        # Cache-bust style.css in every static page (bare href → versioned href)
+        content = content.replace('href="style.css"', f'href="style.css?v={_CSS_VER}"')
         dest = os.path.join(out_dir, filename)
         with open(dest, "w", encoding="utf-8") as f:
             f.write(content)
@@ -5909,14 +5917,14 @@ def _page(*, title: str, desc: str, nav_html: str,
        once loaded. Reversing this order would permanently override style.css. -->
   <style>*,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}:root{{--header-start:#4f46e5;--header-end:#7c3aed;--nav-bg:rgba(255,255,255,.92);--nav-text:#475569;--accent:#6366f1;--bg:#f8f9fe;--text:#1e293b;--border:#e2e8f0}}body{{font-family:system-ui,sans-serif;background:#f8f9fe;color:#1e293b;direction:{s["dir"]}}}.sticky-header{{position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.12)}}.site-header{{background:linear-gradient(135deg,var(--header-start),var(--header-end));color:#fff;padding:8px 0}}.site-header-inner{{display:flex;align-items:center;justify-content:space-between;padding:0 20px;max-width:1200px;margin:0 auto}}.site-header-title{{font-weight:800;font-size:1.2em;letter-spacing:2px;color:#fff}}.site-nav{{background:var(--nav-bg);backdrop-filter:blur(8px);overflow:hidden}}.nav-inner{{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:1px;max-width:1200px;margin:0 auto;padding:0 6px}}.nav-tab{{display:inline-flex;align-items:center;padding:8px 14px;color:var(--nav-text);font-size:.82em;text-decoration:none;white-space:nowrap;flex-shrink:0;min-width:0}}.articles-grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}}.article-card{{border-radius:14px;overflow:hidden;background:#fff;display:flex;flex-direction:column}}.card-bg{{aspect-ratio:16/9;overflow:hidden;position:relative;display:block}}.card-body{{padding:10px 14px 12px}}@media(max-width:900px){{.articles-grid{{grid-template-columns:repeat(2,1fr)}}}}@media(max-width:480px){{.articles-grid{{grid-template-columns:1fr}}}}@media(max-width:768px){{.top-date{{display:none}}.site-header-inner{{padding:0 10px;gap:8px}}}}@media(max-width:480px){{.live-time{{display:none}}}}</style>
   <!-- Performance: preload critical assets first -->
-  <link rel="preload" href="style.css" as="style">
+  <link rel="preload" href="style.css?v={_CSS_VER}" as="style">
 {(f'  <link rel="preload" href="{esc(lcp_image_url)}" as="image" fetchpriority="high">' if lcp_image_url else "")}
   <!-- Fonts: async (non-render-blocking) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="{esc(s["font_url"])}" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link href="{esc(s["font_url"])}" rel="stylesheet"></noscript>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v={_CSS_VER}">
   <!-- JSON-LD -->
   <script type="application/ld+json">{sd}</script>
 {extra_json_ld}
