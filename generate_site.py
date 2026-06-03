@@ -1676,7 +1676,7 @@ ul,ol{list-style:none}
 .card-bg{aspect-ratio:16/9;overflow:hidden;position:relative;display:block}
 .card-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;display:block;transition:transform .5s ease}
 .article-card:hover .card-bg-img{transform:scale(1.07)}
-.card-no-img{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:3.5em;opacity:.2;background:var(--surface-2)}
+.card-no-img{height:6px;display:block}
 .card-overlay{display:none}
 .card-body{padding:10px 14px 12px;display:flex;flex-direction:column;gap:6px}
 .card-meta{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
@@ -4982,7 +4982,8 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
         )
         extra_cls = ""
     else:
-        bg_html = f'<div class="card-no-img">📰</div>'
+        # No-image card: slim gradient strip (desktop) — hidden on mobile via CSS
+        bg_html = f'<div class="card-no-img" style="background:{gradient}"></div>'
         extra_cls = " card--no-img"
 
     share_html = ""  # Share buttons removed from cards
