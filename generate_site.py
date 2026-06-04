@@ -1796,8 +1796,8 @@ body.lang-rtl .more-btn:hover{transform:translateX(4px)}
 .nh-header{padding:10px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center}
 .nh-label{font-size:.72em;font-weight:800;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase}
 .nh-body{display:grid;grid-template-columns:1fr 290px}
-.nh-main{position:relative;overflow:hidden;background:#111}
-.nh-slides{position:relative;width:100%;aspect-ratio:16/9}
+.nh-main{position:relative;overflow:hidden;background:#111;aspect-ratio:16/9}
+.nh-slides{position:absolute;inset:0}
 .nh-slide{position:absolute;inset:0;opacity:0;transition:opacity .55s ease;pointer-events:none;will-change:opacity}
 .nh-slide.active{opacity:1;pointer-events:auto;z-index:2}
 .nh-slide a{display:block;width:100%;height:100%;color:inherit;text-decoration:none;position:relative}
@@ -1817,8 +1817,8 @@ body.lang-rtl .more-btn:hover{transform:translateX(4px)}
 .nh-dot.active{width:24px;background:#fff}
 .nh-bar{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(0,0,0,.2);z-index:20}
 .nh-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),#a855f7);width:0}
-.nh-side{border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--surface)}
-.nh-side-item{display:flex;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border);text-decoration:none;color:inherit;transition:background .2s;align-items:flex-start;position:relative;flex:1}
+.nh-side{border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--surface);overflow:hidden}
+.nh-side-item{display:flex;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border);text-decoration:none;color:inherit;transition:background .2s;align-items:flex-start;position:relative;flex:1;min-height:0}
 .nh-side-item:last-child{border-bottom:none}
 .nh-side-item::after{content:'';position:absolute;right:0;top:8px;bottom:8px;width:3px;background:transparent;border-radius:2px;transition:background .2s}
 .nh-side-item:hover{background:rgba(99,102,241,.06)}
@@ -5276,9 +5276,9 @@ def _carousel(articles: list[dict], max_items: int = 12, s: dict = STRINGS["ar"]
             f'aria-label="{esc(s["slide"])} {i + 1}"></button>'
         )
 
-    # ── sidebar (items[1..4] — static article links) ──────────────────────────
+    # ── sidebar (items[1..3] — static article links) ──────────────────────────
     side_html = ""
-    for art in items[1:5]:
+    for art in items[1:4]:
         gradient = CATEGORY_GRADIENTS.get(art["slug"], DEFAULT_GRADIENT)
         title    = esc(" ".join(art["title"].split()))
         raw_url  = art["url"]
