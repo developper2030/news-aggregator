@@ -1596,7 +1596,7 @@ ul,ol{list-style:none}
 .sticky-header{position:sticky;top:0;z-index:500}
 
 /* ===================== SITE HEADER (merged) ===================== */
-.site-header{background:linear-gradient(135deg,var(--header-start),var(--header-end));color:#fff;padding:9px 0;position:relative;overflow:hidden}
+.site-header{background:linear-gradient(135deg,var(--header-start),var(--header-end));color:#fff;padding:9px 0;position:relative;z-index:300;overflow:visible}
 .site-header::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0,rgba(255,255,255,.04) 1px,transparent 1px,transparent 60px);pointer-events:none}
 .site-header-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;position:relative}
 .header-start{display:flex;align-items:center;gap:9px;flex-shrink:0}
