@@ -1,6 +1,6 @@
 {
   "settings": {
-    "site_title": "World News",
+    "site_title": "Solvixi News",
     "site_description": "Top headlines from trusted international sources in one place",
     "oldest_days": 7,
     "site_url": "https://atlasnews.solvixi.com",
@@ -9,7 +9,8 @@
     "lang_rule": "English only — all sources must publish content in English",
     "show_stats": false,
     "show_bourse": false,
-    "show_biz": false
+    "show_biz": false,
+    "max_articles_per_source": 10
   },
   "categories": [
     {
@@ -181,27 +182,6 @@
       ]
     },
     {
-      "name": "Entertainment",
-      "slug": "arts",
-      "icon": "🎬",
-      "sources": [
-        {
-          "name": "BBC Entertainment",
-          "url": "https://www.bbc.com/news/entertainment_and_arts",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.bbc.com"
-        },
-        {
-          "name": "The Verge Culture",
-          "url": "https://www.theverge.com/culture",
-          "article_selector": "h2",
-          "link_selector": "a",
-          "base_url": "https://www.theverge.com"
-        }
-      ]
-    },
-    {
       "name": "Education",
       "slug": "education",
       "icon": "🎓",
@@ -261,6 +241,125 @@
           "article_selector": "h2",
           "link_selector": "a",
           "base_url": "https://www.chalkbeat.org"
+        }
+      ]
+    },
+    {
+      "name": "Entertainment",
+      "slug": "arts",
+      "icon": "🎬",
+      "sources": [
+        {
+          "name": "BBC Entertainment",
+          "url": "https://www.bbc.com/news/entertainment_and_arts",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "The Verge Culture",
+          "url": "https://www.theverge.com/culture",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.theverge.com"
+        }
+      ]
+    },
+    {
+      "name": "US News",
+      "slug": "us-en",
+      "icon": "🇺🇸",
+      "sources": [
+        {
+          "name": "Reuters US",
+          "url": "https://www.reuters.com/world/us/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.reuters.com"
+        },
+        {
+          "name": "AP News",
+          "url": "https://apnews.com/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://apnews.com"
+        },
+        {
+          "name": "The Guardian US",
+          "url": "https://www.theguardian.com/us-news",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.theguardian.com"
+        }
+      ]
+    },
+    {
+      "name": "UK News",
+      "slug": "uk-en",
+      "icon": "🇬🇧",
+      "sources": [
+        {
+          "name": "BBC UK",
+          "url": "https://www.bbc.com/news/uk",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "The Guardian UK",
+          "url": "https://www.theguardian.com/uk-news",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.theguardian.com"
+        },
+        {
+          "name": "The Independent UK",
+          "url": "https://www.independent.co.uk/news/uk",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.independent.co.uk"
+        },
+        {
+          "name": "Sky News UK",
+          "url": "https://news.sky.com/uk",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://news.sky.com"
+        }
+      ]
+    },
+    {
+      "name": "Middle East",
+      "slug": "mideast-en",
+      "icon": "🕌",
+      "sources": [
+        {
+          "name": "Al Jazeera English",
+          "url": "https://www.aljazeera.com/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.aljazeera.com"
+        },
+        {
+          "name": "Reuters Middle East",
+          "url": "https://www.reuters.com/world/middle-east/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.reuters.com"
+        },
+        {
+          "name": "Middle East Eye",
+          "url": "https://www.middleeasteye.net/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.middleeasteye.net"
+        },
+        {
+          "name": "BBC Middle East",
+          "url": "https://www.bbc.com/news/world/middle_east",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
         }
       ]
     },
@@ -359,104 +458,6 @@
           "article_selector": "h3",
           "link_selector": "a",
           "base_url": "https://www.theguardian.com"
-        }
-      ]
-    },
-    {
-      "name": "UK News",
-      "slug": "uk-en",
-      "icon": "🇬🇧",
-      "sources": [
-        {
-          "name": "BBC UK",
-          "url": "https://www.bbc.com/news/uk",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.bbc.com"
-        },
-        {
-          "name": "The Guardian UK",
-          "url": "https://www.theguardian.com/uk-news",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.theguardian.com"
-        },
-        {
-          "name": "The Independent UK",
-          "url": "https://www.independent.co.uk/news/uk",
-          "article_selector": "h2",
-          "link_selector": "a",
-          "base_url": "https://www.independent.co.uk"
-        },
-        {
-          "name": "Sky News UK",
-          "url": "https://news.sky.com/uk",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://news.sky.com"
-        }
-      ]
-    },
-    {
-      "name": "US News",
-      "slug": "us-en",
-      "icon": "🇺🇸",
-      "sources": [
-        {
-          "name": "Reuters US",
-          "url": "https://www.reuters.com/world/us/",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.reuters.com"
-        },
-        {
-          "name": "AP News",
-          "url": "https://apnews.com/",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://apnews.com"
-        },
-        {
-          "name": "The Guardian US",
-          "url": "https://www.theguardian.com/us-news",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.theguardian.com"
-        }
-      ]
-    },
-    {
-      "name": "Middle East",
-      "slug": "mideast-en",
-      "icon": "🕌",
-      "sources": [
-        {
-          "name": "Al Jazeera English",
-          "url": "https://www.aljazeera.com/",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.aljazeera.com"
-        },
-        {
-          "name": "Reuters Middle East",
-          "url": "https://www.reuters.com/world/middle-east/",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.reuters.com"
-        },
-        {
-          "name": "Middle East Eye",
-          "url": "https://www.middleeasteye.net/",
-          "article_selector": "h2",
-          "link_selector": "a",
-          "base_url": "https://www.middleeasteye.net"
-        },
-        {
-          "name": "BBC Middle East",
-          "url": "https://www.bbc.com/news/world/middle_east",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.bbc.com"
         }
       ]
     },

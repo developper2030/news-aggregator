@@ -1650,402 +1650,6 @@
       ]
     },
     {
-      "name": "أسرة ومجتمع",
-      "slug": "society",
-      "icon": "👥",
-      "sources": [
-        {
-          "name": "الجزيرة - مجتمع",
-          "url": "https://www.aljazeera.net/humanrights/",
-          "selectors": {
-            "article_selector": "article, .article-card, .card",
-            "heading_tags": [
-              "h2",
-              "h3"
-            ],
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar",
-              "widget",
-              "banner"
-            ],
-            "exclude_id_patterns": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar"
-            ],
-            "min_title_length": 20
-          }
-        },
-        {
-          "name": "MSN عربي - مجتمع",
-          "url": "https://www.msn.com/ar-sa/lifestyle",
-          "selectors": {
-            "article_selector": "article, .content-card, .story-card, .card-body, .slide",
-            "heading_tags": [
-              "h1",
-              "h2",
-              "h3"
-            ],
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar",
-              "ad",
-              "advertisement"
-            ],
-            "exclude_id_patterns": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar"
-            ],
-            "min_title_length": 20
-          }
-        }
-      ]
-    },
-    {
-      "name": "ثقافة وفن",
-      "slug": "arts",
-      "icon": "🎬",
-      "sources": [
-        {
-          "name": "الجزيرة - فنون",
-          "url": "https://www.aljazeera.net/culture/",
-          "selectors": {
-            "article_selector": "article, .article-card, .card",
-            "heading_tags": [
-              "h2",
-              "h3"
-            ],
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar",
-              "widget",
-              "banner"
-            ],
-            "exclude_id_patterns": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar"
-            ],
-            "min_title_length": 20
-          }
-        },
-        {
-          "name": "MSN عربي - ترفيه",
-          "url": "https://www.msn.com/ar-sa/entertainment",
-          "selectors": {
-            "article_selector": "article, .content-card, .story-card, .card-body, .slide",
-            "heading_tags": [
-              "h1",
-              "h2",
-              "h3"
-            ],
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar",
-              "ad",
-              "advertisement"
-            ],
-            "exclude_id_patterns": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar"
-            ],
-            "min_title_length": 20
-          }
-        },
-        {
-          "name": "الشرق الأوسط - ثقافة وفنون",
-          "url": "https://aawsat.com/%D8%AB%D9%82%D8%A7%D9%81%D8%A9-%D9%88%D9%81%D9%86%D9%88%D9%86",
-          "selectors": {
-            "article_selector": "article, .article-card, .news-item, .card",
-            "heading_tags": [
-              "h2",
-              "h3"
-            ],
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar",
-              "widget",
-              "banner"
-            ],
-            "exclude_id_patterns": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar"
-            ],
-            "min_title_length": 15
-          }
-        },
-        {
-          "name": "الشرق للأخبار - ثقافة",
-          "url": "https://asharq.com/culture/",
-          "selectors": {
-            "article_selector": "article, .article-card, .story-card, .post",
-            "heading_tags": [
-              "h2",
-              "h3"
-            ],
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar",
-              "widget"
-            ],
-            "exclude_id_patterns": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar"
-            ],
-            "min_title_length": 15
-          }
-        },
-        {
-          "name": "ضفة ثالثة",
-          "url": "https://diffah.alaraby.co.uk/diffah",
-          "selectors": {
-            "article_selector": "article, .article-card, .card, .post-item",
-            "heading_tags": [
-              "h2",
-              "h3"
-            ],
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar",
-              "widget"
-            ],
-            "exclude_id_patterns": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar"
-            ],
-            "min_title_length": 15
-          }
-        },
-        {
-          "name": "أخبار الأدب",
-          "url": "https://adab-news.com/",
-          "selectors": {
-            "article_selector": "article, .post, .entry, .type-post",
-            "heading_tags": [
-              "h2",
-              "h3"
-            ],
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar",
-              "widget",
-              "related"
-            ],
-            "exclude_id_patterns": [
-              "footer",
-              "nav",
-              "menu",
-              "sidebar"
-            ],
-            "min_title_length": 15
-          }
-        },
-        {
-          "name": "العين - فنون",
-          "url": "https://al-ain.com/section/arts/",
-          "selectors": {
-            "article_selector": "article, .article-card, .news-item, .card",
-            "heading_tags": [
-              "h2",
-              "h3"
-            ],
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar",
-              "widget",
-              "banner"
-            ],
-            "exclude_id_patterns": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar"
-            ],
-            "min_title_length": 15
-          }
-        },
-        {
-          "name": "CNN عربي - فنون",
-          "url": "https://arabic.cnn.com/specials/showbiz-news",
-          "selectors": {
-            "article_selector": "article, .card, .container__item, .container_lead-package__item",
-            "heading_tags": [
-              "h2",
-              "h3"
-            ],
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar",
-              "ad"
-            ],
-            "exclude_id_patterns": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar"
-            ],
-            "min_title_length": 15
-          }
-        },
-        {
-          "name": "مصراوي - فنون",
-          "url": "https://www.masrawy.com/channel/arts",
-          "selectors": {
-            "article_selector": "div.item",
-            "heading_tags": [
-              "h2"
-            ],
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar",
-              "ad",
-              "banner"
-            ],
-            "exclude_id_patterns": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar"
-            ],
-            "min_title_length": 15
-          }
-        },
-        {
-          "name": "اليوم السابع - فن",
-          "url": "https://www.youm7.com/Section/%D9%81%D9%86/48/1",
-          "selectors": {
-            "article_selector": "#nt-title li",
-            "heading_tags": [
-              "h3"
-            ],
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar",
-              "ad"
-            ],
-            "exclude_id_patterns": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar"
-            ],
-            "min_title_length": 20
-          }
-        },
-        {
-          "name": "المصري اليوم - فنون",
-          "url": "https://www.almasryalyoum.com/section/index/10",
-          "use_browser": true,
-          "selectors": {
-            "article_selector": "article, .news-item, .story-item, .list-story",
-            "heading_tags": [
-              "h2",
-              "h3"
-            ],
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar",
-              "ad",
-              "banner"
-            ],
-            "exclude_id_patterns": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar"
-            ],
-            "min_title_length": 20
-          }
-        },
-        {
-          "name": "TRT عربي",
-          "url": "https://www.trtarabi.com/thqf",
-          "selectors": {
-            "article_selector": "h3, h2, .article-title",
-            "heading_tags": [
-              "h1",
-              "h2",
-              "h3"
-            ],
-            "exclude_classes": [
-              "footer",
-              "nav",
-              "menu",
-              "header",
-              "sidebar",
-              "widget",
-              "ad"
-            ],
-            "min_title_length": 15
-          }
-        }
-      ]
-    },
-    {
       "name": "تربية وتعليم",
       "slug": "education",
       "icon": "🎓",
@@ -2556,6 +2160,402 @@
         {
           "name": "مجموع تعليم",
           "url": "https://www.mojmos-taalim.com/rss.xml"
+        }
+      ]
+    },
+    {
+      "name": "أسرة ومجتمع",
+      "slug": "society",
+      "icon": "👥",
+      "sources": [
+        {
+          "name": "الجزيرة - مجتمع",
+          "url": "https://www.aljazeera.net/humanrights/",
+          "selectors": {
+            "article_selector": "article, .article-card, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "MSN عربي - مجتمع",
+          "url": "https://www.msn.com/ar-sa/lifestyle",
+          "selectors": {
+            "article_selector": "article, .content-card, .story-card, .card-body, .slide",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "advertisement"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        }
+      ]
+    },
+    {
+      "name": "ثقافة وفن",
+      "slug": "arts",
+      "icon": "🎬",
+      "sources": [
+        {
+          "name": "الجزيرة - فنون",
+          "url": "https://www.aljazeera.net/culture/",
+          "selectors": {
+            "article_selector": "article, .article-card, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "MSN عربي - ترفيه",
+          "url": "https://www.msn.com/ar-sa/entertainment",
+          "selectors": {
+            "article_selector": "article, .content-card, .story-card, .card-body, .slide",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "advertisement"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "الشرق الأوسط - ثقافة وفنون",
+          "url": "https://aawsat.com/%D8%AB%D9%82%D8%A7%D9%81%D8%A9-%D9%88%D9%81%D9%86%D9%88%D9%86",
+          "selectors": {
+            "article_selector": "article, .article-card, .news-item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "الشرق للأخبار - ثقافة",
+          "url": "https://asharq.com/culture/",
+          "selectors": {
+            "article_selector": "article, .article-card, .story-card, .post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "ضفة ثالثة",
+          "url": "https://diffah.alaraby.co.uk/diffah",
+          "selectors": {
+            "article_selector": "article, .article-card, .card, .post-item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "أخبار الأدب",
+          "url": "https://adab-news.com/",
+          "selectors": {
+            "article_selector": "article, .post, .entry, .type-post",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "related"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "العين - فنون",
+          "url": "https://al-ain.com/section/arts/",
+          "selectors": {
+            "article_selector": "article, .article-card, .news-item, .card",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "CNN عربي - فنون",
+          "url": "https://arabic.cnn.com/specials/showbiz-news",
+          "selectors": {
+            "article_selector": "article, .card, .container__item, .container_lead-package__item",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "مصراوي - فنون",
+          "url": "https://www.masrawy.com/channel/arts",
+          "selectors": {
+            "article_selector": "div.item",
+            "heading_tags": [
+              "h2"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 15
+          }
+        },
+        {
+          "name": "اليوم السابع - فن",
+          "url": "https://www.youm7.com/Section/%D9%81%D9%86/48/1",
+          "selectors": {
+            "article_selector": "#nt-title li",
+            "heading_tags": [
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "المصري اليوم - فنون",
+          "url": "https://www.almasryalyoum.com/section/index/10",
+          "use_browser": true,
+          "selectors": {
+            "article_selector": "article, .news-item, .story-item, .list-story",
+            "heading_tags": [
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "ad",
+              "banner"
+            ],
+            "exclude_id_patterns": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar"
+            ],
+            "min_title_length": 20
+          }
+        },
+        {
+          "name": "TRT عربي",
+          "url": "https://www.trtarabi.com/thqf",
+          "selectors": {
+            "article_selector": "h3, h2, .article-title",
+            "heading_tags": [
+              "h1",
+              "h2",
+              "h3"
+            ],
+            "exclude_classes": [
+              "footer",
+              "nav",
+              "menu",
+              "header",
+              "sidebar",
+              "widget",
+              "ad"
+            ],
+            "min_title_length": 15
+          }
         }
       ]
     },

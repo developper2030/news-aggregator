@@ -9,7 +9,8 @@
     "lang_rule": "French only — all sources must publish content in French",
     "show_biz": false,
     "show_stats": false,
-    "show_bourse": false
+    "show_bourse": false,
+    "max_articles_per_source": 10
   },
   "categories": [
     {
@@ -328,6 +329,48 @@
       ]
     },
     {
+      "name": "Actualités France",
+      "slug": "france-fr",
+      "icon": "🇫🇷",
+      "sources": [
+        {
+          "name": "Le Monde France",
+          "url": "https://www.lemonde.fr/politique/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.lemonde.fr"
+        },
+        {
+          "name": "Le Figaro France",
+          "url": "https://www.lefigaro.fr/actualite-france/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.lefigaro.fr"
+        },
+        {
+          "name": "France Info France",
+          "url": "https://www.francetvinfo.fr/france/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.francetvinfo.fr"
+        },
+        {
+          "name": "Le Parisien",
+          "url": "https://www.leparisien.fr/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.leparisien.fr"
+        },
+        {
+          "name": "20 Minutes France",
+          "url": "https://www.20minutes.fr/france/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.20minutes.fr"
+        }
+      ]
+    },
+    {
       "name": "Afrique du Nord",
       "slug": "n-africa-fr",
       "icon": "🇲🇦",
@@ -359,6 +402,34 @@
           "article_selector": "h2",
           "link_selector": "a",
           "base_url": "https://www.lefigaro.fr"
+        }
+      ]
+    },
+    {
+      "name": "Moyen-Orient",
+      "slug": "moyen-orient-fr",
+      "icon": "🕌",
+      "sources": [
+        {
+          "name": "Le Monde Moyen-Orient",
+          "url": "https://www.lemonde.fr/moyen-orient/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.lemonde.fr"
+        },
+        {
+          "name": "Le Figaro International",
+          "url": "https://www.lefigaro.fr/international/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.lefigaro.fr"
+        },
+        {
+          "name": "L'Orient Le Jour",
+          "url": "https://www.lorientlejour.com/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.lorientlejour.com"
         }
       ]
     },
@@ -426,48 +497,6 @@
       ]
     },
     {
-      "name": "Actualités France",
-      "slug": "france-fr",
-      "icon": "🇫🇷",
-      "sources": [
-        {
-          "name": "Le Monde France",
-          "url": "https://www.lemonde.fr/politique/",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.lemonde.fr"
-        },
-        {
-          "name": "Le Figaro France",
-          "url": "https://www.lefigaro.fr/actualite-france/",
-          "article_selector": "h2",
-          "link_selector": "a",
-          "base_url": "https://www.lefigaro.fr"
-        },
-        {
-          "name": "France Info France",
-          "url": "https://www.francetvinfo.fr/france/",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.francetvinfo.fr"
-        },
-        {
-          "name": "Le Parisien",
-          "url": "https://www.leparisien.fr/",
-          "article_selector": "h2",
-          "link_selector": "a",
-          "base_url": "https://www.leparisien.fr"
-        },
-        {
-          "name": "20 Minutes France",
-          "url": "https://www.20minutes.fr/france/",
-          "article_selector": "h2",
-          "link_selector": "a",
-          "base_url": "https://www.20minutes.fr"
-        }
-      ]
-    },
-    {
       "name": "Actualités Afrique",
       "slug": "afrique-fr",
       "icon": "🌍",
@@ -520,34 +549,6 @@
           "article_selector": "h3",
           "link_selector": "a",
           "base_url": "https://www.latribune.fr"
-        }
-      ]
-    },
-    {
-      "name": "Moyen-Orient",
-      "slug": "moyen-orient-fr",
-      "icon": "🕌",
-      "sources": [
-        {
-          "name": "Le Monde Moyen-Orient",
-          "url": "https://www.lemonde.fr/moyen-orient/",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.lemonde.fr"
-        },
-        {
-          "name": "Le Figaro International",
-          "url": "https://www.lefigaro.fr/international/",
-          "article_selector": "h2",
-          "link_selector": "a",
-          "base_url": "https://www.lefigaro.fr"
-        },
-        {
-          "name": "L'Orient Le Jour",
-          "url": "https://www.lorientlejour.com/",
-          "article_selector": "h2",
-          "link_selector": "a",
-          "base_url": "https://www.lorientlejour.com"
         }
       ]
     },

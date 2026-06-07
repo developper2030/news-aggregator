@@ -9,7 +9,8 @@
     "lang_rule": "Spanish only — all sources must publish content in Spanish",
     "show_biz": false,
     "show_stats": false,
-    "show_bourse": false
+    "show_bourse": false,
+    "max_articles_per_source": 10
   },
   "categories": [
     {

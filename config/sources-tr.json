@@ -9,7 +9,8 @@
     "lang_rule": "Turkish only — all sources must publish content in Turkish",
     "show_biz": false,
     "show_stats": false,
-    "show_bourse": false
+    "show_bourse": false,
+    "max_articles_per_source": 10
   },
   "categories": [
     {
