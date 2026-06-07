@@ -1975,11 +1975,11 @@ ul,ol{list-style:none}
 /* ===================== VERTICAL FLOATING SIDE SUBNAV ===================== */
 .side-subnav{position:fixed;top:94px;inset-inline-start:0;z-index:249;width:58px;max-height:calc(100vh - 108px);display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-inline-start:none;border-start-end-radius:14px;border-end-end-radius:14px;box-shadow:3px 0 20px rgba(0,0,0,.09);backdrop-filter:blur(16px);transition:width .28s cubic-bezier(.4,0,.2,1);overflow:hidden}
 body.lang-rtl .side-subnav{box-shadow:-3px 0 20px rgba(0,0,0,.09)}
-.side-subnav:hover{width:224px}
+.side-subnav:hover,.side-subnav.side-open{width:224px}
 .side-hdr{display:flex;align-items:center;gap:8px;padding:10px;background:linear-gradient(135deg,var(--header-start),var(--header-end));min-height:46px;overflow:hidden;flex-shrink:0}
 .side-hdr-icon{font-size:1.1em;flex-shrink:0;width:38px;text-align:center;line-height:1}
 .side-hdr-title{color:#fff;font-weight:800;font-size:.82em;white-space:nowrap;opacity:0;transition:opacity .18s}
-.side-subnav:hover .side-hdr-title{opacity:1}
+.side-subnav:hover .side-hdr-title,.side-subnav.side-open .side-hdr-title{opacity:1}
 .side-inner{overflow-y:auto;overflow-x:hidden;flex:1;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
 .side-inner::-webkit-scrollbar{width:3px}
 .side-inner::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
@@ -1992,15 +1992,23 @@ body.lang-rtl .side-subnav{box-shadow:-3px 0 20px rgba(0,0,0,.09)}
 .side-btn.side-live.side-active{background:rgba(220,38,38,.1);color:#dc2626;border-inline-start-color:#dc2626}
 .side-icon{font-size:1.2em;flex-shrink:0;width:38px;text-align:center;line-height:1}
 .side-label{font-size:.83em;font-weight:700;opacity:0;transition:opacity .15s .04s;min-width:0;display:flex;align-items:center;gap:6px}
-.side-subnav:hover .side-label{opacity:1}
+.side-subnav:hover .side-label,.side-subnav.side-open .side-label{opacity:1}
 .side-soon-badge{font-size:.6em;background:rgba(99,102,241,.18);color:var(--accent);padding:1px 5px;border-radius:4px;font-weight:600}
 /* Dark mode */
 .dark-mode .side-subnav{background:var(--surface);box-shadow:3px 0 20px rgba(0,0,0,.3)}
 .dark-mode body.lang-rtl .side-subnav{box-shadow:-3px 0 20px rgba(0,0,0,.3)}
-/* Offset main content to avoid sidebar overlap */
+/* Desktop: offset main content to avoid sidebar overlap */
 @media(min-width:769px){body.has-sidebar .main-wrapper{padding-inline-start:76px}}
-/* Mobile: hide floating sidebar (bottom-nav handles mobile nav) */
-@media(max-width:768px){.side-subnav{display:none}}
+/* Mobile: compact sidebar (tap to expand, 44px → 224px) */
+@media(max-width:768px){
+  .side-subnav{display:flex;width:44px;top:58px;max-height:calc(100vh - 124px)}
+  /* Colored pull-handle on outer edge — signals interactivity */
+  .side-subnav::after{content:'';position:absolute;inset-inline-end:-3px;top:28%;height:44%;width:3px;background:var(--accent);border-radius:0 3px 3px 0;opacity:.55;pointer-events:none;transition:opacity .22s}
+  body.lang-rtl .side-subnav::after{border-radius:3px 0 0 3px}
+  .side-subnav.side-open::after,.side-subnav:hover::after{opacity:0}
+  /* Offset content so it's not hidden under the 44px sidebar */
+  body.has-sidebar .main-wrapper{padding-inline-start:54px}
+}
 
 /* ===================== LIVE TV PAGE ===================== */
 .live-page-hdr{display:flex;align-items:center;gap:14px;padding:20px 0 6px;margin-bottom:24px;border-bottom:2px solid var(--border)}
@@ -2348,9 +2356,7 @@ body.lang-ltr .nh-text{direction:ltr}
   .nav-inner{padding:0 4px}
   .nav-tab{padding:9px 11px;font-size:.82em}
   .nav-tab.active{box-shadow:inset 0 -3px 0 var(--accent)}
-  /* Floating sidebar hidden on mobile — handled by bottom-nav */
-  .side-subnav{display:none}
-  body.has-sidebar .main-wrapper{padding-inline-start:20px}
+  /* Floating sidebar handled by mobile media query above (tap-to-expand) */
   /* No-image cards on mobile: hide the placeholder area — show only source + date + title */
   .article-card.card--no-img .card-no-img{display:none}
 }
@@ -2910,6 +2916,39 @@ function _applySearch(query) {
   noRes.classList.toggle('visible', visible === 0 && q.length > 0);
 }
 
+/* ========== SIDEBAR MOBILE TOUCH-EXPAND ========== */
+function initSideSubnav() {
+  var navs = Array.prototype.slice.call(document.querySelectorAll('.side-subnav'));
+  if (!navs.length) return;
+  function isMobile() { return window.innerWidth <= 768; }
+
+  navs.forEach(function(nav) {
+    nav.addEventListener('click', function(e) {
+      if (!isMobile()) return;
+      var isOpen = nav.classList.contains('side-open');
+      var link   = e.target.closest('a.side-btn');
+
+      if (!isOpen) {
+        /* First tap: expand — block any link navigation until user sees labels */
+        e.preventDefault();
+        navs.forEach(function(n) { if (n !== nav) n.classList.remove('side-open'); });
+        nav.classList.add('side-open');
+        return;
+      }
+      /* Already open + tapped background/header → collapse */
+      if (!link) { nav.classList.remove('side-open'); }
+      /* Already open + tapped a link → navigate naturally (no action needed) */
+    });
+  });
+
+  /* Collapse all on outside tap (capture phase fires before sidebar handler) */
+  document.addEventListener('click', function(e) {
+    if (!isMobile()) return;
+    if (!e.target.closest('.side-subnav'))
+      navs.forEach(function(n) { n.classList.remove('side-open'); });
+  }, true);
+}
+
 /* ========== INIT ========== */
 /* ========== BOTTOM NAV ========== */
 function initBottomNav() {
@@ -2967,6 +3006,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSearch();
   initLangDrop();
   initBottomNav();
+  initSideSubnav();
   initWeatherWidget();
   initPrayerWidget();
   // Register Service Worker for PWA offline support
