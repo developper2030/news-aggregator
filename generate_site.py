@@ -1795,8 +1795,7 @@ body.lang-rtl .more-btn:hover{transform:translateX(4px)}
 .news-hero{max-width:960px;margin:0 auto 36px;background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.1);border:1px solid var(--border)}
 .nh-header{padding:10px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center}
 .nh-label{font-size:.72em;font-weight:800;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase}
-.nh-body{display:grid;grid-template-columns:1fr 290px}
-.nh-main{position:relative;overflow:hidden;background:#111;aspect-ratio:16/9}
+.nh-main{position:relative;overflow:hidden;background:#111;aspect-ratio:16/9;border-radius:0 0 var(--radius) var(--radius)}
 .nh-slides{position:absolute;inset:0}
 .nh-slide{position:absolute;inset:0;opacity:0;transition:opacity .55s ease;pointer-events:none;will-change:opacity}
 .nh-slide.active{opacity:1;pointer-events:auto;z-index:2}
@@ -1808,7 +1807,7 @@ body.lang-rtl .more-btn:hover{transform:translateX(4px)}
 .nh-badge{display:inline-block;font-size:.7em;font-weight:800;color:#fff;padding:3px 11px;border-radius:12px;margin-bottom:8px;line-height:1.5}
 .nh-title{font-size:1.18em;font-weight:900;color:#fff;line-height:1.6;text-shadow:0 2px 12px rgba(0,0,0,.5);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:6px}
 .nh-meta{font-size:.75em;color:rgba(255,255,255,.65);display:flex;gap:10px}
-.nh-nav{position:absolute;top:36%;transform:translateY(-50%);z-index:20;background:rgba(255,255,255,.13);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1.5px solid rgba(255,255,255,.25);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:1.3em;transition:all .2s;padding:0;line-height:1}
+.nh-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:20;background:rgba(255,255,255,.13);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1.5px solid rgba(255,255,255,.25);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:1.3em;transition:all .2s;padding:0;line-height:1}
 .nh-nav:hover{background:rgba(255,255,255,.32);border-color:rgba(255,255,255,.6);transform:translateY(-50%) scale(1.08)}
 .nh-prev{right:14px}
 .nh-next{left:14px}
@@ -1817,20 +1816,7 @@ body.lang-rtl .more-btn:hover{transform:translateX(4px)}
 .nh-dot.active{width:24px;background:#fff}
 .nh-bar{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(0,0,0,.2);z-index:20}
 .nh-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),#a855f7);width:0}
-.nh-side{border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--surface);overflow:hidden}
-.nh-side-item{display:flex;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border);text-decoration:none;color:inherit;transition:background .2s;align-items:flex-start;position:relative;flex:1;min-height:0}
-.nh-side-item:last-child{border-bottom:none}
-.nh-side-item::after{content:'';position:absolute;right:0;top:8px;bottom:8px;width:3px;background:transparent;border-radius:2px;transition:background .2s}
-.nh-side-item:hover{background:rgba(99,102,241,.06)}
-.nh-side-item:hover::after,.nh-side-item.active-side::after{background:var(--accent)}
-.nh-side-img{width:72px;height:54px;flex-shrink:0;border-radius:8px;object-fit:cover;background:var(--surface-2);display:block;transition:transform .3s}
-.nh-side-item:hover .nh-side-img{transform:scale(1.05)}
-.nh-side-body{min-width:0;flex:1}
-.nh-side-badge{display:inline-block;font-size:.64em;font-weight:800;color:#fff;padding:2px 8px;border-radius:8px;margin-bottom:5px;line-height:1.4}
-.nh-side-title{font-size:.81em;font-weight:700;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--text)}
-.nh-side-meta{font-size:.7em;color:var(--text-muted);margin-top:3px}
-@media(max-width:860px){.nh-body{grid-template-columns:1fr 220px}.nh-title{font-size:1em}}
-@media(max-width:640px){.nh-body{grid-template-columns:1fr}.nh-side{display:none}}
+@media(max-width:640px){.nh-title{font-size:1em}}
 .dark-mode .nh-nav{background:rgba(0,0,0,.4);border-color:rgba(255,255,255,.15)}
 .dark-mode .nh-nav:hover{background:rgba(0,0,0,.65)}
 
@@ -1895,8 +1881,6 @@ body.lang-ltr .cat-link:hover{transform:translateX(3px)}
 body.lang-ltr .back-to-top{left:auto;right:24px}
 body.lang-ltr .nh-prev{right:auto;left:14px}
 body.lang-ltr .nh-next{left:auto;right:14px}
-body.lang-ltr .nh-side{border-right:none;border-left:1px solid var(--border)}
-body.lang-ltr .nh-side-item::after{right:auto;left:0}
 body.lang-ltr .nh-text{direction:ltr}
 
 /* ===================== RESPONSIVE ===================== */
@@ -2300,7 +2284,6 @@ function initHeroCarousel() {
     const fill      = hero.querySelector('.nh-bar-fill');
     const btnPrev   = hero.querySelector('.nh-prev');
     const btnNext   = hero.querySelector('.nh-next');
-    const sideItems = Array.from(hero.querySelectorAll('.nh-side-item'));
     if (slides.length < 2) return;
 
     let cur = 0, timer = null;
@@ -2308,12 +2291,10 @@ function initHeroCarousel() {
 
     function goTo(n) {
       slides[cur].classList.remove('active');
-      if (dots[cur])           dots[cur].classList.remove('active');
-      if (sideItems[cur - 1])  sideItems[cur - 1].classList.remove('active-side');
+      if (dots[cur]) dots[cur].classList.remove('active');
       cur = (n + slides.length) % slides.length;
       slides[cur].classList.add('active');
-      if (dots[cur])           dots[cur].classList.add('active');
-      if (sideItems[cur - 1])  sideItems[cur - 1].classList.add('active-side');
+      if (dots[cur]) dots[cur].classList.add('active');
       startFill();
     }
 
@@ -5276,42 +5257,15 @@ def _carousel(articles: list[dict], max_items: int = 12, s: dict = STRINGS["ar"]
             f'aria-label="{esc(s["slide"])} {i + 1}"></button>'
         )
 
-    # ── sidebar (items[1..3] — static article links) ──────────────────────────
-    side_html = ""
-    for art in items[1:4]:
-        gradient = CATEGORY_GRADIENTS.get(art["slug"], DEFAULT_GRADIENT)
-        title    = esc(" ".join(art["title"].split()))
-        raw_url  = art["url"]
-        href, target = _art_href(raw_url, art.get("slug", ""))
-        image    = safe_url(art["image"])
-        source   = esc(SOURCE_AR_NAME.get(art["source"], art["source"]))
-        date     = esc(art.get("date", ""))
-        cat_name = esc(art["cat_name"])
-        cat_icon = esc(art["cat_icon"])
-        side_html += (
-            f'<a href="{esc(href)}"{(" target=\"" + target + "\"") if target else ""} class="nh-side-item">'
-            f'<img src="{image}" alt="{title}" class="nh-side-img" loading="lazy" '
-            f'onerror="this.style.display=\'none\'">'
-            f'<div class="nh-side-body">'
-            f'<span class="nh-side-badge" style="background:{esc(gradient)}">{cat_icon} {cat_name}</span>'
-            f'<div class="nh-side-title">{title}</div>'
-            f'<div class="nh-side-meta">{source} · {date}</div>'
-            f'</div>'
-            f'</a>'
-        )
-
     return (
         f'<div class="news-hero" aria-label="{esc(s["highlights"])}">'
         f'<div class="nh-header"><div class="nh-label">⭐ {esc(s["highlights"])}</div></div>'
-        f'<div class="nh-body">'
         f'<div class="nh-main">'
         f'<div class="nh-bar"><div class="nh-bar-fill"></div></div>'
         f'<div class="nh-slides">{slides_html}</div>'
         f'<button class="nh-nav nh-prev" aria-label="{esc(s["prev"])}">&#8249;</button>'
         f'<button class="nh-nav nh-next" aria-label="{esc(s["next"])}">&#8250;</button>'
         f'<div class="nh-dots">{dots_html}</div>'
-        f'</div>'
-        f'<div class="nh-side">{side_html}</div>'
         f'</div>'
         f'</div>'
     )
