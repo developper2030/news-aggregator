@@ -1262,11 +1262,24 @@ LANG_FULL_NAMES: dict[str, str] = {
 }
 # Bottom nav labels per language: (home, world, worldcup, prices)
 _BN_LABELS: dict[str, tuple] = {
-    "ar": ("الرئيسية", "العالم",  "كأس العالم", "الأسعار"),
-    "en": ("Home",      "World",   "World Cup",   "Prices"),
-    "fr": ("Accueil",   "Monde",   "Coupe du Monde", "Prix"),
-    "es": ("Inicio",    "Mundo",   "Mundial",     "Precios"),
-    "tr": ("Ana Sayfa", "Dünya",   "Dünya Kupası","Fiyatlar"),
+    "ar": ("الرئيسية", "المحفوظات",     "كأس العالم",    "الأسعار"),
+    "en": ("Home",      "Saved",          "World Cup",      "Prices"),
+    "fr": ("Accueil",   "Sauvegardés",    "Coupe du Monde", "Prix"),
+    "es": ("Inicio",    "Guardados",      "Mundial",        "Precios"),
+    "tr": ("Ana Sayfa", "Kaydedilenler",  "Dünya Kupası",   "Fiyatlar"),
+}
+# Bookmarks drawer labels per language
+_BK_LABELS: dict[str, dict] = {
+    "ar": {"title": "المحفوظات", "empty": "لا توجد مقالات محفوظة بعد 📭",
+           "save": "حفظ المقال", "saved": "محفوظ", "like": "إعجاب"},
+    "en": {"title": "Saved Articles", "empty": "No saved articles yet 📭",
+           "save": "Save article", "saved": "Saved", "like": "Like"},
+    "fr": {"title": "Articles Sauvegardés", "empty": "Aucun article sauvegardé 📭",
+           "save": "Sauvegarder", "saved": "Sauvegardé", "like": "J'aime"},
+    "es": {"title": "Artículos Guardados", "empty": "No hay artículos guardados 📭",
+           "save": "Guardar", "saved": "Guardado", "like": "Me gusta"},
+    "tr": {"title": "Kaydedilen Makaleler", "empty": "Henüz kayıtlı makale yok 📭",
+           "save": "Kaydet", "saved": "Kaydedildi", "like": "Beğen"},
 }
 
 # Cross-language slug equivalency map.
@@ -1390,7 +1403,7 @@ def _bottom_nav(s: dict, active: str = "home") -> str:
     """Fixed bottom navigation bar — mobile only (hidden on desktop via CSS)."""
     lang   = s.get("lang", "ar")
     labels = _BN_LABELS.get(lang, _BN_LABELS["ar"])
-    home_l, world_l, wc_l, prices_l = labels
+    home_l, bk_l, wc_l, prices_l = labels
 
     def _item(href: str, icon: str, label: str, slug: str) -> str:
         cls = "bn-item bn-active" if active == slug else "bn-item"
@@ -1400,12 +1413,21 @@ def _bottom_nav(s: dict, active: str = "home") -> str:
             f'<span class="bn-label">{esc(label)}</span></a>'
         )
 
+    # Bookmarks button — triggers JS drawer (no href navigation)
+    _bk_cls = "bn-item bn-active" if active == "bookmarks" else "bn-item"
+    _bk_btn = (
+        f'<button class="{_bk_cls}" data-slug="bookmarks" type="button">'
+        f'<span class="bn-icon" style="position:relative">🔖'
+        f'<span class="bn-badge" id="bn-bk-badge"></span></span>'
+        f'<span class="bn-label">{esc(bk_l)}</span></button>'
+    )
+
     return (
         '<nav class="bottom-nav" aria-label="navigation">'
-        + _item("index.html",    "🏠", home_l,    "home")
-        + _item("world.html",    "🌍", world_l,   "world")
-        + _item("worldcup.html", "🏆", wc_l,      "worldcup")
-        + _item("prices.html",   "💱", prices_l,  "prices")
+        + _item("index.html",    "🏠", home_l,   "home")
+        + _bk_btn
+        + _item("worldcup.html", "🏆", wc_l,     "worldcup")
+        + _item("prices.html",   "💱", prices_l, "prices")
         + '</nav>'
     )
 
@@ -2007,9 +2029,10 @@ body.lang-rtl .side-subnav{box-shadow:-3px 0 20px rgba(0,0,0,.09)}
   body.lang-rtl .side-subnav::after{border-radius:3px 0 0 3px}
   .side-subnav.side-open::after,.side-subnav:hover::after{opacity:0}
   /* Sidebar is position:fixed (floats above, not in flow).
-     Push only the article cards grid past the 44px sidebar edge.
-     Hero, section-header, search bar etc. keep full width. */
-  body.has-sidebar .articles-grid{grid-template-columns:1fr;padding-inline-start:48px}
+     Shift the entire main-wrapper past the 44px sidebar so carousel,
+     widgets, section headers and cards are all clear of the sidebar. */
+  body.has-sidebar .main-wrapper{padding-inline-start:52px}
+  body.has-sidebar .articles-grid{grid-template-columns:1fr}
 }
 
 /* ===================== LIVE TV PAGE ===================== */
@@ -2402,10 +2425,13 @@ body.lang-ltr .nh-text{direction:ltr}
 @media(max-width:768px){
   /* ── Bottom nav bar ─────────────────────────────────────────────── */
   .bottom-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:400;background:var(--surface);border-top:1px solid var(--border);box-shadow:0 -2px 16px rgba(0,0,0,.08);height:58px}
-  .bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:var(--text-light);text-decoration:none;font-size:.62em;font-weight:700;padding:6px 2px 4px;transition:color .18s;position:relative;line-height:1}
+  .bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:var(--text-light);text-decoration:none;font-size:.62em;font-weight:700;padding:6px 2px 4px;transition:color .18s;position:relative;line-height:1;background:none;border:none;cursor:pointer;font-family:inherit}
   .bn-item:hover,.bn-item.bn-active{color:var(--accent)}
   .bn-item.bn-active::before{content:'';position:absolute;top:0;left:20%;right:20%;height:3px;background:var(--accent);border-radius:0 0 3px 3px}
-  .bn-icon{font-size:1.5em;line-height:1;display:block}
+  .bn-icon{font-size:1.5em;line-height:1;display:block;position:relative}
+  /* Badge counter on bookmark icon */
+  .bn-badge{position:absolute;top:-4px;inset-inline-end:-6px;min-width:15px;height:15px;background:#ef4444;color:#fff;font-size:.58em;font-weight:800;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 3px;line-height:1;border:1.5px solid var(--surface)}
+  .bn-badge.show{display:flex}
   /* Push content above bottom nav */
   .main-wrapper{padding-bottom:calc(58px + 10px)}
   .site-footer{padding-bottom:calc(58px + 4px)}
@@ -2423,6 +2449,37 @@ body.lang-ltr .nh-text{direction:ltr}
   }
 }
 
+/* ====== BOOKMARKS DRAWER ====== */
+.bk-drawer{position:fixed;inset:0;z-index:550;pointer-events:none;display:flex;flex-direction:column;justify-content:flex-end}
+.bk-drawer.open{pointer-events:all}
+.bk-overlay{position:absolute;inset:0;background:rgba(0,0,0,.48);opacity:0;transition:opacity .3s;cursor:pointer}
+.bk-drawer.open .bk-overlay{opacity:1}
+.bk-panel{position:relative;background:var(--surface);border-radius:22px 22px 0 0;max-height:78vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);box-shadow:0 -8px 32px rgba(0,0,0,.18)}
+.bk-drawer.open .bk-panel{transform:translateY(0)}
+/* Drag handle */
+.bk-drag{width:36px;height:4px;background:var(--border);border-radius:3px;margin:10px auto 0;flex-shrink:0}
+.bk-panel-hdr{display:flex;align-items:center;gap:10px;padding:10px 18px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
+.bk-hdr-title{font-weight:800;font-size:1.05em;flex:1}
+.bk-hdr-count{background:var(--accent);color:#fff;font-size:.72em;font-weight:800;padding:2px 9px;border-radius:10px;min-width:20px;text-align:center}
+.bk-close{background:none;border:none;cursor:pointer;font-size:1.1em;color:var(--text-muted);padding:6px 10px;border-radius:10px;line-height:1;font-family:inherit}
+.bk-close:hover{background:var(--surface-2,rgba(0,0,0,.05))}
+.bk-list{overflow-y:auto;flex:1;padding:10px 14px 24px}
+.bk-empty{text-align:center;padding:36px 20px;color:var(--text-muted);font-size:.95em;line-height:1.7}
+.bk-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;margin-bottom:8px;background:var(--surface-2,rgba(0,0,0,.04));border:1px solid var(--border);transition:background .18s;cursor:pointer}
+.bk-item:hover{background:var(--surface-3,rgba(99,102,241,.06))}
+.bk-thumb{width:68px;height:51px;border-radius:8px;object-fit:cover;flex-shrink:0}
+.bk-thumb-ph{width:68px;height:51px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(139,92,246,.15));display:flex;align-items:center;justify-content:center;font-size:1.4em}
+.bk-body{flex:1;min-width:0;text-decoration:none;color:inherit}
+.bk-title{font-size:.84em;font-weight:700;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:3px;color:var(--text)}
+.bk-meta{font-size:.72em;color:var(--text-muted)}
+.bk-del{background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:1em;padding:7px;border-radius:8px;flex-shrink:0;line-height:1;font-family:inherit;transition:background .18s,color .18s}
+.bk-del:hover{background:rgba(239,68,68,.1);color:#ef4444}
+/* Article page save + like buttons */
+.art-save{background:#94a3b8 !important}
+.art-save.saved{background:var(--accent) !important;animation:bkPop .28s ease}
+.art-like{background:#94a3b8 !important}
+.art-like.liked{background:#ef4444 !important;animation:bkPop .28s ease}
+@keyframes bkPop{0%{transform:scale(1)}50%{transform:scale(1.28)}100%{transform:scale(1)}}
 /* ====== SOURCE FILTER STRIP ====== */
 .src-strip{margin:0 0 18px}
 .src-chips{
@@ -2945,6 +3002,122 @@ function initSideSubnav() {
   }, true);
 }
 
+/* ========== BOOKMARKS ========== */
+function initBookmarks() {
+  var BK_KEY = 'atlas_bk', LK_KEY = 'atlas_lk';
+  /* ── Storage helpers ── */
+  function getBK(){try{return JSON.parse(localStorage.getItem(BK_KEY)||'[]');}catch(e){return[];}}
+  function getLK(){try{return JSON.parse(localStorage.getItem(LK_KEY)||'{}');}catch(e){return {};}}
+  function saveBK(l){localStorage.setItem(BK_KEY,JSON.stringify(l));}
+  function saveLK(o){localStorage.setItem(LK_KEY,JSON.stringify(o));}
+  function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  /* ── Badge ── */
+  function updateBadge(){
+    var badge=document.getElementById('bn-bk-badge');
+    if(!badge) return;
+    var n=getBK().length;
+    badge.textContent=n>99?'99+':String(n);
+    badge.classList.toggle('show',n>0);
+  }
+
+  /* ── Drawer ── */
+  var drawer=document.getElementById('bk-drawer');
+  var bkList=document.getElementById('bk-list');
+  var bkCount=document.getElementById('bk-hdr-count');
+  function openDrawer(){
+    if(!drawer) return;
+    renderList();
+    drawer.classList.add('open');
+    drawer.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+  }
+  function closeDrawer(){
+    if(!drawer) return;
+    drawer.classList.remove('open');
+    drawer.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+  }
+  function renderList(){
+    if(!bkList) return;
+    var list=getBK();
+    if(bkCount) bkCount.textContent=list.length;
+    if(!list.length){
+      bkList.innerHTML='<div class="bk-empty">'+escH(bkList.getAttribute('data-empty')||'No saved articles')+'</div>';
+      return;
+    }
+    bkList.innerHTML=list.map(function(item){
+      var thumb=item.img
+        ?'<img class="bk-thumb" src="'+escH(item.img)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">'
+        :'<div class="bk-thumb-ph">📰</div>';
+      return '<div class="bk-item">'
+        +'<a href="'+escH(item.url)+'" class="bk-body" style="display:flex;gap:10px;flex:1;text-decoration:none;align-items:center">'
+        +thumb
+        +'<div style="flex:1;min-width:0"><div class="bk-title">'+escH(item.title)+'</div>'
+        +'<div class="bk-meta">'+escH(item.src)+' · '+escH(item.date)+'</div></div>'
+        +'</a>'
+        +'<button class="bk-del" data-id="'+escH(item.id)+'" title="Remove">🗑</button>'
+        +'</div>';
+    }).join('');
+    bkList.querySelectorAll('.bk-del').forEach(function(btn){
+      btn.addEventListener('click',function(e){
+        e.stopPropagation();
+        var id=btn.getAttribute('data-id');
+        saveBK(getBK().filter(function(i){return i.id!==id;}));
+        updateBadge(); renderList();
+        var sb=document.getElementById('art-save-btn');
+        if(sb&&sb.getAttribute('data-id')===id) sb.classList.remove('saved');
+      });
+    });
+  }
+
+  /* Close on overlay / button */
+  var ov=document.getElementById('bk-overlay');
+  if(ov) ov.addEventListener('click',closeDrawer);
+  var cb=document.getElementById('bk-close');
+  if(cb) cb.addEventListener('click',closeDrawer);
+
+  /* Bottom nav bookmark item → open drawer */
+  var bnBk=document.querySelector('.bn-item[data-slug="bookmarks"]');
+  if(bnBk) bnBk.addEventListener('click',function(e){e.preventDefault();openDrawer();});
+
+  /* ── Save button (article pages) ── */
+  var saveBtn=document.getElementById('art-save-btn');
+  if(saveBtn){
+    var artId=saveBtn.getAttribute('data-id');
+    if(getBK().some(function(i){return i.id===artId;})) saveBtn.classList.add('saved');
+    saveBtn.addEventListener('click',function(){
+      var list=getBK();
+      var idx=-1;
+      for(var k=0;k<list.length;k++){if(list[k].id===artId){idx=k;break;}}
+      if(idx>=0){list.splice(idx,1);saveBtn.classList.remove('saved');}
+      else{
+        list.unshift({id:artId,url:saveBtn.getAttribute('data-url'),
+          title:saveBtn.getAttribute('data-title'),img:saveBtn.getAttribute('data-img'),
+          src:saveBtn.getAttribute('data-src'),date:saveBtn.getAttribute('data-date'),
+          lang:saveBtn.getAttribute('data-lang')});
+        saveBtn.classList.add('saved');
+      }
+      saveBK(list); updateBadge();
+    });
+  }
+
+  /* ── Like button (article pages) ── */
+  var likeBtn=document.getElementById('art-like-btn');
+  if(likeBtn){
+    var likeUrl=likeBtn.getAttribute('data-url');
+    if(getLK()[likeUrl]) likeBtn.classList.add('liked');
+    likeBtn.addEventListener('click',function(){
+      var lk=getLK();
+      if(lk[likeUrl]){delete lk[likeUrl];likeBtn.classList.remove('liked');}
+      else{lk[likeUrl]=true;likeBtn.classList.add('liked');}
+      saveLK(lk);
+    });
+  }
+
+  updateBadge();
+}
+
 /* ========== INIT ========== */
 /* ========== BOTTOM NAV ========== */
 function initBottomNav() {
@@ -3003,6 +3176,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLangDrop();
   initBottomNav();
   initSideSubnav();
+  initBookmarks();
   initWeatherWidget();
   initPrayerWidget();
   // Register Service Worker for PWA offline support
@@ -6541,6 +6715,11 @@ def _article_page_html(
     _tg  = ("https://t.me/share/url?url=" + _up.quote(_share_page, safe="")
             + "&text=" + _up.quote(title_raw, safe=""))
     _fb  = "https://www.facebook.com/sharer/sharer.php?u=" + _up.quote(_share_page, safe="")
+    # ── Save / Like buttons ───────────────────────────────────────────────────
+    _art_id   = hashlib.md5(ext_url.encode("utf-8")).hexdigest()[:12]
+    _bk       = _BK_LABELS.get(lang, _BK_LABELS["en"])
+    _save_lbl = esc(_bk["save"])
+    _like_lbl = esc(_bk["like"])
     share_row = (
         f'<div class="art-share-row">'
         f'<a href="{esc(_wa)}" class="share-btn share-wa" target="_blank" rel="noopener noreferrer" title="WhatsApp">W</a>'
@@ -6548,6 +6727,13 @@ def _article_page_html(
         f'<a href="{esc(_x)}" class="share-btn share-x" target="_blank" rel="noopener noreferrer" title="X">𝕏</a>'
         f'<a href="{esc(_tg)}" class="share-btn share-tg" target="_blank" rel="noopener noreferrer" title="Telegram">✈</a>'
         f'<button class="share-btn share-copy" data-copy="{esc(_share_page)}" title="Copy link">⧉</button>'
+        f'<button class="share-btn art-save" id="art-save-btn" title="{_save_lbl}"'
+        f' data-id="{_art_id}" data-url="{esc(_share_page)}"'
+        f' data-title="{esc(title_raw)}" data-img="{esc(image_url or "")}"'
+        f' data-src="{esc(SOURCE_AR_NAME.get(source_raw, source_raw))}"'
+        f' data-date="{esc(date_str)}" data-lang="{lang}">🔖</button>'
+        f'<button class="share-btn art-like" id="art-like-btn" title="{_like_lbl}"'
+        f' data-url="{esc(_share_page)}">❤️</button>'
         f'</div>'
     )
 
@@ -6915,6 +7101,19 @@ def _page(*, title: str, desc: str, nav_html: str,
       </div>
     </div>
   </div>
+  <!-- ── Bookmarks Drawer ── -->
+  {(lambda bk: f"""<div class="bk-drawer" id="bk-drawer" aria-hidden="true">
+    <div class="bk-overlay" id="bk-overlay"></div>
+    <div class="bk-panel" role="dialog" aria-modal="true" aria-label="{esc(bk['title'])}">
+      <div class="bk-drag"></div>
+      <div class="bk-panel-hdr">
+        <span class="bk-hdr-title">{esc(bk['title'])}</span>
+        <span class="bk-hdr-count" id="bk-hdr-count">0</span>
+        <button class="bk-close" id="bk-close" aria-label="close">✕</button>
+      </div>
+      <div class="bk-list" id="bk-list" data-empty="{esc(bk['empty'])}"></div>
+    </div>
+  </div>""")(_BK_LABELS.get(s.get("lang","ar"), _BK_LABELS["ar"]))}
   {_bottom_nav(s, bn_active)}
   <script src="app.js?v={_APP_VER}"></script>
 </body>
