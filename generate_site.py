@@ -2409,17 +2409,11 @@ body.lang-ltr .nh-text{direction:ltr}
   /* Push content above bottom nav */
   .main-wrapper{padding-bottom:calc(58px + 10px)}
   .site-footer{padding-bottom:calc(58px + 4px)}
-  /* ── Mobile list layout ─────────────────────────────────────────── */
-  .articles-grid{grid-template-columns:1fr;gap:0}
-  .article-card{border-radius:0;box-shadow:none;animation:cardIn .22s ease both;border-left:none;border-right:none;border-top:none}
-  .article-card:first-child{border-top:1px solid var(--border)}
-  .card-link{display:flex;flex-direction:row;align-items:center;gap:12px;padding:11px 14px}
-  .card-bg{width:88px;height:66px;flex-shrink:0;border-radius:8px;aspect-ratio:unset}
-  .card-body{padding:0;flex:1;min-width:0;gap:3px}
-  .card-title{font-size:.88em;-webkit-line-clamp:2}
-  .card-meta{flex-wrap:nowrap;gap:6px}
-  .card-source{max-width:110px}
-  .category-section{margin-bottom:10px}
+  /* ── Mobile card layout: full grid squares (image on top, title below).
+     Only reduce gap here — grid columns are set by ≤900px block (2fr)
+     and ≤480px block (1fr); don't override those later-specificity rules. ── */
+  .articles-grid{gap:12px}
+  .category-section{margin-bottom:16px}
 }
 @supports(padding-bottom:env(safe-area-inset-bottom)){
   @media(max-width:768px){
