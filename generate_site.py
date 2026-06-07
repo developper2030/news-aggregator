@@ -398,6 +398,26 @@ _WC_ROUNDS: dict[str, dict[str, str]] = {
 }
 
 
+_WC_FLAG: dict[str, str] = {
+    "Mexico":"🇲🇽","United States":"🇺🇸","Canada":"🇨🇦","Morocco":"🇲🇦",
+    "Argentina":"🇦🇷","Brazil":"🇧🇷","France":"🇫🇷","Spain":"🇪🇸",
+    "Germany":"🇩🇪","England":"🏴󠁧󠁢󠁥󠁮󠁧󠁿","Portugal":"🇵🇹","Netherlands":"🇳🇱",
+    "Italy":"🇮🇹","Belgium":"🇧🇪","Croatia":"🇭🇷","Japan":"🇯🇵",
+    "South Korea":"🇰🇷","Senegal":"🇸🇳","Tunisia":"🇹🇳","Algeria":"🇩🇿",
+    "Egypt":"🇪🇬","Saudi Arabia":"🇸🇦","Australia":"🇦🇺","South Africa":"🇿🇦",
+    "Czech Republic":"🇨🇿","Ghana":"🇬🇭","Nigeria":"🇳🇬","Cameroon":"🇨🇲",
+    "Uruguay":"🇺🇾","Colombia":"🇨🇴","Iran":"🇮🇷","Poland":"🇵🇱",
+    "Switzerland":"🇨🇭","Ecuador":"🇪🇨","Qatar":"🇶🇦","Denmark":"🇩🇰",
+    "Turkey":"🇹🇷","Ukraine":"🇺🇦","Austria":"🇦🇹","Sweden":"🇸🇪",
+    "Serbia":"🇷🇸","Chile":"🇨🇱","Peru":"🇵🇪","Panama":"🇵🇦",
+    "Costa Rica":"🇨🇷","Honduras":"🇭🇳","Jamaica":"🇯🇲","New Zealand":"🇳🇿",
+    "China":"🇨🇳","Iraq":"🇮🇶","Uzbekistan":"🇺🇿","Indonesia":"🇮🇩",
+    "DR Congo":"🇨🇩","Mali":"🇲🇱","Kenya":"🇰🇪","Venezuela":"🇻🇪",
+    "Bolivia":"🇧🇴","Paraguay":"🇵🇾","Guatemala":"🇬🇹","El Salvador":"🇸🇻",
+    "Cuba":"🇨🇺","Haiti":"🇭🇹","Scotland":"🏴󠁧󠁢󠁳󠁣󠁴󠁿","Wales":"🏴󠁧󠁢󠁷󠁬󠁳󠁿",
+}
+
+
 def _wc_team(name: str, lang: str) -> str:
     """Translate a team name; fall back to the English name. Handles knockout
     placeholder codes (e.g. '2A', 'W73') by returning them as-is."""
@@ -1370,6 +1390,135 @@ def _bottom_nav(s: dict, active: str = "home") -> str:
     )
 
 
+# ──────────────────────────────────────────────────────────────────────────────
+# HOME-PAGE WIDGET COLUMN
+# ──────────────────────────────────────────────────────────────────────────────
+
+_GAMES_DATA = [
+    {"emoji": "🔢", "name": "2048",   "url": "https://play2048.co/"},
+    {"emoji": "📝", "name": "Wordle", "url": "https://www.nytimes.com/games/wordle/index.html"},
+    {"emoji": "♟️", "name": "Chess",  "url": "https://www.chess.com/play/online"},
+    {"emoji": "🎯", "name": "Sudoku", "url": "https://sudoku.com/"},
+    {"emoji": "🐍", "name": "Snake",  "url": "https://playsnake.org/"},
+    {"emoji": "🧩", "name": "Tetris", "url": "https://tetris.com/play-tetris"},
+]
+
+_WT = {
+    "ar": {"title": "حالة الطقس",   "loading": "جاري التحميل...", "games": "الألعاب"},
+    "en": {"title": "Weather",       "loading": "Loading...",       "games": "Games"},
+    "fr": {"title": "Météo",         "loading": "Chargement...",    "games": "Jeux"},
+    "es": {"title": "El Tiempo",     "loading": "Cargando...",      "games": "Juegos"},
+    "tr": {"title": "Hava Durumu",   "loading": "Yükleniyor...",    "games": "Oyunlar"},
+}
+
+_WC_SEE_ALL = {
+    "ar": "الجدول الكامل", "en": "Full Schedule", "fr": "Calendrier",
+    "es": "Calendario",    "tr": "Tam Program",
+}
+_WC_GRP_WORD = {
+    "ar": "المجموعة", "en": "Group", "fr": "Groupe", "es": "Grupo", "tr": "Grup",
+}
+
+
+def _weather_widget(s: dict, lang: str) -> str:
+    """Weather skeleton — filled live by initWeatherWidget() JS."""
+    wt = _WT.get(lang, _WT["en"])
+    return (
+        f'<div class="widget-card weather-card" id="weather-widget" data-lang="{lang}">'
+        f'<div class="widget-hdr weather-hdr">'
+        f'<span class="wh-icon">🌤</span>'
+        f'<span class="widget-hdr-title">{esc(wt["title"])}</span>'
+        f'<span class="wt-city" id="wt-city">···</span>'
+        f'</div>'
+        f'<div class="wt-body" id="wt-body">'
+        f'<div class="wt-loading">{esc(wt["loading"])}</div>'
+        f'</div>'
+        f'</div>'
+    )
+
+
+def _worldcup_widget(data: dict, s: dict, lang: str) -> str:
+    """World Cup: next 3 upcoming matches, with flags."""
+    matches = data.get("matches", [])
+    if not matches:
+        return ""
+    from datetime import date as _date
+    today = _date.today().isoformat()
+    upcoming = [m for m in matches if m.get("date", "") >= today][:3]
+    if not upcoming:
+        upcoming = matches[:3]
+
+    grp_word = _WC_GRP_WORD.get(lang, "Group")
+    see_all  = _WC_SEE_ALL.get(lang, "Full Schedule")
+    wc_title = s.get("wc_title", "World Cup 2026")
+
+    rows = ""
+    for m in upcoming:
+        t1e, t2e = m.get("team1", ""), m.get("team2", "")
+        t1  = esc(_wc_team(t1e, lang))
+        t2  = esc(_wc_team(t2e, lang))
+        f1  = _WC_FLAG.get(t1e, "🏳")
+        f2  = _WC_FLAG.get(t2e, "🏳")
+        dt  = esc(m.get("date", ""))
+        tm  = esc((m.get("time", "") or "").split()[0])
+        grp = m.get("group", "")
+        lbl = esc(grp.replace("Group", grp_word).strip()) if grp else esc(_wc_round(m.get("round", ""), lang))
+        rows += (
+            f'<div class="ww-match">'
+            f'<div class="ww-badge">{lbl}</div>'
+            f'<div class="ww-teams">'
+            f'<div class="ww-team"><span class="ww-flag">{f1}</span><span class="ww-name">{t1}</span></div>'
+            f'<div class="ww-vs">⚽</div>'
+            f'<div class="ww-team ww-team-r"><span class="ww-name">{t2}</span><span class="ww-flag">{f2}</span></div>'
+            f'</div>'
+            f'<div class="ww-info">📅 {dt} · ⏰ {tm}</div>'
+            f'</div>'
+        )
+
+    return (
+        f'<div class="widget-card ww-card">'
+        f'<div class="widget-hdr ww-hdr">'
+        f'<span class="wh-icon">🏆</span>'
+        f'<span class="widget-hdr-title">{esc(wc_title)}</span>'
+        f'<a href="worldcup.html" class="widget-hdr-link">{esc(see_all)} ›</a>'
+        f'</div>'
+        f'<div class="ww-list">{rows}</div>'
+        f'</div>'
+    )
+
+
+def _games_widget(lang: str) -> str:
+    """Static games widget — 6 popular browser games."""
+    wt    = _WT.get(lang, _WT["en"])
+    items = "".join(
+        f'<a href="{g["url"]}" target="_blank" rel="noopener noreferrer" class="gm-item">'
+        f'<span class="gm-emoji">{g["emoji"]}</span>'
+        f'<span class="gm-name">{g["name"]}</span>'
+        f'</a>'
+        for g in _GAMES_DATA
+    )
+    return (
+        f'<div class="widget-card games-card">'
+        f'<div class="widget-hdr games-hdr">'
+        f'<span class="wh-icon">🎮</span>'
+        f'<span class="widget-hdr-title">{esc(wt["games"])}</span>'
+        f'</div>'
+        f'<div class="gm-grid">{items}</div>'
+        f'</div>'
+    )
+
+
+def _widget_col(s: dict, lang: str, worldcup_data: dict) -> str:
+    """Full widget column: weather + worldcup + games."""
+    return (
+        f'<div class="widget-col">'
+        f'{_weather_widget(s, lang)}'
+        f'{_worldcup_widget(worldcup_data, s, lang)}'
+        f'{_games_widget(lang)}'
+        f'</div>'
+    )
+
+
 def _prices_main_html(market_data: dict,
                       pairs: list[tuple[str, str]] = None,
                       s: dict = None) -> str:
@@ -1792,33 +1941,88 @@ body.lang-rtl .more-btn:hover{transform:translateX(4px)}
 .footer-bottom p+p{margin-top:4px}
 
 /* ===================== NEWS HERO CAROUSEL ===================== */
-.news-hero{max-width:960px;margin:0 auto 36px;background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.1);border:1px solid var(--border)}
-.nh-header{padding:10px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center}
-.nh-label{font-size:.72em;font-weight:800;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase}
-.nh-main{position:relative;overflow:hidden;background:#111;aspect-ratio:16/9;border-radius:0 0 var(--radius) var(--radius)}
+.news-hero{max-width:600px;margin:0 auto 28px;background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.1);border:1px solid var(--border)}
+.nh-header{padding:10px 16px;border-bottom:2px solid var(--border);display:flex;align-items:center;background:linear-gradient(90deg,rgba(99,102,241,.07),transparent)}
+.nh-label{font-size:.95em;font-weight:900;color:var(--accent);letter-spacing:.5px;text-transform:none}
+.nh-main{position:relative;overflow:hidden;background:#111;aspect-ratio:2/1}
 .nh-slides{position:absolute;inset:0}
 .nh-slide{position:absolute;inset:0;opacity:0;transition:opacity .55s ease;pointer-events:none;will-change:opacity}
 .nh-slide.active{opacity:1;pointer-events:auto;z-index:2}
 .nh-slide a{display:block;width:100%;height:100%;color:inherit;text-decoration:none;position:relative}
-.nh-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 8s ease}
+.nh-img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;transition:transform 8s ease}
 .nh-slide.active .nh-img{transform:scale(1.04)}
-.nh-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9) 0%,rgba(0,0,0,.3) 50%,transparent 100%);pointer-events:none}
-.nh-text{position:absolute;bottom:0;left:0;right:0;padding:44px 20px 18px;direction:rtl}
-.nh-badge{display:inline-block;font-size:.7em;font-weight:800;color:#fff;padding:3px 11px;border-radius:12px;margin-bottom:8px;line-height:1.5}
-.nh-title{font-size:1.18em;font-weight:900;color:#fff;line-height:1.6;text-shadow:0 2px 12px rgba(0,0,0,.5);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:6px}
-.nh-meta{font-size:.75em;color:rgba(255,255,255,.65);display:flex;gap:10px}
-.nh-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:20;background:rgba(255,255,255,.13);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1.5px solid rgba(255,255,255,.25);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:1.3em;transition:all .2s;padding:0;line-height:1}
-.nh-nav:hover{background:rgba(255,255,255,.32);border-color:rgba(255,255,255,.6);transform:translateY(-50%) scale(1.08)}
-.nh-prev{right:14px}
-.nh-next{left:14px}
-.nh-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:20}
-.nh-dot{width:7px;height:7px;border-radius:4px;background:rgba(255,255,255,.35);cursor:pointer;transition:all .3s;border:none;padding:0}
-.nh-dot.active{width:24px;background:#fff}
+.nh-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.88) 0%,rgba(0,0,0,.2) 55%,transparent 100%);pointer-events:none}
+.nh-text{position:absolute;bottom:0;left:0;right:0;padding:32px 16px 14px;direction:rtl}
+.nh-badge{display:inline-block;font-size:.68em;font-weight:800;color:#fff;padding:2px 10px;border-radius:10px;margin-bottom:6px;line-height:1.5}
+.nh-title{font-size:1em;font-weight:900;color:#fff;line-height:1.55;text-shadow:0 2px 10px rgba(0,0,0,.6);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:4px}
+.nh-meta{font-size:.7em;color:rgba(255,255,255,.65);display:flex;gap:8px}
+.nh-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:20;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1.5px solid rgba(255,255,255,.3);color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:1.1em;transition:all .2s;padding:0;line-height:1}
+.nh-nav:hover{background:rgba(255,255,255,.35);border-color:rgba(255,255,255,.7);transform:translateY(-50%) scale(1.08)}
+.nh-prev{right:10px}
+.nh-next{left:10px}
+.nh-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:4px;z-index:20}
+.nh-dot{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.4);cursor:pointer;transition:all .3s;border:none;padding:0}
+.nh-dot.active{width:20px;background:#fff}
 .nh-bar{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(0,0,0,.2);z-index:20}
 .nh-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),#a855f7);width:0}
-@media(max-width:640px){.nh-title{font-size:1em}}
-.dark-mode .nh-nav{background:rgba(0,0,0,.4);border-color:rgba(255,255,255,.15)}
-.dark-mode .nh-nav:hover{background:rgba(0,0,0,.65)}
+@media(max-width:640px){.news-hero{max-width:100%}.nh-title{font-size:.92em}}
+.dark-mode .nh-nav{background:rgba(0,0,0,.45);border-color:rgba(255,255,255,.18)}
+.dark-mode .nh-nav:hover{background:rgba(0,0,0,.7)}
+
+/* ===================== HERO + WIDGET ROW ===================== */
+.hero-widget-row{display:grid;grid-template-columns:1fr 330px;gap:22px;align-items:start;max-width:1200px;margin:0 auto 28px;padding:0 20px}
+.hero-widget-row .news-hero{max-width:100%;margin:0}
+@media(max-width:980px){.hero-widget-row{grid-template-columns:1fr;padding:0 12px}}
+/* WIDGET COLUMN */
+.widget-col{display:flex;flex-direction:column;gap:12px}
+.widget-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:0 2px 14px rgba(0,0,0,.06);overflow:hidden}
+.widget-hdr{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--border);background:linear-gradient(90deg,rgba(99,102,241,.06),transparent)}
+.wh-icon{font-size:1.1em;flex-shrink:0}
+.widget-hdr-title{font-weight:800;font-size:.88em;color:var(--text);flex:1;letter-spacing:.2px}
+.widget-hdr-link{font-size:.75em;color:var(--accent);text-decoration:none;white-space:nowrap;font-weight:700;opacity:.85}
+.widget-hdr-link:hover{opacity:1;text-decoration:underline}
+/* ---- WEATHER ---- */
+.weather-hdr{background:linear-gradient(90deg,rgba(14,165,233,.1),transparent)}
+.wt-city{font-size:.73em;color:var(--muted,#64748b);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px}
+.wt-body{padding:10px 14px 12px;min-height:88px}
+.wt-loading{color:var(--muted,#64748b);font-size:.82em;text-align:center;padding:22px 0;opacity:.7}
+.wt-main{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.wt-icon{font-size:2.5em;line-height:1;flex-shrink:0}
+.wt-temp{font-size:2em;font-weight:900;color:var(--text);line-height:1}
+.wt-meta{display:flex;flex-direction:column;gap:2px}
+.wt-desc{font-size:.78em;color:var(--muted,#64748b);font-weight:600;text-transform:capitalize}
+.wt-details{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.wt-detail{font-size:.72em;color:var(--muted,#64748b);background:rgba(99,102,241,.07);border-radius:6px;padding:3px 8px;font-weight:700;white-space:nowrap}
+.wt-forecast{display:flex;gap:5px;margin-top:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.wt-forecast::-webkit-scrollbar{display:none}
+.wt-fc-item{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:44px;padding:5px 4px;background:rgba(99,102,241,.05);border-radius:8px;font-size:.7em;flex-shrink:0}
+.wt-fc-time{color:var(--muted,#64748b);font-weight:700}
+.wt-fc-icon{font-size:1.25em;line-height:1}
+.wt-fc-temp{font-weight:900;color:var(--text)}
+/* ---- WORLD CUP ---- */
+.ww-hdr{background:linear-gradient(90deg,rgba(234,179,8,.1),transparent)}
+.ww-list{padding:4px 0}
+.ww-match{padding:8px 14px;border-bottom:1px solid var(--border)}
+.ww-match:last-child{border-bottom:none}
+.ww-badge{display:inline-block;font-size:.67em;font-weight:800;color:#fff;background:var(--accent);border-radius:20px;padding:2px 8px;margin-bottom:5px;letter-spacing:.3px}
+.ww-teams{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.ww-team{display:flex;align-items:center;gap:4px;flex:1;overflow:hidden}
+.ww-team-r{justify-content:flex-end;text-align:end}
+.ww-flag{font-size:1.25em;line-height:1;flex-shrink:0}
+.ww-name{font-size:.78em;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ww-vs{font-size:.9em;flex-shrink:0;opacity:.5}
+.ww-info{font-size:.69em;color:var(--muted,#64748b);font-weight:600}
+/* ---- GAMES ---- */
+.games-hdr{background:linear-gradient(90deg,rgba(168,85,247,.1),transparent)}
+.gm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.gm-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;background:var(--surface);text-decoration:none;transition:background .15s,transform .12s;cursor:pointer}
+.gm-item:hover{background:rgba(99,102,241,.08);transform:scale(1.05)}
+.gm-emoji{font-size:1.55em;line-height:1}
+.gm-name{font-size:.71em;font-weight:700;color:var(--text);text-align:center}
+/* dark mode */
+.dark-mode .widget-card{box-shadow:0 2px 14px rgba(0,0,0,.28)}
+.dark-mode .wt-detail{background:rgba(99,102,241,.12)}
+.dark-mode .wt-fc-item{background:rgba(99,102,241,.09)}
 
 /* ===================== ECONOMY TABS WIDGET ===================== */
 .econ-widget{background:linear-gradient(90deg,#059669,#0d9488);border-bottom:2px solid rgba(0,0,0,.12);color:#fff}
@@ -2535,6 +2739,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSearch();
   initLangDrop();
   initBottomNav();
+  initWeatherWidget();
   // Register Service Worker for PWA offline support
   // reg.update() forces an immediate sw.js freshness check on every page load,
   // so Chrome picks up the new SW (and its purged cache) without waiting 24h.
@@ -2696,6 +2901,116 @@ function initSourceFilter() {
     run();
   }
 })();
+
+/* ========== WEATHER WIDGET ========== */
+function initWeatherWidget() {
+  var card = document.getElementById('weather-widget');
+  if (!card) return;
+  var lang = card.getAttribute('data-lang') || 'ar';
+  var body = document.getElementById('wt-body');
+  var cityEl = document.getElementById('wt-city');
+
+  var WMO = {
+    0:'☀️',1:'🌤',2:'⛅',3:'☁️',
+    45:'🌫',48:'🌫',
+    51:'🌦',53:'🌦',55:'🌧',
+    61:'🌧',63:'🌧',65:'🌧',
+    71:'❄️',73:'❄️',75:'❄️',
+    80:'🌦',81:'🌧',82:'⛈',
+    95:'⛈',96:'⛈',99:'⛈'
+  };
+  var DESC = {
+    0:{ar:'صافٍ',en:'Clear',fr:'Ensoleillé',es:'Despejado',tr:'Açık'},
+    1:{ar:'غائم جزئياً',en:'Partly Cloudy',fr:'Peu Nuageux',es:'Parcialmente Nublado',tr:'Az Bulutlu'},
+    2:{ar:'غائم',en:'Cloudy',fr:'Nuageux',es:'Nublado',tr:'Bulutlu'},
+    3:{ar:'ملبّد بالغيوم',en:'Overcast',fr:'Couvert',es:'Cubierto',tr:'Kapalı'},
+    45:{ar:'ضبابي',en:'Foggy',fr:'Brumeux',es:'Brumoso',tr:'Sisli'},
+    51:{ar:'رذاذ خفيف',en:'Light Drizzle',fr:'Bruine Légère',es:'Llovizna Leve',tr:'Hafif Çiseleme'},
+    61:{ar:'مطر خفيف',en:'Light Rain',fr:'Pluie Légère',es:'Lluvia Leve',tr:'Hafif Yağmur'},
+    63:{ar:'مطر متوسط',en:'Moderate Rain',fr:'Pluie Modérée',es:'Lluvia Moderada',tr:'Orta Yağmur'},
+    65:{ar:'مطر غزير',en:'Heavy Rain',fr:'Pluie Forte',es:'Lluvia Fuerte',tr:'Yoğun Yağmur'},
+    71:{ar:'ثلج خفيف',en:'Light Snow',fr:'Neige Légère',es:'Nieve Leve',tr:'Hafif Kar'},
+    80:{ar:'زخات مطر',en:'Showers',fr:'Averses',es:'Aguaceros',tr:'Sağanak'},
+    95:{ar:'عاصفة رعدية',en:'Thunderstorm',fr:'Orage',es:'Tormenta',tr:'Fırtına'}
+  };
+
+  function wmoIcon(c){return WMO[c]||WMO[Math.floor(c/10)*10]||'🌡';}
+  function wmoDesc(c){var d=DESC[c]||DESC[Math.floor(c/10)*10];return d?(d[lang]||d['en']):'--';}
+
+  function render(data, city) {
+    var cur = data.current;
+    var temp = Math.round(cur.temperature_2m);
+    var code = cur.weather_code;
+    var hum  = Math.round(cur.relative_humidity_2m || 0);
+    var wind = Math.round(cur.wind_speed_10m || 0);
+    var dirLbl = {ar:'ريح',en:'Wind',fr:'Vent',es:'Viento',tr:'Rüzgar'}[lang]||'Wind';
+    var humLbl = {ar:'رطوبة',en:'Humidity',fr:'Humidité',es:'Humedad',tr:'Nem'}[lang]||'Humidity';
+
+    // Hourly forecast — next 4 steps (3-hourly: pick 0,3,6,9)
+    var hours   = data.hourly.time.slice(0, 12);
+    var hourWMO = data.hourly.weather_code.slice(0, 12);
+    var hourTmp = data.hourly.temperature_2m.slice(0, 12);
+    var fcHtml  = '';
+    var picked  = [0,3,6,9];
+    picked.forEach(function(i){
+      if(!hours[i]) return;
+      var hm = hours[i].slice(11,16);
+      fcHtml += '<div class="wt-fc-item">'
+              + '<span class="wt-fc-time">'+hm+'</span>'
+              + '<span class="wt-fc-icon">'+wmoIcon(hourWMO[i])+'</span>'
+              + '<span class="wt-fc-temp">'+Math.round(hourTmp[i])+'°</span>'
+              + '</div>';
+    });
+
+    if(city) cityEl.textContent = city;
+    body.innerHTML =
+      '<div class="wt-main">'
+        +'<span class="wt-icon">'+wmoIcon(code)+'</span>'
+        +'<span class="wt-temp">'+temp+'°C</span>'
+        +'<div class="wt-meta"><span class="wt-desc">'+wmoDesc(code)+'</span>'
+        +'<div class="wt-details">'
+        +'<span class="wt-detail">💧'+hum+'%</span>'
+        +'<span class="wt-detail">💨'+wind+'km/h</span>'
+        +'</div></div>'
+      +'</div>'
+      +(fcHtml?'<div class="wt-forecast">'+fcHtml+'</div>':'');
+  }
+
+  function fetchWeather(lat, lon, city) {
+    var url = 'https://api.open-meteo.com/v1/forecast'
+      + '?latitude='+lat+'&longitude='+lon
+      + '&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m'
+      + '&hourly=temperature_2m,weather_code'
+      + '&forecast_days=1&wind_speed_unit=kmh&timezone=auto';
+    fetch(url)
+      .then(function(r){return r.json();})
+      .then(function(d){render(d, city);})
+      .catch(function(){
+        body.innerHTML='<div class="wt-loading">--</div>';
+      });
+  }
+
+  // Try geolocation, fall back to cached coords or Casablanca
+  function tryGeo() {
+    if (!navigator.geolocation) { fetchWeather(33.57,  -7.59, 'Casablanca'); return; }
+    navigator.geolocation.getCurrentPosition(
+      function(pos){
+        var lat=pos.coords.latitude, lon=pos.coords.longitude;
+        // Reverse-geocode via Open-Meteo's geocoding (no key needed)
+        fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat='+lat+'&lon='+lon)
+          .then(function(r){return r.json();})
+          .then(function(d){
+            var city = (d.address&&(d.address.city||d.address.town||d.address.village||d.address.county))||'';
+            fetchWeather(lat, lon, city);
+          })
+          .catch(function(){fetchWeather(lat,lon,'');});
+      },
+      function(){ fetchWeather(33.57,-7.59,'Casablanca'); },
+      {timeout:6000}
+    );
+  }
+  tryGeo();
+}
 
 /* Share copy-link handler kept for article pages only */
 document.addEventListener('click', function(e) {
@@ -5202,7 +5517,8 @@ def _gather_carousel(
 
 
 def _carousel(articles: list[dict], max_items: int = 12, s: dict = STRINGS["ar"],
-              site_url: str = "", media_slugs: set | None = None) -> str:
+              site_url: str = "", media_slugs: set | None = None,
+              extra_class: str = "") -> str:
     """Hero + sidebar carousel (Hespress/MSN style).
 
     Main panel: one large slide at a time, auto-advances every 5.5 s,
@@ -5258,7 +5574,7 @@ def _carousel(articles: list[dict], max_items: int = 12, s: dict = STRINGS["ar"]
         )
 
     return (
-        f'<div class="news-hero" aria-label="{esc(s["highlights"])}">'
+        f'<div class="news-hero{(" " + extra_class) if extra_class else ""}" aria-label="{esc(s["highlights"])}">'
         f'<div class="nh-header"><div class="nh-label">⭐ {esc(s["highlights"])}</div></div>'
         f'<div class="nh-main">'
         f'<div class="nh-bar"><div class="nh-bar-fill"></div></div>'
@@ -5975,6 +6291,7 @@ def _page(*, title: str, desc: str, nav_html: str,
           ga_id: str = "",
           lcp_image_url: str = "",
           bn_active: str = "home",
+          widget_col_html: str = "",
           s: dict) -> str:
     # ── JSON-LD: WebSite ──────────────────────────────────────────────────────
     sd = json.dumps({
@@ -6074,7 +6391,7 @@ def _page(*, title: str, desc: str, nav_html: str,
     {ticker_html}
   </div>
   <div class="main-wrapper">
-    {carousel_html}
+    {('<div class="hero-widget-row">' + carousel_html + widget_col_html + '</div>') if (carousel_html and widget_col_html) else carousel_html}
     <main class="content-area" role="main">
       <h1 class="sr-only">{esc(title)}</h1>
       {main_html}
@@ -6787,6 +7104,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         main_html=home_sections,
         world_subnav_html=world_subnav,
         carousel_html=home_carousel,
+        widget_col_html=_widget_col(s, lang, _worldcup_data),
         canonical=_page_canonical("index.html"),
         hreflang_html=_make_hreflang("index.html"),
         og_image_url=_og_img_url,
