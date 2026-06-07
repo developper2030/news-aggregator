@@ -1471,13 +1471,17 @@ _REGION_SLUG_SET: frozenset[str] = frozenset({
     "europe","eastern-europe","russia-ukraine",
     "africa",
     # English regions
-    "n-africa-en","europe-en","asia-en","africa-en","americas-en","mideast-en","uk-en","us-en",
+    "uk-en","us-en","n-africa-en","mideast-en","asia-en","africa-en","americas-en","europe-en",
+    "china-en","australia-en","south-america-en","eastern-europe-en","russia-ukraine-en",
     # French regions
-    "n-africa-fr","europe-fr","asia-fr","afrique-fr","ameriques-fr","moyen-orient-fr","france-fr",
+    "france-fr","n-africa-fr","moyen-orient-fr","asia-fr","afrique-fr","ameriques-fr","europe-fr",
+    "china-fr","australia-fr","south-america-fr","eastern-europe-fr","russia-ukraine-fr",
     # Spanish regions
-    "n-africa-es","europe-es","asia-es","africa-es","latam-es","mideast-es","espana-es",
+    "espana-es","n-africa-es","mideast-es","asia-es","africa-es","latam-es","europe-es",
+    "china-es","australia-es","south-america-es","eastern-europe-es","russia-ukraine-es",
     # Turkish regions
-    "n-africa-tr","europe-tr","asia-tr","africa-tr","americas-tr","mideast-tr","turkey",
+    "turkey","n-africa-tr","mideast-tr","asia-tr","africa-tr","americas-tr","europe-tr",
+    "china-tr","australia-tr","south-america-tr","eastern-europe-tr","russia-ukraine-tr",
 })
 
 

@@ -871,6 +871,36 @@
       "color": "#16a34a",
       "enabled": true,
       "sources": []
+    },
+    {
+      "slug": "china-fr",
+      "name": "Chine",
+      "icon": "🇨🇳",
+      "sources": []
+    },
+    {
+      "slug": "australia-fr",
+      "name": "Australie",
+      "icon": "🇦🇺",
+      "sources": []
+    },
+    {
+      "slug": "south-america-fr",
+      "name": "Amérique du Sud",
+      "icon": "🌎",
+      "sources": []
+    },
+    {
+      "slug": "eastern-europe-fr",
+      "name": "Europe de l'Est et Russie",
+      "icon": "🏛️",
+      "sources": []
+    },
+    {
+      "slug": "russia-ukraine-fr",
+      "name": "Guerre Russie-Ukraine",
+      "icon": "⚡",
+      "sources": []
     }
   ],
   "media_regions": [
@@ -913,18 +943,18 @@
   "world_regions": [
     {
       "slug": "france-fr",
-      "name": "France",
-      "icon": "🇫🇷"
+      "name": "Actualités locales",
+      "icon": "📍"
     },
     {
       "slug": "n-africa-fr",
       "name": "Afrique du Nord",
-      "icon": "🇲🇦"
+      "icon": "🌍"
     },
     {
-      "slug": "europe-fr",
-      "name": "Europe",
-      "icon": "🏰"
+      "slug": "moyen-orient-fr",
+      "name": "Moyen-Orient",
+      "icon": "🕌"
     },
     {
       "slug": "asia-fr",
@@ -932,19 +962,44 @@
       "icon": "🌏"
     },
     {
-      "slug": "afrique-fr",
-      "name": "Afrique",
-      "icon": "🌍"
+      "slug": "china-fr",
+      "name": "Chine",
+      "icon": "🇨🇳"
+    },
+    {
+      "slug": "australia-fr",
+      "name": "Australie",
+      "icon": "🇦🇺"
     },
     {
       "slug": "ameriques-fr",
-      "name": "Amériques",
+      "name": "Amérique du Nord",
       "icon": "🌎"
     },
     {
-      "slug": "moyen-orient-fr",
-      "name": "Moyen-Orient",
-      "icon": "🕌"
+      "slug": "south-america-fr",
+      "name": "Amérique du Sud",
+      "icon": "🌎"
+    },
+    {
+      "slug": "europe-fr",
+      "name": "Europe occidentale",
+      "icon": "🏰"
+    },
+    {
+      "slug": "eastern-europe-fr",
+      "name": "Europe de l'Est et Russie",
+      "icon": "🏛️"
+    },
+    {
+      "slug": "russia-ukraine-fr",
+      "name": "Guerre Russie-Ukraine",
+      "icon": "⚡"
+    },
+    {
+      "slug": "afrique-fr",
+      "name": "Afrique",
+      "icon": "🌍"
     }
   ]
 }

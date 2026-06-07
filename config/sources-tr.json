@@ -954,6 +954,36 @@
       "color": "#16a34a",
       "enabled": true,
       "sources": []
+    },
+    {
+      "slug": "china-tr",
+      "name": "Çin",
+      "icon": "🇨🇳",
+      "sources": []
+    },
+    {
+      "slug": "australia-tr",
+      "name": "Avustralya",
+      "icon": "🇦🇺",
+      "sources": []
+    },
+    {
+      "slug": "south-america-tr",
+      "name": "Güney Amerika",
+      "icon": "🌎",
+      "sources": []
+    },
+    {
+      "slug": "eastern-europe-tr",
+      "name": "Doğu Avrupa ve Rusya",
+      "icon": "🏛️",
+      "sources": []
+    },
+    {
+      "slug": "russia-ukraine-tr",
+      "name": "Rusya-Ukrayna Savaşı",
+      "icon": "⚡",
+      "sources": []
     }
   ],
   "media_regions": [
@@ -996,18 +1026,18 @@
   "world_regions": [
     {
       "slug": "turkey",
-      "name": "Türkiye",
-      "icon": "🇹🇷"
+      "name": "Yerel Haberler",
+      "icon": "📍"
     },
     {
       "slug": "n-africa-tr",
       "name": "Kuzey Afrika",
-      "icon": "🇲🇦"
+      "icon": "🌍"
     },
     {
-      "slug": "europe-tr",
-      "name": "Avrupa",
-      "icon": "🏰"
+      "slug": "mideast-tr",
+      "name": "Orta Doğu",
+      "icon": "🕌"
     },
     {
       "slug": "asia-tr",
@@ -1015,19 +1045,44 @@
       "icon": "🌏"
     },
     {
-      "slug": "africa-tr",
-      "name": "Afrika",
-      "icon": "🌍"
+      "slug": "china-tr",
+      "name": "Çin",
+      "icon": "🇨🇳"
+    },
+    {
+      "slug": "australia-tr",
+      "name": "Avustralya",
+      "icon": "🇦🇺"
     },
     {
       "slug": "americas-tr",
-      "name": "Amerika",
+      "name": "Kuzey Amerika",
       "icon": "🌎"
     },
     {
-      "slug": "mideast-tr",
-      "name": "Orta Doğu",
-      "icon": "🕌"
+      "slug": "south-america-tr",
+      "name": "Güney Amerika",
+      "icon": "🌎"
+    },
+    {
+      "slug": "europe-tr",
+      "name": "Batı Avrupa",
+      "icon": "🏰"
+    },
+    {
+      "slug": "eastern-europe-tr",
+      "name": "Doğu Avrupa ve Rusya",
+      "icon": "🏛️"
+    },
+    {
+      "slug": "russia-ukraine-tr",
+      "name": "Rusya-Ukrayna Savaşı",
+      "icon": "⚡"
+    },
+    {
+      "slug": "africa-tr",
+      "name": "Afrika",
+      "icon": "🌍"
     }
   ]
 }

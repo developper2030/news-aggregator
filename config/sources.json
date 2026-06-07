@@ -5104,6 +5104,42 @@
           }
         }
       ]
+    },
+    {
+      "slug": "local-news",
+      "name": "أخبار محلية",
+      "icon": "📍",
+      "sources": []
+    },
+    {
+      "slug": "china",
+      "name": "الصين",
+      "icon": "🇨🇳",
+      "sources": []
+    },
+    {
+      "slug": "australia",
+      "name": "أستراليا",
+      "icon": "🇦🇺",
+      "sources": []
+    },
+    {
+      "slug": "south-america",
+      "name": "أمريكا الجنوبية",
+      "icon": "🌎",
+      "sources": []
+    },
+    {
+      "slug": "eastern-europe",
+      "name": "أوروبا الشرقية وروسيا",
+      "icon": "🏛️",
+      "sources": []
+    },
+    {
+      "slug": "russia-ukraine",
+      "name": "حرب روسيا وأوكرانيا",
+      "icon": "⚡",
+      "sources": []
     }
   ],
   "media_regions": [
