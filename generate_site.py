@@ -3398,6 +3398,10 @@ document.addEventListener('click', function(e) {
 });
 """
 
+# Content-hash version for app.js — changes whenever APP_JS is modified.
+# Forces browsers and CDN to fetch the new script instead of the cached version.
+_APP_VER = hashlib.md5(APP_JS.encode("utf-8")).hexdigest()[:8]
+
 PRIVACY_HTML = """\
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -5563,7 +5567,7 @@ def _make_sw(site_url: str = "") -> str:
 const CACHE = '{_cache_name}';
 const STATIC = [
   '{base}/style.css?v={_CSS_VER}',
-  '{base}/app.js',
+  '{base}/app.js?v={_APP_VER}',
 ];
 
 self.addEventListener('install', e => {{
@@ -5672,8 +5676,9 @@ def _write_static_assets(out_dir: str = OUTPUT_DIR, lang: str = "ar",
             _hreflang  = _hreflang_links(_sp_root_url, filename)
             _inject    = f'  <link rel="canonical" href="{_canonical}">\n{_hreflang}\n'
             content    = content.replace("</head>", _inject + "</head>", 1)
-        # Cache-bust style.css in every static page (bare href → versioned href)
+        # Cache-bust style.css and app.js in every static page
         content = content.replace('href="style.css"', f'href="style.css?v={_CSS_VER}"')
+        content = content.replace('src="app.js"', f'src="app.js?v={_APP_VER}"')
         dest = os.path.join(out_dir, filename)
         with open(dest, "w", encoding="utf-8") as f:
             f.write(content)
@@ -6646,7 +6651,7 @@ def _article_page_html(
     </main>
   </div>
   <button class="back-to-top" id="back-to-top" aria-label="{esc(s.get('back_to_top', 'Back to top'))}">↑</button>
-  <script src="../app.js"></script>
+  <script src="../app.js?v={_APP_VER}"></script>
 </body>
 </html>"""
 
@@ -6854,7 +6859,7 @@ def _page(*, title: str, desc: str, nav_html: str,
     </div>
   </div>
   {_bottom_nav(s, bn_active)}
-  <script src="app.js"></script>
+  <script src="app.js?v={_APP_VER}"></script>
 </body>
 </html>"""
 
