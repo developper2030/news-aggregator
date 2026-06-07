@@ -1040,6 +1040,11 @@
       "icon": "🕌"
     },
     {
+      "slug": "russia-ukraine-tr",
+      "name": "Rusya-Ukrayna Savaşı",
+      "icon": "⚡"
+    },
+    {
       "slug": "asia-tr",
       "name": "Asya",
       "icon": "🌏"
@@ -1073,11 +1078,6 @@
       "slug": "eastern-europe-tr",
       "name": "Doğu Avrupa ve Rusya",
       "icon": "🏛️"
-    },
-    {
-      "slug": "russia-ukraine-tr",
-      "name": "Rusya-Ukrayna Savaşı",
-      "icon": "⚡"
     },
     {
       "slug": "africa-tr",

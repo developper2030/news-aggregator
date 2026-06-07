@@ -923,6 +923,11 @@
       "icon": "🕌"
     },
     {
+      "slug": "russia-ukraine-es",
+      "name": "Guerra Rusia-Ucrania",
+      "icon": "⚡"
+    },
+    {
       "slug": "asia-es",
       "name": "Asia",
       "icon": "🌏"
@@ -956,11 +961,6 @@
       "slug": "eastern-europe-es",
       "name": "Europa del Este y Rusia",
       "icon": "🏛️"
-    },
-    {
-      "slug": "russia-ukraine-es",
-      "name": "Guerra Rusia-Ucrania",
-      "icon": "⚡"
     },
     {
       "slug": "africa-es",

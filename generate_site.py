@@ -132,9 +132,10 @@ SPORTS_SUB_SLUGS: set[str] = {"worldcup-news"}
 WORLD_REGIONS = [
     {"slug": "local-news",     "name": "أخبار محلية",             "icon": "📍"},
     {"slug": "morocco",        "name": "شمال أفريقيا",            "icon": "🌍"},
+    {"slug": "middleeast",     "name": "الشرق الأوسط",            "icon": "🕌"},
+    {"slug": "russia-ukraine", "name": "حرب روسيا وأوكرانيا",    "icon": "⚡"},
     {"slug": "islamic",        "name": "العالم الإسلامي",          "icon": "☪️"},
     {"slug": "diaspora",       "name": "شؤون المهاجرين",           "icon": "👥"},
-    {"slug": "middleeast",     "name": "الشرق الأوسط",            "icon": "🕌"},
     {"slug": "asia",           "name": "آسيا",                     "icon": "🌏"},
     {"slug": "china",          "name": "الصين",                    "icon": "🇨🇳"},
     {"slug": "australia",      "name": "أستراليا",                 "icon": "🇦🇺"},
@@ -142,7 +143,6 @@ WORLD_REGIONS = [
     {"slug": "south-america",  "name": "أمريكا الجنوبية",          "icon": "🌏"},
     {"slug": "europe",         "name": "أوروبا الغربية",           "icon": "🏰"},
     {"slug": "eastern-europe", "name": "أوروبا الشرقية وروسيا",   "icon": "🏛️"},
-    {"slug": "russia-ukraine", "name": "حرب روسيا وأوكرانيا",     "icon": "⚡"},
     {"slug": "africa",         "name": "أفريقيا",                  "icon": "🌍"},
 ]
 
@@ -1471,7 +1471,7 @@ _REGION_SLUG_SET: frozenset[str] = frozenset({
     "europe","eastern-europe","russia-ukraine",
     "africa",
     # English regions
-    "uk-en","us-en","n-africa-en","mideast-en","asia-en","africa-en","americas-en","europe-en",
+    "uk-en","n-africa-en","mideast-en","asia-en","africa-en","americas-en","europe-en",
     "china-en","australia-en","south-america-en","eastern-europe-en","russia-ukraine-en",
     # French regions
     "france-fr","n-africa-fr","moyen-orient-fr","asia-fr","afrique-fr","ameriques-fr","europe-fr",
@@ -2560,6 +2560,18 @@ body.lang-ltr .nh-text{direction:ltr}
   .sticky-header{padding-top:env(safe-area-inset-top)}
   .back-to-top{bottom:calc(24px + env(safe-area-inset-bottom))}
   .cookie-banner{padding-bottom:calc(14px + env(safe-area-inset-bottom))}
+}
+/* Mobile: lift back-to-top above bottom nav (58px) + footer side padding */
+@media(max-width:768px){
+  .back-to-top{bottom:calc(58px + 16px);right:16px}
+  body.lang-ltr .back-to-top{left:auto;right:16px}
+  body.lang-rtl .back-to-top{right:auto;left:16px}
+  body.has-sidebar .site-footer{padding-inline-start:52px}
+}
+@supports(padding-bottom:env(safe-area-inset-bottom)){
+  @media(max-width:768px){
+    .back-to-top{bottom:calc(58px + 16px + env(safe-area-inset-bottom))}
+  }
 }
 
 /* ===================== BOTTOM NAV (mobile only) ===================== */

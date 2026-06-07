@@ -266,34 +266,6 @@
       ]
     },
     {
-      "name": "US News",
-      "slug": "us-en",
-      "icon": "🇺🇸",
-      "sources": [
-        {
-          "name": "Reuters US",
-          "url": "https://www.reuters.com/world/us/",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.reuters.com"
-        },
-        {
-          "name": "AP News",
-          "url": "https://apnews.com/",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://apnews.com"
-        },
-        {
-          "name": "The Guardian US",
-          "url": "https://www.theguardian.com/us-news",
-          "article_selector": "h3",
-          "link_selector": "a",
-          "base_url": "https://www.theguardian.com"
-        }
-      ]
-    },
-    {
       "name": "UK News",
       "slug": "uk-en",
       "icon": "🇬🇧",
@@ -458,6 +430,20 @@
           "article_selector": "h3",
           "link_selector": "a",
           "base_url": "https://www.theguardian.com"
+        },
+        {
+          "name": "Reuters US",
+          "url": "https://www.reuters.com/world/us/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.reuters.com"
+        },
+        {
+          "name": "AP News",
+          "url": "https://apnews.com/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://apnews.com"
         }
       ]
     },
@@ -961,11 +947,6 @@
       "icon": "📍"
     },
     {
-      "slug": "us-en",
-      "name": "United States",
-      "icon": "🇺🇸"
-    },
-    {
       "slug": "n-africa-en",
       "name": "North Africa",
       "icon": "🌍"
@@ -974,6 +955,11 @@
       "slug": "mideast-en",
       "name": "Middle East",
       "icon": "🕌"
+    },
+    {
+      "slug": "russia-ukraine-en",
+      "name": "Russia-Ukraine War",
+      "icon": "⚡"
     },
     {
       "slug": "asia-en",
@@ -1009,11 +995,6 @@
       "slug": "eastern-europe-en",
       "name": "Eastern Europe & Russia",
       "icon": "🏛️"
-    },
-    {
-      "slug": "russia-ukraine-en",
-      "name": "Russia-Ukraine War",
-      "icon": "⚡"
     },
     {
       "slug": "africa-en",
