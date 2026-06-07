@@ -2006,8 +2006,10 @@ body.lang-rtl .side-subnav{box-shadow:-3px 0 20px rgba(0,0,0,.09)}
   .side-subnav::after{content:'';position:absolute;inset-inline-end:-3px;top:28%;height:44%;width:3px;background:var(--accent);border-radius:0 3px 3px 0;opacity:.55;pointer-events:none;transition:opacity .22s}
   body.lang-rtl .side-subnav::after{border-radius:3px 0 0 3px}
   .side-subnav.side-open::after,.side-subnav:hover::after{opacity:0}
-  /* Offset content so it's not hidden under the 44px sidebar */
-  body.has-sidebar .main-wrapper{padding-inline-start:54px}
+  /* Sidebar is position:fixed (floats above, not in flow).
+     Push only the article cards grid past the 44px sidebar edge.
+     Hero, section-header, search bar etc. keep full width. */
+  body.has-sidebar .articles-grid{grid-template-columns:1fr;padding-inline-start:48px}
 }
 
 /* ===================== LIVE TV PAGE ===================== */
