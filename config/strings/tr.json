@@ -108,5 +108,18 @@
   "wc_title": "2026 Dünya Kupası Fikstürü",
   "wc_sub": "ABD · Kanada · Meksika",
   "wc_soon": "Fikstür yakında.",
-  "wc_nav": "Dünya Kupası"
+  "wc_nav": "Dünya Kupası",
+  "sports_leagues_label": "Ligler",
+  "sport_league_local":      "Yerel Şampiyona",
+  "sport_league_botola":     "Fas Ligi",
+  "sport_league_laliga":     "La Liga",
+  "sport_league_premier":    "Premier League",
+  "sport_league_ligue1":     "Ligue 1",
+  "sport_league_buli":       "Bundesliga",
+  "sport_league_mls":        "MLS",
+  "sport_league_spl":        "Suudi Pro Ligi",
+  "econ_markets_section":    "Piyasalar",
+  "econ_trading_btn":        "💹 İşlem",
+  "econ_global_markets_btn": "🌐 Küresel Piyasalar",
+  "econ_crypto_btn":         "₿ Kripto"
 }

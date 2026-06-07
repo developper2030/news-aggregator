@@ -108,5 +108,18 @@
   "wc_title": "Calendario Mundial 2026",
   "wc_sub": "Estados Unidos · Canadá · México",
   "wc_soon": "Calendario próximamente.",
-  "wc_nav": "Mundial 2026"
+  "wc_nav": "Mundial 2026",
+  "sports_leagues_label": "Ligas",
+  "sport_league_local":      "Campeonato local",
+  "sport_league_botola":     "Liga marroquí",
+  "sport_league_laliga":     "La Liga",
+  "sport_league_premier":    "Premier League",
+  "sport_league_ligue1":     "Ligue 1",
+  "sport_league_buli":       "Bundesliga",
+  "sport_league_mls":        "MLS",
+  "sport_league_spl":        "Saudi Pro League",
+  "econ_markets_section":    "Mercados",
+  "econ_trading_btn":        "💹 Trading",
+  "econ_global_markets_btn": "🌐 Mercados globales",
+  "econ_crypto_btn":         "₿ Cripto"
 }

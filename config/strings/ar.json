@@ -108,5 +108,18 @@
   "wc_title": "برنامج كأس العالم 2026",
   "wc_sub": "الولايات المتحدة · كندا · المكسيك",
   "wc_soon": "البرنامج سيظهر قريباً",
-  "wc_nav": "برنامج المونديال"
+  "wc_nav": "برنامج المونديال",
+  "sports_leagues_label": "الدوريات",
+  "sport_league_local":      "البطولة المحلية",
+  "sport_league_botola":     "الدوري المغربي",
+  "sport_league_laliga":     "الدوري الإسباني",
+  "sport_league_premier":    "الدوري الإنجليزي",
+  "sport_league_ligue1":     "الدوري الفرنسي",
+  "sport_league_buli":       "الدوري الألماني",
+  "sport_league_mls":        "الدوري الأمريكي",
+  "sport_league_spl":        "الدوري السعودي",
+  "econ_markets_section":    "الأسواق",
+  "econ_trading_btn":        "💹 تداول",
+  "econ_global_markets_btn": "🌐 الأسواق العالمية",
+  "econ_crypto_btn":         "₿ كريبتو"
 }

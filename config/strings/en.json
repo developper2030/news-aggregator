@@ -108,5 +108,18 @@
   "wc_title": "World Cup 2026 Schedule",
   "wc_sub": "United States · Canada · Mexico",
   "wc_soon": "Schedule coming soon.",
-  "wc_nav": "World Cup"
+  "wc_nav": "World Cup",
+  "sports_leagues_label": "Leagues",
+  "sport_league_local":      "Local Championship",
+  "sport_league_botola":     "Moroccan League",
+  "sport_league_laliga":     "La Liga",
+  "sport_league_premier":    "Premier League",
+  "sport_league_ligue1":     "Ligue 1",
+  "sport_league_buli":       "Bundesliga",
+  "sport_league_mls":        "MLS",
+  "sport_league_spl":        "Saudi Pro League",
+  "econ_markets_section":    "Markets",
+  "econ_trading_btn":        "💹 Trading",
+  "econ_global_markets_btn": "🌐 Global Markets",
+  "econ_crypto_btn":         "₿ Crypto"
 }

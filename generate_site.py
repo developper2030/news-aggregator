@@ -98,7 +98,14 @@ CATEGORY_GRADIENTS: dict[str, str] = {
 }
 
 # Slugs treated as world-regions (shown in world subnav, hidden from main nav & home sections)
-REGION_SLUGS: set[str] = {"morocco", "islamic", "diaspora", "middleeast", "asia", "americas", "europe", "africa"}
+REGION_SLUGS: set[str] = {
+    "local-news",
+    "morocco", "islamic", "diaspora", "middleeast",
+    "asia", "china", "australia",
+    "americas", "south-america",
+    "europe", "eastern-europe", "russia-ukraine",
+    "africa",
+}
 
 # Slugs treated as media-regions (shown in media subnav, hidden from main nav & home sections)
 MEDIA_SLUGS: set[str] = {
@@ -123,14 +130,20 @@ SPORTS_SUB_SLUGS: set[str] = {"worldcup-news"}
 
 # Ordered world-region display data
 WORLD_REGIONS = [
-    {"slug": "morocco",    "name": "المغرب وشمال أفريقيا", "icon": "🇲🇦"},
-    {"slug": "islamic",    "name": "العالم الإسلامي",       "icon": "☪️"},
-    {"slug": "diaspora",   "name": "شؤون المهاجرين",        "icon": "👥"},
-    {"slug": "middleeast", "name": "الشرق الأوسط",         "icon": "🕌"},
-    {"slug": "asia",       "name": "آسيا",                  "icon": "🌏"},
-    {"slug": "americas",   "name": "الأمريكتين",            "icon": "🌎"},
-    {"slug": "europe",     "name": "أوروبا",                "icon": "🏰"},
-    {"slug": "africa",     "name": "أفريقيا",               "icon": "🌍"},
+    {"slug": "local-news",     "name": "أخبار محلية",             "icon": "📍"},
+    {"slug": "morocco",        "name": "شمال أفريقيا",            "icon": "🌍"},
+    {"slug": "islamic",        "name": "العالم الإسلامي",          "icon": "☪️"},
+    {"slug": "diaspora",       "name": "شؤون المهاجرين",           "icon": "👥"},
+    {"slug": "middleeast",     "name": "الشرق الأوسط",            "icon": "🕌"},
+    {"slug": "asia",           "name": "آسيا",                     "icon": "🌏"},
+    {"slug": "china",          "name": "الصين",                    "icon": "🇨🇳"},
+    {"slug": "australia",      "name": "أستراليا",                 "icon": "🇦🇺"},
+    {"slug": "americas",       "name": "أمريكا الشمالية",          "icon": "🌎"},
+    {"slug": "south-america",  "name": "أمريكا الجنوبية",          "icon": "🌏"},
+    {"slug": "europe",         "name": "أوروبا الغربية",           "icon": "🏰"},
+    {"slug": "eastern-europe", "name": "أوروبا الشرقية وروسيا",   "icon": "🏛️"},
+    {"slug": "russia-ukraine", "name": "حرب روسيا وأوكرانيا",     "icon": "⚡"},
+    {"slug": "africa",         "name": "أفريقيا",                  "icon": "🌍"},
 ]
 
 # Ordered media-region display data (صوت وصورة) — thematic video categories
@@ -559,27 +572,57 @@ def _worldcup_page_html(data: dict, s: dict, lang: str) -> str:
 
 def _sports_subnav(active_slug: str, s: dict, wcnews_name: str = "",
                    has_schedule: bool = True) -> str:
-    """Vertical floating sidebar for the Sports section — World Cup branches only.
+    """Vertical floating sidebar for the Sports section.
 
-    No redundant 'Sports' button (you reach Sports from the main nav). Shows:
-      • أخبار المونديال (worldcup-news) — when that section is enabled
-      • برنامج المونديال (worldcup.html) — when the schedule feed loaded
-    Returns "" if neither branch exists.
+    Shows:
+      • World Cup items (when enabled)
+      • Leagues section (always visible — marked 'soon' until pages are live)
     """
-    rows: list[tuple[str, str, str, str]] = []  # (href, icon, label, slug)
+    # ── World Cup items (clickable when pages exist) ──────────────────────────
+    wc_rows: list[tuple[str, str, str, str]] = []
     if wcnews_name:
-        rows.append(("worldcup-news.html", "🏆", wcnews_name, "worldcup-news"))
+        wc_rows.append(("worldcup-news.html", "🏆", wcnews_name, "worldcup-news"))
     if has_schedule:
-        rows.append(("worldcup.html", "📅", s.get("wc_nav", "World Cup"), "worldcup"))
-    if not rows:
+        wc_rows.append(("worldcup.html", "📅", s.get("wc_nav", "World Cup"), "worldcup"))
+
+    # ── Football leagues (coming soon — no RSS feeds yet) ────────────────────
+    _leagues: list[tuple[str, str]] = [
+        ("🏆", s.get("sport_league_local",     "البطولة المحلية")),
+        ("🇲🇦", s.get("sport_league_botola",   "الدوري المغربي")),
+        ("🇪🇸", s.get("sport_league_laliga",   "الدوري الإسباني")),
+        ("🏴󠁧󠁢󠁥󠁮󠁧󠁿", s.get("sport_league_premier", "الدوري الإنجليزي")),
+        ("🇫🇷", s.get("sport_league_ligue1",   "الدوري الفرنسي")),
+        ("🇩🇪", s.get("sport_league_buli",     "الدوري الألماني")),
+        ("🇺🇸", s.get("sport_league_mls",      "الدوري الأمريكي")),
+        ("🇸🇦", s.get("sport_league_spl",      "الدوري السعودي")),
+    ]
+
+    btns = ""
+    for href, icon, label, slug in wc_rows:
+        active_cls = " side-active" if slug == active_slug else ""
+        btns += (
+            f'<a href="{esc(href)}" class="side-btn{active_cls}">'
+            f'<span class="side-icon">{icon}</span>'
+            f'<span class="side-label">{esc(label)}</span>'
+            f'</a>'
+        )
+
+    if _leagues:
+        _div_lbl = esc(s.get("sports_leagues_label", "الدوريات"))
+        btns += f'<div class="side-divider"><span class="side-divider-lbl">{_div_lbl}</span></div>'
+        for icon, label in _leagues:
+            btns += (
+                f'<span class="side-btn side-btn-soon">'
+                f'<span class="side-icon">{icon}</span>'
+                f'<span class="side-label">{esc(label)}'
+                f'<small class="side-soon-badge">soon</small>'
+                f'</span>'
+                f'</span>'
+            )
+
+    if not btns:
         return ""
-    btns = "".join(
-        f'<a href="{esc(href)}" class="side-btn{" side-active" if slug == active_slug else ""}">'
-        f'<span class="side-icon">{icon}</span>'
-        f'<span class="side-label">{esc(label)}</span>'
-        f'</a>'
-        for href, icon, label, slug in rows
-    )
+
     hdr = esc(s.get("sports", "Sports"))
     return (f'<aside class="side-subnav" aria-label="{hdr}">'
             f'<div class="side-hdr"><span class="side-hdr-icon">⚽</span>'
@@ -602,6 +645,7 @@ def _economy_widget(s: dict, active_tab: str = "",
         parts = raw.split(" ", 1)
         return (parts[0], parts[1]) if len(parts) == 2 else ("•", raw)
 
+    # ── Section: main economy pages (live) ───────────────────────────────────
     rows: list[tuple[str, str, str, str, bool]] = []  # href, icon, label, tab_key, is_soon
     if show_prices:
         ic, lbl = _split("econ_prices")
@@ -610,29 +654,42 @@ def _economy_widget(s: dict, active_tab: str = "",
     rows.append(("business.html", ic or "💼", lbl, "business", False))
     ic, lbl = _split("econ_travel_btn")
     rows.append(("travel.html", ic or "✈️", lbl, "travel", False))
-    if show_stats:
-        ic, lbl = _split("econ_stats_btn")
-        rows.append(("", ic or "📊", lbl, "", True))
-    if show_bourse:
-        ic, lbl = _split("econ_bourse_btn")
-        rows.append(("", ic or "📈", lbl, "", True))
-    if show_biz:
-        ic, lbl = _split("econ_biz_btn")
-        rows.append(("", ic or "🏢", lbl, "", True))
 
     btns = ""
     for href, icon, label, tab_key, is_soon in rows:
         active_cls = " side-active" if tab_key == active_tab else ""
-        soon_cls   = " side-btn-soon" if is_soon else ""
         tag        = "a" if href else "span"
         href_attr  = f' href="{esc(href)}"' if href else ""
         btns += (
-            f'<{tag}{href_attr} class="side-btn{active_cls}{soon_cls}">'
+            f'<{tag}{href_attr} class="side-btn{active_cls}">'
+            f'<span class="side-icon">{icon}</span>'
+            f'<span class="side-label">{esc(label)}</span>'
+            f'</{tag}>'
+        )
+
+    # ── Section: markets (coming soon) ────────────────────────────────────────
+    _markets_label = esc(s.get("econ_markets_section", "الأسواق"))
+    btns += f'<div class="side-divider"><span class="side-divider-lbl">{_markets_label}</span></div>'
+
+    soon_rows: list[tuple[str, str]] = []
+    ic, lbl = _split("econ_trading_btn");  soon_rows.append((ic or "💹", lbl))
+    if show_bourse:
+        ic, lbl = _split("econ_bourse_btn"); soon_rows.append((ic or "📈", lbl))
+    ic, lbl = _split("econ_global_markets_btn"); soon_rows.append((ic or "🌐", lbl))
+    ic, lbl = _split("econ_crypto_btn");   soon_rows.append((ic or "₿", lbl))
+    if show_stats:
+        ic, lbl = _split("econ_stats_btn"); soon_rows.append((ic or "📊", lbl))
+    if show_biz:
+        ic, lbl = _split("econ_biz_btn"); soon_rows.append((ic or "🏢", lbl))
+
+    for icon, label in soon_rows:
+        btns += (
+            f'<span class="side-btn side-btn-soon">'
             f'<span class="side-icon">{icon}</span>'
             f'<span class="side-label">{esc(label)}'
-            f'{"<small class=\'side-soon-badge\'>soon</small>" if is_soon else ""}'
+            f"<small class='side-soon-badge'>soon</small>"
             f'</span>'
-            f'</{tag}>'
+            f'</span>'
         )
 
     hdr = esc(s.get("econ_widget_label", "Economy"))
@@ -798,6 +855,19 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "live_tv_desc":    "تابع القنوات الإخبارية العالمية مباشرةً عبر اليوتيوب",
         "live_tv_watch":   "▶ شاهد مباشر",
         "live_tv_on_air":  "على الهواء",
+        "sports_leagues_label":   "الدوريات",
+        "sport_league_local":     "البطولة المحلية",
+        "sport_league_botola":    "الدوري المغربي",
+        "sport_league_laliga":    "الدوري الإسباني",
+        "sport_league_premier":   "الدوري الإنجليزي",
+        "sport_league_ligue1":    "الدوري الفرنسي",
+        "sport_league_buli":      "الدوري الألماني",
+        "sport_league_mls":       "الدوري الأمريكي",
+        "sport_league_spl":       "الدوري السعودي",
+        "econ_markets_section":   "الأسواق",
+        "econ_trading_btn":       "💹 تداول",
+        "econ_global_markets_btn":"🌐 الأسواق العالمية",
+        "econ_crypto_btn":        "₿ كريبتو",
     },
     "en": {
         "lang": "en", "dir": "ltr",
@@ -897,6 +967,19 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "live_tv_desc":    "Watch global news channels live on YouTube",
         "live_tv_watch":   "▶ Watch Live",
         "live_tv_on_air":  "On Air",
+        "sports_leagues_label":   "Leagues",
+        "sport_league_local":     "Local Championship",
+        "sport_league_botola":    "Moroccan League",
+        "sport_league_laliga":    "La Liga",
+        "sport_league_premier":   "Premier League",
+        "sport_league_ligue1":    "Ligue 1",
+        "sport_league_buli":      "Bundesliga",
+        "sport_league_mls":       "MLS",
+        "sport_league_spl":       "Saudi Pro League",
+        "econ_markets_section":   "Markets",
+        "econ_trading_btn":       "💹 Trading",
+        "econ_global_markets_btn":"🌐 Global Markets",
+        "econ_crypto_btn":        "₿ Crypto",
     },
     "fr": {
         "lang": "fr", "dir": "ltr",
@@ -996,6 +1079,19 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "live_tv_desc":    "Regardez les chaînes d'information mondiales en direct sur YouTube",
         "live_tv_watch":   "▶ Regarder en direct",
         "live_tv_on_air":  "En direct",
+        "sports_leagues_label":   "Ligues",
+        "sport_league_local":     "Championnat local",
+        "sport_league_botola":    "Botola Pro",
+        "sport_league_laliga":    "La Liga",
+        "sport_league_premier":   "Premier League",
+        "sport_league_ligue1":    "Ligue 1",
+        "sport_league_buli":      "Bundesliga",
+        "sport_league_mls":       "MLS",
+        "sport_league_spl":       "Saudi Pro League",
+        "econ_markets_section":   "Marchés",
+        "econ_trading_btn":       "💹 Trading",
+        "econ_global_markets_btn":"🌐 Marchés mondiaux",
+        "econ_crypto_btn":        "₿ Crypto",
     },
     "es": {
         "lang": "es", "dir": "ltr",
@@ -1095,6 +1191,19 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "live_tv_desc":    "Sigue los canales de noticias globales en directo en YouTube",
         "live_tv_watch":   "▶ Ver en vivo",
         "live_tv_on_air":  "En el aire",
+        "sports_leagues_label":   "Ligas",
+        "sport_league_local":     "Campeonato local",
+        "sport_league_botola":    "Liga marroquí",
+        "sport_league_laliga":    "La Liga",
+        "sport_league_premier":   "Premier League",
+        "sport_league_ligue1":    "Ligue 1",
+        "sport_league_buli":      "Bundesliga",
+        "sport_league_mls":       "MLS",
+        "sport_league_spl":       "Saudi Pro League",
+        "econ_markets_section":   "Mercados",
+        "econ_trading_btn":       "💹 Trading",
+        "econ_global_markets_btn":"🌐 Mercados globales",
+        "econ_crypto_btn":        "₿ Cripto",
     },
     "tr": {
         "lang": "tr", "dir": "ltr",
@@ -1194,6 +1303,19 @@ _STRINGS_FALLBACK: dict[str, dict] = {
         "live_tv_desc":    "YouTube üzerinden dünya haber kanallarını canlı izleyin",
         "live_tv_watch":   "▶ Canlı İzle",
         "live_tv_on_air":  "Yayında",
+        "sports_leagues_label":   "Ligler",
+        "sport_league_local":     "Yerel Şampiyona",
+        "sport_league_botola":    "Fas Ligi",
+        "sport_league_laliga":    "La Liga",
+        "sport_league_premier":   "Premier League",
+        "sport_league_ligue1":    "Ligue 1",
+        "sport_league_buli":      "Bundesliga",
+        "sport_league_mls":       "MLS",
+        "sport_league_spl":       "Suudi Pro Ligi",
+        "econ_markets_section":   "Piyasalar",
+        "econ_trading_btn":       "💹 İşlem",
+        "econ_global_markets_btn":"🌐 Küresel Piyasalar",
+        "econ_crypto_btn":        "₿ Kripto",
     },
 }
 
@@ -1341,10 +1463,20 @@ _SLUG_XMAP: dict[str, dict[str, str | None]] = {
 
 # Slugs that are world-region pages (fallback = world.html when no equivalent)
 _REGION_SLUG_SET: frozenset[str] = frozenset({
-    "morocco","middleeast","islamic","diaspora","asia","americas","europe","africa",
+    # Arabic regions
+    "local-news",
+    "morocco","middleeast","islamic","diaspora",
+    "asia","china","australia",
+    "americas","south-america",
+    "europe","eastern-europe","russia-ukraine",
+    "africa",
+    # English regions
     "n-africa-en","europe-en","asia-en","africa-en","americas-en","mideast-en","uk-en","us-en",
+    # French regions
     "n-africa-fr","europe-fr","asia-fr","afrique-fr","ameriques-fr","moyen-orient-fr","france-fr",
+    # Spanish regions
     "n-africa-es","europe-es","asia-es","africa-es","latam-es","mideast-es","espana-es",
+    # Turkish regions
     "n-africa-tr","europe-tr","asia-tr","africa-tr","americas-tr","mideast-tr","turkey",
 })
 
@@ -2016,6 +2148,9 @@ body.lang-rtl .side-subnav{box-shadow:-3px 0 20px rgba(0,0,0,.09)}
 .side-label{font-size:.83em;font-weight:700;opacity:0;transition:opacity .15s .04s;min-width:0;display:flex;align-items:center;gap:6px}
 .side-subnav:hover .side-label,.side-subnav.side-open .side-label{opacity:1}
 .side-soon-badge{font-size:.6em;background:rgba(99,102,241,.18);color:var(--accent);padding:1px 5px;border-radius:4px;font-weight:600}
+.side-divider{display:flex;align-items:center;padding:6px 0 2px;opacity:0;transition:opacity .15s .04s;overflow:hidden;white-space:nowrap}
+.side-subnav:hover .side-divider,.side-subnav.side-open .side-divider{opacity:1}
+.side-divider-lbl{font-size:.65em;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted,#94a3b8);padding-inline-start:12px}
 /* Dark mode */
 .dark-mode .side-subnav{background:var(--surface);box-shadow:3px 0 20px rgba(0,0,0,.3)}
 .dark-mode body.lang-rtl .side-subnav{box-shadow:-3px 0 20px rgba(0,0,0,.3)}
@@ -6216,16 +6351,14 @@ def _world_subnav(active_slug: str = "", world_regions: list = WORLD_REGIONS,
 
 def _media_subnav(active_slug: str = "", media_regions: list = MEDIA_REGIONS,
                   s: dict = STRINGS["ar"]) -> str:
-    """Vertical floating sidebar for صوت وصورة and vid-* pages."""
+    """Vertical floating sidebar for صوت وصورة and vid-* pages.
+
+    Live TV removed from sidebar — accessible only via direct link.
+    """
     if not media_regions:
         return ""
     btns = ""
-    _live_raw   = s.get("live_tv_label", "📡 Live TV")
-    _live_parts = _live_raw.split(" ", 1)
-    _live_icon  = _live_parts[0] if len(_live_parts) == 2 else "📡"
-    _live_text  = _live_parts[1] if len(_live_parts) == 2 else _live_raw
-    _live_active_cls = " side-active" if active_slug == "live" else ""
-    for i, r in enumerate(media_regions):
+    for r in media_regions:
         active_cls = " side-active" if r["slug"] == active_slug else ""
         btns += (
             f'<a href="{esc(r["slug"])}.html" class="side-btn{active_cls}">'
@@ -6233,14 +6366,6 @@ def _media_subnav(active_slug: str = "", media_regions: list = MEDIA_REGIONS,
             f'<span class="side-label">{esc(r["name"])}</span>'
             f'</a>'
         )
-        # Insert Live TV button right after the first item (أحداث / Events)
-        if i == 0:
-            btns += (
-                f'<a href="live.html" class="side-btn side-live{_live_active_cls}">'
-                f'<span class="side-icon">{_live_icon}</span>'
-                f'<span class="side-label">{esc(_live_text)}</span>'
-                f'</a>'
-            )
     hdr = esc(s.get("media_regions_label", "صوت وصورة"))
     return (
         f'<aside class="side-subnav" aria-label="{hdr}">'

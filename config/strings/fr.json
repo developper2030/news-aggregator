@@ -108,5 +108,18 @@
   "wc_title": "Calendrier Coupe du Monde 2026",
   "wc_sub": "États-Unis · Canada · Mexique",
   "wc_soon": "Calendrier à venir.",
-  "wc_nav": "Coupe du Monde"
+  "wc_nav": "Coupe du Monde",
+  "sports_leagues_label": "Ligues",
+  "sport_league_local":      "Championnat local",
+  "sport_league_botola":     "Botola Pro",
+  "sport_league_laliga":     "La Liga",
+  "sport_league_premier":    "Premier League",
+  "sport_league_ligue1":     "Ligue 1",
+  "sport_league_buli":       "Bundesliga",
+  "sport_league_mls":        "MLS",
+  "sport_league_spl":        "Saudi Pro League",
+  "econ_markets_section":    "Marchés",
+  "econ_trading_btn":        "💹 Trading",
+  "econ_global_markets_btn": "🌐 Marchés mondiaux",
+  "econ_crypto_btn":         "₿ Crypto"
 }
