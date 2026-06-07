@@ -1446,6 +1446,77 @@ _TRENDING_LABELS = {
     "tr": {"title": "En Çok Okunan"},
 }
 
+# ── Prayer Times widget labels per language ───────────────────────────────────
+_PR = {
+    "ar": {
+        "title": "مواقيت الصلاة", "badge": "الصلاة",
+        "fajr": "الفجر", "sunrise": "الشروق", "dhuhr": "الظهر",
+        "asr": "العصر", "maghrib": "المغرب", "isha": "العشاء",
+        "next": "الصلاة القادمة", "loading": "جارٍ التحميل...",
+    },
+    "en": {
+        "title": "Prayer Times", "badge": "Prayer",
+        "fajr": "Fajr", "sunrise": "Sunrise", "dhuhr": "Dhuhr",
+        "asr": "Asr", "maghrib": "Maghrib", "isha": "Isha",
+        "next": "Next Prayer", "loading": "Loading...",
+    },
+    "fr": {
+        "title": "Horaires des Prières", "badge": "Prière",
+        "fajr": "Fajr", "sunrise": "Lever du Soleil", "dhuhr": "Dhouhr",
+        "asr": "Asr", "maghrib": "Maghrib", "isha": "Ichaa",
+        "next": "Prochaine Prière", "loading": "Chargement...",
+    },
+    "es": {
+        "title": "Horarios de Oración", "badge": "Oración",
+        "fajr": "Fajr", "sunrise": "Amanecer", "dhuhr": "Dhuhr",
+        "asr": "Asr", "maghrib": "Maghrib", "isha": "Isha",
+        "next": "Próxima Oración", "loading": "Cargando...",
+    },
+    "tr": {
+        "title": "Namaz Vakitleri", "badge": "Namaz",
+        "fajr": "Sabah", "sunrise": "Güneş", "dhuhr": "Öğle",
+        "asr": "İkindi", "maghrib": "Akşam", "isha": "Yatsı",
+        "next": "Sonraki Namaz", "loading": "Yükleniyor...",
+    },
+}
+
+
+def _prayer_widget(s: dict, lang: str) -> str:
+    """Prayer times skeleton — content filled live by initPrayerWidget() JS.
+
+    Geolocation is IP-based (ipapi.co) — no browser permission needed.
+    Prayer times fetched from api.aladhan.com (free, no key).
+    AR/TR: placed above weather widget; EN/FR/ES: below weather widget.
+    """
+    pr = _PR.get(lang, _PR["en"])
+    PRAYER_KEYS = ["fajr", "sunrise", "dhuhr", "asr", "maghrib", "isha"]
+    rows = "".join(
+        f'<div class="prayer-row" id="pr-{k}">'
+        f'<span class="pr-name">{esc(pr[k])}</span>'
+        f'<span class="pr-time" id="pt-{k}">--:--</span>'
+        f'</div>'
+        for k in PRAYER_KEYS
+    )
+    return (
+        f'<div class="widget-card prayer-card" id="prayer-widget" data-lang="{lang}">'
+        f'<div class="widget-hdr prayer-hdr">'
+        f'<span class="wh-icon">🕌</span>'
+        f'<span class="widget-hdr-title">{esc(pr["title"])}</span>'
+        f'<span class="pr-city" id="pr-city"></span>'
+        f'</div>'
+        f'<div class="prayer-body">'
+        f'<div class="pr-loading" id="pr-loading">{esc(pr["loading"])}</div>'
+        f'<div class="pr-list" id="pr-list" style="display:none">{rows}</div>'
+        f'<div class="pr-next-row" id="pr-next-row" style="display:none">'
+        f'<span class="pr-next-label">{esc(pr["next"])}</span>'
+        f'<span class="pr-next-name" id="pr-next-name"></span>'
+        f'<span class="pr-next-time" id="pr-next-time"></span>'
+        f'<span class="pr-countdown" id="pr-countdown"></span>'
+        f'</div>'
+        f'</div>'
+        f'</div>'
+    )
+
 
 def _weather_widget(s: dict, lang: str) -> str:
     """Weather skeleton — filled live by initWeatherWidget() JS."""
@@ -1625,11 +1696,18 @@ def _trending_widget(arts: list, s: dict, lang: str) -> str:
 
 def _widget_col(s: dict, lang: str, worldcup_data: dict,
                 show_wc: bool = True) -> str:
-    """Left widget column: weather + worldcup + games."""
-    wc = _worldcup_widget(worldcup_data, s, lang) if show_wc else ""
+    """Left widget column: prayer + weather (order varies by lang) + worldcup + games.
+
+    AR / TR: prayer widget above weather (culturally prominent).
+    EN / FR / ES: prayer widget below weather.
+    """
+    wc      = _worldcup_widget(worldcup_data, s, lang) if show_wc else ""
+    prayer  = _prayer_widget(s, lang)
+    weather = _weather_widget(s, lang)
+    pw      = (prayer + weather) if lang in ("ar", "tr") else (weather + prayer)
     return (
         f'<div class="widget-col">'
-        f'{_weather_widget(s, lang)}'
+        f'{pw}'
         f'{wc}'
         f'{_games_widget(lang)}'
         f'</div>'
@@ -2122,6 +2200,32 @@ body.lang-rtl .more-btn:hover{transform:translateX(4px)}
 .wt-fc-time{color:var(--muted,#64748b);font-weight:700}
 .wt-fc-icon{font-size:1.25em;line-height:1}
 .wt-fc-temp{font-weight:900;color:var(--text)}
+/* ---- PRAYER TIMES WIDGET ---- */
+.prayer-hdr{background:linear-gradient(90deg,rgba(99,102,241,.09),transparent)}
+.pr-city{font-size:.72em;color:var(--text-muted,#64748b);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px;margin-inline-start:auto}
+.prayer-body{padding:2px 0}
+.pr-loading{color:var(--text-muted,#64748b);font-size:.82em;text-align:center;padding:16px 0;opacity:.7}
+.pr-list{}
+.prayer-row{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;font-size:.83em;border-bottom:1px solid rgba(0,0,0,.04);transition:background .2s,border-inline-start-color .2s;border-inline-start:3px solid transparent}
+.prayer-row:last-child{border-bottom:none}
+.prayer-row.pr-active{background:linear-gradient(90deg,rgba(99,102,241,.1),rgba(99,102,241,.03));border-inline-start-color:var(--accent)}
+.prayer-row.pr-done{opacity:.4}
+.prayer-row.pr-sunrise-row{opacity:.65}
+.pr-name{font-weight:700;color:var(--text)}
+.pr-time{color:var(--accent);font-weight:800;font-size:.89em;font-variant-numeric:tabular-nums}
+.prayer-row.pr-active .pr-name{color:var(--accent)}
+.prayer-row.pr-active .pr-time{font-size:.93em}
+.pr-next-row{display:flex;align-items:center;gap:5px;padding:7px 14px 8px;background:linear-gradient(90deg,rgba(99,102,241,.07),transparent);font-size:.77em;flex-wrap:wrap;border-top:1px solid rgba(99,102,241,.08)}
+.pr-next-label{color:var(--text-muted,#64748b);font-weight:600}
+.pr-next-name{color:var(--text);font-weight:800}
+.pr-next-time{color:var(--accent);font-weight:800}
+.pr-countdown{margin-inline-start:auto;background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff;padding:2px 9px;border-radius:10px;font-size:.88em;font-weight:800;letter-spacing:.2px;font-variant-numeric:tabular-nums}
+/* Header prayer badge — filled+shown by JS */
+.prayer-hbadge{display:none;align-items:center;gap:4px;color:rgba(255,255,255,.9);font-size:.79em;font-weight:700;white-space:nowrap;cursor:default;padding:2px 9px;background:rgba(255,255,255,.14);border-radius:8px;border:1px solid rgba(255,255,255,.2)}
+/* Dark mode */
+.dark-mode .prayer-row.pr-active{background:linear-gradient(90deg,rgba(99,102,241,.18),rgba(99,102,241,.06))}
+/* Hide badge on mobile */
+@media(max-width:768px){.prayer-hbadge{display:none!important}}
 /* ---- TRENDING / MOST READ ---- */
 .trending-hdr{background:linear-gradient(90deg,rgba(239,68,68,.1),transparent)}
 .tr-list{padding:2px 0}
@@ -2864,6 +2968,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLangDrop();
   initBottomNav();
   initWeatherWidget();
+  initPrayerWidget();
   // Register Service Worker for PWA offline support
   // reg.update() forces an immediate sw.js freshness check on every page load,
   // so Chrome picks up the new SW (and its purged cache) without waiting 24h.
@@ -3134,6 +3239,141 @@ function initWeatherWidget() {
     );
   }
   tryGeo();
+}
+
+/* ========== PRAYER TIMES WIDGET ========== */
+function initPrayerWidget() {
+  var widget = document.getElementById('prayer-widget');
+  var badge  = document.getElementById('prayer-hbadge');
+  if (!widget && !badge) return;
+
+  var lang = (widget && widget.getAttribute('data-lang')) ||
+             document.documentElement.getAttribute('lang') || 'ar';
+
+  /* Prayer names per language (for badge + countdown text) */
+  var PR = {
+    ar:{fajr:'الفجر',sunrise:'الشروق',dhuhr:'الظهر',asr:'العصر',maghrib:'المغرب',isha:'العشاء'},
+    en:{fajr:'Fajr',sunrise:'Sunrise',dhuhr:'Dhuhr',asr:'Asr',maghrib:'Maghrib',isha:'Isha'},
+    fr:{fajr:'Fajr',sunrise:'Lever',dhuhr:'Dhouhr',asr:'Asr',maghrib:'Maghrib',isha:'Ichaa'},
+    es:{fajr:'Fajr',sunrise:'Amanecer',dhuhr:'Dhuhr',asr:'Asr',maghrib:'Maghrib',isha:'Isha'},
+    tr:{fajr:'Sabah',sunrise:'Güneş',dhuhr:'Öğle',asr:'İkindi',maghrib:'Akşam',isha:'Yatsı'},
+  };
+  var L = PR[lang] || PR['en'];
+
+  /* AlAdhan calculation method by country code */
+  var CC_METHOD = {
+    EG:5,MA:5,DZ:5,TN:5,LY:5,SD:5,MR:5,SO:5,  // North Africa: Egyptian
+    TR:13,AZ:13,                                  // Turkey/Azerbaijan: Diyanet
+    SA:4,KW:4,AE:4,BH:4,QA:4,OM:4,IQ:4,YE:4,JO:4, // Gulf + Iraq: Umm Al-Qura
+    FR:12,                                        // France: UOIF
+    SG:11,MY:11,                                  // SE Asia: Singapore
+    PK:1,AF:1,BD:1,                               // South Asia: Karachi
+    IR:7,                                         // Iran: Tehran
+  };
+  /* Default: Muslim World League (method 3) — covers Europe, Americas, rest */
+
+  function toMins(t) {
+    var p = t.split(':');
+    return parseInt(p[0], 10) * 60 + parseInt(p[1], 10);
+  }
+
+  function renderPrayer(t, city) {
+    /* Update city name */
+    var cityEl = document.getElementById('pr-city');
+    if (cityEl) cityEl.textContent = city;
+
+    /* Fill prayer times (API key names → element IDs) */
+    var KEYS_MAP = {fajr:'Fajr',sunrise:'Sunrise',dhuhr:'Dhuhr',asr:'Asr',maghrib:'Maghrib',isha:'Isha'};
+    Object.keys(KEYS_MAP).forEach(function(k) {
+      var el = document.getElementById('pt-' + k);
+      if (el) el.textContent = t[KEYS_MAP[k]] || '--:--';
+    });
+
+    /* Determine next main prayer (skip sunrise) */
+    var MAIN = ['fajr','dhuhr','asr','maghrib','isha'];
+    var API  = {fajr:'Fajr',dhuhr:'Dhuhr',asr:'Asr',maghrib:'Maghrib',isha:'Isha'};
+    var now  = new Date();
+    var nowM = now.getHours() * 60 + now.getMinutes();
+
+    var nextIdx = -1;
+    for (var i = 0; i < MAIN.length; i++) {
+      if (toMins(t[API[MAIN[i]]]) > nowM) { nextIdx = i; break; }
+    }
+    if (nextIdx < 0) nextIdx = 0; // after Isha → next is Fajr
+
+    /* Highlight rows */
+    Object.keys(KEYS_MAP).forEach(function(k) {
+      var row = document.getElementById('pr-' + k);
+      if (!row) return;
+      row.classList.remove('pr-active', 'pr-done', 'pr-sunrise-row');
+      if (k === 'sunrise') { row.classList.add('pr-sunrise-row'); return; }
+      var mi = MAIN.indexOf(k);
+      if (mi < 0) return;
+      if (mi === nextIdx) row.classList.add('pr-active');
+      else if (nextIdx === 0 || mi < nextIdx) row.classList.add('pr-done');
+    });
+
+    /* Countdown */
+    var nextKey  = MAIN[nextIdx];
+    var nextTime = t[API[nextKey]];
+    var diff     = toMins(nextTime) - nowM;
+    if (diff < 0) diff += 1440;
+    var hrs  = Math.floor(diff / 60);
+    var mins = diff % 60;
+    var countdown = hrs > 0 ? hrs + 'h ' + String(mins).padStart(2, '0') + 'm' : mins + '\'';
+
+    var nextRow     = document.getElementById('pr-next-row');
+    var nextNameEl  = document.getElementById('pr-next-name');
+    var nextTimeEl  = document.getElementById('pr-next-time');
+    var countdownEl = document.getElementById('pr-countdown');
+    if (nextRow)     nextRow.style.display = '';
+    if (nextNameEl)  nextNameEl.textContent = L[nextKey] || nextKey;
+    if (nextTimeEl)  nextTimeEl.textContent = nextTime;
+    if (countdownEl) countdownEl.textContent = countdown;
+
+    /* Show list, hide loading */
+    var loading = document.getElementById('pr-loading');
+    var list    = document.getElementById('pr-list');
+    if (loading) loading.style.display = 'none';
+    if (list)    list.style.display = '';
+
+    /* Update header badge */
+    if (badge) {
+      badge.textContent = '🕌 ' + (L[nextKey] || nextKey) + ' ' + nextTime;
+      badge.style.display = 'inline-flex';
+    }
+  }
+
+  function fetchPrayer(lat, lon, city, cc) {
+    var method = CC_METHOD[cc] || 3;
+    var d = new Date();
+    var dateStr = String(d.getDate()).padStart(2,'0') + '-' +
+                  String(d.getMonth()+1).padStart(2,'0') + '-' + d.getFullYear();
+    fetch('https://api.aladhan.com/v1/timings/' + dateStr +
+          '?latitude=' + lat + '&longitude=' + lon + '&method=' + method)
+      .then(function(r) { return r.json(); })
+      .then(function(data) { renderPrayer(data.data.timings, city); })
+      .catch(function() {
+        var l = document.getElementById('pr-loading');
+        if (l) l.textContent = '⚠️';
+      });
+  }
+
+  /* ── IP-based geolocation — no browser permission required ── */
+  var MEK_LAT = 21.3891, MEK_LON = 39.8579, MEK_CITY = 'مكة المكرمة', MEK_CC = 'SA';
+
+  fetch('https://ipapi.co/json/')
+    .then(function(r) { return r.json(); })
+    .then(function(g) {
+      var lat  = parseFloat(g.latitude)  || MEK_LAT;
+      var lon  = parseFloat(g.longitude) || MEK_LON;
+      var city = g.city                  || MEK_CITY;
+      var cc   = (g.country_code || g.country || MEK_CC).toUpperCase().slice(0, 2);
+      fetchPrayer(lat, lon, city, cc);
+    })
+    .catch(function() {
+      fetchPrayer(MEK_LAT, MEK_LON, MEK_CITY, MEK_CC);
+    });
 }
 
 /* Share copy-link handler kept for article pages only */
@@ -6502,6 +6742,7 @@ def _page(*, title: str, desc: str, nav_html: str,
           <span class="top-date">📅 {esc(today_ar)}</span>
           <span class="live-dot" title="{s["live_label"]}"></span>
           <span id="live-time" class="live-time">00:00:00</span>
+          <span id="prayer-hbadge" class="prayer-hbadge" title="{esc(_PR.get(s.get("lang","ar"),_PR["en"])["title"])}"></span>
         </div>
         <span class="site-header-title">{esc(title)}</span>
         <div class="header-end">
