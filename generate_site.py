@@ -3132,6 +3132,51 @@ function initSourceFilter() {
 })();
 
 /* ========== WEATHER WIDGET ========== */
+/* ── Shared geolocation (GPS first → ipapi.co fallback, result cached) ──────
+   Both weather and prayer widgets call _getGeoLoc() and get the same coords.
+   This ensures both always show the same city, and ipapi.co is called once. */
+var _geoLocP = null;
+function _getGeoLoc() {
+  if (_geoLocP) return _geoLocP;
+  _geoLocP = new Promise(function(resolve) {
+    /* Hard fallback if everything fails */
+    var DEF = {lat:33.57, lon:-7.59, city:'Casablanca', cc:'MA'};
+    /* IP-based fallback (no browser permission) */
+    function tryIP() {
+      fetch('https://ipapi.co/json/')
+        .then(function(r){return r.json();})
+        .then(function(g){
+          var lat = parseFloat(g.latitude), lon = parseFloat(g.longitude);
+          if (!lat || !lon) { resolve(DEF); return; }
+          resolve({lat:lat, lon:lon,
+                   city: g.city || '',
+                   cc: (g.country_code || 'MA').toUpperCase().slice(0,2)});
+        })
+        .catch(function(){resolve(DEF);});
+    }
+    /* Try browser GPS first (most accurate — same source weather uses) */
+    if (!navigator.geolocation) { tryIP(); return; }
+    navigator.geolocation.getCurrentPosition(
+      function(pos) {
+        var lat = pos.coords.latitude, lon = pos.coords.longitude;
+        /* Reverse-geocode for city name + country code */
+        fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat='+lat+'&lon='+lon)
+          .then(function(r){return r.json();})
+          .then(function(d){
+            var a  = d.address || {};
+            var city = a.city||a.town||a.village||a.county||'';
+            var cc   = (a.country_code||'MA').toUpperCase().slice(0,2);
+            resolve({lat:lat, lon:lon, city:city, cc:cc});
+          })
+          .catch(function(){resolve({lat:lat, lon:lon, city:'', cc:'MA'});});
+      },
+      function(){tryIP();},   /* permission denied → IP fallback */
+      {timeout:6000}
+    );
+  });
+  return _geoLocP;
+}
+
 function initWeatherWidget() {
   var card = document.getElementById('weather-widget');
   if (!card) return;
@@ -3219,26 +3264,11 @@ function initWeatherWidget() {
       });
   }
 
-  // Try geolocation, fall back to cached coords or Casablanca
-  function tryGeo() {
-    if (!navigator.geolocation) { fetchWeather(33.57,  -7.59, 'Casablanca'); return; }
-    navigator.geolocation.getCurrentPosition(
-      function(pos){
-        var lat=pos.coords.latitude, lon=pos.coords.longitude;
-        // Reverse-geocode via Open-Meteo's geocoding (no key needed)
-        fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat='+lat+'&lon='+lon)
-          .then(function(r){return r.json();})
-          .then(function(d){
-            var city = (d.address&&(d.address.city||d.address.town||d.address.village||d.address.county))||'';
-            fetchWeather(lat, lon, city);
-          })
-          .catch(function(){fetchWeather(lat,lon,'');});
-      },
-      function(){ fetchWeather(33.57,-7.59,'Casablanca'); },
-      {timeout:6000}
-    );
-  }
-  tryGeo();
+  _getGeoLoc().then(function(geo){
+    fetchWeather(geo.lat, geo.lon, geo.city);
+  }).catch(function(){
+    fetchWeather(33.57, -7.59, 'Casablanca');
+  });
 }
 
 /* ========== PRAYER TIMES WIDGET ========== */
@@ -3359,21 +3389,12 @@ function initPrayerWidget() {
       });
   }
 
-  /* ── IP-based geolocation — no browser permission required ── */
-  var MEK_LAT = 21.3891, MEK_LON = 39.8579, MEK_CITY = 'مكة المكرمة', MEK_CC = 'SA';
-
-  fetch('https://ipapi.co/json/')
-    .then(function(r) { return r.json(); })
-    .then(function(g) {
-      var lat  = parseFloat(g.latitude)  || MEK_LAT;
-      var lon  = parseFloat(g.longitude) || MEK_LON;
-      var city = g.city                  || MEK_CITY;
-      var cc   = (g.country_code || g.country || MEK_CC).toUpperCase().slice(0, 2);
-      fetchPrayer(lat, lon, city, cc);
-    })
-    .catch(function() {
-      fetchPrayer(MEK_LAT, MEK_LON, MEK_CITY, MEK_CC);
-    });
+  /* ── Use the same location as the weather widget (GPS → ipapi.co fallback) ── */
+  _getGeoLoc().then(function(geo) {
+    fetchPrayer(geo.lat, geo.lon, geo.city, geo.cc);
+  }).catch(function() {
+    fetchPrayer(21.3891, 39.8579, 'مكة المكرمة', 'SA');
+  });
 }
 
 /* Share copy-link handler kept for article pages only */
