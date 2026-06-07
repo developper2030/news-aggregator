@@ -559,71 +559,91 @@ def _worldcup_page_html(data: dict, s: dict, lang: str) -> str:
 
 def _sports_subnav(active_slug: str, s: dict, wcnews_name: str = "",
                    has_schedule: bool = True) -> str:
-    """Sub-bar under the Sports section — World Cup branches only.
+    """Vertical floating sidebar for the Sports section — World Cup branches only.
 
     No redundant 'Sports' button (you reach Sports from the main nav). Shows:
       • أخبار المونديال (worldcup-news) — when that section is enabled
       • برنامج المونديال (worldcup.html) — when the schedule feed loaded
     Returns "" if neither branch exists.
     """
-    items = []
+    rows: list[tuple[str, str, str, str]] = []  # (href, icon, label, slug)
     if wcnews_name:
-        items.append(("worldcup-news.html", f"🏆 {wcnews_name}", "worldcup-news"))
+        rows.append(("worldcup-news.html", "🏆", wcnews_name, "worldcup-news"))
     if has_schedule:
-        items.append(("worldcup.html", f"📅 {s.get('wc_nav', 'World Cup')}", "worldcup"))
-    if not items:
+        rows.append(("worldcup.html", "📅", s.get("wc_nav", "World Cup"), "worldcup"))
+    if not rows:
         return ""
-    buttons = "".join(
-        f'<a href="{esc(href)}" class="world-region-btn'
-        f'{" active-region" if slug == active_slug else ""}">{esc(label)}</a>'
-        for href, label, slug in items
+    btns = "".join(
+        f'<a href="{esc(href)}" class="side-btn{" side-active" if slug == active_slug else ""}">'
+        f'<span class="side-icon">{icon}</span>'
+        f'<span class="side-label">{esc(label)}</span>'
+        f'</a>'
+        for href, icon, label, slug in rows
     )
-    return (f'<div class="world-subnav" aria-label="{esc(s.get("sports", "Sports"))}">'
-            f'<div class="world-subnav-inner">{buttons}</div></div>')
+    hdr = esc(s.get("sports", "Sports"))
+    return (f'<aside class="side-subnav" aria-label="{hdr}">'
+            f'<div class="side-hdr"><span class="side-hdr-icon">⚽</span>'
+            f'<span class="side-hdr-title">{hdr}</span></div>'
+            f'<div class="side-inner">{btns}</div>'
+            f'</aside>')
 
 
 def _economy_widget(s: dict, active_tab: str = "",
                     show_prices: bool = True, show_bourse: bool = True,
                     show_stats: bool = True, show_biz: bool = True) -> str:
-    """Build the tabbed economy navigation widget (language-aware).
+    """Vertical floating sidebar for economy sub-sections (language-aware).
 
-    active_tab: "prices" | "business" | "travel" to highlight the active link tab.
+    active_tab: "prices" | "business" | "travel" to highlight the active link.
     show_* flags: controlled by admin Special Pages toggles (per language).
     """
-    prices_cls   = "econ-tab active" if active_tab == "prices"   else "econ-tab"
-    business_cls = "econ-tab active" if active_tab == "business" else "econ-tab"
-    travel_cls   = "econ-tab active" if active_tab == "travel"   else "econ-tab"
+    def _split(key: str) -> tuple[str, str]:
+        """Extract 'EMOJI text' → (emoji, text) from a strings key."""
+        raw = s.get(key, "")
+        parts = raw.split(" ", 1)
+        return (parts[0], parts[1]) if len(parts) == 2 else ("•", raw)
 
-    # ── Conditional tabs/panels based on admin toggles ────────────────────────
-    prices_tab  = (f'<a href="prices.html" class="{prices_cls}">{esc(s["econ_prices"])}</a>'
-                   if show_prices else "")
-    stats_tab   = (f'<button class="econ-tab" data-panel="econ-stats">{esc(s["econ_stats_btn"])}</button>'
-                   if show_stats else "")
-    bourse_tab  = (f'<button class="econ-tab" data-panel="econ-bourse">{esc(s["econ_bourse_btn"])}</button>'
-                   if show_bourse else "")
-    biz_tab     = (f'<button class="econ-tab" data-panel="econ-biz">{esc(s["econ_biz_btn"])}</button>'
-                   if show_biz else "")
-    stats_panel_h  = (f'<div class="econ-panel" id="econ-stats"><div class="econ-soon">{esc(s["econ_stats_soon"])}</div></div>'
-                      if show_stats else "")
-    bourse_panel_h = (f'<div class="econ-panel" id="econ-bourse"><div class="econ-soon">{esc(s["econ_bourse_soon"])}</div></div>'
-                      if show_bourse else "")
-    biz_panel_h    = (f'<div class="econ-panel" id="econ-biz"><div class="econ-soon">{esc(s["econ_biz_soon"])}</div></div>'
-                      if show_biz else "")
+    rows: list[tuple[str, str, str, str, bool]] = []  # href, icon, label, tab_key, is_soon
+    if show_prices:
+        ic, lbl = _split("econ_prices")
+        rows.append(("prices.html", ic or "💱", lbl, "prices", False))
+    ic, lbl = _split("econ_business_btn")
+    rows.append(("business.html", ic or "💼", lbl, "business", False))
+    ic, lbl = _split("econ_travel_btn")
+    rows.append(("travel.html", ic or "✈️", lbl, "travel", False))
+    if show_stats:
+        ic, lbl = _split("econ_stats_btn")
+        rows.append(("", ic or "📊", lbl, "", True))
+    if show_bourse:
+        ic, lbl = _split("econ_bourse_btn")
+        rows.append(("", ic or "📈", lbl, "", True))
+    if show_biz:
+        ic, lbl = _split("econ_biz_btn")
+        rows.append(("", ic or "🏢", lbl, "", True))
 
+    btns = ""
+    for href, icon, label, tab_key, is_soon in rows:
+        active_cls = " side-active" if tab_key == active_tab else ""
+        soon_cls   = " side-btn-soon" if is_soon else ""
+        tag        = "a" if href else "span"
+        href_attr  = f' href="{esc(href)}"' if href else ""
+        btns += (
+            f'<{tag}{href_attr} class="side-btn{active_cls}{soon_cls}">'
+            f'<span class="side-icon">{icon}</span>'
+            f'<span class="side-label">{esc(label)}'
+            f'{"<small class=\'side-soon-badge\'>soon</small>" if is_soon else ""}'
+            f'</span>'
+            f'</{tag}>'
+        )
+
+    hdr = esc(s.get("econ_widget_label", "Economy"))
     return (
-        f'<div class="econ-widget" role="complementary" aria-label="{esc(s["econ_widget_label"])}">'
-        f'<div class="econ-tab-nav">'
-        f'<div class="econ-tab-nav-inner">'
-        f'{prices_tab}'
-        f'<a href="business.html" class="{business_cls}">{esc(s["econ_business_btn"])}</a>'
-        f'<a href="travel.html"   class="{travel_cls}">{esc(s["econ_travel_btn"])}</a>'
-        f'{stats_tab}{bourse_tab}{biz_tab}'
+        f'<aside class="side-subnav side-econ" role="complementary" aria-label="{hdr}">'
+        f'<div class="side-hdr">'
+        f'<span class="side-hdr-icon">💹</span>'
+        f'<span class="side-hdr-title">{hdr}</span>'
         f'</div>'
-        f'</div>'
-        f'<div class="econ-panels">'
-        f'{stats_panel_h}{bourse_panel_h}{biz_panel_h}'
-        f'</div>'
-        f'</div>'
+        f'<div class="side-inner">{btns}</div>'
+        f'</aside>'
     )
 
 
@@ -1874,30 +1894,35 @@ ul,ol{list-style:none}
 .search-no-results.visible{display:block}
 .search-count{font-size:.75em;color:var(--text-muted);margin-inline-start:8px;font-weight:600}
 
-/* ===================== WORLD REGIONS SUBNAV ===================== */
-.world-subnav{background:var(--nav-bg);border-top:1px solid var(--border);border-bottom:2px solid var(--accent);backdrop-filter:blur(12px)}
-.world-subnav-inner{max-width:1200px;margin:0 auto;padding:0 10px;display:flex;overflow-x:auto;scrollbar-width:none;gap:1px}
-.world-subnav-inner::-webkit-scrollbar{display:none}
-.world-region-btn{display:inline-flex;align-items:center;gap:4px;color:#111;padding:9px 15px;font-size:.9em;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;font-weight:800;cursor:pointer;border-radius:6px 6px 0 0;flex-shrink:0;opacity:0;animation:btn-drop .38s ease forwards}
-.world-region-btn:hover{color:var(--accent);background:rgba(99,102,241,.06);border-bottom-color:rgba(99,102,241,.3)}
-.world-region-btn.active-region{color:var(--accent);border-bottom-color:var(--accent);background:rgba(99,102,241,.09)}
-.dark-mode .world-region-btn{color:#e2e8f0}
-.dark-mode .world-region-btn:hover{color:#a5b4fc}
-.dark-mode .world-region-btn.active-region{color:#a5b4fc}
-@keyframes btn-drop{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
-.world-region-btn:nth-child(1){animation-delay:.04s}
-.world-region-btn:nth-child(2){animation-delay:.09s}
-.world-region-btn:nth-child(3){animation-delay:.14s}
-.world-region-btn:nth-child(4){animation-delay:.19s}
-.world-region-btn:nth-child(5){animation-delay:.24s}
-.world-region-btn:nth-child(6){animation-delay:.29s}
-.world-region-btn:nth-child(7){animation-delay:.34s}
-.world-region-btn:nth-child(8){animation-delay:.39s}
-.world-region-btn.live-btn{color:#dc2626;border-bottom-color:transparent}
-.world-region-btn.live-btn:hover{color:#b91c1c;background:rgba(220,38,38,.07);border-bottom-color:rgba(220,38,38,.35)}
-.world-region-btn.live-btn.active-region{color:#dc2626;border-bottom-color:#dc2626;background:rgba(220,38,38,.09)}
-.dark-mode .world-region-btn.live-btn{color:#f87171}
-.dark-mode .world-region-btn.live-btn.active-region{color:#f87171;border-bottom-color:#f87171}
+/* ===================== VERTICAL FLOATING SIDE SUBNAV ===================== */
+.side-subnav{position:fixed;top:94px;inset-inline-start:0;z-index:249;width:58px;max-height:calc(100vh - 108px);display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-inline-start:none;border-start-end-radius:14px;border-end-end-radius:14px;box-shadow:3px 0 20px rgba(0,0,0,.09);backdrop-filter:blur(16px);transition:width .28s cubic-bezier(.4,0,.2,1);overflow:hidden}
+body.lang-rtl .side-subnav{box-shadow:-3px 0 20px rgba(0,0,0,.09)}
+.side-subnav:hover{width:224px}
+.side-hdr{display:flex;align-items:center;gap:8px;padding:10px;background:linear-gradient(135deg,var(--header-start),var(--header-end));min-height:46px;overflow:hidden;flex-shrink:0}
+.side-hdr-icon{font-size:1.1em;flex-shrink:0;width:38px;text-align:center;line-height:1}
+.side-hdr-title{color:#fff;font-weight:800;font-size:.82em;white-space:nowrap;opacity:0;transition:opacity .18s}
+.side-subnav:hover .side-hdr-title{opacity:1}
+.side-inner{overflow-y:auto;overflow-x:hidden;flex:1;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.side-inner::-webkit-scrollbar{width:3px}
+.side-inner::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.side-btn{display:flex;align-items:center;gap:10px;padding:10px;color:var(--text);text-decoration:none;white-space:nowrap;overflow:hidden;transition:background .18s,color .18s,border-inline-start-color .18s;border-inline-start:3px solid transparent;cursor:pointer;font-family:inherit;background:none;border-top:none;border-inline-end:none;border-bottom:none;width:100%;text-align:start}
+.side-btn:hover{background:rgba(99,102,241,.08);color:var(--accent);border-inline-start-color:rgba(99,102,241,.35)}
+.side-btn.side-active{background:rgba(99,102,241,.12);color:var(--accent);border-inline-start-color:var(--accent);font-weight:700}
+.side-btn.side-btn-soon{opacity:.52;cursor:default;pointer-events:none}
+.side-btn.side-live{color:#dc2626}
+.side-btn.side-live:hover{background:rgba(220,38,38,.07);color:#b91c1c;border-inline-start-color:rgba(220,38,38,.4)}
+.side-btn.side-live.side-active{background:rgba(220,38,38,.1);color:#dc2626;border-inline-start-color:#dc2626}
+.side-icon{font-size:1.2em;flex-shrink:0;width:38px;text-align:center;line-height:1}
+.side-label{font-size:.83em;font-weight:700;opacity:0;transition:opacity .15s .04s;min-width:0;display:flex;align-items:center;gap:6px}
+.side-subnav:hover .side-label{opacity:1}
+.side-soon-badge{font-size:.6em;background:rgba(99,102,241,.18);color:var(--accent);padding:1px 5px;border-radius:4px;font-weight:600}
+/* Dark mode */
+.dark-mode .side-subnav{background:var(--surface);box-shadow:3px 0 20px rgba(0,0,0,.3)}
+.dark-mode body.lang-rtl .side-subnav{box-shadow:-3px 0 20px rgba(0,0,0,.3)}
+/* Offset main content to avoid sidebar overlap */
+@media(min-width:769px){body.has-sidebar .main-wrapper{padding-inline-start:76px}}
+/* Mobile: hide floating sidebar (bottom-nav handles mobile nav) */
+@media(max-width:768px){.side-subnav{display:none}}
 
 /* ===================== LIVE TV PAGE ===================== */
 .live-page-hdr{display:flex;align-items:center;gap:14px;padding:20px 0 6px;margin-bottom:24px;border-bottom:2px solid var(--border)}
@@ -2139,20 +2164,12 @@ body.lang-rtl .more-btn:hover{transform:translateX(4px)}
 .dark-mode .wt-detail{background:rgba(99,102,241,.12)}
 .dark-mode .wt-fc-item{background:rgba(99,102,241,.09)}
 
-/* ===================== ECONOMY TABS WIDGET ===================== */
-.econ-widget{background:linear-gradient(90deg,#059669,#0d9488);border-bottom:2px solid rgba(0,0,0,.12);color:#fff}
-.econ-tab-nav{background:rgba(0,0,0,.2)}
-.econ-tab-nav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;overflow-x:auto;scrollbar-width:none;white-space:nowrap}
-.econ-tab-nav-inner::-webkit-scrollbar{display:none}
-.econ-tab{background:none;border:none;border-bottom:3px solid transparent;color:rgba(255,255,255,.65);font-size:.83em;font-weight:700;padding:9px 18px;cursor:pointer;transition:all .2s;white-space:nowrap;font-family:inherit;letter-spacing:.2px;flex-shrink:0}
-.econ-tab:hover{color:#fff;background:rgba(255,255,255,.08)}
-.econ-tab.active{color:#fff;border-bottom-color:rgba(255,255,255,.85);background:rgba(255,255,255,.12)}
-.econ-panels{overflow:hidden}
-.econ-panel{display:none;font-size:.82em;font-weight:700}
-.econ-panel.active{display:block}
-.econ-soon{max-width:1200px;margin:0 auto;padding:0 24px;color:rgba(255,255,255,.6);font-size:.81em;font-style:italic;height:36px;display:flex;align-items:center;gap:6px}
-.dark-mode .econ-widget{background:linear-gradient(90deg,#065f46,#0f766e)}
-.dark-mode .econ-tab-nav{background:rgba(0,0,0,.3)}
+/* ===================== ECONOMY SIDEBAR (side-econ) ===================== */
+/* Economy sidebar uses .side-subnav base + override accent colors */
+.side-econ .side-hdr{background:linear-gradient(135deg,#059669,#0d9488)}
+.side-econ .side-btn:hover{background:rgba(5,150,105,.09);color:#059669;border-inline-start-color:rgba(5,150,105,.4)}
+.side-econ .side-btn.side-active{background:rgba(5,150,105,.14);color:#059669;border-inline-start-color:#059669}
+.dark-mode .side-econ .side-hdr{background:linear-gradient(135deg,#065f46,#0f766e)}
 
 /* ===================== PRICES PAGE ===================== */
 .prices-section{margin-bottom:44px}
@@ -2227,17 +2244,9 @@ body.lang-ltr .nh-text{direction:ltr}
   .nav-inner{padding:0 4px}
   .nav-tab{padding:9px 11px;font-size:.82em}
   .nav-tab.active{box-shadow:inset 0 -3px 0 var(--accent)}
-  /* ALL subnavs (World regions + Media) VISIBLE on mobile — compact and
-     horizontally scrollable (MSN / Google News style). Applies to both the
-     homepage world-subnav AND region/media page subnavs. */
-  .world-subnav{position:relative}
-  .world-subnav-inner{padding:0 8px;-webkit-overflow-scrolling:touch}
-  .world-region-btn{padding:7px 11px;font-size:.8em}
-  /* Right-edge fade hint on the subnav — signals horizontal scrollability.
-     Placed on .world-subnav (the relative parent), NOT on the scrolling inner. */
-  .world-subnav::after{content:'';position:absolute;top:0;bottom:2px;width:26px;pointer-events:none;z-index:1}
-  body.lang-ltr .world-subnav::after{right:0;background:linear-gradient(90deg,transparent,var(--nav-bg))}
-  body.lang-rtl .world-subnav::after{left:0;background:linear-gradient(270deg,transparent,var(--nav-bg))}
+  /* Floating sidebar hidden on mobile — handled by bottom-nav */
+  .side-subnav{display:none}
+  body.has-sidebar .main-wrapper{padding-inline-start:20px}
   /* No-image cards on mobile: hide the placeholder area — show only source + date + title */
   .article-card.card--no-img .card-no-img{display:none}
 }
@@ -5704,53 +5713,62 @@ def _carousel(articles: list[dict], max_items: int = 12, s: dict = STRINGS["ar"]
 
 def _world_subnav(active_slug: str = "", world_regions: list = WORLD_REGIONS,
                   s: dict = STRINGS["ar"]) -> str:
-    """Horizontal world-regions strip — sticky inside .sticky-header on index + world + region pages.
-
-    Visible on all viewports (compact + horizontally scrollable on mobile).
-    """
+    """Vertical floating sidebar — world regions, shown on index + world + region pages."""
     if not world_regions:
         return ""
-    buttons = ""
+    btns = ""
     for r in world_regions:
-        active_cls = " active-region" if r["slug"] == active_slug else ""
-        buttons += (
-            f'<a href="{esc(r["slug"])}.html" class="world-region-btn{active_cls}">'
-            f'{esc(r["icon"])} {esc(r["name"])}'
+        active_cls = " side-active" if r["slug"] == active_slug else ""
+        btns += (
+            f'<a href="{esc(r["slug"])}.html" class="side-btn{active_cls}">'
+            f'<span class="side-icon">{esc(r["icon"])}</span>'
+            f'<span class="side-label">{esc(r["name"])}</span>'
             f'</a>'
         )
+    hdr = esc(s.get("world_regions_label", "World Regions"))
     return (
-        f'<div class="world-subnav" aria-label="{esc(s["world_regions_label"])}">'
-        f'<div class="world-subnav-inner">{buttons}</div>'
-        f'</div>'
+        f'<aside class="side-subnav" aria-label="{hdr}">'
+        f'<div class="side-hdr"><span class="side-hdr-icon">🌐</span>'
+        f'<span class="side-hdr-title">{hdr}</span></div>'
+        f'<div class="side-inner">{btns}</div>'
+        f'</aside>'
     )
 
 
 def _media_subnav(active_slug: str = "", media_regions: list = MEDIA_REGIONS,
                   s: dict = STRINGS["ar"]) -> str:
-    """Horizontal media-regions strip for صوت وصورة and vid-* pages."""
+    """Vertical floating sidebar for صوت وصورة and vid-* pages."""
     if not media_regions:
         return ""
-    buttons = ""
-    _live_label = s.get("live_tv_label", "📡 Live TV")
-    _live_active_cls = " active-region" if active_slug == "live" else ""
+    btns = ""
+    _live_raw   = s.get("live_tv_label", "📡 Live TV")
+    _live_parts = _live_raw.split(" ", 1)
+    _live_icon  = _live_parts[0] if len(_live_parts) == 2 else "📡"
+    _live_text  = _live_parts[1] if len(_live_parts) == 2 else _live_raw
+    _live_active_cls = " side-active" if active_slug == "live" else ""
     for i, r in enumerate(media_regions):
-        active_cls = " active-region" if r["slug"] == active_slug else ""
-        buttons += (
-            f'<a href="{esc(r["slug"])}.html" class="world-region-btn{active_cls}">'
-            f'{esc(r["icon"])} {esc(r["name"])}'
+        active_cls = " side-active" if r["slug"] == active_slug else ""
+        btns += (
+            f'<a href="{esc(r["slug"])}.html" class="side-btn{active_cls}">'
+            f'<span class="side-icon">{esc(r["icon"])}</span>'
+            f'<span class="side-label">{esc(r["name"])}</span>'
             f'</a>'
         )
-        # Insert live TV button right after the first item (أحداث / Events)
+        # Insert Live TV button right after the first item (أحداث / Events)
         if i == 0:
-            buttons += (
-                f'<a href="live.html" class="world-region-btn live-btn{_live_active_cls}">'
-                f'{esc(_live_label)}'
+            btns += (
+                f'<a href="live.html" class="side-btn side-live{_live_active_cls}">'
+                f'<span class="side-icon">{_live_icon}</span>'
+                f'<span class="side-label">{esc(_live_text)}</span>'
                 f'</a>'
             )
+    hdr = esc(s.get("media_regions_label", "صوت وصورة"))
     return (
-        f'<div class="world-subnav" aria-label="{esc(s.get("media_regions_label", "صوت وصورة"))}">'
-        f'<div class="world-subnav-inner">{buttons}</div>'
-        f'</div>'
+        f'<aside class="side-subnav" aria-label="{hdr}">'
+        f'<div class="side-hdr"><span class="side-hdr-icon">🎬</span>'
+        f'<span class="side-hdr-title">{hdr}</span></div>'
+        f'<div class="side-inner">{btns}</div>'
+        f'</aside>'
     )
 
 
@@ -6421,6 +6439,7 @@ def _page(*, title: str, desc: str, nav_html: str,
         f'  <meta property="og:image:height" content="630">\n'
         f'  <meta name="twitter:image" content="{esc(og_image_url)}">'
     ) if og_image_url else ""
+    _sidebar_cls = " has-sidebar" if (world_subnav_html or ticker_html) else ""
     return f"""<!DOCTYPE html>
 <html lang="{s["lang"]}" dir="{s["dir"]}">
 <head>
@@ -6475,7 +6494,7 @@ def _page(*, title: str, desc: str, nav_html: str,
 {extra_json_ld}
 {_ga4_head(ga_id)}
 </head>
-<body id="top" class="{s["body_class"]}">
+<body id="top" class="{s["body_class"]}{_sidebar_cls}">
   <div class="sticky-header">
     <header class="site-header" aria-label="{s["header_label"]}">
       <div class="site-header-inner">
@@ -6503,9 +6522,9 @@ def _page(*, title: str, desc: str, nav_html: str,
     <nav class="site-nav" aria-label="{s["nav_label"]}">
       <div class="nav-inner">{nav_html}</div>
     </nav>
-    {world_subnav_html}
-    {ticker_html}
   </div>
+  {world_subnav_html}
+  {ticker_html}
   <div class="main-wrapper">
     {('<div class="hero-widget-row"><div class="carousel-col">' + carousel_html + trending_widget_html + '</div>' + widget_col_html + '</div>') if (carousel_html and widget_col_html) else ('<div class="carousel-col">' + carousel_html + trending_widget_html + '</div>') if (carousel_html and trending_widget_html) else carousel_html}
     <main class="content-area" role="main">
