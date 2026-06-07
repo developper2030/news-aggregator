@@ -2356,6 +2356,9 @@ body.lang-ltr .nh-prev{right:auto;left:14px}
 body.lang-ltr .nh-next{left:auto;right:14px}
 body.lang-ltr .nh-text{direction:ltr}
 
+/* Carousel arrows: desktop only — mobile uses swipe */
+@media(max-width:768px){.nh-nav{display:none}}
+
 /* ===================== RESPONSIVE ===================== */
 @media(max-width:1200px){
   .articles-grid{grid-template-columns:repeat(3,1fr)}
