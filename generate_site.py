@@ -1418,6 +1418,13 @@ _WC_SEE_ALL = {
 _WC_GRP_WORD = {
     "ar": "المجموعة", "en": "Group", "fr": "Groupe", "es": "Grupo", "tr": "Grup",
 }
+_TRENDING_LABELS = {
+    "ar": {"title": "الأكثر قراءة"},
+    "en": {"title": "Most Read"},
+    "fr": {"title": "Les Plus Lus"},
+    "es": {"title": "Lo Más Leído"},
+    "tr": {"title": "En Çok Okunan"},
+}
 
 
 def _weather_widget(s: dict, lang: str) -> str:
@@ -1508,12 +1515,105 @@ def _games_widget(lang: str) -> str:
     )
 
 
-def _widget_col(s: dict, lang: str, worldcup_data: dict) -> str:
-    """Full widget column: weather + worldcup + games."""
+def _trending_widget(arts: list, s: dict, lang: str) -> str:
+    """Most-Read widget: top 5 diverse articles ranked by image quality + category spread."""
+    if not arts:
+        return ""
+
+    # ── Select: diverse across categories, prefer real images ────────────────
+    _BAD_IMG = ("placeholder", "default", "logo", "social-01", "blank", "noimage",
+                "no-image", "fallback", "generic", "aitnews-image")
+    def _good_img(url: str) -> bool:
+        if not url or not url.startswith("http"):
+            return False
+        lo = url.lower()
+        return not any(b in lo for b in _BAD_IMG)
+
+    seen_cats: dict[str, int] = {}   # cat_slug → count picked
+    selected: list[dict] = []
+    seen_urls: set[str] = set()
+
+    # Pass 1: image-rich articles, max 2 per category
+    for a in arts:
+        if len(selected) >= 5:
+            break
+        url = a.get("url", "")
+        if url in seen_urls or _is_yt_url(url):
+            continue
+        if not _good_img(a.get("image", "")):
+            continue
+        cat = a.get("slug", "other")
+        if seen_cats.get(cat, 0) >= 2:
+            continue
+        seen_cats[cat] = seen_cats.get(cat, 0) + 1
+        seen_urls.add(url)
+        selected.append(a)
+
+    # Pass 2: fill remaining slots from any article (any image quality)
+    for a in arts:
+        if len(selected) >= 5:
+            break
+        url = a.get("url", "")
+        if url in seen_urls or _is_yt_url(url):
+            continue
+        cat = a.get("slug", "other")
+        if seen_cats.get(cat, 0) >= 2:
+            continue
+        seen_cats[cat] = seen_cats.get(cat, 0) + 1
+        seen_urls.add(url)
+        selected.append(a)
+
+    if not selected:
+        return ""
+
+    label  = _TRENDING_LABELS.get(lang, _TRENDING_LABELS["en"])["title"]
+    # Rank badge colors: gold, silver, bronze, then accent
+    _RANK_CLS = ["tr-r1", "tr-r2", "tr-r3", "tr-r4", "tr-r5"]
+
+    rows = ""
+    for i, art in enumerate(selected):
+        art_hash = _article_slug(art.get("url", ""))
+        href     = f"article/{art_hash}.html"
+        img      = art.get("image", "")
+        title    = esc(art.get("title", "---"))
+        src_name = esc((art.get("source_name") or art.get("source") or "").split("—")[0].strip())
+        thumb    = (
+            f'<img src="{esc(img)}" alt="{title}" class="tr-thumb-img" loading="lazy"'
+            f' onerror="this.parentElement.classList.add(\'tr-no-img\')">'
+        ) if img and img.startswith("http") else ""
+        rows += (
+            f'<a class="tr-item" href="{href}">'
+            f'<div class="tr-rank {_RANK_CLS[i]}">{i + 1}</div>'
+            f'<div class="tr-thumb">{thumb}</div>'
+            f'<div class="tr-info">'
+            f'<div class="tr-title">{title}</div>'
+            f'{"<div class=\'tr-src\'>" + src_name + "</div>" if src_name else ""}'
+            f'</div>'
+            f'</a>'
+        )
+
+    return (
+        f'<div class="widget-card trending-card">'
+        f'<div class="widget-hdr trending-hdr">'
+        f'<span class="wh-icon">🔥</span>'
+        f'<span class="widget-hdr-title">{esc(label)}</span>'
+        f'</div>'
+        f'<div class="tr-list">{rows}</div>'
+        f'</div>'
+    )
+
+
+def _widget_col(s: dict, lang: str, worldcup_data: dict,
+                trending_arts: list = None,
+                show_wc: bool = True) -> str:
+    """Full widget column: weather + trending + worldcup + games."""
+    wc = _worldcup_widget(worldcup_data, s, lang) if show_wc else ""
+    tr = _trending_widget(trending_arts or [], s, lang)
     return (
         f'<div class="widget-col">'
         f'{_weather_widget(s, lang)}'
-        f'{_worldcup_widget(worldcup_data, s, lang)}'
+        f'{tr}'
+        f'{wc}'
         f'{_games_widget(lang)}'
         f'</div>'
     )
@@ -1999,6 +2099,23 @@ body.lang-rtl .more-btn:hover{transform:translateX(4px)}
 .wt-fc-time{color:var(--muted,#64748b);font-weight:700}
 .wt-fc-icon{font-size:1.25em;line-height:1}
 .wt-fc-temp{font-weight:900;color:var(--text)}
+/* ---- TRENDING / MOST READ ---- */
+.trending-hdr{background:linear-gradient(90deg,rgba(239,68,68,.1),transparent)}
+.tr-list{padding:2px 0}
+.tr-item{display:flex;align-items:center;gap:9px;padding:8px 12px;text-decoration:none;border-bottom:1px solid var(--border);transition:background .15s}
+.tr-item:last-child{border-bottom:none}
+.tr-item:hover{background:rgba(99,102,241,.05)}
+.tr-rank{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72em;font-weight:900;flex-shrink:0;color:#fff}
+.tr-r1{background:linear-gradient(135deg,#f59e0b,#ef4444)}
+.tr-r2{background:linear-gradient(135deg,#94a3b8,#64748b)}
+.tr-r3{background:linear-gradient(135deg,#b45309,#92400e)}
+.tr-r4,.tr-r5{background:linear-gradient(135deg,var(--accent),#8b5cf6)}
+.tr-thumb{width:52px;height:52px;border-radius:8px;overflow:hidden;flex-shrink:0;background:var(--border)}
+.tr-thumb-img{width:100%;height:100%;object-fit:cover;display:block}
+.tr-no-img{background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(139,92,246,.15))}
+.tr-info{flex:1;min-width:0}
+.tr-title{font-size:.78em;font-weight:700;color:var(--text);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tr-src{font-size:.68em;color:var(--muted,#64748b);margin-top:3px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* ---- WORLD CUP ---- */
 .ww-hdr{background:linear-gradient(90deg,rgba(234,179,8,.1),transparent)}
 .ww-list{padding:4px 0}
@@ -7104,7 +7221,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         main_html=home_sections,
         world_subnav_html=world_subnav,
         carousel_html=home_carousel,
-        widget_col_html=_widget_col(s, lang, _worldcup_data),
+        widget_col_html=_widget_col(s, lang, _worldcup_data, trending_arts=all_articles),
         canonical=_page_canonical("index.html"),
         hreflang_html=_make_hreflang("index.html"),
         og_image_url=_og_img_url,
@@ -7270,6 +7387,15 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         _cat_extra_ld = "\n".join(filter(None, [_org_ld, _cat_bc_ld, _cat_item_list_ld]))
         # Override desc with category-specific description (common has site_desc)
         _cat_common = {**common, "desc": cat_desc}
+        # Widget column: show on pages that have a carousel; trending = this category's articles
+        # Show WC widget on sports-related pages; hide on purely editorial pages
+        _show_wc_here = slug in {"sports", "worldcup-news"} or slug in SPORTS_SUB_SLUGS
+        _cat_widget = (
+            _widget_col(s, lang, _worldcup_data,
+                        trending_arts=raw_articles,
+                        show_wc=_show_wc_here)
+            if cat_carousel else ""
+        )
         _wrt(_cat_page_file, _page(
             title=cat_title,
             nav_html=_nav(categories, articles_by_cat, active=slug,
@@ -7283,6 +7409,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             world_subnav_html=page_world_subnav,
             ticker_html=cat_ticker,
             carousel_html=cat_carousel,
+            widget_col_html=_cat_widget,
             rss_url=cat_rss,
             lang_switcher_html=_lsw(_cat_page_file),
             lcp_image_url=_cat_lcp_img,
@@ -7388,6 +7515,10 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             [(r["slug"], r["name"], r["icon"]) for r in world_regions],
             per_slug=3,
         ), s=s, site_url=_site_url)
+        _world_all_arts = [
+            a for r in world_regions
+            for a in articles_by_cat.get(r["slug"], {}).get("articles", [])
+        ]
         _wrt("world.html", _page(
             title=site_title,
             nav_html=_nav(categories, articles_by_cat, active="world",
@@ -7401,6 +7532,8 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             og_image_url=_og_img_url,
             extra_json_ld=_org_ld,
             carousel_html=world_carousel,
+            widget_col_html=_widget_col(s, lang, _worldcup_data,
+                                        trending_arts=_world_all_arts, show_wc=False),
             lang_switcher_html=_lsw("world.html"),
             **common,
         ))
