@@ -1604,15 +1604,12 @@ def _trending_widget(arts: list, s: dict, lang: str) -> str:
 
 
 def _widget_col(s: dict, lang: str, worldcup_data: dict,
-                trending_arts: list = None,
                 show_wc: bool = True) -> str:
-    """Full widget column: weather + trending + worldcup + games."""
+    """Left widget column: weather + worldcup + games."""
     wc = _worldcup_widget(worldcup_data, s, lang) if show_wc else ""
-    tr = _trending_widget(trending_arts or [], s, lang)
     return (
         f'<div class="widget-col">'
         f'{_weather_widget(s, lang)}'
-        f'{tr}'
         f'{wc}'
         f'{_games_widget(lang)}'
         f'</div>'
@@ -2071,7 +2068,8 @@ body.lang-rtl .more-btn:hover{transform:translateX(4px)}
 
 /* ===================== HERO + WIDGET ROW ===================== */
 .hero-widget-row{display:grid;grid-template-columns:1fr 330px;gap:22px;align-items:start;max-width:1200px;margin:0 auto 28px;padding:0 20px}
-.hero-widget-row .news-hero{max-width:100%;margin:0}
+.carousel-col{display:flex;flex-direction:column;gap:14px;min-width:0}
+.carousel-col .news-hero{max-width:100%;margin:0}
 @media(max-width:980px){.hero-widget-row{grid-template-columns:1fr;padding:0 12px}}
 /* WIDGET COLUMN */
 .widget-col{display:flex;flex-direction:column;gap:12px}
@@ -6409,6 +6407,7 @@ def _page(*, title: str, desc: str, nav_html: str,
           lcp_image_url: str = "",
           bn_active: str = "home",
           widget_col_html: str = "",
+          trending_widget_html: str = "",
           s: dict) -> str:
     # ── JSON-LD: WebSite ──────────────────────────────────────────────────────
     sd = json.dumps({
@@ -6508,7 +6507,7 @@ def _page(*, title: str, desc: str, nav_html: str,
     {ticker_html}
   </div>
   <div class="main-wrapper">
-    {('<div class="hero-widget-row">' + carousel_html + widget_col_html + '</div>') if (carousel_html and widget_col_html) else carousel_html}
+    {('<div class="hero-widget-row"><div class="carousel-col">' + carousel_html + trending_widget_html + '</div>' + widget_col_html + '</div>') if (carousel_html and widget_col_html) else ('<div class="carousel-col">' + carousel_html + trending_widget_html + '</div>') if (carousel_html and trending_widget_html) else carousel_html}
     <main class="content-area" role="main">
       <h1 class="sr-only">{esc(title)}</h1>
       {main_html}
@@ -7221,7 +7220,8 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         main_html=home_sections,
         world_subnav_html=world_subnav,
         carousel_html=home_carousel,
-        widget_col_html=_widget_col(s, lang, _worldcup_data, trending_arts=all_articles),
+        widget_col_html=_widget_col(s, lang, _worldcup_data),
+        trending_widget_html=_trending_widget(all_articles, s, lang),
         canonical=_page_canonical("index.html"),
         hreflang_html=_make_hreflang("index.html"),
         og_image_url=_og_img_url,
@@ -7387,15 +7387,11 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         _cat_extra_ld = "\n".join(filter(None, [_org_ld, _cat_bc_ld, _cat_item_list_ld]))
         # Override desc with category-specific description (common has site_desc)
         _cat_common = {**common, "desc": cat_desc}
-        # Widget column: show on pages that have a carousel; trending = this category's articles
-        # Show WC widget on sports-related pages; hide on purely editorial pages
+        # Widget column: show on pages that have a carousel
+        # WC widget only on sports-related pages
         _show_wc_here = slug in {"sports", "worldcup-news"} or slug in SPORTS_SUB_SLUGS
-        _cat_widget = (
-            _widget_col(s, lang, _worldcup_data,
-                        trending_arts=raw_articles,
-                        show_wc=_show_wc_here)
-            if cat_carousel else ""
-        )
+        _cat_widget   = _widget_col(s, lang, _worldcup_data, show_wc=_show_wc_here) if cat_carousel else ""
+        _cat_trending = _trending_widget(raw_articles, s, lang) if cat_carousel else ""
         _wrt(_cat_page_file, _page(
             title=cat_title,
             nav_html=_nav(categories, articles_by_cat, active=slug,
@@ -7410,6 +7406,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             ticker_html=cat_ticker,
             carousel_html=cat_carousel,
             widget_col_html=_cat_widget,
+            trending_widget_html=_cat_trending,
             rss_url=cat_rss,
             lang_switcher_html=_lsw(_cat_page_file),
             lcp_image_url=_cat_lcp_img,
@@ -7532,8 +7529,8 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             og_image_url=_og_img_url,
             extra_json_ld=_org_ld,
             carousel_html=world_carousel,
-            widget_col_html=_widget_col(s, lang, _worldcup_data,
-                                        trending_arts=_world_all_arts, show_wc=False),
+            widget_col_html=_widget_col(s, lang, _worldcup_data, show_wc=False),
+            trending_widget_html=_trending_widget(_world_all_arts, s, lang),
             lang_switcher_html=_lsw("world.html"),
             **common,
         ))
