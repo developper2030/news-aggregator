@@ -805,6 +805,17 @@ def _read_btn_label(src_lang: str, ui_lang: str, fallback: str = "📖 Read arti
     return _READ_IN_LANG.get((src_lang, ui_lang),
            _READ_IN_LANG.get((src_lang, "en"), fallback))
 
+# ── Inline translate bar — labels + target language per UI language ──────────
+# Target choices: EN pages → AR (since content is Arabic-focused),
+#                 all others → EN (universal bridge language)
+_TRANSLATE_CFG: dict[str, dict] = {
+    "ar": {"btn": "🌐 ترجمة",    "tgt": "en", "restore": "↩ الأصل",    "loading": "⏳ جاري..."},
+    "en": {"btn": "🌐 Translate", "tgt": "ar", "restore": "↩ Restore",  "loading": "⏳ Translating..."},
+    "fr": {"btn": "🌐 Traduire",  "tgt": "en", "restore": "↩ Original", "loading": "⏳ Traduction..."},
+    "es": {"btn": "🌐 Traducir",  "tgt": "en", "restore": "↩ Original", "loading": "⏳ Traduciendo..."},
+    "tr": {"btn": "🌐 Çevir",    "tgt": "en", "restore": "↩ Orijinal", "loading": "⏳ Çevriliyor..."},
+}
+
 # UI strings per language — loaded dynamically from config/strings/*.json
 # To add a new language: drop a new <lang>.json file in that folder — no code change needed.
 def _load_strings() -> dict[str, dict]:
@@ -3391,6 +3402,13 @@ body.lang-ltr .nh-text{direction:ltr}
 .art-back-bottom{text-align:center;padding:24px 0 12px}
 .art-back-btn{display:inline-flex;align-items:center;gap:8px;color:var(--accent);background:rgba(99,102,241,.07);text-decoration:none;font-size:.9em;font-weight:700;padding:10px 26px;border-radius:26px;border:1.5px solid var(--accent);transition:all .2s}
 .art-back-btn:hover{background:var(--accent);color:#fff;transform:translateY(-1px);box-shadow:0 4px 16px rgba(99,102,241,.35)}
+/* ── Inline translate bar ── */
+.art-translate-bar{display:inline-flex;align-items:center;gap:8px;margin:14px 0 2px;flex-wrap:wrap}
+.art-tl-btn{display:inline-flex;align-items:center;gap:5px;background:transparent;border:1.5px solid var(--border);border-radius:20px;padding:5px 16px;color:var(--text-light);font-size:.84em;font-weight:600;cursor:pointer;transition:background .18s,color .15s,border-color .15s,transform .15s;line-height:1.2;user-select:none}
+.art-tl-btn:hover:not(:disabled){background:var(--surface,#f1f5f9);color:var(--text);transform:scale(1.04)}
+.art-tl-btn:disabled{opacity:.45;cursor:wait}
+.art-tl-btn.art-tl-active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.art-tl-status{font-size:.84em;color:var(--text-light);min-width:1em}
 @media(max-width:600px){
   .art-page{padding:14px 12px 32px}
   .art-img{border-radius:8px;margin-bottom:14px}
@@ -3748,6 +3766,77 @@ function initCardShare() {
   }, false);
 }
 
+/* ========== ARTICLE INLINE TRANSLATE (MyMemory free API) ========== */
+/* Translates article title + AI summary in-place. No API key needed.   */
+/* Source: page lang attribute.  Target: configured per language.        */
+function initArticleTranslate() {
+  var bar = document.querySelector('.art-translate-bar');
+  if (!bar) return;
+  var btn       = document.getElementById('art-tl-btn');
+  var statusEl  = document.getElementById('art-tl-status');
+  if (!btn) return;
+  var srcLang     = bar.dataset.src     || 'ar';
+  var tgtLang     = bar.dataset.tgt     || 'en';
+  var restoreLbl  = bar.dataset.restore || '↩';
+  var loadingLbl  = bar.dataset.loading || '⏳';
+  var origLabel   = btn.textContent;
+  var isTranslated = false;
+  /* Elements to translate: title + AI summary text */
+  var targets = [
+    document.querySelector('h1.art-title'),
+    document.querySelector('.art-summary-text')
+  ].filter(Boolean);
+  function setStatus(txt) { if (statusEl) statusEl.textContent = txt; }
+  function translateOne(text, src, tgt) {
+    var url = 'https://api.mymemory.translated.net/get'
+      + '?q='        + encodeURIComponent(text.substring(0, 500))
+      + '&langpair=' + src + '|' + tgt;
+    return fetch(url, {cache: 'no-store'})
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        var t = d && d.responseData && d.responseData.translatedText;
+        if (!t || t.indexOf('MYMEMORY WARNING') === 0) throw new Error('quota');
+        return t;
+      });
+  }
+  btn.addEventListener('click', function() {
+    /* ── Restore ── */
+    if (isTranslated) {
+      targets.forEach(function(el) {
+        if (el.dataset.orig) el.textContent = el.dataset.orig;
+      });
+      btn.textContent = origLabel;
+      btn.classList.remove('art-tl-active');
+      setStatus('');
+      isTranslated = false;
+      return;
+    }
+    /* ── Translate ── */
+    if (targets.length === 0) return;
+    btn.disabled = true;
+    setStatus(loadingLbl);
+    Promise.all(targets.map(function(el) {
+      return translateOne(el.textContent.trim(), srcLang, tgtLang)
+        .then(function(translated) {
+          el.dataset.orig = el.textContent;
+          el.textContent  = translated;
+        });
+    }))
+    .then(function() {
+      btn.disabled = false;
+      btn.textContent = restoreLbl;
+      btn.classList.add('art-tl-active');
+      setStatus('');
+      isTranslated = true;
+    })
+    .catch(function() {
+      btn.disabled = false;
+      setStatus('⚠️');
+      setTimeout(function() { setStatus(''); }, 3000);
+    });
+  });
+}
+
 /* ========== SEARCH ========== */
 function initSearch() {
   const toggle = document.getElementById('search-toggle');
@@ -4014,6 +4103,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initYTCards();
   initCardReactions();
   initCardShare();
+  initArticleTranslate();
   initEconTabs();
   initSourceFilter();
   initSearch();
@@ -7585,6 +7675,19 @@ def _article_page_html(
             f'</div>'
         )
 
+    # ── Inline translate bar (MyMemory API, free, no key) ────────────────────────
+    _tl_cfg = _TRANSLATE_CFG.get(lang, _TRANSLATE_CFG["en"])
+    _translate_bar = (
+        f'<div class="art-translate-bar" '
+        f'data-src="{lang}" '
+        f'data-tgt="{_tl_cfg["tgt"]}" '
+        f'data-restore="{esc(_tl_cfg["restore"])}" '
+        f'data-loading="{esc(_tl_cfg["loading"])}">'
+        f'<button class="art-tl-btn" id="art-tl-btn">{esc(_tl_cfg["btn"])}</button>'
+        f'<span class="art-tl-status" id="art-tl-status" aria-live="polite"></span>'
+        f'</div>'
+    )
+
     # ── Share buttons — use our canonical page URL, fall back to ext_url ────────
     _share_page = canon_url if canon_url else ext_url
     _wa  = "https://wa.me/?text=" + _up.quote(title_raw + "\n\n" + _share_page, safe="")
@@ -7786,6 +7889,7 @@ def _article_page_html(
         </div>
         {_art_cluster_badge}
         {summary_html}
+        {_translate_bar}
         <a href="{safe_url(ext_url)}" target="_blank" rel="noopener noreferrer nofollow"
            class="art-read-btn" itemprop="url">
           {esc(_read_btn_label(lang, lang, s.get("art_read_orig", "📖 Read article")))}
