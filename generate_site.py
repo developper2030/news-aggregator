@@ -2848,11 +2848,19 @@ body.lang-ltr .nh-text{direction:ltr}
 .share-copy{background:var(--accent)}
 .art-related{border-top:1px solid var(--border);padding-top:24px;margin-top:8px}
 .art-related-title{font-size:1.05em;font-weight:700;margin-bottom:14px;color:var(--text)}
-.art-related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
-.art-rel-card{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;text-decoration:none;color:var(--text);transition:border-color .15s,transform .15s;display:block}
-.art-rel-card:hover{border-color:var(--accent);transform:translateY(-2px)}
-.art-rel-title{font-size:.87em;font-weight:600;line-height:1.4;margin-bottom:5px;color:var(--text)}
-.art-rel-meta{font-size:.74em;color:var(--text-light)}
+.art-related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.art-rel-card{background:var(--bg);border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);transition:border-color .15s,transform .15s,box-shadow .15s;display:flex;flex-direction:column;overflow:hidden}
+.art-rel-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 20px rgba(99,102,241,.15)}
+.art-rel-img{aspect-ratio:16/9;overflow:hidden;background:var(--surface,#f1f5f9);flex-shrink:0}
+.art-rel-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.art-rel-card:hover .art-rel-img img{transform:scale(1.05)}
+.art-rel-img-empty{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:2em;background:var(--surface,#f1f5f9);flex-shrink:0;opacity:.55}
+.art-rel-body{padding:10px 12px 12px;flex:1;display:flex;flex-direction:column}
+.art-rel-title{font-size:.85em;font-weight:600;line-height:1.4;margin-bottom:5px;color:var(--text);flex:1}
+.art-rel-meta{font-size:.73em;color:var(--text-light);margin-top:auto}
+.art-back-bottom{text-align:center;padding:24px 0 12px}
+.art-back-btn{display:inline-flex;align-items:center;gap:8px;color:var(--accent);background:rgba(99,102,241,.07);text-decoration:none;font-size:.9em;font-weight:700;padding:10px 26px;border-radius:26px;border:1.5px solid var(--accent);transition:all .2s}
+.art-back-btn:hover{background:var(--accent);color:#fff;transform:translateY(-1px);box-shadow:0 4px 16px rgba(99,102,241,.35)}
 @media(max-width:600px){
   .art-page{padding:14px 12px 32px}
   .art-img{border-radius:8px;margin-bottom:14px}
@@ -2864,9 +2872,10 @@ body.lang-ltr .nh-text{direction:ltr}
   .art-read-btn{padding:11px 18px;font-size:.93em;margin-bottom:20px;border-radius:8px}
   .art-related{padding-top:18px}
   .art-related-title{font-size:.97em;margin-bottom:10px}
-  .art-rel-card{padding:10px}
+  .art-rel-body{padding:8px 10px 10px}
   .art-browse-cta{display:flex;justify-content:center;margin-top:16px;padding:9px 16px;font-size:.84em}
   .art-back{padding:7px 14px;font-size:.8em;margin-bottom:16px}
+  .art-back-btn{padding:9px 20px;font-size:.85em}
 }
 """
 
@@ -6461,9 +6470,13 @@ def _item_list_json_ld(
 def _nav(categories: list, articles_by_cat: dict, active: str = "home",
          s: dict = STRINGS["ar"], region_slugs: set = REGION_SLUGS,
          has_world: bool = True, media_slugs: set = MEDIA_SLUGS,
-         has_media: bool = True) -> str:
+         has_media: bool = True, rel_prefix: str = "") -> str:
+    """Build the top navigation bar HTML.
+
+    rel_prefix: path prefix for links (e.g. '../' for pages inside /article/).
+    """
     home_cls = "nav-tab active" if active == "home" else "nav-tab"
-    html = f'<a href="index.html" class="{home_cls}" data-cat="all">{s["home"]}</a>\n'
+    html = f'<a href="{rel_prefix}index.html" class="{home_cls}" data-cat="all">{s["home"]}</a>\n'
 
     for cat in categories:
         slug = cat["slug"]
@@ -6471,7 +6484,7 @@ def _nav(categories: list, articles_by_cat: dict, active: str = "home",
             continue  # regions/media/econ-sub/sports-sub live in subnav, not main nav
         cls = "nav-tab active" if active == slug else "nav-tab"
         html += (
-            f'<a href="{esc(slug)}.html" class="{cls}" data-cat="{esc(slug)}">'
+            f'<a href="{rel_prefix}{esc(slug)}.html" class="{cls}" data-cat="{esc(slug)}">'
             f'{esc(cat.get("icon",""))} {esc(cat["name"])}</a>\n'
         )
 
@@ -6479,7 +6492,7 @@ def _nav(categories: list, articles_by_cat: dict, active: str = "home",
     if has_world or has_media:
         media_active = active in media_slugs or active in ("media", "live")
         world_cls = "nav-tab active" if media_active else "nav-tab"
-        html += f'<a href="media.html" class="{world_cls}" data-cat="media">{s["world"]}</a>\n'
+        html += f'<a href="{rel_prefix}media.html" class="{world_cls}" data-cat="media">{s["world"]}</a>\n'
     return html
 
 
@@ -6728,8 +6741,16 @@ def _article_page_html(
     lang: str,
     cluster_map: dict | None = None,
     ga_id: str = "",
+    nav_html: str = "",
+    today_ar: str = "",
+    cat_articles: list | None = None,
 ) -> str:
-    """Generate a standalone HTML page for a single article (for SEO / Google News)."""
+    """Generate a standalone HTML page for a single article (for SEO / Google News).
+
+    nav_html: pre-built navigation HTML (with rel_prefix='../').
+    today_ar: today's date string for the header.
+    cat_articles: all articles from the same category (for bottom grid).
+    """
     import urllib.parse as _up
     import hashlib
 
@@ -6881,23 +6902,36 @@ def _article_page_html(
         f'</div>'
     )
 
-    # ── Related articles ──────────────────────────────────────────────────────
+    # ── Related articles (image thumbnail cards) ──────────────────────────────
     related_html = ""
-    if related:
+    # Use cat_articles if provided (fuller list), else fall back to related
+    _rel_pool = [a for a in (cat_articles or related) if a["url"] != ext_url][:16]
+    if _rel_pool:
         rel_cards = ""
-        for r in related[:4]:
+        for r in _rel_pool:
             r_hash  = hashlib.md5(r["url"].encode("utf-8")).hexdigest()[:12]
             r_title = esc(" ".join(r["title"].split()))
             r_src   = esc(SOURCE_AR_NAME.get(r["source"], r["source"]))
+            r_img   = r.get("image", "") or r.get("image_url", "")
+            _img_html = (
+                f'<div class="art-rel-img">'
+                f'<img src="{esc(r_img)}" alt="{r_title}" loading="lazy" onerror="this.parentNode.style.display=\'none\'">'
+                f'</div>'
+            ) if r_img else f'<div class="art-rel-img art-rel-img-empty"><span>{esc(cat_icon)}</span></div>'
             rel_cards += (
                 f'<a href="{r_hash}.html" class="art-rel-card">'
+                f'{_img_html}'
+                f'<div class="art-rel-body">'
                 f'<div class="art-rel-title">{r_title}</div>'
                 f'<div class="art-rel-meta">{r_src} · {esc(r.get("date", ""))}</div>'
+                f'</div>'
                 f'</a>'
             )
         related_html = (
             f'<div class="art-related">'
-            f'<h3 class="art-related-title">{esc(s.get("art_related", "Related"))}</h3>'
+            f'<h3 class="art-related-title">'
+            f'{esc(cat_icon)} {esc(s.get("art_related", "Related"))} — {esc(cat_name)}'
+            f'</h3>'
             f'<div class="art-related-grid">{rel_cards}</div>'
             f'</div>'
         )
@@ -7001,19 +7035,33 @@ def _article_page_html(
 </head>
 <body id="top" class="{_bc}">
   <div class="sticky-header">
-    <header class="site-header" aria-label="{esc(s.get('header_label', 'Header'))}">
+    <header class="site-header" aria-label="{esc(s.get('header_label','Header'))}">
       <div class="site-header-inner">
         <div class="header-start">
-          <a href="../index.html#{esc(slug)}" class="art-back" id="art-back-link">{esc(s.get('art_back', '← Back'))} {esc(site_title)}</a>
+          <span class="live-dot"></span>
+          <span id="live-time" class="live-time">00:00:00</span>
         </div>
+        <span class="site-header-title">{esc(site_title)}</span>
         <div class="header-end">
-          <button id="theme-toggle" class="theme-btn" aria-label="{esc(s.get('theme_btn_label', 'Toggle theme'))}">🌙</button>
+          <button id="theme-toggle" class="theme-btn" aria-label="{esc(s.get('theme_btn_label','Toggle theme'))}">🌙</button>
+          <button id="search-toggle" class="theme-btn" aria-label="{esc(s.get('search_label','Search'))}" aria-expanded="false">🔍</button>
         </div>
       </div>
-      {breadcrumb}
     </header>
+    <div id="search-bar" class="search-bar" role="search">
+      <div class="search-bar-inner">
+        <input id="search-input" type="search" class="search-input"
+               placeholder="{esc(s.get('search_placeholder','...'))}"
+               aria-label="{esc(s.get('search_label','Search'))}" autocomplete="off">
+        <button class="search-clear" id="search-clear" aria-label="×">×</button>
+      </div>
+    </div>
+    <nav class="site-nav" aria-label="{esc(s.get('nav_label','Nav'))}">
+      <div class="nav-inner">{nav_html}</div>
+    </nav>
+    {breadcrumb}
   </div>
-  <div class="main-wrapper">
+  <div class="main-wrapper art-main-wrapper">
     <main class="art-page" role="main">
       <article itemscope itemtype="https://schema.org/NewsArticle">
         {img_html}
@@ -7030,14 +7078,19 @@ def _article_page_html(
           {esc(s.get("art_read_orig", "📖 Read full article"))}
         </a>
         {share_row}
-        {related_html}
-        <a href="../{esc(slug)}.html" class="art-browse-cta">
-          {esc(s.get("art_browse_cat","More from"))} {esc(cat_icon)} {esc(cat_name)} {s.get("arrow","→")}
-        </a>
       </article>
+      {related_html}
+      <a href="../{esc(slug)}.html" class="art-browse-cta">
+        {esc(s.get("art_browse_cat","More from"))} {esc(cat_icon)} {esc(cat_name)} {s.get("arrow","→")}
+      </a>
+      <div class="art-back-bottom">
+        <a href="../{esc(slug)}.html" class="art-back-btn">
+          {s.get("arrow","→")} {esc(s.get("art_back","← Back"))}
+        </a>
+      </div>
     </main>
   </div>
-  <button class="back-to-top" id="back-to-top" aria-label="{esc(s.get('back_to_top', 'Back to top'))}">↑</button>
+  <button class="back-to-top" id="back-to-top" aria-label="{esc(s.get('back_to_top','Back to top'))}">↑</button>
   <script src="../app.js?v={_APP_VER}"></script>
 </body>
 </html>"""
@@ -7900,19 +7953,30 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
     art_dir = os.path.join(out_dir, "article")
     os.makedirs(art_dir, exist_ok=True)
     art_pages_written = 0
+
+    # Build nav HTML once for all article pages (links use '../' prefix)
+    _art_nav_html = _nav(
+        categories, articles_by_cat, active="",
+        s=s, region_slugs=region_slugs,
+        has_world=has_world, media_slugs=media_slugs_local,
+        has_media=has_media, rel_prefix="../",
+    )
+    _today_ar_str = common.get("today_ar", "")
+
     for art in all_articles:
         _slug = art.get("slug", "")
         if _slug in media_slugs_local:
             continue  # Skip YouTube videos — no article pages needed
-        _related = [
+        # All articles from the same category (for the bottom grid)
+        _cat_arts = [
             a for a in articles_by_cat.get(_slug, {}).get("articles", [])
             if a["url"] != art["url"]
-        ][:4]
+        ]
         _art_hash = _article_slug(art["url"])
         _art_html = _article_page_html(
             art=art,
             slug=_slug,
-            related=_related,
+            related=_cat_arts[:4],
             s=s,
             site_title=site_title,
             site_url=_site_url,
@@ -7920,6 +7984,9 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             lang=lang,
             cluster_map=_cluster_map,
             ga_id=_ga_id,
+            nav_html=_art_nav_html,
+            today_ar=_today_ar_str,
+            cat_articles=_cat_arts,
         )
         _write(f"article/{_art_hash}.html", _art_html, out_dir)
         art_pages_written += 1
