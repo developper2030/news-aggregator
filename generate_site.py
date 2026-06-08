@@ -762,6 +762,49 @@ SOURCE_AR_NAME: dict[str, str] = {
     "MAP News": "وكالة ماب",
 }
 
+# ── "Read article in <language>" — full grammatically-correct button labels ──
+# Key: (source_lang, ui_lang) → full localized button label
+# source_lang = language the article was written in (= generation lang in our config)
+# ui_lang     = language of the site UI the visitor is browsing
+# 5×5 = 25 combinations to cover all cross-language scenarios
+_READ_IN_LANG: dict[tuple[str, str], str] = {
+    # Arabic UI
+    ("ar", "ar"): "📖 اقرأ المقال بالعربية",
+    ("en", "ar"): "📖 اقرأ المقال بالإنجليزية",
+    ("fr", "ar"): "📖 اقرأ المقال بالفرنسية",
+    ("es", "ar"): "📖 اقرأ المقال بالإسبانية",
+    ("tr", "ar"): "📖 اقرأ المقال بالتركية",
+    # English UI
+    ("ar", "en"): "📖 Read article in Arabic",
+    ("en", "en"): "📖 Read article in English",
+    ("fr", "en"): "📖 Read article in French",
+    ("es", "en"): "📖 Read article in Spanish",
+    ("tr", "en"): "📖 Read article in Turkish",
+    # French UI
+    ("ar", "fr"): "📖 Lire l'article en arabe",
+    ("en", "fr"): "📖 Lire l'article en anglais",
+    ("fr", "fr"): "📖 Lire l'article en français",
+    ("es", "fr"): "📖 Lire l'article en espagnol",
+    ("tr", "fr"): "📖 Lire l'article en turc",
+    # Spanish UI
+    ("ar", "es"): "📖 Leer el artículo en árabe",
+    ("en", "es"): "📖 Leer el artículo en inglés",
+    ("fr", "es"): "📖 Leer el artículo en francés",
+    ("es", "es"): "📖 Leer el artículo en español",
+    ("tr", "es"): "📖 Leer el artículo en turco",
+    # Turkish UI
+    ("ar", "tr"): "📖 Makaleyi Arapça oku",
+    ("en", "tr"): "📖 Makaleyi İngilizce oku",
+    ("fr", "tr"): "📖 Makaleyi Fransızca oku",
+    ("es", "tr"): "📖 Makaleyi İspanyolca oku",
+    ("tr", "tr"): "📖 Makaleyi Türkçe oku",
+}
+
+def _read_btn_label(src_lang: str, ui_lang: str, fallback: str = "📖 Read article") -> str:
+    """Return the grammatically-correct 'Read article in <language>' button label."""
+    return _READ_IN_LANG.get((src_lang, ui_lang),
+           _READ_IN_LANG.get((src_lang, "en"), fallback))
+
 # UI strings per language — loaded dynamically from config/strings/*.json
 # To add a new language: drop a new <lang>.json file in that folder — no code change needed.
 def _load_strings() -> dict[str, dict]:
@@ -7745,7 +7788,7 @@ def _article_page_html(
         {summary_html}
         <a href="{safe_url(ext_url)}" target="_blank" rel="noopener noreferrer nofollow"
            class="art-read-btn" itemprop="url">
-          {esc(s.get("art_read_orig", "📖 Read full article"))}
+          {esc(_read_btn_label(lang, lang, s.get("art_read_orig", "📖 Read article")))}
         </a>
         {share_row}
       </article>
