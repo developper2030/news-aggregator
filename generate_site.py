@@ -3259,6 +3259,22 @@ body.lang-ltr .nh-text{direction:ltr}
 /* ── YouTube click-to-play iframe ── */
 .card-yt-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:0}
 .card-yt-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:0}
+/* ── Video card action bar — reactions 👍👎 + share 📤 ── */
+.card-actions{display:flex;align-items:center;justify-content:space-between;padding:7px 12px 8px;border-top:1px solid var(--border);gap:8px;background:transparent}
+.card-react-group{display:flex;align-items:center;gap:6px}
+.crb{display:inline-flex;align-items:center;gap:5px;background:transparent;border:1.5px solid var(--border);border-radius:16px;padding:5px 13px 5px 11px;color:var(--text-light);font-size:.88em;font-weight:600;cursor:pointer;opacity:.5;transition:opacity .2s,transform .18s cubic-bezier(.34,1.56,.64,1),background .18s,color .15s,border-color .15s;line-height:1;white-space:nowrap;user-select:none}
+.article-card:hover .crb,.article-card:hover .card-share{opacity:1}
+.crb:hover{background:var(--surface,#f1f5f9);color:var(--text);transform:scale(1.08)}
+.crb:focus-visible,.card-share:focus-visible{outline:2px solid var(--accent);opacity:1}
+.crb.crb-active.crb-like{background:rgba(22,163,74,.12);color:#16a34a;border-color:#16a34a;opacity:1}
+.crb.crb-active.crb-dis{background:rgba(220,38,38,.1);color:#dc2626;border-color:#dc2626;opacity:1}
+.crb-c{font-size:.78em;font-weight:700;min-width:0}
+.crb-c:empty{display:none}
+.card-share{display:inline-flex;align-items:center;gap:5px;background:transparent;border:1.5px solid var(--border);border-radius:16px;padding:5px 15px;color:var(--text-light);font-size:.88em;font-weight:600;cursor:pointer;opacity:.5;transition:opacity .2s,transform .18s cubic-bezier(.34,1.56,.64,1),background .18s,color .15s,border-color .15s;line-height:1;user-select:none}
+.card-share:hover{background:var(--surface,#f1f5f9);color:var(--text);transform:scale(1.08)}
+.card-share.share-done{color:var(--accent);border-color:var(--accent);opacity:1}
+@keyframes crb-pop{0%{transform:scale(1)}45%{transform:scale(1.42)}80%{transform:scale(.95)}100%{transform:scale(1)}}
+.crb.crb-popping{animation:crb-pop .3s cubic-bezier(.34,1.56,.64,1)}
 /* ====== CLUSTER BADGE ====== */
 .cluster-badge{display:inline-flex;align-items:center;gap:3px;font-size:.72em;font-weight:700;background:linear-gradient(90deg,#0ea5e9,#6366f1);color:#fff;padding:2px 8px;border-radius:10px;white-space:nowrap;cursor:default}
 .cluster-badge:hover{background:linear-gradient(90deg,#0284c7,#4f46e5)}
@@ -3592,6 +3608,103 @@ function initYTCards() {
   }, false);
 }
 
+/* ========== VIDEO CARD REACTIONS (👍 / 👎) ========== */
+/* Votes are stored locally in localStorage — key: hpg7_rx               */
+/* Storage format: { "<12-char-md5>": { l: <likes>, d: <dislikes>, m: "l"|"d"|null } } */
+function initCardReactions() {
+  var STORE = 'hpg7_rx';
+  function getRx() {
+    try { return JSON.parse(localStorage.getItem(STORE) || '{}'); } catch(_e) { return {}; }
+  }
+  function setRx(data) {
+    try { localStorage.setItem(STORE, JSON.stringify(data)); } catch(_e) {}
+  }
+  function renderWrap(wrap, entry) {
+    var lb = wrap.querySelector('.crb-like');
+    var db = wrap.querySelector('.crb-dis');
+    if (!lb || !db) return;
+    lb.querySelector('.crb-c').textContent = (entry.l > 0) ? entry.l : '';
+    db.querySelector('.crb-c').textContent = (entry.d > 0) ? entry.d : '';
+    lb.classList.toggle('crb-active', entry.m === 'l');
+    db.classList.toggle('crb-active', entry.m === 'd');
+  }
+  // Render existing cards from stored votes
+  document.querySelectorAll('.card-actions[data-art]').forEach(function(wrap) {
+    var id = wrap.dataset.art;
+    if (!id) return;
+    var rx = getRx();
+    renderWrap(wrap, rx[id] || {l: 0, d: 0, m: null});
+  });
+  // Event delegation — handles current + future cards (e.g. after load-more)
+  document.addEventListener('click', function(ev) {
+    var btn = ev.target.closest('.crb');
+    if (!btn) return;
+    var wrap = btn.closest('.card-actions');
+    if (!wrap) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    var id = wrap.dataset.art;
+    if (!id) return;
+    var isLike = btn.classList.contains('crb-like');
+    var type  = isLike ? 'l' : 'd';
+    var other = isLike ? 'd' : 'l';
+    var rx = getRx();
+    var entry = rx[id] ? Object.assign({}, rx[id]) : {l: 0, d: 0, m: null};
+    if (entry.m === type) {
+      // Same button again → undo vote
+      entry[type] = Math.max(0, (entry[type] || 0) - 1);
+      entry.m = null;
+    } else {
+      // Switch or new vote
+      if (entry.m) { entry[entry.m] = Math.max(0, (entry[entry.m] || 0) - 1); }
+      entry[type] = (entry[type] || 0) + 1;
+      entry.m = type;
+    }
+    rx[id] = entry;
+    setRx(rx);
+    renderWrap(wrap, entry);
+    // Pop animation
+    btn.classList.remove('crb-popping');
+    void btn.offsetWidth; // reflow
+    btn.classList.add('crb-popping');
+    btn.addEventListener('animationend', function() {
+      btn.classList.remove('crb-popping');
+    }, {once: true});
+  }, false);
+}
+
+/* ========== VIDEO CARD SHARE BUTTON ========== */
+/* Uses Web Share API on mobile — falls back to clipboard copy on desktop */
+function initCardShare() {
+  document.addEventListener('click', function(ev) {
+    var btn = ev.target.closest('.card-share');
+    if (!btn) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    var actions = btn.closest('.card-actions');
+    var shareUrl   = (actions && actions.dataset.shareUrl)   || location.href;
+    var shareTitle = (actions && actions.dataset.shareTitle) || document.title;
+    function showDone() {
+      btn.textContent = '✓';
+      btn.classList.add('share-done');
+      setTimeout(function() {
+        btn.textContent = '📤';
+        btn.classList.remove('share-done');
+      }, 1800);
+    }
+    if (navigator.share) {
+      navigator.share({ title: shareTitle, url: shareUrl })
+        .then(showDone).catch(function() {});
+    } else if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(shareUrl).then(showDone).catch(function() {
+        prompt('Copy link:', shareUrl);
+      });
+    } else {
+      prompt('Copy link:', shareUrl);
+    }
+  }, false);
+}
+
 /* ========== SEARCH ========== */
 function initSearch() {
   const toggle = document.getElementById('search-toggle');
@@ -3856,6 +3969,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initBackToTop();
   initBreadcrumbScroll();
   initYTCards();
+  initCardReactions();
+  initCardShare();
   initEconTabs();
   initSourceFilter();
   initSearch();
@@ -6719,6 +6834,19 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
     # Extract YT video ID so JS can inject iframe on click (click-to-play)
     _yt_id_val  = _yt_vid_id(url) if (_is_vid and _is_yt_url(url)) else ""
     _yt_data    = f' data-yt-id="{esc(_yt_id_val)}"' if _yt_id_val else ""
+    # Reaction buttons (👍/👎) — video cards only, unique key = md5 of URL
+    _react_hash = hashlib.md5(art["url"].encode("utf-8")).hexdigest()[:12] if _is_vid else ""
+    # Actions bar: 👍/👎 reactions + 📤 share — placed OUTSIDE <a>, below the title
+    _actions_html = (
+        f'<div class="card-actions" data-art="{_react_hash}" '
+        f'data-share-url="{esc(url)}" data-share-title="{title}">'
+        f'<div class="card-react-group">'
+        f'<button class="crb crb-like" aria-label="Like">\U0001f44d<span class="crb-c"></span></button>'
+        f'<button class="crb crb-dis" aria-label="Dislike">\U0001f44e<span class="crb-c"></span></button>'
+        f'</div>'
+        f'<button class="card-share" aria-label="Share">\U0001f4e4</button>'
+        f'</div>'
+    ) if _is_vid else ""
 
     if image and image != "#":
         bg_html = (
@@ -6764,6 +6892,7 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
         f'{ai_html}'
         f'<h3 class="card-title">{title}</h3>'
         f'</div></a>'
+        f'{_actions_html}'
         f'</article>'
     )
 
