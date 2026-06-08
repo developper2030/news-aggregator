@@ -805,15 +805,21 @@ def _read_btn_label(src_lang: str, ui_lang: str, fallback: str = "📖 Read arti
     return _READ_IN_LANG.get((src_lang, ui_lang),
            _READ_IN_LANG.get((src_lang, "en"), fallback))
 
-# ── Inline translate bar — labels + target language per UI language ──────────
-# Target choices: EN pages → AR (since content is Arabic-focused),
-#                 all others → EN (universal bridge language)
+# ── Inline translate bar — user picks any of the 5 languages ─────────────────
 _TRANSLATE_CFG: dict[str, dict] = {
-    "ar": {"btn": "🌐 ترجمة",    "tgt": "en", "restore": "↩ الأصل",    "loading": "⏳ جاري..."},
-    "en": {"btn": "🌐 Translate", "tgt": "ar", "restore": "↩ Restore",  "loading": "⏳ Translating..."},
-    "fr": {"btn": "🌐 Traduire",  "tgt": "en", "restore": "↩ Original", "loading": "⏳ Traduction..."},
-    "es": {"btn": "🌐 Traducir",  "tgt": "en", "restore": "↩ Original", "loading": "⏳ Traduciendo..."},
-    "tr": {"btn": "🌐 Çevir",    "tgt": "en", "restore": "↩ Orijinal", "loading": "⏳ Çevriliyor..."},
+    "ar": {"label": "🌐 ترجم إلى:",    "restore": "↩ الأصل",    "loading": "⏳"},
+    "en": {"label": "🌐 Translate to:", "restore": "↩ Restore",  "loading": "⏳"},
+    "fr": {"label": "🌐 Traduire en:",  "restore": "↩ Original", "loading": "⏳"},
+    "es": {"label": "🌐 Traducir a:",   "restore": "↩ Original", "loading": "⏳"},
+    "tr": {"label": "🌐 Çevir:",       "restore": "↩ Orijinal", "loading": "⏳"},
+}
+# Native name for each language pill (shown to user regardless of UI lang)
+_LANG_PILLS: dict[str, str] = {
+    "ar": "عربي",
+    "en": "English",
+    "fr": "Français",
+    "es": "Español",
+    "tr": "Türkçe",
 }
 
 # UI strings per language — loaded dynamically from config/strings/*.json
@@ -3402,13 +3408,18 @@ body.lang-ltr .nh-text{direction:ltr}
 .art-back-bottom{text-align:center;padding:24px 0 12px}
 .art-back-btn{display:inline-flex;align-items:center;gap:8px;color:var(--accent);background:rgba(99,102,241,.07);text-decoration:none;font-size:.9em;font-weight:700;padding:10px 26px;border-radius:26px;border:1.5px solid var(--accent);transition:all .2s}
 .art-back-btn:hover{background:var(--accent);color:#fff;transform:translateY(-1px);box-shadow:0 4px 16px rgba(99,102,241,.35)}
-/* ── Inline translate bar ── */
-.art-translate-bar{display:inline-flex;align-items:center;gap:8px;margin:14px 0 2px;flex-wrap:wrap}
-.art-tl-btn{display:inline-flex;align-items:center;gap:5px;background:transparent;border:1.5px solid var(--border);border-radius:20px;padding:5px 16px;color:var(--text-light);font-size:.84em;font-weight:600;cursor:pointer;transition:background .18s,color .15s,border-color .15s,transform .15s;line-height:1.2;user-select:none}
-.art-tl-btn:hover:not(:disabled){background:var(--surface,#f1f5f9);color:var(--text);transform:scale(1.04)}
-.art-tl-btn:disabled{opacity:.45;cursor:wait}
-.art-tl-btn.art-tl-active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.art-tl-status{font-size:.84em;color:var(--text-light);min-width:1em}
+/* ── Inline translate bar — multi-language picker ── */
+.art-translate-bar{display:flex;align-items:center;gap:7px;margin:14px 0 4px;flex-wrap:wrap}
+.art-tl-label{font-size:.8em;color:var(--text-light);font-weight:500;white-space:nowrap;flex-shrink:0}
+.art-tl-langs{display:flex;gap:5px;flex-wrap:wrap}
+.art-tl-lang{display:inline-flex;align-items:center;background:transparent;border:1.5px solid var(--border);border-radius:14px;padding:4px 12px;color:var(--text-light);font-size:.8em;font-weight:600;cursor:pointer;transition:background .18s,color .15s,border-color .15s,transform .15s;line-height:1.3;user-select:none;white-space:nowrap}
+.art-tl-lang:hover:not(:disabled){background:var(--surface,#f1f5f9);color:var(--text);border-color:var(--text-light);transform:scale(1.05)}
+.art-tl-lang:disabled{opacity:.4;cursor:wait}
+.art-tl-lang.art-tl-active{background:var(--accent);color:#fff;border-color:var(--accent);transform:none}
+.art-tl-restore{display:none;align-items:center;background:transparent;border:1.5px solid var(--border);border-radius:14px;padding:4px 12px;color:var(--text-light);font-size:.8em;font-weight:600;cursor:pointer;transition:all .18s;line-height:1.3;user-select:none}
+.art-tl-restore:hover{background:var(--surface,#f1f5f9);color:var(--text)}
+.art-tl-restore.visible{display:inline-flex}
+.art-tl-status{font-size:.84em;color:var(--text-light);min-width:1em;transition:opacity .2s}
 @media(max-width:600px){
   .art-page{padding:14px 12px 32px}
   .art-img{border-radius:8px;margin-bottom:14px}
@@ -3767,30 +3778,32 @@ function initCardShare() {
 }
 
 /* ========== ARTICLE INLINE TRANSLATE (MyMemory free API) ========== */
-/* Translates article title + AI summary in-place. No API key needed.   */
-/* Source: page lang attribute.  Target: configured per language.        */
+/* User picks any of 4 target languages via pills (current lang excluded). */
+/* Always translates FROM the original text — switching langs works too.   */
 function initArticleTranslate() {
   var bar = document.querySelector('.art-translate-bar');
   if (!bar) return;
-  var btn       = document.getElementById('art-tl-btn');
-  var statusEl  = document.getElementById('art-tl-status');
-  if (!btn) return;
-  var srcLang     = bar.dataset.src     || 'ar';
-  var tgtLang     = bar.dataset.tgt     || 'en';
-  var restoreLbl  = bar.dataset.restore || '↩';
-  var loadingLbl  = bar.dataset.loading || '⏳';
-  var origLabel   = btn.textContent;
-  var isTranslated = false;
-  /* Elements to translate: title + AI summary text */
+  var langBtns   = bar.querySelectorAll('.art-tl-lang');
+  var restoreBtn = document.getElementById('art-tl-restore');
+  var statusEl   = document.getElementById('art-tl-status');
+  if (!langBtns.length) return;
+  var srcLang    = bar.dataset.src     || 'ar';
+  var loadingTxt = bar.dataset.loading || '⏳';
+  var activeLang = null;
+  /* Elements to translate: h1 title + AI summary paragraph */
   var targets = [
     document.querySelector('h1.art-title'),
     document.querySelector('.art-summary-text')
   ].filter(Boolean);
   function setStatus(txt) { if (statusEl) statusEl.textContent = txt; }
+  function setLangBtnsDisabled(state) {
+    langBtns.forEach(function(b) { b.disabled = state; });
+  }
   function translateOne(text, src, tgt) {
+    /* MyMemory free API: 500 chars/req, 5000 req/day, no key needed */
     var url = 'https://api.mymemory.translated.net/get'
       + '?q='        + encodeURIComponent(text.substring(0, 500))
-      + '&langpair=' + src + '|' + tgt;
+      + '&langpair=' + encodeURIComponent(src + '|' + tgt);
     return fetch(url, {cache: 'no-store'})
       .then(function(r) { return r.json(); })
       .then(function(d) {
@@ -3799,42 +3812,54 @@ function initArticleTranslate() {
         return t;
       });
   }
-  btn.addEventListener('click', function() {
-    /* ── Restore ── */
-    if (isTranslated) {
-      targets.forEach(function(el) {
-        if (el.dataset.orig) el.textContent = el.dataset.orig;
-      });
-      btn.textContent = origLabel;
-      btn.classList.remove('art-tl-active');
-      setStatus('');
-      isTranslated = false;
-      return;
-    }
-    /* ── Translate ── */
+  function restore() {
+    targets.forEach(function(el) {
+      if (el.dataset.orig) el.textContent = el.dataset.orig;
+    });
+    langBtns.forEach(function(b) { b.classList.remove('art-tl-active'); });
+    if (restoreBtn) restoreBtn.classList.remove('visible');
+    setStatus('');
+    activeLang = null;
+  }
+  function doTranslate(tgtLang, clickedBtn) {
     if (targets.length === 0) return;
-    btn.disabled = true;
-    setStatus(loadingLbl);
+    setLangBtnsDisabled(true);
+    setStatus(loadingTxt);
     Promise.all(targets.map(function(el) {
-      return translateOne(el.textContent.trim(), srcLang, tgtLang)
+      /* Always translate from the ORIGINAL text, not a previous translation */
+      var sourceText = el.dataset.orig || el.textContent.trim();
+      return translateOne(sourceText, srcLang, tgtLang)
         .then(function(translated) {
-          el.dataset.orig = el.textContent;
-          el.textContent  = translated;
+          if (!el.dataset.orig) el.dataset.orig = el.textContent;
+          el.textContent = translated;
         });
     }))
     .then(function() {
-      btn.disabled = false;
-      btn.textContent = restoreLbl;
-      btn.classList.add('art-tl-active');
+      setLangBtnsDisabled(false);
+      langBtns.forEach(function(b) { b.classList.remove('art-tl-active'); });
+      clickedBtn.classList.add('art-tl-active');
+      if (restoreBtn) restoreBtn.classList.add('visible');
       setStatus('');
-      isTranslated = true;
+      activeLang = tgtLang;
     })
     .catch(function() {
-      btn.disabled = false;
+      setLangBtnsDisabled(false);
       setStatus('⚠️');
       setTimeout(function() { setStatus(''); }, 3000);
     });
+  }
+  /* Language pill clicks */
+  langBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var tgt = btn.dataset.lang;
+      if (tgt === activeLang) { restore(); return; }  /* click active → restore */
+      doTranslate(tgt, btn);
+    });
   });
+  /* Restore button */
+  if (restoreBtn) {
+    restoreBtn.addEventListener('click', restore);
+  }
 }
 
 /* ========== SEARCH ========== */
@@ -7675,15 +7700,21 @@ def _article_page_html(
             f'</div>'
         )
 
-    # ── Inline translate bar (MyMemory API, free, no key) ────────────────────────
-    _tl_cfg = _TRANSLATE_CFG.get(lang, _TRANSLATE_CFG["en"])
+    # ── Inline translate bar — user picks any target language ────────────────────
+    _tl_cfg   = _TRANSLATE_CFG.get(lang, _TRANSLATE_CFG["en"])
+    # Build language pills — show all 5 languages except the current page language
+    _pills_html = "".join(
+        f'<button class="art-tl-lang" data-lang="{code}">{name}</button>'
+        for code, name in _LANG_PILLS.items()
+        if code != lang
+    )
     _translate_bar = (
-        f'<div class="art-translate-bar" '
-        f'data-src="{lang}" '
-        f'data-tgt="{_tl_cfg["tgt"]}" '
-        f'data-restore="{esc(_tl_cfg["restore"])}" '
+        f'<div class="art-translate-bar" data-src="{lang}" '
         f'data-loading="{esc(_tl_cfg["loading"])}">'
-        f'<button class="art-tl-btn" id="art-tl-btn">{esc(_tl_cfg["btn"])}</button>'
+        f'<span class="art-tl-label">{esc(_tl_cfg["label"])}</span>'
+        f'<div class="art-tl-langs">{_pills_html}</div>'
+        f'<button class="art-tl-restore" id="art-tl-restore">'
+        f'{esc(_tl_cfg["restore"])}</button>'
         f'<span class="art-tl-status" id="art-tl-status" aria-live="polite"></span>'
         f'</div>'
     )
