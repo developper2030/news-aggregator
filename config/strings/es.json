@@ -132,5 +132,19 @@
   "crypto_src_note":         "Datos de CoinGecko · se actualiza cada minuto",
   "crypto_col_price":        "Precio",
   "crypto_col_change":       "Cambio 24h",
-  "crypto_col_mcap":         "Cap. de mercado"
+  "crypto_col_mcap":         "Cap. de mercado",
+  "sports_american_label":   "🏆 Deportes americanos",
+  "sport_nfl_label":         "🏈 NFL",
+  "sport_nba_label":         "🏀 NBA",
+  "nfl_page_title":          "🏈 NFL Fútbol americano",
+  "nfl_page_desc":           "Resultados y calendario NFL — fuente ESPN",
+  "nba_page_title":          "🏀 NBA Baloncesto",
+  "nba_page_desc":           "Resultados y calendario NBA — fuente ESPN",
+  "sport_scores_tab":        "Resultados",
+  "sport_standings_tab":     "Clasificación",
+  "sport_no_games":          "No hay partidos programados actualmente",
+  "sport_scheduled":         "Programado",
+  "sport_final":             "Final",
+  "sport_live_label":        "🔴 En vivo",
+  "sport_src_note":          "Datos de ESPN · se actualiza cada minuto"
 }

@@ -132,5 +132,19 @@
   "crypto_src_note":         "Veriler CoinGecko'dan · her dakika güncellenir",
   "crypto_col_price":        "Fiyat",
   "crypto_col_change":       "24s Değişim",
-  "crypto_col_mcap":         "Piyasa Değeri"
+  "crypto_col_mcap":         "Piyasa Değeri",
+  "sports_american_label":   "🏆 Amerikan Sporları",
+  "sport_nfl_label":         "🏈 NFL",
+  "sport_nba_label":         "🏀 NBA",
+  "nfl_page_title":          "🏈 NFL Amerikan Futbolu",
+  "nfl_page_desc":           "Sonuçlar ve fikstür — kaynak ESPN",
+  "nba_page_title":          "🏀 NBA Basketbol",
+  "nba_page_desc":           "Sonuçlar ve fikstür — kaynak ESPN",
+  "sport_scores_tab":        "Sonuçlar",
+  "sport_standings_tab":     "Puan Durumu",
+  "sport_no_games":          "Şu anda planlanmış maç yok",
+  "sport_scheduled":         "Planlandı",
+  "sport_final":             "Bitti",
+  "sport_live_label":        "🔴 Canlı",
+  "sport_src_note":          "Veriler ESPN'den · her dakika güncellenir"
 }

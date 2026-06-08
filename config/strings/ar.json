@@ -132,5 +132,19 @@
   "crypto_src_note":         "البيانات من CoinGecko · تتجدد كل دقيقة",
   "crypto_col_price":        "السعر",
   "crypto_col_change":       "تغيير 24س",
-  "crypto_col_mcap":         "القيمة السوقية"
+  "crypto_col_mcap":         "القيمة السوقية",
+  "sports_american_label":   "🏆 الرياضة الأمريكية",
+  "sport_nfl_label":         "🏈 NFL",
+  "sport_nba_label":         "🏀 NBA",
+  "nfl_page_title":          "🏈 دوري NFL للأمريكي",
+  "nfl_page_desc":           "نتائج وجداول مباريات NFL — المصدر ESPN",
+  "nba_page_title":          "🏀 دوري NBA لكرة السلة",
+  "nba_page_desc":           "نتائج وجداول مباريات NBA — المصدر ESPN",
+  "sport_scores_tab":        "النتائج",
+  "sport_standings_tab":     "الترتيب",
+  "sport_no_games":          "لا توجد مباريات مجدولة حالياً",
+  "sport_scheduled":         "مقررة",
+  "sport_final":             "انتهت",
+  "sport_live_label":        "🔴 مباشر",
+  "sport_src_note":          "البيانات من ESPN · تتجدد كل دقيقة"
 }

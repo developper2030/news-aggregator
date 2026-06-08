@@ -633,6 +633,21 @@ def _sports_subnav(active_slug: str, s: dict, wcnews_name: str = "",
                 f'</span>'
             )
 
+    # ── American Sports (live — ESPN free API) ────────────────────────────────
+    _am_lbl = esc(s.get("sports_american_label", "🏆 American Sports"))
+    btns += f'<div class="side-divider"><span class="side-divider-lbl">{_am_lbl}</span></div>'
+    for _href, _icon, _slug_key, _label_key in [
+        ("nfl.html", "🏈", "nfl", "sport_nfl_label"),
+        ("nba.html", "🏀", "nba", "sport_nba_label"),
+    ]:
+        _active_cls = " side-active" if active_slug == _slug_key else ""
+        btns += (
+            f'<a href="{_href}" class="side-btn{_active_cls}">'
+            f'<span class="side-icon">{_icon}</span>'
+            f'<span class="side-label">{esc(s.get(_label_key, _slug_key.upper()))}</span>'
+            f'</a>'
+        )
+
     if not btns:
         return ""
 
@@ -1894,6 +1909,229 @@ def _widget_col(s: dict, lang: str, worldcup_data: dict,
     )
 
 
+def _espn_sport_html(sport: str, s: dict, lang: str = "ar") -> str:
+    """Generate a live ESPN scoreboard + standings page for NFL or NBA.
+
+    sport: 'nfl' or 'nba'
+    Uses ESPN's free public API (no key, CORS-enabled). Scores refresh every 60s.
+    """
+    _league   = "football/nfl" if sport == "nfl" else "basketball/nba"
+    _icon     = "🏈" if sport == "nfl" else "🏀"
+    _dir      = s.get("dir", "ltr")
+    _title    = esc(s.get(f"{sport}_page_title",    f"{_icon} {sport.upper()}"))
+    _desc     = esc(s.get(f"{sport}_page_desc",     "Scores & schedules — ESPN"))
+    _tab_sc   = esc(s.get("sport_scores_tab",       "Scores"))
+    _tab_st   = esc(s.get("sport_standings_tab",    "Standings"))
+    _no_games = esc(s.get("sport_no_games",         "No games scheduled"))
+    _final    = esc(s.get("sport_final",            "Final"))
+    _live_lbl = esc(s.get("sport_live_label",       "🔴 Live"))
+    _sched    = esc(s.get("sport_scheduled",        "Scheduled"))
+    _loading  = esc(s.get("crypto_loading",         "⏳ Loading..."))
+    _error    = esc(s.get("crypto_error",           "⚠️ Failed to load data"))
+    _refresh  = esc(s.get("crypto_refresh",         "🔄 Refresh"))
+    _src_note = esc(s.get("sport_src_note",         "Data from ESPN"))
+    _updated  = esc(s.get("crypto_updated",         "Updated"))
+
+    _scores_url    = f"https://site.api.espn.com/apis/site/v2/sports/{_league}/scoreboard"
+    _standings_url = f"https://site.api.espn.com/apis/site/v2/sports/{_league}/standings"
+
+    return f"""
+<div class="sports-page" dir="{_dir}">
+  <div class="sports-page-hdr">
+    <h1>{_title}</h1>
+    <p>{_desc}</p>
+  </div>
+  <div class="sports-tabs">
+    <button class="sports-tab active" data-tab="scores">{_tab_sc}</button>
+    <button class="sports-tab" data-tab="standings">{_tab_st}</button>
+    <button class="sports-refresh-btn" id="sp-refresh-{sport}">{_refresh}</button>
+  </div>
+  <div id="sp-scores-{sport}" class="sp-panel">
+    <div class="sp-loading">{_loading}</div>
+  </div>
+  <div id="sp-standings-{sport}" class="sp-panel" style="display:none">
+    <div class="sp-loading">{_loading}</div>
+  </div>
+  <div class="sp-footer">
+    <span>{_src_note} &nbsp;·&nbsp; {_updated}: <span id="sp-ts-{sport}">—</span></span>
+  </div>
+</div>
+
+<script>
+(function(){{
+  'use strict';
+  var SPORT        = '{sport}';
+  var SCORES_URL   = '{_scores_url}';
+  var STANDINGS_URL= '{_standings_url}';
+  var LBL_FINAL    = '{_final}';
+  var LBL_LIVE     = '{_live_lbl}';
+  var LBL_SCHED    = '{_sched}';
+  var LBL_NO_GAMES = '{_no_games}';
+  var LBL_ERROR    = '{_error}';
+  var LBL_LOADING  = '{_loading}';
+
+  var scoresEl  = document.getElementById('sp-scores-'   + SPORT);
+  var standEl   = document.getElementById('sp-standings-' + SPORT);
+  var tsEl      = document.getElementById('sp-ts-'       + SPORT);
+  var refreshEl = document.getElementById('sp-refresh-'  + SPORT);
+  var tabs      = document.querySelectorAll('.sports-tab');
+
+  /* ── Tab switching ── */
+  tabs.forEach(function(btn){{
+    btn.addEventListener('click', function(){{
+      tabs.forEach(function(b){{b.classList.remove('active');}});
+      btn.classList.add('active');
+      var tab = btn.dataset.tab;
+      scoresEl.style.display  = (tab === 'scores')    ? '' : 'none';
+      standEl.style.display   = (tab === 'standings') ? '' : 'none';
+      if (tab === 'standings' && standEl.querySelector('.sp-loading'))
+        fetchStandings();
+    }});
+  }});
+
+  /* ── Helpers ── */
+  function fmtDate(iso){{
+    try{{
+      var d = new Date(iso);
+      return d.toLocaleDateString(undefined,{{weekday:'short',month:'short',day:'numeric'}});
+    }}catch(e){{return iso;}}
+  }}
+
+  /* ── Render scoreboard ── */
+  function renderScores(data){{
+    var events = (data && data.events) || [];
+    if (!events.length){{
+      scoresEl.innerHTML = '<div class="sp-no-games">' + LBL_NO_GAMES + '</div>';
+      return;
+    }}
+    /* Group by date */
+    var byDate = {{}};
+    events.forEach(function(evt){{
+      var d = (evt.date||'').slice(0,10);
+      if (!byDate[d]) byDate[d] = [];
+      byDate[d].push(evt);
+    }});
+    var html = '';
+    Object.keys(byDate).sort().forEach(function(date){{
+      html += '<div class="sp-section-hdr">' + fmtDate(date) + '</div>';
+      byDate[date].forEach(function(evt){{
+        var comp   = (evt.competitions||[])[0]; if (!comp) return;
+        var comps  = comp.competitors||[];
+        var away   = comps.find(function(c){{return c.homeAway==='away';}}) || comps[0];
+        var home   = comps.find(function(c){{return c.homeAway==='home';}}) || comps[1];
+        if (!away||!home) return;
+        var st     = evt.status.type;
+        var isLive = st.state === 'in';
+        var isDone = st.state === 'post';
+        var stTxt  = isDone ? LBL_FINAL : (isLive ? (st.detail||LBL_LIVE) : (st.shortDetail||LBL_SCHED));
+        var stCls  = isLive ? 'live' : (isDone ? 'final' : 'scheduled');
+        var aScore = parseInt(away.score||0);
+        var hScore = parseInt(home.score||0);
+        var aWon   = isDone && aScore > hScore;
+        var hWon   = isDone && hScore > aScore;
+        var aRec   = ((away.records||[])[0]||{{}}).summary||'';
+        var hRec   = ((home.records||[])[0]||{{}}).summary||'';
+        var aLogo  = away.team.logo||'';
+        var hLogo  = home.team.logo||'';
+        var aName  = away.team.shortDisplayName||away.team.abbreviation||'';
+        var hName  = home.team.shortDisplayName||home.team.abbreviation||'';
+        html += '<div class="game-card">'
+          + '<div class="game-team away">'
+          +   (aLogo?'<img class="game-logo" src="'+aLogo+'" alt="'+aName+'" loading="lazy">':'')
+          +   '<div><div class="game-name">'+aName+'</div>'+(aRec?'<div class="game-record">'+aRec+'</div>':'')+'</div>'
+          + '</div>'
+          + '<div class="game-center">'
+          +   (isDone||isLive
+                ? '<div class="game-scores"><span class="game-score'+(aWon?' winner':'')+'">'+aScore
+                  +'</span><span class="game-sep">—</span>'
+                  +'<span class="game-score'+(hWon?' winner':'')+'">'+hScore+'</span></div>'
+                : '')
+          +   '<div class="game-status '+stCls+'">'+stTxt+'</div>'
+          + '</div>'
+          + '<div class="game-team home">'
+          +   '<div><div class="game-name">'+hName+'</div>'+(hRec?'<div class="game-record">'+hRec+'</div>':'')+'</div>'
+          +   (hLogo?'<img class="game-logo" src="'+hLogo+'" alt="'+hName+'" loading="lazy">':'')
+          + '</div>'
+          + '</div>';
+      }});
+    }});
+    scoresEl.innerHTML = html;
+    if (tsEl) tsEl.textContent = new Date().toLocaleTimeString();
+  }}
+
+  /* ── Render standings ── */
+  function renderStandings(data){{
+    /* ESPN standings can be flat or nested by conference/division */
+    var entries = [];
+    function collect(node){{
+      if (node.standings && node.standings.entries) {{
+        entries = entries.concat(node.standings.entries);
+      }}
+      if (node.entries) entries = entries.concat(node.entries);
+      if (node.children) node.children.forEach(collect);
+    }}
+    collect(data);
+    if (!entries.length){{
+      standEl.innerHTML = '<div class="sp-no-games">' + LBL_NO_GAMES + '</div>';
+      return;
+    }}
+    /* sort by win% descending */
+    entries.sort(function(a,b){{
+      var aw = ((a.stats||[]).find(function(s){{return s.name==='winPercent';}})||{{}}).value||0;
+      var bw = ((b.stats||[]).find(function(s){{return s.name==='winPercent';}})||{{}}).value||0;
+      return bw - aw;
+    }});
+    var rows = '';
+    entries.forEach(function(e, i){{
+      var t    = e.team||{{}};
+      var stats= e.stats||[];
+      var W    = ((stats.find(function(s){{return s.name==='wins';}})||{{}}).displayValue)||'—';
+      var L    = ((stats.find(function(s){{return s.name==='losses';}})||{{}}).displayValue)||'—';
+      var pct  = ((stats.find(function(s){{return s.name==='winPercent';}})||{{}}).displayValue)||'—';
+      var logo = (t.logos||[])[0] ? (t.logos[0].href||'') : (t.logo||'');
+      var name = t.displayName||t.shortDisplayName||t.abbreviation||'';
+      rows += '<tr>'
+        + '<td class="team-col"><div class="st-team">'
+        +   '<span class="st-rank">'+(i+1)+'</span>'
+        +   (logo?'<img class="st-logo" src="'+logo+'" alt="'+name+'" loading="lazy">':'')
+        +   '<span class="st-name">'+name+'</span>'
+        + '</div></td>'
+        + '<td>'+W+'</td><td>'+L+'</td><td>'+pct+'</td>'
+        + '</tr>';
+    }});
+    standEl.innerHTML = '<table class="standings-table"><thead><tr>'
+      + '<th class="team-col">Team</th><th>W</th><th>L</th><th>PCT</th>'
+      + '</tr></thead><tbody>'+rows+'</tbody></table>';
+  }}
+
+  /* ── Fetch ── */
+  function fetchScores(){{
+    fetch(SCORES_URL)
+      .then(function(r){{return r.json();}})
+      .then(renderScores)
+      .catch(function(){{
+        if(scoresEl) scoresEl.innerHTML='<div class="sp-error">'+LBL_ERROR+'</div>';
+      }});
+  }}
+  function fetchStandings(){{
+    fetch(STANDINGS_URL)
+      .then(function(r){{return r.json();}})
+      .then(renderStandings)
+      .catch(function(){{
+        if(standEl) standEl.innerHTML='<div class="sp-error">'+LBL_ERROR+'</div>';
+      }});
+  }}
+
+  fetchScores();
+  setInterval(fetchScores, 60000);
+  if (refreshEl) refreshEl.addEventListener('click', function(){{
+    scoresEl.innerHTML = '<div class="sp-loading">'+LBL_LOADING+'</div>';
+    fetchScores();
+  }});
+}})();
+</script>"""
+
+
 def _crypto_main_html(s: dict, lang: str = "ar") -> str:
     """Build the main content HTML for crypto.html.
 
@@ -2648,6 +2886,54 @@ body.lang-ltr .prices-section-header{border-inline-start:5px solid #059669}
 .crypto-loading,.crypto-error{text-align:center;padding:56px 20px;color:var(--text-muted);grid-column:1/-1;font-size:1em}
 .crypto-error{color:#dc2626}
 @media(max-width:600px){.crypto-grid{grid-template-columns:repeat(2,1fr);gap:10px}.crypto-card{padding:12px}.crypto-price{font-size:1em}}
+/* ===================== ESPN SPORTS PAGES (NFL / NBA) ===================== */
+.sports-page{max-width:900px;margin:0 auto;padding:24px 16px 48px}
+.sports-page-hdr{margin-bottom:22px}
+.sports-page-hdr h1{font-size:1.6em;font-weight:800;color:var(--text);margin-bottom:5px}
+.sports-page-hdr p{font-size:.9em;color:var(--text-muted)}
+.sports-tabs{display:flex;gap:8px;margin-bottom:20px;align-items:center;flex-wrap:wrap}
+.sports-tab{padding:7px 20px;border:1.5px solid var(--border);border-radius:24px;background:none;cursor:pointer;font-size:.84em;font-weight:600;color:var(--text-muted);transition:all .15s}
+.sports-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.sports-tab:hover:not(.active){border-color:var(--accent);color:var(--accent)}
+.sports-refresh-btn{margin-inline-start:auto;background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 14px;color:var(--text);cursor:pointer;font-size:.82em;transition:all .15s}
+.sports-refresh-btn:hover{border-color:var(--accent);color:var(--accent)}
+.sp-panel{animation:fadeIn .2s ease}
+.sp-loading,.sp-error,.sp-no-games{text-align:center;padding:52px 16px;color:var(--text-muted);font-size:.95em}
+.sp-error{color:#dc2626}
+.game-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px 18px;margin-bottom:10px;display:grid;grid-template-columns:1fr 96px 1fr;gap:10px;align-items:center;transition:border-color .15s}
+.game-card:hover{border-color:var(--accent)}
+.game-team{display:flex;align-items:center;gap:10px}
+.game-team.home{flex-direction:row-reverse;text-align:end}
+.game-logo{width:38px;height:38px;object-fit:contain;flex-shrink:0}
+.game-name{font-size:.88em;font-weight:700;color:var(--text);line-height:1.25}
+.game-record{font-size:.72em;color:var(--text-muted);margin-top:1px}
+.game-center{display:flex;flex-direction:column;align-items:center;gap:5px}
+.game-scores{display:flex;align-items:center;gap:8px}
+.game-score{font-size:1.45em;font-weight:900;color:var(--text);min-width:32px;text-align:center;font-variant-numeric:tabular-nums}
+.game-score.winner{color:var(--accent)}
+.game-sep{color:var(--text-muted);font-size:.9em}
+.game-status{font-size:.7em;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);white-space:nowrap}
+.game-status.live{color:#ef4444;animation:pulse 1.2s infinite}
+.game-status.scheduled{color:var(--text-muted)}
+.sp-section-hdr{font-size:.78em;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);padding:14px 2px 6px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.standings-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--card-shadow);font-size:.84em;margin-bottom:24px}
+.standings-table th{background:var(--surface-2);color:var(--text-muted);font-size:.74em;font-weight:700;padding:8px 12px;text-align:center;border-bottom:2px solid var(--border);white-space:nowrap}
+.standings-table th.team-col,.standings-table td.team-col{text-align:start}
+.standings-table td{padding:7px 12px;border-bottom:1px solid var(--border);text-align:center;color:var(--text)}
+.standings-table tr:last-child td{border-bottom:none}
+.standings-table tr:hover td{background:rgba(99,102,241,.04)}
+.st-team{display:flex;align-items:center;gap:8px}
+.st-logo{width:24px;height:24px;object-fit:contain}
+.st-rank{font-size:.75em;color:var(--text-muted);width:20px;text-align:center;flex-shrink:0}
+.st-name{font-weight:600}
+.sp-footer{font-size:.75em;color:var(--text-muted);margin-top:10px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+@media(max-width:640px){
+  .game-card{grid-template-columns:1fr;gap:12px}
+  .game-team,.game-team.home{flex-direction:row;text-align:start}
+  .game-center{flex-direction:row;justify-content:center;gap:10px}
+  .game-scores{gap:6px}
+  .game-score{font-size:1.2em}
+}
 
 /* ===================== LANGUAGE GLOBE DROPDOWN ===================== */
 .lang-globe-wrap{position:relative;flex-shrink:0}
@@ -8447,6 +8733,38 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             ))
             pages_written += 1
 
+    # ── NFL.HTML + NBA.HTML — live ESPN scoreboard pages ─────────────────────
+    _sports_subnav_html = _sports_subnav(
+        "nfl", s,
+        wcnews_name=next((c["name"] for c in categories if c["slug"] == "worldcup-news"), ""),
+        has_schedule=(_has_wc and _show_worldcup),
+    )
+    for _sp_sport in ("nfl", "nba"):
+        _sp_active_nav = _sports_subnav(
+            _sp_sport, s,
+            wcnews_name=next((c["name"] for c in categories if c["slug"] == "worldcup-news"), ""),
+            has_schedule=(_has_wc and _show_worldcup),
+        )
+        _sp_title = s.get(f"{_sp_sport}_page_title", f"{_sp_sport.upper()}")
+        _wrt(f"{_sp_sport}.html", _page(
+            title=_sp_title + " — " + site_title,
+            nav_html=_nav(categories, articles_by_cat, active="sports",
+                          s=s, region_slugs=region_slugs, has_world=has_world,
+                          media_slugs=media_slugs_local, has_media=has_media),
+            main_html=_espn_sport_html(_sp_sport, s=s, lang=lang),
+            bn_active=_sp_sport,
+            canonical=_page_canonical(f"{_sp_sport}.html"),
+            hreflang_html=_make_hreflang(f"{_sp_sport}.html"),
+            og_image_url=_og_img_url,
+            extra_json_ld=_org_ld,
+            world_subnav_html=_sp_active_nav,
+            carousel_html="",
+            lang_switcher_html=_lsw(f"{_sp_sport}.html"),
+            **{**common, "desc": s.get(f"{_sp_sport}_page_desc", _sp_title)},
+        ))
+        pages_written += 1
+    logger.info("ESPN sport pages written: nfl.html, nba.html [%s]", lang)
+
     # ── WORLDCUP.HTML — World Cup 2026 schedule (data page, like prices) ──────
     if _has_wc and _show_worldcup:
         _sports_name = next((c["name"] for c in categories if c["slug"] == "sports"),
@@ -8696,6 +9014,9 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             _cat_pages.append(("prices.html", "0.6", "daily"))
         if any(cat.get("slug") == "economy" for cat in categories):
             _cat_pages.append(("crypto.html", "0.7", "hourly"))
+        if any(cat.get("slug") == "sports" for cat in categories):
+            _cat_pages.append(("nfl.html", "0.8", "hourly"))
+            _cat_pages.append(("nba.html", "0.8", "hourly"))
 
         _all_sm_pages = _static_pages + _cat_pages + _region_pages
         _today = datetime.now().strftime("%Y-%m-%d")
