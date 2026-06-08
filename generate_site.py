@@ -2810,7 +2810,8 @@ body.lang-ltr .nh-text{direction:ltr}
 .art-page{max-width:800px;margin:0 auto;padding:28px 16px 48px}
 .art-back{display:inline-flex;align-items:center;gap:8px;color:#fff;background:linear-gradient(135deg,var(--header-start),var(--header-end));text-decoration:none;font-size:.88em;font-weight:700;margin-bottom:24px;padding:10px 22px;border-radius:24px;box-shadow:0 3px 16px rgba(99,102,241,.3);transition:all .22s;border:none;white-space:nowrap}
 .art-back:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(99,102,241,.45);opacity:1}
-.art-breadcrumb{font-size:.8em;color:var(--text-light);margin-bottom:18px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.art-breadcrumb{font-size:.8em;color:var(--text-light);margin-bottom:18px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;overflow:hidden;max-height:3em;opacity:1;transition:max-height .25s ease,opacity .2s ease,margin-bottom .25s ease}
+.sticky-header.hdr-compact .art-breadcrumb{max-height:0;opacity:0;margin-bottom:0}
 /* Category page breadcrumb */
 .cat-breadcrumb{font-size:.82em;color:var(--text-muted);margin-bottom:14px;padding:8px 0;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .cat-breadcrumb a{color:var(--text-muted);text-decoration:none;transition:color .15s}
@@ -3069,6 +3070,22 @@ function initBackToTop() {
   if (!btn) return;
   window.addEventListener('scroll', () => btn.classList.toggle('visible', window.scrollY > 400), {passive:true});
   btn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+}
+
+/* ========== BREADCRUMB HIDE ON SCROLL (article pages) ========== */
+function initBreadcrumbScroll() {
+  var hdr = document.querySelector('.sticky-header');
+  if (!hdr || !hdr.querySelector('.art-breadcrumb')) return;
+  var lastY = window.scrollY;
+  window.addEventListener('scroll', function() {
+    var y = window.scrollY;
+    if (y > lastY && y > 72) {
+      hdr.classList.add('hdr-compact');    // scrolling down → hide breadcrumb
+    } else if (y < lastY - 12 || y < 72) {
+      hdr.classList.remove('hdr-compact'); // scrolling up → restore breadcrumb
+    }
+    lastY = y;
+  }, {passive: true});
 }
 
 /* ========== SEARCH ========== */
@@ -3333,6 +3350,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCardAnimations();
   initNav();
   initBackToTop();
+  initBreadcrumbScroll();
   initEconTabs();
   initSourceFilter();
   initSearch();
