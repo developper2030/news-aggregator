@@ -121,5 +121,16 @@
   "econ_markets_section":    "Markets",
   "econ_trading_btn":        "💹 Trading",
   "econ_global_markets_btn": "🌐 Global Markets",
-  "econ_crypto_btn":         "₿ Crypto"
+  "econ_crypto_btn":         "₿ Crypto",
+  "crypto_page_title":       "₿ Cryptocurrency Prices",
+  "crypto_page_desc":        "Live crypto prices — powered by CoinGecko",
+  "crypto_bc":               "Crypto",
+  "crypto_refresh":          "🔄 Refresh",
+  "crypto_updated":          "Last updated",
+  "crypto_loading":          "⏳ Loading prices...",
+  "crypto_error":            "⚠️ Failed to load data — check your connection",
+  "crypto_src_note":         "Data from CoinGecko · updates every minute",
+  "crypto_col_price":        "Price",
+  "crypto_col_change":       "24h Change",
+  "crypto_col_mcap":         "Market Cap"
 }

@@ -684,12 +684,21 @@ def _economy_widget(s: dict, active_tab: str = "",
     _markets_label = esc(s.get("econ_markets_section", "الأسواق"))
     btns += f'<div class="side-divider"><span class="side-divider-lbl">{_markets_label}</span></div>'
 
+    # Crypto is live (CoinGecko free API, no key needed)
+    ic, lbl = _split("econ_crypto_btn")
+    _crypto_active = " side-active" if active_tab == "crypto" else ""
+    btns += (
+        f'<a href="crypto.html" class="side-btn{_crypto_active}">'
+        f'<span class="side-icon">{ic or "₿"}</span>'
+        f'<span class="side-label">{esc(lbl)}</span>'
+        f'</a>'
+    )
+
     soon_rows: list[tuple[str, str]] = []
     ic, lbl = _split("econ_trading_btn");  soon_rows.append((ic or "💹", lbl))
     if show_bourse:
         ic, lbl = _split("econ_bourse_btn"); soon_rows.append((ic or "📈", lbl))
     ic, lbl = _split("econ_global_markets_btn"); soon_rows.append((ic or "🌐", lbl))
-    ic, lbl = _split("econ_crypto_btn");   soon_rows.append((ic or "₿", lbl))
     if show_stats:
         ic, lbl = _split("econ_stats_btn"); soon_rows.append((ic or "📊", lbl))
     if show_biz:
@@ -1885,6 +1894,137 @@ def _widget_col(s: dict, lang: str, worldcup_data: dict,
     )
 
 
+def _crypto_main_html(s: dict, lang: str = "ar") -> str:
+    """Build the main content HTML for crypto.html.
+
+    Uses a client-side JavaScript widget that fetches live prices from the
+    CoinGecko free API (no API key, CORS-enabled). Prices refresh every 60s.
+    """
+    _dir      = s.get("dir", "rtl")
+    _title    = esc(s.get("crypto_page_title",  "₿ العملات الرقمية"))
+    _desc     = esc(s.get("crypto_page_desc",   "أسعار العملات الرقمية مباشرة"))
+    _refresh  = esc(s.get("crypto_refresh",     "🔄 تحديث"))
+    _updated  = esc(s.get("crypto_updated",     "آخر تحديث"))
+    _loading  = esc(s.get("crypto_loading",     "⏳ جاري التحميل..."))
+    _error    = esc(s.get("crypto_error",       "⚠️ تعذّر تحميل البيانات"))
+    _src_note = esc(s.get("crypto_src_note",    "البيانات من CoinGecko"))
+    _col_price  = esc(s.get("crypto_col_price", "السعر"))
+    _col_change = esc(s.get("crypto_col_change","تغيير 24س"))
+    _col_mcap   = esc(s.get("crypto_col_mcap",  "القيمة السوقية"))
+
+    # JS coin list — CoinGecko IDs + display info
+    _coins_js = """[
+      {id:"bitcoin",      sym:"BTC",  name:"Bitcoin",      icon:"₿"},
+      {id:"ethereum",     sym:"ETH",  name:"Ethereum",     icon:"Ξ"},
+      {id:"tether",       sym:"USDT", name:"Tether",       icon:"T"},
+      {id:"binancecoin",  sym:"BNB",  name:"BNB",          icon:"B"},
+      {id:"solana",       sym:"SOL",  name:"Solana",       icon:"◎"},
+      {id:"ripple",       sym:"XRP",  name:"XRP",          icon:"✕"},
+      {id:"usd-coin",     sym:"USDC", name:"USD Coin",     icon:"C"},
+      {id:"dogecoin",     sym:"DOGE", name:"Dogecoin",     icon:"Ð"},
+      {id:"cardano",      sym:"ADA",  name:"Cardano",      icon:"♠"},
+      {id:"tron",         sym:"TRX",  name:"TRON",         icon:"⚡"},
+      {id:"avalanche-2",  sym:"AVAX", name:"Avalanche",    icon:"🔺"},
+      {id:"chainlink",    sym:"LINK", name:"Chainlink",    icon:"🔗"}
+    ]"""
+
+    return f"""
+<div class="crypto-page" dir="{_dir}">
+  <div class="crypto-page-hdr">
+    <h1>{_title}</h1>
+    <p>{_desc}</p>
+  </div>
+  <div id="crypto-grid" class="crypto-grid">
+    <div class="crypto-loading">{_loading}</div>
+  </div>
+  <div class="crypto-footer">
+    <span>{_src_note} &nbsp;·&nbsp; {_updated}: <span id="crypto-ts">—</span></span>
+    <button id="crypto-refresh" class="crypto-refresh-btn">{_refresh}</button>
+  </div>
+</div>
+
+<script>
+(function() {{
+  'use strict';
+  var COINS = {_coins_js};
+  var COL_PRICE  = '{_col_price}';
+  var COL_CHANGE = '{_col_change}';
+  var COL_MCAP   = '{_col_mcap}';
+  var ERR_MSG    = '{_error}';
+
+  function fmtUSD(p) {{
+    if (!p) return '—';
+    if (p >= 1000) return '$' + p.toLocaleString('en-US', {{minimumFractionDigits:2, maximumFractionDigits:2}});
+    if (p >= 1)    return '$' + p.toFixed(4);
+    return '$' + p.toFixed(6);
+  }}
+
+  function fmtMcap(v) {{
+    if (!v) return '—';
+    if (v >= 1e12) return '$' + (v/1e12).toFixed(2) + 'T';
+    if (v >= 1e9)  return '$' + (v/1e9).toFixed(2) + 'B';
+    if (v >= 1e6)  return '$' + (v/1e6).toFixed(2) + 'M';
+    return '$' + v.toFixed(0);
+  }}
+
+  function fmtChange(c) {{
+    if (c == null) return '—';
+    var sign = c >= 0 ? '+' : '';
+    return sign + c.toFixed(2) + '%';
+  }}
+
+  function fetchPrices() {{
+    var ids = COINS.map(function(c) {{ return c.id; }}).join(',');
+    var url = 'https://api.coingecko.com/api/v3/simple/price?ids=' + ids +
+              '&vs_currencies=usd&include_24hr_change=true&include_market_cap=true';
+    var grid = document.getElementById('crypto-grid');
+    if (!grid) return;
+
+    fetch(url)
+      .then(function(r) {{
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      }})
+      .then(function(data) {{
+        var html = '';
+        COINS.forEach(function(coin) {{
+          var d = data[coin.id];
+          if (!d) return;
+          var price  = d.usd || 0;
+          var change = d.usd_24h_change;
+          var mcap   = d.usd_market_cap || 0;
+          var cls    = (change == null) ? 'neu' : (change >= 0 ? 'up' : 'dn');
+          var arrow  = (change == null) ? '' : (change >= 0 ? '▲' : '▼');
+          html += '<div class="crypto-card">' +
+            '<div class="crypto-coin-hdr">' +
+              '<div class="crypto-icon ' + cls + '">' + coin.icon + '</div>' +
+              '<div>' +
+                '<div class="crypto-coin-name">' + coin.name + '</div>' +
+                '<div class="crypto-coin-sym">' + coin.sym + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="crypto-price">' + fmtUSD(price) + '</div>' +
+            '<div class="crypto-change ' + cls + '">' + arrow + ' ' + fmtChange(change) + '</div>' +
+            '<div class="crypto-mcap">' + fmtMcap(mcap) + '</div>' +
+          '</div>';
+        }});
+        grid.innerHTML = html || '<div class="crypto-error">' + ERR_MSG + '</div>';
+        var ts = document.getElementById('crypto-ts');
+        if (ts) ts.textContent = new Date().toLocaleTimeString();
+      }})
+      .catch(function() {{
+        if (grid) grid.innerHTML = '<div class="crypto-error">' + ERR_MSG + '</div>';
+      }});
+  }}
+
+  fetchPrices();
+  setInterval(fetchPrices, 60000);
+  var btn = document.getElementById('crypto-refresh');
+  if (btn) btn.addEventListener('click', fetchPrices);
+}})();
+</script>"""
+
+
 def _prices_main_html(market_data: dict,
                       pairs: list[tuple[str, str]] = None,
                       s: dict = None) -> str:
@@ -2480,6 +2620,34 @@ body.lang-rtl .more-btn:hover{transform:translateX(4px)}
 @media(max-width:760px){.prices-grid{grid-template-columns:1fr}}
 body.lang-ltr .prices-table th{text-align:left}
 body.lang-ltr .prices-section-header{border-inline-start:5px solid #059669}
+/* ===================== CRYPTO PAGE ===================== */
+.crypto-page{max-width:1100px;margin:0 auto;padding:24px 16px 48px}
+.crypto-page-hdr{margin-bottom:28px}
+.crypto-page-hdr h1{font-size:1.6em;font-weight:800;color:var(--text);margin-bottom:6px}
+.crypto-page-hdr p{font-size:.9em;color:var(--text-muted)}
+.crypto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin:0 0 20px}
+.crypto-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:16px;transition:border-color .18s,transform .18s,box-shadow .18s;display:flex;flex-direction:column;gap:8px}
+.crypto-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 20px rgba(99,102,241,.12)}
+.crypto-coin-hdr{display:flex;align-items:center;gap:10px}
+.crypto-icon{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.25em;font-weight:900;flex-shrink:0}
+.crypto-icon.up{background:rgba(22,163,74,.13);color:#16a34a}
+.crypto-icon.dn{background:rgba(220,38,38,.13);color:#dc2626}
+.crypto-icon.neu{background:var(--surface-2);color:var(--text-muted)}
+.crypto-coin-name{font-size:.88em;font-weight:700;color:var(--text);line-height:1.2}
+.crypto-coin-sym{font-size:.72em;color:var(--text-muted);font-weight:600;letter-spacing:.04em}
+.crypto-price{font-size:1.18em;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.crypto-change{font-size:.82em;font-weight:700;display:flex;align-items:center;gap:3px}
+.crypto-change.up{color:#16a34a}
+.crypto-change.dn{color:#dc2626}
+.crypto-change.neu{color:var(--text-muted)}
+.crypto-mcap{font-size:.72em;color:var(--text-muted);margin-top:2px}
+.crypto-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:8px;font-size:.78em;color:var(--text-muted);flex-wrap:wrap}
+.crypto-refresh-btn{background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 14px;color:var(--text);cursor:pointer;font-size:.82em;transition:all .15s;white-space:nowrap}
+.crypto-refresh-btn:hover{border-color:var(--accent);color:var(--accent)}
+.crypto-refresh-btn:active{transform:scale(.96)}
+.crypto-loading,.crypto-error{text-align:center;padding:56px 20px;color:var(--text-muted);grid-column:1/-1;font-size:1em}
+.crypto-error{color:#dc2626}
+@media(max-width:600px){.crypto-grid{grid-template-columns:repeat(2,1fr);gap:10px}.crypto-card{padding:12px}.crypto-price{font-size:1em}}
 
 /* ===================== LANGUAGE GLOBE DROPDOWN ===================== */
 .lang-globe-wrap{position:relative;flex-shrink:0}
@@ -8256,6 +8424,29 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             ))
             pages_written += 1
 
+        # ── CRYPTO.HTML — live crypto prices via CoinGecko (always enabled) ────
+        if slug == "economy":
+            _wrt("crypto.html", _page(
+                title=s.get("crypto_page_title", "₿ Crypto"),
+                nav_html=_nav(categories, articles_by_cat, active="economy",
+                              s=s, region_slugs=region_slugs, has_world=has_world,
+                              media_slugs=media_slugs_local),
+                main_html=_crypto_main_html(s=s, lang=lang),
+                bn_active="crypto",
+                canonical=_page_canonical("crypto.html"),
+                hreflang_html=_make_hreflang("crypto.html"),
+                og_image_url=_og_img_url,
+                extra_json_ld=_org_ld,
+                world_subnav_html="",
+                ticker_html=_economy_widget(s, active_tab="crypto",
+                                            show_prices=_show_prices, show_bourse=_show_bourse,
+                                            show_stats=_show_stats, show_biz=_show_biz),
+                carousel_html="",
+                lang_switcher_html=_lsw("crypto.html"),
+                **common,
+            ))
+            pages_written += 1
+
     # ── WORLDCUP.HTML — World Cup 2026 schedule (data page, like prices) ──────
     if _has_wc and _show_worldcup:
         _sports_name = next((c["name"] for c in categories if c["slug"] == "sports"),
@@ -8503,6 +8694,8 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
                 _region_pages.append((f'{r["slug"]}.html', "0.6", "hourly"))
         if _show_prices and any(cat.get("slug") == "economy" for cat in categories):
             _cat_pages.append(("prices.html", "0.6", "daily"))
+        if any(cat.get("slug") == "economy" for cat in categories):
+            _cat_pages.append(("crypto.html", "0.7", "hourly"))
 
         _all_sm_pages = _static_pages + _cat_pages + _region_pages
         _today = datetime.now().strftime("%Y-%m-%d")

@@ -121,5 +121,16 @@
   "econ_markets_section":    "الأسواق",
   "econ_trading_btn":        "💹 تداول",
   "econ_global_markets_btn": "🌐 الأسواق العالمية",
-  "econ_crypto_btn":         "₿ كريبتو"
+  "econ_crypto_btn":         "₿ كريبتو",
+  "crypto_page_title":       "₿ العملات الرقمية",
+  "crypto_page_desc":        "أسعار العملات الرقمية مباشرة — مصدر CoinGecko",
+  "crypto_bc":               "كريبتو",
+  "crypto_refresh":          "🔄 تحديث",
+  "crypto_updated":          "آخر تحديث",
+  "crypto_loading":          "⏳ جاري تحميل الأسعار...",
+  "crypto_error":            "⚠️ تعذّر تحميل البيانات — تحقق من الاتصال بالإنترنت",
+  "crypto_src_note":         "البيانات من CoinGecko · تتجدد كل دقيقة",
+  "crypto_col_price":        "السعر",
+  "crypto_col_change":       "تغيير 24س",
+  "crypto_col_mcap":         "القيمة السوقية"
 }

@@ -121,5 +121,16 @@
   "econ_markets_section":    "Marchés",
   "econ_trading_btn":        "💹 Trading",
   "econ_global_markets_btn": "🌐 Marchés mondiaux",
-  "econ_crypto_btn":         "₿ Crypto"
+  "econ_crypto_btn":         "₿ Crypto",
+  "crypto_page_title":       "₿ Cryptomonnaies",
+  "crypto_page_desc":        "Prix des cryptos en direct — source CoinGecko",
+  "crypto_bc":               "Crypto",
+  "crypto_refresh":          "🔄 Actualiser",
+  "crypto_updated":          "Mis à jour",
+  "crypto_loading":          "⏳ Chargement des prix...",
+  "crypto_error":            "⚠️ Impossible de charger les données — vérifiez votre connexion",
+  "crypto_src_note":         "Données de CoinGecko · mise à jour chaque minute",
+  "crypto_col_price":        "Prix",
+  "crypto_col_change":       "Variation 24h",
+  "crypto_col_mcap":         "Capitalisation"
 }

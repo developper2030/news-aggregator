@@ -121,5 +121,16 @@
   "econ_markets_section":    "Piyasalar",
   "econ_trading_btn":        "💹 İşlem",
   "econ_global_markets_btn": "🌐 Küresel Piyasalar",
-  "econ_crypto_btn":         "₿ Kripto"
+  "econ_crypto_btn":         "₿ Kripto",
+  "crypto_page_title":       "₿ Kripto Para Fiyatları",
+  "crypto_page_desc":        "Canlı kripto fiyatları — kaynak CoinGecko",
+  "crypto_bc":               "Kripto",
+  "crypto_refresh":          "🔄 Yenile",
+  "crypto_updated":          "Son güncelleme",
+  "crypto_loading":          "⏳ Fiyatlar yükleniyor...",
+  "crypto_error":            "⚠️ Veriler yüklenemedi — bağlantınızı kontrol edin",
+  "crypto_src_note":         "Veriler CoinGecko'dan · her dakika güncellenir",
+  "crypto_col_price":        "Fiyat",
+  "crypto_col_change":       "24s Değişim",
+  "crypto_col_mcap":         "Piyasa Değeri"
 }
