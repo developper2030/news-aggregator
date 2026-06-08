@@ -123,6 +123,19 @@ def _is_yt_url(url: str) -> bool:
     return "youtube.com/watch" in url or "youtu.be/" in url
 
 
+def _yt_vid_id(url: str) -> str:
+    """Extract the 11-character YouTube video ID from a watch or short URL.
+
+    Supports:
+        https://www.youtube.com/watch?v=VIDEO_ID[&...]
+        https://youtu.be/VIDEO_ID[?...]
+    Returns '' if no valid ID is found.
+    """
+    import re as _re
+    m = _re.search(r"(?:v=|youtu\.be/)([A-Za-z0-9_\-]{11})", url)
+    return m.group(1) if m else ""
+
+
 # Slugs that are economy sub-sections (hidden from main nav & home — accessible only via economy strip)
 ECON_SUB_SLUGS: set[str] = {"business", "travel"}
 # Sections shown in the Sports sub-bar (not the main nav, not the home grid)
@@ -2789,6 +2802,9 @@ body.lang-ltr .nh-text{direction:ltr}
 .card-play::after{content:'';display:block;width:0;height:0;border-style:solid;border-width:10px 0 10px 18px;border-color:transparent transparent transparent rgba(255,255,255,.95);margin-inline-start:4px}
 .article-card:hover .card-play{transform:translate(-50%,-60%) scale(1.12);background:rgba(255,0,0,.72)}
 @media(pointer:coarse){.card-play{width:46px;height:46px}}
+/* ── YouTube click-to-play iframe ── */
+.card-yt-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:0}
+.card-yt-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:0}
 /* ====== CLUSTER BADGE ====== */
 .cluster-badge{display:inline-flex;align-items:center;gap:3px;font-size:.72em;font-weight:700;background:linear-gradient(90deg,#0ea5e9,#6366f1);color:#fff;padding:2px 8px;border-radius:10px;white-space:nowrap;cursor:default}
 .cluster-badge:hover{background:linear-gradient(90deg,#0284c7,#4f46e5)}
@@ -3088,6 +3104,40 @@ function initBreadcrumbScroll() {
   }, {passive: true});
 }
 
+/* ========== YOUTUBE CLICK-TO-PLAY ========== */
+// Clicking the thumbnail/play-button of a vid-* card injects a youtube-nocookie
+// iframe in place (autoplay). Clicking the title/source still navigates to YouTube.
+// Only one video plays at a time — opening a second pauses the first.
+function initYTCards() {
+  document.addEventListener('click', function(e) {
+    var card = e.target.closest('.article-card[data-yt-id]');
+    if (!card) return;
+    var bg = card.querySelector('.card-bg');
+    // Only activate when clicking the image/play-button area
+    if (!bg || !bg.contains(e.target)) return;
+    // Already playing? Let the click reach the iframe normally
+    if (card.querySelector('.card-yt-wrap')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    var ytId = card.dataset.ytId;
+    if (!ytId) return;
+    // Stop any other playing cards first
+    document.querySelectorAll('.card-yt-wrap').forEach(function(w) {
+      var prevBg = w.closest('.card-bg');
+      if (prevBg) prevBg.innerHTML = '';
+    });
+    // Inject iframe
+    bg.innerHTML =
+      '<div class="card-yt-wrap">' +
+      '<iframe src="https://www.youtube-nocookie.com/embed/' + ytId +
+      '?autoplay=1&rel=0&modestbranding=1&color=white" ' +
+      'title="YouTube video" ' +
+      'allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;web-share" ' +
+      'allowfullscreen></iframe>' +
+      '</div>';
+  }, false);
+}
+
 /* ========== SEARCH ========== */
 function initSearch() {
   const toggle = document.getElementById('search-toggle');
@@ -3351,6 +3401,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initNav();
   initBackToTop();
   initBreadcrumbScroll();
+  initYTCards();
   initEconTabs();
   initSourceFilter();
   initSearch();
@@ -6208,8 +6259,12 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
                 f'{esc(_cl_label)}</span>'
             )
 
-    # ── Play button (vid-* cards) — computed before bg_html so it embeds in image container
-    _play_btn = '<div class="card-play" aria-hidden="true"></div>' if slug.startswith("vid-") else ""
+    # ── Play button + YouTube ID (vid-* cards) ────────────────────────────────
+    _is_vid   = slug.startswith("vid-")
+    _play_btn = '<div class="card-play" aria-hidden="true"></div>' if _is_vid else ""
+    # Extract YT video ID so JS can inject iframe on click (click-to-play)
+    _yt_id_val  = _yt_vid_id(url) if (_is_vid and _is_yt_url(url)) else ""
+    _yt_data    = f' data-yt-id="{esc(_yt_id_val)}"' if _yt_id_val else ""
 
     if image and image != "#":
         bg_html = (
@@ -6243,7 +6298,7 @@ def _card(art: dict, slug: str, use_article_page: bool = True,
 
     return (
         f'<article class="article-card{extra_cls}" data-cat="{esc(slug)}" data-title="{title}" '
-        f'data-source="{source}" data-url="{url}" data-date="{date}" data-color="{esc(color)}">'
+        f'data-source="{source}" data-url="{url}" data-date="{date}" data-color="{esc(color)}"{_yt_data}>'
         f'<a href="{esc(_card_href)}"{_card_target}{_card_rel} class="card-link">'
         f'{bg_html}'
         f'<div class="card-body">'
