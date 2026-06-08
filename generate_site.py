@@ -6543,14 +6543,25 @@ def _item_list_json_ld(
 def _nav(categories: list, articles_by_cat: dict, active: str = "home",
          s: dict = STRINGS["ar"], region_slugs: set = REGION_SLUGS,
          has_world: bool = True, media_slugs: set = MEDIA_SLUGS,
-         has_media: bool = True, rel_prefix: str = "") -> str:
+         has_media: bool = True, rel_prefix: str = "",
+         media_after: str = "politics") -> str:
     """Build the top navigation bar HTML.
 
-    rel_prefix: path prefix for links (e.g. '../' for pages inside /article/).
+    rel_prefix:  path prefix for links (e.g. '../' for pages inside /article/).
+    media_after: slug after which the Media tab is inserted (default: 'politics').
+                 Set to '' to place Media at the end (legacy behaviour).
     """
     home_cls = "nav-tab active" if active == "home" else "nav-tab"
     html = f'<a href="{rel_prefix}index.html" class="{home_cls}" data-cat="all">{s["home"]}</a>\n'
 
+    # Pre-build the media tab HTML so we can inject it at the right position
+    _media_tab = ""
+    if has_world or has_media:
+        media_active = active in media_slugs or active in ("media", "live")
+        world_cls = "nav-tab active" if media_active else "nav-tab"
+        _media_tab = f'<a href="{rel_prefix}media.html" class="{world_cls}" data-cat="media">{s["world"]}</a>\n'
+
+    _media_inserted = False
     for cat in categories:
         slug = cat["slug"]
         if slug in region_slugs or slug in media_slugs or slug in ECON_SUB_SLUGS or slug in SPORTS_SUB_SLUGS:
@@ -6560,12 +6571,15 @@ def _nav(categories: list, articles_by_cat: dict, active: str = "home",
             f'<a href="{rel_prefix}{esc(slug)}.html" class="{cls}" data-cat="{esc(slug)}">'
             f'{esc(cat.get("icon",""))} {esc(cat["name"])}</a>\n'
         )
+        # Insert media tab immediately after the designated anchor slug
+        if _media_tab and media_after and slug == media_after and not _media_inserted:
+            html += _media_tab
+            _media_inserted = True
 
-    # Show media tab when either world_regions or media_regions are configured
-    if has_world or has_media:
-        media_active = active in media_slugs or active in ("media", "live")
-        world_cls = "nav-tab active" if media_active else "nav-tab"
-        html += f'<a href="{rel_prefix}media.html" class="{world_cls}" data-cat="media">{s["world"]}</a>\n'
+    # Fallback: add at the end if the anchor slug was never seen
+    if _media_tab and not _media_inserted:
+        html += _media_tab
+
     return html
 
 
