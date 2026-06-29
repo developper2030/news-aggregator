@@ -444,6 +444,121 @@ _WC_FLAG: dict[str, str] = {
 }
 
 
+# Venue → UTC offset in hours (DST-adjusted for June–July 2026)
+_WC_VENUE_TZ: dict[str, int] = {
+    "MetLife Stadium": -4, "Lincoln Financial Field": -4,
+    "Gillette Stadium": -4, "Hard Rock Stadium": -4,
+    "AT&T Stadium": -5, "NRG Stadium": -5, "Arrowhead Stadium": -5,
+    "SoFi Stadium": -7, "Levi's Stadium": -7, "Rose Bowl": -7, "BC Place": -7,
+    "State Farm Stadium": -7,
+    "Estadio Azteca": -6, "Estadio AKRON": -6,
+    "Estadio Monterrey": -6, "Estadio BBVA": -6,
+}
+
+# UI strings for all 5 languages
+_WC_UI: dict[str, dict] = {
+    "ar": {"upcoming":"📅 المباريات القادمة","results":"⚽ النتائج","groups":"🏆 المجموعات",
+           "scorers":"⭐ الهدافون","no_upcoming":"لا توجد مباريات قادمة","no_results":"لا توجد نتائج بعد",
+           "highlights":"🎬 ملخص","goals":"أهداف","team":"الفريق",
+           "pts":"نقاط","pl":"ل","w":"ف","d":"ت","l":"خ","gf":"م+","ga":"م-","gd":"فارق"},
+    "en": {"upcoming":"📅 Upcoming","results":"⚽ Results","groups":"🏆 Groups",
+           "scorers":"⭐ Top Scorers","no_upcoming":"No upcoming matches","no_results":"No results yet",
+           "highlights":"🎬 Highlights","goals":"goals","team":"Team",
+           "pts":"Pts","pl":"Pl","w":"W","d":"D","l":"L","gf":"GF","ga":"GA","gd":"GD"},
+    "fr": {"upcoming":"📅 À venir","results":"⚽ Résultats","groups":"🏆 Groupes",
+           "scorers":"⭐ Buteurs","no_upcoming":"Aucun match à venir","no_results":"Pas de résultats",
+           "highlights":"🎬 Résumé","goals":"buts","team":"Équipe",
+           "pts":"Pts","pl":"J","w":"V","d":"N","l":"D","gf":"BP","ga":"BC","gd":"DB"},
+    "es": {"upcoming":"📅 Próximos","results":"⚽ Resultados","groups":"🏆 Grupos",
+           "scorers":"⭐ Goleadores","no_upcoming":"Sin próximos partidos","no_results":"Sin resultados",
+           "highlights":"🎬 Resumen","goals":"goles","team":"Equipo",
+           "pts":"Pts","pl":"PJ","w":"G","d":"E","l":"P","gf":"GF","ga":"GC","gd":"DG"},
+    "tr": {"upcoming":"📅 Yaklaşan","results":"⚽ Sonuçlar","groups":"🏆 Gruplar",
+           "scorers":"⭐ Gol Krallığı","no_upcoming":"Yaklaşan maç yok","no_results":"Henüz sonuç yok",
+           "highlights":"🎬 Özet","goals":"gol","team":"Takım",
+           "pts":"Puan","pl":"Oy","w":"G","d":"B","l":"M","gf":"AG","ga":"YG","gd":"AV"},
+}
+
+
+def _wc_utc_iso(date: str, time_str: str, ground: str) -> str:
+    """Convert venue local kick-off time to UTC ISO-8601 string."""
+    from datetime import datetime, timedelta
+    offset_h = _WC_VENUE_TZ.get(ground, -5)
+    if not date or not time_str:
+        return ""
+    try:
+        t = time_str.split()[0]
+        dt_local = datetime.strptime(f"{date} {t}", "%Y-%m-%d %H:%M")
+        dt_utc = dt_local - timedelta(hours=offset_h)
+        return dt_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
+    except Exception:
+        return ""
+
+
+def _compute_wc_standings(matches: list) -> dict:
+    """Compute group-stage standings from match results."""
+    from collections import defaultdict
+    groups: dict = defaultdict(dict)
+    for m in matches:
+        grp = m.get("group", "")
+        if not grp:
+            continue
+        sc = m.get("score") or {}
+        ft = sc.get("ft") if isinstance(sc, dict) else None
+        t1, t2 = m.get("team1", ""), m.get("team2", "")
+        for t in (t1, t2):
+            if t and t not in groups[grp]:
+                groups[grp][t] = {"pl":0,"w":0,"d":0,"l":0,"gf":0,"ga":0,"pts":0}
+        if ft and len(ft) == 2 and t1 and t2:
+            g1, g2 = int(ft[0]), int(ft[1])
+            s1, s2 = groups[grp][t1], groups[grp][t2]
+            s1["pl"]+=1; s1["gf"]+=g1; s1["ga"]+=g2
+            s2["pl"]+=1; s2["gf"]+=g2; s2["ga"]+=g1
+            if g1 > g2:   s1["w"]+=1; s1["pts"]+=3; s2["l"]+=1
+            elif g1 < g2: s2["w"]+=1; s2["pts"]+=3; s1["l"]+=1
+            else:         s1["d"]+=1; s1["pts"]+=1; s2["d"]+=1; s2["pts"]+=1
+    result = {}
+    for grp, teams in sorted(groups.items()):
+        result[grp] = sorted(
+            [{"name": t, **st} for t, st in teams.items()],
+            key=lambda x: (-x["pts"], -(x["gf"]-x["ga"]), -x["gf"])
+        )
+    return result
+
+
+def _fetch_wc_scorers(matches: list) -> list:
+    """Extract top scorers: first from openfootball goals data, then ESPN API."""
+    import json as _json, urllib.request as _urlreq
+    from collections import defaultdict
+    scorers: dict = defaultdict(lambda: {"goals":0,"team":""})
+    for m in matches:
+        for g in (m.get("goals") or []):
+            name = g.get("name") or g.get("player","")
+            if name and not g.get("own_goal"):
+                scorers[name]["goals"] += 1
+                scorers[name]["team"] = scorers[name]["team"] or m.get("team1","") if g.get("team1") else g.get("team","")
+    if scorers:
+        return sorted([{"name":n,**v} for n,v in scorers.items()], key=lambda x:-x["goals"])[:20]
+    # ESPN fallback
+    try:
+        url = "https://site.api.espn.com/apis/site/v2/sports/soccer/FIFA.WORLD/leaders?limit=20"
+        req = _urlreq.Request(url, headers={"User-Agent":"AtlasNews/1.0"})
+        with _urlreq.urlopen(req, timeout=8) as r:
+            obj = _json.loads(r.read())
+        for cat in obj.get("leaders", []):
+            if "goal" in (cat.get("name","") or cat.get("displayName","")).lower():
+                out = []
+                for e in cat.get("leaders",[]):
+                    ath = e.get("athlete",{})
+                    out.append({"name":ath.get("displayName","?"),
+                                "team":(ath.get("team") or {}).get("displayName",""),
+                                "goals":int(e.get("value",0))})
+                return sorted(out, key=lambda x:-x["goals"])
+    except Exception:
+        pass
+    return []
+
+
 def _wc_team(name: str, lang: str) -> str:
     """Translate a team name; fall back to the English name. Handles knockout
     placeholder codes (e.g. '2A', 'W73') by returning them as-is."""
@@ -527,58 +642,158 @@ def _fetch_worldcup(cache_path: str = "", force_refresh: bool = False) -> dict:
 
 
 def _worldcup_page_html(data: dict, s: dict, lang: str) -> str:
-    """Build the World Cup 2026 schedule page (matches grouped by date)."""
+    """World Cup 2026 page — 4 tabs: upcoming / results / groups / top scorers."""
     matches = data.get("matches", [])
-    title = s.get("wc_title", "World Cup 2026 Schedule")
+    title   = s.get("wc_title", "World Cup 2026")
+    ui      = _WC_UI.get(lang, _WC_UI["en"])
+    _gw     = {"ar":"المجموعة","fr":"Groupe","es":"Grupo","tr":"Grup"}.get(lang,"Group")
+
     if not matches:
-        return (f'<div class="main-wrapper">'
-                f'<div class="empty-state"><h2>🏆 {esc(title)}</h2>'
-                f'<p>{esc(s.get("wc_soon", "Schedule coming soon."))}</p></div></div>')
+        return (f'<div class="main-wrapper"><div class="empty-state">'
+                f'<h2>🏆 {esc(title)}</h2>'
+                f'<p>{esc(s.get("wc_soon","Schedule coming soon."))}</p></div></div>')
 
-    from collections import OrderedDict
-    by_date: "OrderedDict[str, list]" = OrderedDict()
+    # ── Split: upcoming vs completed ──────────────────────────────────────────
+    upcoming, completed = [], []
     for m in matches:
-        by_date.setdefault(m.get("date", ""), []).append(m)
+        sc = m.get("score") or {}
+        ft = sc.get("ft") if isinstance(sc, dict) else None
+        (completed if (ft and len(ft) == 2) else upcoming).append(m)
 
-    _grp_word = {"ar": "المجموعة", "fr": "Groupe", "es": "Grupo", "tr": "Grup"}.get(lang, "Group")
+    # ── TAB 1: Upcoming ───────────────────────────────────────────────────────
+    def _upcoming_card(m):
+        t1 = esc(_wc_team(m.get("team1",""), lang)); f1 = _WC_FLAG.get(m.get("team1",""),"")
+        t2 = esc(_wc_team(m.get("team2",""), lang)); f2 = _WC_FLAG.get(m.get("team2",""),"")
+        tm_raw = (m.get("time","") or "").split()[0]
+        ground = m.get("ground","")
+        utc    = _wc_utc_iso(m.get("date",""), tm_raw, ground)
+        t_html = (f'<span class="wc-local-time" data-utc="{esc(utc)}">{esc(tm_raw)}</span>'
+                  if utc else f'<span class="wc-local-time">{esc(tm_raw)}</span>')
+        grp   = m.get("group","")
+        badge = esc(grp.replace("Group",_gw).strip() if grp else _wc_round(m.get("round",""), lang))
+        gnd   = f'<span class="wc-ground">📍 {esc(ground)}</span>' if ground else ""
+        return (f'<div class="wc-mc">'
+                f'<div class="wc-mc-teams">'
+                f'<span class="wc-tm wc-tm-home">{f1} {t1}</span>'
+                f'<div class="wc-mc-mid"><span class="wc-badge">{badge}</span>{t_html}</div>'
+                f'<span class="wc-tm wc-tm-away">{t2} {f2}</span>'
+                f'</div><div class="wc-mc-foot">{gnd}</div></div>')
 
-    days_html = ""
-    for date, day_matches in by_date.items():
-        rows = ""
-        for m in day_matches:
-            t1 = esc(_wc_team(m.get("team1", ""), lang))
-            t2 = esc(_wc_team(m.get("team2", ""), lang))
-            tm = esc((m.get("time", "") or "").split()[0])
-            grp = m.get("group", "")
-            if grp:
-                label = esc(grp.replace("Group", _grp_word).strip())
-            else:
-                label = esc(_wc_round(m.get("round", ""), lang))
-            ground = esc(_wc_team(m.get("ground", ""), lang))
-            rows += (
-                f'<div class="wc-match">'
-                f'<span class="wc-time">{tm}</span>'
-                f'<div class="wc-teams">'
-                f'<span class="wc-team wc-t1">{t1}</span>'
-                f'<span class="wc-vs">⚔</span>'
-                f'<span class="wc-team wc-t2">{t2}</span>'
-                f'</div>'
-                f'<span class="wc-grp">{label}</span>'
-                f'<span class="wc-ground">📍 {ground}</span>'
-                f'</div>'
-            )
-        days_html += (
-            f'<section class="wc-day">'
-            f'<h2 class="wc-date">📅 {esc(date)}</h2>'
-            f'<div class="wc-matches">{rows}</div>'
-            f'</section>'
+    by_date: dict = {}
+    for m in upcoming:
+        by_date.setdefault(m.get("date",""), []).append(m)
+    up_html = ""
+    for date, ms in sorted(by_date.items())[:10]:
+        up_html += f'<div class="wc-day-hdr" data-utcdate="{esc(date)}">📅 {esc(date)}</div>'
+        up_html += "".join(_upcoming_card(m) for m in ms)
+    if not up_html:
+        up_html = f'<div class="wc-empty">{esc(ui["no_upcoming"])}</div>'
+
+    # ── TAB 2: Results ────────────────────────────────────────────────────────
+    def _result_card(m):
+        t1 = esc(_wc_team(m.get("team1",""), lang)); f1 = _WC_FLAG.get(m.get("team1",""),"")
+        t2 = esc(_wc_team(m.get("team2",""), lang)); f2 = _WC_FLAG.get(m.get("team2",""),"")
+        sc = m.get("score") or {}
+        ft = sc.get("ft",[0,0]) if isinstance(sc, dict) else [0,0]
+        g1, g2 = int(ft[0]), int(ft[1])
+        w1 = " wc-winner" if g1 > g2 else ""
+        w2 = " wc-winner" if g2 > g1 else ""
+        yt = (f"https://www.youtube.com/results?search_query="
+              f"World+Cup+2026+{m.get('team1','').replace(' ','+')}+vs+"
+              f"{m.get('team2','').replace(' ','+')}+highlights")
+        return (f'<div class="wc-mc wc-mc-done">'
+                f'<div class="wc-mc-teams">'
+                f'<span class="wc-tm wc-tm-home{w1}">{f1} {t1}</span>'
+                f'<div class="wc-mc-mid"><span class="wc-score-badge">{g1} – {g2}</span></div>'
+                f'<span class="wc-tm wc-tm-away{w2}">{t2} {f2}</span>'
+                f'</div><div class="wc-mc-foot">'
+                f'<a href="{esc(yt)}" class="wc-yt-btn" target="_blank" rel="noopener noreferrer">'
+                f'▶ {esc(ui["highlights"])}</a>'
+                f'</div></div>')
+
+    by_round: dict = {}
+    for m in reversed(completed):
+        rnd = _wc_round(m.get("round","") or m.get("group",""), lang)
+        by_round.setdefault(rnd, []).append(m)
+    res_html = ""
+    for rnd, ms in by_round.items():
+        res_html += f'<div class="wc-round-hdr">🏆 {esc(rnd)}</div>'
+        res_html += "".join(_result_card(m) for m in ms)
+    if not res_html:
+        res_html = f'<div class="wc-empty">{esc(ui["no_results"])}</div>'
+
+    # ── TAB 3: Group standings ────────────────────────────────────────────────
+    standings = _compute_wc_standings(matches)
+    grp_html  = ""
+    for grp_name, tlist in standings.items():
+        glabel = esc(grp_name.replace("Group", _gw).strip())
+        rows   = ""
+        for i, t in enumerate(tlist, 1):
+            flag  = _WC_FLAG.get(t["name"],"")
+            tname = esc(_wc_team(t["name"], lang))
+            gd    = t["gf"] - t["ga"]
+            promo = "wc-promoted" if i <= 2 else ""
+            rows += (f'<tr class="{promo}">'
+                     f'<td><span class="wc-pos">{i}</span> {flag} {tname}</td>'
+                     f'<td>{t["pl"]}</td><td>{t["w"]}</td><td>{t["d"]}</td><td>{t["l"]}</td>'
+                     f'<td>{t["gf"]}</td><td>{t["ga"]}</td>'
+                     f'<td><b>{"+" if gd>0 else ""}{gd}</b></td>'
+                     f'<td><b>{t["pts"]}</b></td></tr>')
+        grp_html += (
+            f'<div class="wc-group-name">{glabel}</div>'
+            f'<table class="wc-st-table"><thead><tr>'
+            f'<th style="text-align:left">{esc(ui["team"])}</th>'
+            f'<th>{esc(ui["pl"])}</th><th>{esc(ui["w"])}</th>'
+            f'<th>{esc(ui["d"])}</th><th>{esc(ui["l"])}</th>'
+            f'<th>{esc(ui["gf"])}</th><th>{esc(ui["ga"])}</th>'
+            f'<th>{esc(ui["gd"])}</th><th>{esc(ui["pts"])}</th>'
+            f'</tr></thead><tbody>{rows}</tbody></table>'
         )
+    if not grp_html:
+        grp_html = f'<div class="wc-empty">–</div>'
 
+    # ── TAB 4: Top scorers ────────────────────────────────────────────────────
+    scorers    = _fetch_wc_scorers(matches)
+    scr_html   = ""
+    _rank_cls  = {1:"rank-gold",2:"rank-silver",3:"rank-bronze"}
+    for i, sc in enumerate(scorers[:20], 1):
+        flag  = _WC_FLAG.get(sc.get("team",""),"")
+        name  = esc(sc.get("name",""))
+        team  = esc(_wc_team(sc.get("team",""), lang))
+        goals = sc.get("goals",0)
+        rc    = f' {_rank_cls[i]}' if i in _rank_cls else ""
+        scr_html += (
+            f'<div class="wc-scorer-row">'
+            f'<span class="wc-scorer-rank{rc}">{i}</span>'
+            f'<div class="wc-scorer-info">'
+            f'<span class="wc-scorer-name">{flag} {name}</span>'
+            f'<span class="wc-scorer-team">{team}</span>'
+            f'</div>'
+            f'<span class="wc-scorer-goals">{goals} {esc(ui["goals"])}</span>'
+            f'</div>'
+        )
+    if not scr_html:
+        scr_html = f'<div class="wc-empty">⏳</div>'
+
+    # ── Assemble ──────────────────────────────────────────────────────────────
+    tab_defs = [("upcoming",ui["upcoming"],len(upcoming)),
+                ("results", ui["results"], len(completed)),
+                ("groups",  ui["groups"],  len(standings)),
+                ("scorers", ui["scorers"], len(scorers))]
+    tabs_html = "".join(
+        f'<button class="wc-tab{"  wct-active" if i==0 else ""}" data-tab="{k}">'
+        f'{esc(v)}{f" ({n})" if n else ""}</button>'
+        for i,(k,v,n) in enumerate(tab_defs)
+    )
     return (
         f'<div class="main-wrapper">'
         f'<div class="wc-hero"><h1>🏆 {esc(title)}</h1>'
-        f'<p class="wc-sub">{esc(s.get("wc_sub", "United States · Canada · Mexico"))}</p></div>'
-        f'<div class="wc-schedule">{days_html}</div>'
+        f'<p class="wc-sub">{esc(s.get("wc_sub","United States · Canada · Mexico"))}</p></div>'
+        f'<div class="wc-tabs">{tabs_html}</div>'
+        f'<div id="wcp-upcoming" class="wc-panel wcp-active">{up_html}</div>'
+        f'<div id="wcp-results"  class="wc-panel">{res_html}</div>'
+        f'<div id="wcp-groups"   class="wc-panel">{grp_html}</div>'
+        f'<div id="wcp-scorers"  class="wc-panel">{scr_html}</div>'
         f'</div>'
     )
 
@@ -2646,23 +2861,53 @@ body.lang-rtl .side-subnav{box-shadow:-3px 0 20px rgba(0,0,0,.09)}
 @media(max-width:380px){.live-grid{grid-template-columns:1fr}}
 
 /* ===================== WORLD CUP 2026 SCHEDULE ===================== */
-.wc-hero{text-align:center;padding:26px 16px;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#fff;border-radius:14px;margin-bottom:22px;box-shadow:var(--card-shadow)}
+/* ── World Cup 2026 ── */
+.wc-hero{text-align:center;padding:26px 16px;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#fff;border-radius:14px;margin-bottom:18px;box-shadow:var(--card-shadow)}
 .wc-hero h1{font-size:1.7em;font-weight:900;letter-spacing:.5px}
 .wc-sub{opacity:.9;margin-top:6px;font-size:.95em;font-weight:600}
-.wc-schedule{display:flex;flex-direction:column;gap:22px}
-.wc-day{}
-.wc-date{font-size:1.05em;font-weight:800;color:var(--accent);padding:8px 4px;border-bottom:2px solid var(--accent);margin-bottom:12px}
-.wc-matches{display:flex;flex-direction:column;gap:9px}
-.wc-match{display:flex;align-items:center;gap:14px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;flex-wrap:wrap;transition:border-color .15s,transform .15s}
-.wc-match:hover{border-color:var(--accent);transform:translateX(-2px)}
-.wc-time{font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;min-width:52px;font-size:.95em}
-.wc-teams{display:flex;align-items:center;gap:12px;flex:1;font-weight:700;min-width:220px;font-size:1em}
-.wc-team{flex:1}
-.wc-t1{text-align:end}
-.wc-t2{text-align:start}
-.wc-vs{opacity:.45;font-size:.8em;flex:0 0 auto}
-.wc-grp{font-size:.76em;font-weight:700;padding:3px 11px;border-radius:12px;background:rgba(99,102,241,.13);color:var(--accent);white-space:nowrap}
-.wc-ground{font-size:.8em;color:var(--text-muted);white-space:nowrap}
+/* Tabs */
+.wc-tabs{display:flex;gap:4px;background:var(--surface);padding:5px;border-radius:12px;margin-bottom:16px;flex-wrap:wrap}
+.wc-tab{flex:1;padding:9px 10px;border:none;background:transparent;border-radius:8px;cursor:pointer;font-size:.8em;font-weight:700;color:var(--text-light);transition:all .2s;white-space:nowrap;min-width:0;line-height:1.3}
+.wc-tab.wct-active{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(99,102,241,.3)}
+.wc-panel{display:none}
+.wc-panel.wcp-active{display:block}
+.wc-empty{text-align:center;padding:30px;color:var(--text-muted);font-size:.9em}
+/* Day / round headers */
+.wc-day-hdr{font-size:.82em;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin:14px 0 7px;padding:5px 2px;border-bottom:2px solid var(--accent)}
+.wc-round-hdr{background:var(--surface);border-radius:8px;padding:7px 14px;margin:14px 0 7px;font-size:.88em;font-weight:800;color:var(--text)}
+/* Match card */
+.wc-mc{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;transition:box-shadow .2s,border-color .15s}
+.wc-mc:hover{box-shadow:var(--card-shadow);border-color:var(--accent)}
+.wc-mc-teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+.wc-tm{font-weight:800;font-size:.9em;color:var(--text)}
+.wc-tm-home{text-align:right}
+.wc-tm-away{text-align:left}
+.wc-winner{color:var(--accent)}
+.wc-mc-mid{text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px}
+.wc-badge{font-size:.7em;font-weight:700;padding:2px 9px;border-radius:10px;background:rgba(99,102,241,.12);color:var(--accent);white-space:nowrap}
+.wc-local-time{font-size:.82em;font-weight:800;color:var(--text-light);font-variant-numeric:tabular-nums}
+.wc-score-badge{font-size:1.3em;font-weight:900;color:var(--accent);letter-spacing:3px;line-height:1}
+.wc-mc-foot{display:flex;align-items:center;justify-content:space-between;margin-top:7px;flex-wrap:wrap;gap:6px}
+.wc-ground{font-size:.74em;color:var(--text-muted)}
+.wc-yt-btn{display:inline-flex;align-items:center;gap:4px;color:#dc2626;font-weight:700;font-size:.78em;text-decoration:none;background:rgba(220,38,38,.08);border-radius:7px;padding:4px 10px;transition:background .15s}
+.wc-yt-btn:hover{background:rgba(220,38,38,.18)}
+/* Group standings */
+.wc-group-name{font-size:.88em;font-weight:800;color:var(--accent);margin:16px 0 6px;padding:6px 12px;background:rgba(99,102,241,.08);border-radius:8px;border-left:3px solid var(--accent)}
+.wc-st-table{width:100%;border-collapse:collapse;font-size:.78em;margin-bottom:8px}
+.wc-st-table th{text-align:center;padding:5px 5px;color:var(--text-muted);font-weight:700;border-bottom:1px solid var(--border);white-space:nowrap}
+.wc-st-table th:first-child{text-align:left}
+.wc-st-table td{padding:6px 5px;border-bottom:1px solid var(--border);text-align:center;color:var(--text)}
+.wc-st-table td:first-child{text-align:left;font-weight:700}
+.wc-promoted td{background:rgba(22,163,74,.06)}
+.wc-pos{color:var(--text-muted);font-size:.85em;min-width:16px;display:inline-block}
+/* Top scorers */
+.wc-scorer-row{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;margin-bottom:6px}
+.wc-scorer-rank{font-size:1em;font-weight:900;color:var(--text-muted);min-width:26px;text-align:center}
+.rank-gold{color:#f59e0b}.rank-silver{color:#94a3b8}.rank-bronze{color:#b45309}
+.wc-scorer-info{flex:1;display:flex;flex-direction:column;gap:1px}
+.wc-scorer-name{font-weight:700;font-size:.9em;color:var(--text)}
+.wc-scorer-team{font-size:.74em;color:var(--text-muted)}
+.wc-scorer-goals{font-size:.88em;font-weight:800;color:var(--accent);white-space:nowrap}
 @media(max-width:600px){
   .wc-hero h1{font-size:1.35em}
   .wc-match{gap:8px;padding:11px 12px}
@@ -3861,6 +4106,40 @@ function initCardShare() {
 }
 
 /* ========== ARTICLE INLINE TRANSLATE (MyMemory free API) ========== */
+/* ========== WORLD CUP TABS + LOCAL TIME ========== */
+function initWCTabs() {
+  var tabs   = document.querySelectorAll('.wc-tab');
+  var panels = document.querySelectorAll('.wc-panel');
+  if (!tabs.length) return;
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      tabs.forEach(function(t)  { t.classList.remove('wct-active'); });
+      panels.forEach(function(p){ p.classList.remove('wcp-active'); });
+      tab.classList.add('wct-active');
+      var p = document.getElementById('wcp-' + tab.dataset.tab);
+      if (p) p.classList.add('wcp-active');
+    });
+  });
+  // Convert UTC kick-off times to visitor local time
+  document.querySelectorAll('.wc-local-time[data-utc]').forEach(function(el) {
+    try {
+      var d = new Date(el.dataset.utc);
+      if (isNaN(d.getTime())) return;
+      el.textContent = d.toLocaleTimeString(undefined, {hour:'2-digit', minute:'2-digit'});
+      el.title = el.dataset.utc;
+    } catch(_e) {}
+  });
+  // Update date headers to local date
+  document.querySelectorAll('.wc-day-hdr[data-utcdate]').forEach(function(el) {
+    try {
+      var d = new Date(el.dataset.utcdate + 'T12:00:00Z');
+      if (isNaN(d.getTime())) return;
+      var label = d.toLocaleDateString(undefined, {weekday:'short', month:'short', day:'numeric'});
+      el.textContent = '📅 ' + label;
+    } catch(_e) {}
+  });
+}
+
 /* User picks any of 4 target languages via pills (current lang excluded). */
 /* Always translates FROM the original text — switching langs works too.   */
 function initArticleTranslate() {
@@ -4210,6 +4489,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initBreadcrumbScroll();
   initFloatingPlayer();
   initYTCards();
+  initWCTabs();
   initCardReactions();
   initCardShare();
   initArticleTranslate();
