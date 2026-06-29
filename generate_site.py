@@ -3319,6 +3319,21 @@ body.lang-ltr .nh-text{direction:ltr}
 /* ── YouTube click-to-play iframe ── */
 .card-yt-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:0}
 .card-yt-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:0}
+/* ── Floating YouTube Player ── */
+#yt-float{position:fixed;z-index:9000;bottom:24px;right:24px;width:360px;height:225px;min-width:200px;min-height:120px;background:#000;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.3);display:none;flex-direction:column;resize:both;overflow:hidden}
+#yt-float.ytf-on{display:flex}
+#yt-float-bar{display:flex;align-items:center;padding:7px 10px;background:rgba(18,18,18,.96);cursor:grab;user-select:none;flex-shrink:0;gap:7px;border-radius:10px 10px 0 0}
+#yt-float-bar:active{cursor:grabbing}
+#yt-float.ytf-min #yt-float-bar{border-radius:10px}
+#yt-float-icon{font-size:.85em;flex-shrink:0;color:#f00}
+#yt-float-title{flex:1;font-size:.72em;color:#ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+#yt-float-btns{display:flex;gap:5px;flex-shrink:0}
+.ytf-btn{background:rgba(255,255,255,.13);border:none;border-radius:50%;width:22px;height:22px;color:#fff;font-size:.72em;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:background .15s;flex-shrink:0;line-height:1}
+.ytf-btn:hover{background:rgba(255,255,255,.28)}
+#yt-float-body{flex:1;position:relative;min-height:0;background:#000}
+#yt-float-body iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+#yt-float.ytf-min #yt-float-body{display:none}
+@media(max-width:768px){#yt-float{width:94vw;right:3vw;bottom:72px;min-width:160px;resize:none}}
 /* ── Video card action bar — reactions 👍👎 + share 📤 ── */
 .card-actions{display:flex;align-items:center;justify-content:space-between;padding:7px 12px 8px;border-top:1px solid var(--border);gap:8px;background:transparent}
 .card-react-group{display:flex;align-items:center;gap:6px}
@@ -3647,37 +3662,105 @@ function initBreadcrumbScroll() {
 }
 
 /* ========== YOUTUBE CLICK-TO-PLAY ========== */
-// Clicking the thumbnail/play-button of a vid-* card injects a youtube-nocookie
-// iframe in place (autoplay). Clicking the title/source still navigates to YouTube.
-// Only one video plays at a time — opening a second pauses the first.
+// Clicking the thumbnail/play-button of a vid-* card opens the floating player.
 function initYTCards() {
   document.addEventListener('click', function(e) {
     var card = e.target.closest('.article-card[data-yt-id]');
     if (!card) return;
     var bg = card.querySelector('.card-bg');
-    // Only activate when clicking the image/play-button area
     if (!bg || !bg.contains(e.target)) return;
-    // Already playing? Let the click reach the iframe normally
-    if (card.querySelector('.card-yt-wrap')) return;
     e.preventDefault();
     e.stopPropagation();
     var ytId = card.dataset.ytId;
     if (!ytId) return;
-    // Stop any other playing cards first
-    document.querySelectorAll('.card-yt-wrap').forEach(function(w) {
-      var prevBg = w.closest('.card-bg');
-      if (prevBg) prevBg.innerHTML = '';
-    });
-    // Inject iframe
-    bg.innerHTML =
-      '<div class="card-yt-wrap">' +
-      '<iframe src="https://www.youtube-nocookie.com/embed/' + ytId +
-      '?autoplay=1&rel=0&modestbranding=1&color=white" ' +
-      'title="YouTube video" ' +
-      'allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;web-share" ' +
-      'allowfullscreen></iframe>' +
-      '</div>';
+    if (window._ytFloatOpen) window._ytFloatOpen(ytId, card.dataset.title || '');
   }, false);
+}
+
+/* ========== FLOATING YOUTUBE PLAYER ========== */
+function initFloatingPlayer() {
+  var fp = document.createElement('div');
+  fp.id = 'yt-float';
+  fp.innerHTML =
+    '<div id="yt-float-bar">' +
+    '<span id="yt-float-icon">▶</span>' +
+    '<span id="yt-float-title">Video</span>' +
+    '<div id="yt-float-btns">' +
+    '<button class="ytf-btn" id="ytf-min" title="Minimize">–</button>' +
+    '<button class="ytf-btn" id="ytf-close" title="Close">✕</button>' +
+    '</div></div>' +
+    '<div id="yt-float-body">' +
+    '<iframe id="yt-float-frame" src="" title="YouTube video" ' +
+    'allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;web-share" ' +
+    'allowfullscreen></iframe></div>';
+  document.body.appendChild(fp);
+
+  var bar    = document.getElementById('yt-float-bar');
+  var closeB = document.getElementById('ytf-close');
+  var minB   = document.getElementById('ytf-min');
+  var titleE = document.getElementById('yt-float-title');
+  var frame  = document.getElementById('yt-float-frame');
+  var mini   = false;
+
+  function resetPos() {
+    fp.style.left = ''; fp.style.top = '';
+    fp.style.right = ''; fp.style.bottom = '';
+  }
+  function closePlayer() {
+    fp.classList.remove('ytf-on');
+    frame.src = '';
+    mini = false; fp.classList.remove('ytf-min'); minB.textContent = '–';
+    resetPos();
+  }
+  closeB.addEventListener('click', closePlayer);
+  minB.addEventListener('click', function() {
+    mini = !mini;
+    fp.classList.toggle('ytf-min', mini);
+    minB.textContent = mini ? '□' : '–';
+  });
+
+  /* ── Drag (mouse) ── */
+  var drag = false, ox = 0, oy = 0;
+  bar.addEventListener('mousedown', function(e) {
+    if (e.target.closest('.ytf-btn')) return;
+    drag = true;
+    var r = fp.getBoundingClientRect();
+    ox = e.clientX - r.left; oy = e.clientY - r.top;
+    fp.style.right = 'auto'; fp.style.bottom = 'auto';
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', function(e) {
+    if (!drag) return;
+    fp.style.left = Math.max(0, Math.min(e.clientX - ox, window.innerWidth  - fp.offsetWidth))  + 'px';
+    fp.style.top  = Math.max(0, Math.min(e.clientY - oy, window.innerHeight - fp.offsetHeight)) + 'px';
+  });
+  document.addEventListener('mouseup', function() { drag = false; });
+
+  /* ── Drag (touch) ── */
+  bar.addEventListener('touchstart', function(e) {
+    if (e.target.closest('.ytf-btn')) return;
+    var t = e.touches[0]; drag = true;
+    var r = fp.getBoundingClientRect();
+    ox = t.clientX - r.left; oy = t.clientY - r.top;
+    fp.style.right = 'auto'; fp.style.bottom = 'auto';
+  }, {passive: true});
+  document.addEventListener('touchmove', function(e) {
+    if (!drag) return;
+    var t = e.touches[0];
+    fp.style.left = Math.max(0, Math.min(t.clientX - ox, window.innerWidth  - fp.offsetWidth))  + 'px';
+    fp.style.top  = Math.max(0, Math.min(t.clientY - oy, window.innerHeight - fp.offsetHeight)) + 'px';
+  }, {passive: true});
+  document.addEventListener('touchend', function() { drag = false; });
+
+  /* ── Public API ── */
+  window._ytFloatOpen = function(ytId, title) {
+    if (!fp.classList.contains('ytf-on')) resetPos();
+    if (mini) { mini = false; fp.classList.remove('ytf-min'); minB.textContent = '–'; }
+    titleE.textContent = title || 'Video';
+    frame.src = 'https://www.youtube-nocookie.com/embed/' + ytId +
+      '?autoplay=1&rel=0&modestbranding=1&color=white';
+    fp.classList.add('ytf-on');
+  };
 }
 
 /* ========== VIDEO CARD REACTIONS (👍 / 👎) ========== */
@@ -4125,6 +4208,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initNav();
   initBackToTop();
   initBreadcrumbScroll();
+  initFloatingPlayer();
   initYTCards();
   initCardReactions();
   initCardShare();
