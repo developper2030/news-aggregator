@@ -527,33 +527,43 @@ def _compute_wc_standings(matches: list) -> dict:
 
 
 def _fetch_wc_scorers(matches: list) -> list:
-    """Extract top scorers: first from openfootball goals data, then ESPN API."""
-    import json as _json, urllib.request as _urlreq
+    """Extract top scorers from openfootball goals1/goals2 fields."""
     from collections import defaultdict
-    scorers: dict = defaultdict(lambda: {"goals":0,"team":""})
+    scorers: dict = defaultdict(lambda: {"goals": 0, "team": ""})
     for m in matches:
-        for g in (m.get("goals") or []):
-            name = g.get("name") or g.get("player","")
+        t1, t2 = m.get("team1", ""), m.get("team2", "")
+        for g in (m.get("goals1") or []):
+            name = (g.get("name") or "").strip()
             if name and not g.get("own_goal"):
                 scorers[name]["goals"] += 1
-                scorers[name]["team"] = scorers[name]["team"] or m.get("team1","") if g.get("team1") else g.get("team","")
+                if not scorers[name]["team"]:
+                    scorers[name]["team"] = t1
+        for g in (m.get("goals2") or []):
+            name = (g.get("name") or "").strip()
+            if name and not g.get("own_goal"):
+                scorers[name]["goals"] += 1
+                if not scorers[name]["team"]:
+                    scorers[name]["team"] = t2
     if scorers:
-        return sorted([{"name":n,**v} for n,v in scorers.items()], key=lambda x:-x["goals"])[:20]
-    # ESPN fallback
+        return sorted([{"name": n, **v} for n, v in scorers.items()],
+                      key=lambda x: -x["goals"])[:20]
+    # ESPN fallback: statistics endpoint (goalsLeaders)
     try:
-        url = "https://site.api.espn.com/apis/site/v2/sports/soccer/FIFA.WORLD/leaders?limit=20"
-        req = _urlreq.Request(url, headers={"User-Agent":"AtlasNews/1.0"})
+        import json as _json, urllib.request as _urlreq
+        url = "https://site.api.espn.com/apis/site/v2/sports/soccer/FIFA.WORLD/statistics?limit=20"
+        req = _urlreq.Request(url, headers={"User-Agent": "AtlasNews/1.0"})
         with _urlreq.urlopen(req, timeout=8) as r:
             obj = _json.loads(r.read())
-        for cat in obj.get("leaders", []):
-            if "goal" in (cat.get("name","") or cat.get("displayName","")).lower():
+        for s in obj.get("stats", []):
+            if s.get("name") == "goalsLeaders" and s.get("athletes"):
                 out = []
-                for e in cat.get("leaders",[]):
-                    ath = e.get("athlete",{})
-                    out.append({"name":ath.get("displayName","?"),
-                                "team":(ath.get("team") or {}).get("displayName",""),
-                                "goals":int(e.get("value",0))})
-                return sorted(out, key=lambda x:-x["goals"])
+                for a in s["athletes"]:
+                    ath = a.get("athlete") or a
+                    team = (ath.get("team") or {}).get("displayName", "") or a.get("team", "")
+                    out.append({"name": ath.get("displayName", ath.get("name", "?")),
+                                "team": team,
+                                "goals": int(a.get("value", a.get("goals", 0)))})
+                return sorted(out, key=lambda x: -x["goals"])
     except Exception:
         pass
     return []
