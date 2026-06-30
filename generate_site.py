@@ -8728,30 +8728,44 @@ def _generate_news_sitemap(
     lang: str = "ar",
     site_title: str = "Atlas News",
 ) -> None:
-    """Generate news-sitemap.xml for Google News (last 48 h articles only)."""
+    """Generate news-sitemap.xml for Google News (last 48 h articles, 7-day fallback)."""
     from datetime import datetime as _dt, timezone as _tz, timedelta as _td
     _now = _dt.now(_tz.utc)
-    _cutoff = _now - _td(hours=48)
+    _cutoff_48h = _now - _td(hours=48)
+    _cutoff_7d  = _now - _td(days=7)
+
+    def _parse_dt(raw: str) -> "_dt":
+        try:
+            return _dt.strptime(raw[:19], "%Y-%m-%d %H:%M:%S").replace(tzinfo=_tz.utc)
+        except (ValueError, TypeError):
+            return _now
+
+    def _collect(cutoff: "_dt | None", limit: int = 1000) -> list:
+        out = []
+        for art in all_articles:
+            if art.get("slug", "") in media_slugs:
+                continue
+            if cutoff is None or _parse_dt(art.get("scraped_at", "")) >= cutoff:
+                out.append(art)
+            if len(out) >= limit:
+                break
+        return out
+
+    # 48h → 7 days → most recent 100 (ensures sitemap is never empty)
+    candidates = (_collect(_cutoff_48h)
+                  or _collect(_cutoff_7d)
+                  or _collect(None, limit=100))
+
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"',
         '        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">',
     ]
     included = 0
-    for art in all_articles:
-        slug = art.get("slug", "")
-        if slug in media_slugs:
-            continue
-        scraped_raw = art.get("scraped_at", "")
-        # Parse scraped_at "YYYY-MM-DD HH:MM:SS" → aware datetime
-        try:
-            art_dt = _dt.strptime(scraped_raw[:19], "%Y-%m-%d %H:%M:%S").replace(tzinfo=_tz.utc)
-        except (ValueError, TypeError):
-            art_dt = _now  # fall back to now if parse fails
-        if art_dt < _cutoff:
-            continue
+    for art in candidates:
         art_hash  = _article_slug(art["url"])
         art_url   = f"{site_url.rstrip('/')}/article/{art_hash}.html"
+        art_dt    = _parse_dt(art.get("scraped_at", ""))
         pub_date  = art_dt.strftime("%Y-%m-%dT%H:%M:%S+00:00")
         title_xml = art["title"].replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
         lines += [
