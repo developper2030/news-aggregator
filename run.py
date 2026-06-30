@@ -31,7 +31,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 import json as _json
 from scraper.scrape import run as run_scraper, fill_article_descriptions
-from generate_site import generate_html
+from generate_site import generate_html, generate_sitemap_index
 from summarizer.summarize import summarize_articles
 from clustering.cluster import run_clustering
 
@@ -163,6 +163,19 @@ def generate(langs: list[str]) -> list[str]:
             lang=code,
         )
         outputs.append(path)
+
+    # After all languages, build sitemap-index.xml covering all 15 sitemaps
+    _static = os.path.join(_ROOT, "static")
+    import json as _j
+    try:
+        with open(os.path.join(_ROOT, "config", "sources-en.json"), encoding="utf-8") as _f:
+            _root_url = _j.load(_f).get("settings", {}).get("site_url", "").rstrip("/")
+    except Exception:
+        _root_url = "https://news.solvixi.com"
+    if _root_url:
+        generate_sitemap_index(_root_url, _static)
+        print(f"\n[SEO] sitemap-index.xml written → {_root_url}/sitemap-index.xml")
+
     return outputs
 
 

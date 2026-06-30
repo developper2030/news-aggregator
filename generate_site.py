@@ -9791,6 +9791,47 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
     return output_path
 
 
+def generate_sitemap_index(root_url: str, static_dir: str) -> None:
+    """Write sitemap-index.xml at the site root covering all 5 languages × 3 types.
+
+    Call this once after all language generations are done.
+    Also rewrites robots.txt to reference only the index.
+    """
+    from datetime import datetime as _dt
+    today = _dt.now().strftime("%Y-%m-%d")
+    base  = root_url.rstrip("/")
+
+    lang_paths = {"en": "", "ar": "/ar", "fr": "/fr", "es": "/es", "tr": "/tr"}
+    sm_types   = ["sitemap.xml", "sitemap-articles.xml", "news-sitemap.xml"]
+
+    blocks = []
+    for lc, lp in lang_paths.items():
+        for sm in sm_types:
+            loc = f"{base}{lp}/{sm}"
+            blocks.append(f"  <sitemap>\n    <loc>{loc}</loc>\n    <lastmod>{today}</lastmod>\n  </sitemap>")
+
+    index_xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        + "\n".join(blocks) + "\n"
+        '</sitemapindex>\n'
+    )
+    _write("sitemap-index.xml", index_xml, static_dir)
+
+    # Rewrite robots.txt to reference the index (covers all 15 sitemaps at once)
+    robots_path = os.path.join(static_dir, "robots.txt")
+    if os.path.exists(robots_path):
+        with open(robots_path, "r", encoding="utf-8") as _f:
+            robots = _f.read()
+        # Replace individual Sitemap: lines with a single index reference
+        import re as _re
+        robots = _re.sub(r"Sitemap:.*\n", "", robots).rstrip() + f"\n\nSitemap: {base}/sitemap-index.xml\n"
+        with open(robots_path, "w", encoding="utf-8") as _f:
+            _f.write(robots)
+
+    logger.info("Sitemap index: 15 sitemaps → %s/sitemap-index.xml", static_dir)
+
+
 if __name__ == "__main__":
     import argparse as _ap
     _parser = _ap.ArgumentParser(description="Static site generator")
