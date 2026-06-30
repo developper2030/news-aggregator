@@ -9253,7 +9253,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
 
         color     = CATEGORY_COLORS.get(slug, DEFAULT_COLOR)
         gradient  = CATEGORY_GRADIENTS.get(slug, DEFAULT_GRADIENT)
-        cat_title = site_title
+        cat_title = f"{cat['name']} — {site_title}"
         cat_desc  = s["cat_desc_tpl"].format(name=cat["name"])
 
         breadcrumb = (
@@ -9385,7 +9385,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         # ── PRICES.HTML — sub-page of economy (hidden when show_prices=false) ─
         if slug == "economy" and _show_prices:
             _wrt("prices.html", _page(
-                title=site_title,
+                title=f"{s.get('prices_prices_bc', 'Prices')} — {site_title}",
                 nav_html=_nav(categories, articles_by_cat, active="economy",
                               s=s, region_slugs=region_slugs, has_world=has_world,
                               media_slugs=media_slugs_local),
@@ -9408,7 +9408,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         # ── CRYPTO.HTML — live crypto prices via CoinGecko (always enabled) ────
         if slug == "economy":
             _wrt("crypto.html", _page(
-                title=s.get("crypto_page_title", "₿ Crypto"),
+                title=f"{s.get('crypto_page_title', '₿ Crypto')} — {site_title}",
                 nav_html=_nav(categories, articles_by_cat, active="economy",
                               s=s, region_slugs=region_slugs, has_world=has_world,
                               media_slugs=media_slugs_local),
@@ -9465,7 +9465,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         _sports_name = next((c["name"] for c in categories if c["slug"] == "sports"),
                             s.get("sports", "Sports"))
         _wrt("worldcup.html", _page(
-            title=s.get("wc_title", "World Cup 2026 Schedule"),
+            title=f"{s.get('wc_title', 'World Cup 2026')} — {site_title}",
             nav_html=_nav(categories, articles_by_cat, active="sports",
                           s=s, region_slugs=region_slugs, has_world=has_world,
                           media_slugs=media_slugs_local, has_media=has_media),
@@ -9540,7 +9540,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
             for a in articles_by_cat.get(r["slug"], {}).get("articles", [])
         ]
         _wrt("world.html", _page(
-            title=site_title,
+            title=f"{s.get('world_regions_label', 'World News')} — {site_title}",
             nav_html=_nav(categories, articles_by_cat, active="world",
                           s=s, region_slugs=region_slugs, has_world=has_world,
                           media_slugs=media_slugs_local, has_media=has_media),
@@ -9607,7 +9607,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
 
         media_carousel = ""  # No carousel on media page — videos shown directly
         _wrt("media.html", _page(
-            title=site_title,
+            title=f"{s.get('media_regions_label', 'Media')} — {site_title}",
             nav_html=_nav(categories, articles_by_cat, active="media",
                           s=s, region_slugs=region_slugs, has_world=has_world,
                           media_slugs=media_slugs_local, has_media=has_media),
