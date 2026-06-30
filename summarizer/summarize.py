@@ -1,5 +1,5 @@
 """
-AI Article Summarizer — Atlas News
+AI Article Summarizer — Solvixi News
 Supports four backends (auto-selected by available API keys):
 
   1. Google Gemini 2.5 Flash  (GEMINI_API_KEY)
@@ -50,7 +50,7 @@ GEMINI_API_URL = (
 OPENROUTER_API_URL   = "https://openrouter.ai/api/v1/chat/completions"
 OPENROUTER_MODEL     = "meta-llama/llama-3.3-70b-instruct:free"
 OPENROUTER_SITE_URL  = "https://news.solvixi.com"
-OPENROUTER_SITE_NAME = "Atlas News"
+OPENROUTER_SITE_NAME = "Solvixi News"
 
 # ── NVIDIA NIM (OpenAI-compatible) ────────────────────────────────────────────
 NVIDIA_API_URL = "https://integrate.api.nvidia.com/v1/chat/completions"

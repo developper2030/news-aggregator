@@ -4973,8 +4973,8 @@ PRIVACY_HTML = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<meta name="description" content="سياسة خصوصية Atlas News — مجمّع إخباري متعدد اللغات">
-<title>سياسة الخصوصية — Atlas News</title>
+<meta name="description" content="سياسة خصوصية Solvixi News — مجمّع إخباري متعدد اللغات">
+<title>سياسة الخصوصية — Solvixi News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -5001,7 +5001,7 @@ PRIVACY_HTML = """\
   <h1>سياسة الخصوصية</h1>
   <p class="sub">آخر تحديث: 2026</p>
 
-  <p>نرحب بك في <strong>Atlas News</strong>. نلتزم بحماية خصوصيتك وفيما يلي توضيح كامل لسياستنا.</p>
+  <p>نرحب بك في <strong>Solvixi News</strong>. نلتزم بحماية خصوصيتك وفيما يلي توضيح كامل لسياستنا.</p>
 
   <h2>1. المعلومات التي نجمعها</h2>
   <p>هذا الموقع لا يجمع أي بيانات شخصية مباشرة. نحن موقع تجميع إخباري يعرض عناوين من مصادر أخرى.</p>
@@ -5045,8 +5045,8 @@ ABOUT_HTML = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<meta name="description" content="تعرف على Atlas News — مجمّع إخباري متعدد اللغات يغطي أخبار العالم بـ5 لغات">
-<title>من نحن — Atlas News</title>
+<meta name="description" content="تعرف على Solvixi News — مجمّع إخباري متعدد اللغات يغطي أخبار العالم بـ5 لغات">
+<title>من نحن — Solvixi News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -5076,9 +5076,9 @@ ABOUT_HTML = """\
 </div>
 <div class="page">
   <h1>من نحن</h1>
-  <p class="sub">Atlas News — مجمّع إخباري آلي متعدد اللغات</p>
+  <p class="sub">Solvixi News — مجمّع إخباري آلي متعدد اللغات</p>
 
-  <p><strong>Atlas News</strong> هو موقع تجميع إخباري يجمع أهم العناوين من مصادر عربية وعالمية موثوقة في مكان واحد، دون الحاجة إلى زيارة عشرات المواقع يومياً.</p>
+  <p><strong>Solvixi News</strong> هو موقع تجميع إخباري يجمع أهم العناوين من مصادر عربية وعالمية موثوقة في مكان واحد، دون الحاجة إلى زيارة عشرات المواقع يومياً.</p>
 
   <h2>كيف يعمل الموقع</h2>
   <div class="steps">
@@ -5124,7 +5124,7 @@ ABOUT_HTML = """\
   <p>هذا الموقع هو مجمّع إخباري آلي. جميع المقالات مرتبطة بمصادرها الأصلية ونحن لسنا مسؤولين عن محتواها. قد يعرض الموقع إعلانات من خلال Google AdSense، لمزيد من التفاصيل راجع <a href="privacy.html">سياسة الخصوصية</a>.</p>
 
   <h2>الناشر</h2>
-  <p>Atlas News موقع إخباري مُشغَّل من قِبل <strong>مطور مستقل</strong>. للتواصل: <a href="contact.html">صفحة التواصل</a> أو <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>.</p>
+  <p>Solvixi News موقع إخباري مُشغَّل من قِبل <strong>مطور مستقل</strong>. للتواصل: <a href="contact.html">صفحة التواصل</a> أو <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>.</p>
 </div>
 <script src="app.js"></script>
 </body>
@@ -5138,8 +5138,8 @@ PRIVACY_HTML_EN = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<meta name="description" content="Atlas News Privacy Policy — multilingual automated news aggregator">
-<title>Privacy Policy — Atlas News</title>
+<meta name="description" content="Solvixi News Privacy Policy — multilingual automated news aggregator">
+<title>Privacy Policy — Solvixi News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -5166,7 +5166,7 @@ body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}
 <div class="page">
   <h1>Privacy Policy</h1>
   <p class="sub">Last updated: 2026</p>
-  <p>Welcome to <strong>Atlas News</strong>. We are committed to protecting your privacy.</p>
+  <p>Welcome to <strong>Solvixi News</strong>. We are committed to protecting your privacy.</p>
   <h2>1. Information We Collect</h2>
   <p>This site does not collect personal data directly. We are a news aggregator that displays headlines from other sources.</p>
   <ul>
@@ -5203,8 +5203,8 @@ ABOUT_HTML_EN = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<meta name="description" content="About Atlas News — a multilingual automated news aggregator covering world news in 5 languages">
-<title>About — Atlas News</title>
+<meta name="description" content="About Solvixi News — a multilingual automated news aggregator covering world news in 5 languages">
+<title>About — Solvixi News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -5234,8 +5234,8 @@ body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}
 </div>
 <div class="page">
   <h1>About</h1>
-  <p class="sub">Atlas News — Automated multilingual news aggregator</p>
-  <p><strong>Atlas News</strong> is a news aggregator that gathers the most important headlines from trusted international sources in one place, without needing to visit dozens of sites every day.</p>
+  <p class="sub">Solvixi News — Automated multilingual news aggregator</p>
+  <p><strong>Solvixi News</strong> is a news aggregator that gathers the most important headlines from trusted international sources in one place, without needing to visit dozens of sites every day.</p>
   <h2>How It Works</h2>
   <div class="steps">
     <div class="step"><span class="step-num">1</span><span>Headlines are fetched automatically every 6 hours from configured sources</span></div>
@@ -5273,7 +5273,7 @@ body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}
   <p>This site is an automated news aggregator. All articles link to their original sources and we are not responsible for their content. The site may display ads via Google AdSense; see <a href="privacy.html">Privacy Policy</a> for details.</p>
 
   <h2>Publisher</h2>
-  <p>Atlas News is operated by an <strong>independent developer</strong>. Contact: <a href="contact.html">contact page</a> or <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>.</p>
+  <p>Solvixi News is operated by an <strong>independent developer</strong>. Contact: <a href="contact.html">contact page</a> or <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>.</p>
 </div>
 <script src="app.js"></script>
 </body>
@@ -5287,8 +5287,8 @@ PRIVACY_HTML_FR = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<meta name="description" content="Politique de confidentialité d'Atlas News — agrégateur d'actualités multilingue automatisé">
-<title>Politique de confidentialité — Atlas News</title>
+<meta name="description" content="Politique de confidentialité d'Solvixi News — agrégateur d'actualités multilingue automatisé">
+<title>Politique de confidentialité — Solvixi News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -5314,7 +5314,7 @@ PRIVACY_HTML_FR = """\
 <div class="page">
   <h1>Politique de confidentialité</h1>
   <p class="sub">Dernière mise à jour : 2026</p>
-  <p>Bienvenue sur <strong>Atlas News</strong>. Nous nous engageons à protéger votre vie privée.</p>
+  <p>Bienvenue sur <strong>Solvixi News</strong>. Nous nous engageons à protéger votre vie privée.</p>
   <h2>1. Informations collectées</h2>
   <p>Ce site ne collecte aucune donnée personnelle directement. Nous sommes un agrégateur de nouvelles qui affiche des titres provenant d'autres sources.</p>
   <ul>
@@ -5351,8 +5351,8 @@ ABOUT_HTML_FR = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<meta name="description" content="À propos d'Atlas News — agrégateur d'actualités multilingue automatisé en 5 langues">
-<title>À propos — Atlas News</title>
+<meta name="description" content="À propos d'Solvixi News — agrégateur d'actualités multilingue automatisé en 5 langues">
+<title>À propos — Solvixi News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -5381,8 +5381,8 @@ ABOUT_HTML_FR = """\
 </div>
 <div class="page">
   <h1>À propos</h1>
-  <p class="sub">Atlas News — Agrégateur d'actualités multilingue automatique</p>
-  <p><strong>Atlas News</strong> est un agrégateur de nouvelles qui rassemble les titres les plus importants de sources internationales fiables en un seul endroit.</p>
+  <p class="sub">Solvixi News — Agrégateur d'actualités multilingue automatique</p>
+  <p><strong>Solvixi News</strong> est un agrégateur de nouvelles qui rassemble les titres les plus importants de sources internationales fiables en un seul endroit.</p>
   <h2>Comment ça fonctionne</h2>
   <div class="steps">
     <div class="step"><span class="step-num">1</span><span>Les titres sont récupérés automatiquement toutes les 6 heures depuis les sources configurées</span></div>
@@ -5421,7 +5421,7 @@ ABOUT_HTML_FR = """\
   <p>Ce site est un agrégateur automatique. Tous les articles renvoient à leurs sources originales. Consultez la <a href="privacy.html">politique de confidentialité</a> pour les détails sur la publicité.</p>
 
   <h2>Éditeur</h2>
-  <p>Atlas News est géré par un <strong>développeur indépendant</strong>. Contact : <a href="contact.html">page de contact</a> ou <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>.</p>
+  <p>Solvixi News est géré par un <strong>développeur indépendant</strong>. Contact : <a href="contact.html">page de contact</a> ou <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>.</p>
 </div>
 <script src="app.js"></script>
 </body>
@@ -5435,8 +5435,8 @@ PRIVACY_HTML_ES = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<meta name="description" content="Política de privacidad de Atlas News — agregador de noticias multilingüe automatizado">
-<title>Política de privacidad — Atlas News</title>
+<meta name="description" content="Política de privacidad de Solvixi News — agregador de noticias multilingüe automatizado">
+<title>Política de privacidad — Solvixi News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -5462,7 +5462,7 @@ PRIVACY_HTML_ES = """\
 <div class="page">
   <h1>Política de privacidad</h1>
   <p class="sub">Última actualización: 2026</p>
-  <p>Bienvenido a <strong>Atlas News</strong>. Estamos comprometidos a proteger tu privacidad.</p>
+  <p>Bienvenido a <strong>Solvixi News</strong>. Estamos comprometidos a proteger tu privacidad.</p>
   <h2>1. Información que recopilamos</h2>
   <p>Este sitio no recopila datos personales directamente. Somos un agregador de noticias que muestra titulares de otras fuentes.</p>
   <ul>
@@ -5499,8 +5499,8 @@ ABOUT_HTML_ES = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<meta name="description" content="Acerca de Atlas News — agregador de noticias multilingüe automatizado en 5 idiomas">
-<title>Acerca de — Atlas News</title>
+<meta name="description" content="Acerca de Solvixi News — agregador de noticias multilingüe automatizado en 5 idiomas">
+<title>Acerca de — Solvixi News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -5529,8 +5529,8 @@ ABOUT_HTML_ES = """\
 </div>
 <div class="page">
   <h1>Acerca de</h1>
-  <p class="sub">Atlas News — Agregador de noticias multilingüe automatizado</p>
-  <p><strong>Atlas News</strong> es un agregador de noticias que reúne los titulares más importantes de fuentes internacionales confiables en un solo lugar.</p>
+  <p class="sub">Solvixi News — Agregador de noticias multilingüe automatizado</p>
+  <p><strong>Solvixi News</strong> es un agregador de noticias que reúne los titulares más importantes de fuentes internacionales confiables en un solo lugar.</p>
   <h2>Cómo funciona</h2>
   <div class="steps">
     <div class="step"><span class="step-num">1</span><span>Los titulares se obtienen automáticamente cada 6 horas desde las fuentes configuradas</span></div>
@@ -5569,7 +5569,7 @@ ABOUT_HTML_ES = """\
   <p>Este sitio es un agregador automático. Todos los artículos enlazan a sus fuentes originales. Consulta la <a href="privacy.html">política de privacidad</a> para detalles sobre publicidad.</p>
 
   <h2>Editor</h2>
-  <p>Atlas News es gestionado por un <strong>desarrollador independiente</strong>. Contacto: <a href="contact.html">página de contacto</a> o <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>.</p>
+  <p>Solvixi News es gestionado por un <strong>desarrollador independiente</strong>. Contacto: <a href="contact.html">página de contacto</a> o <a href="mailto:contact@solvixi.com">contact@solvixi.com</a>.</p>
 </div>
 <script src="app.js"></script>
 </body>
@@ -5583,8 +5583,8 @@ PRIVACY_HTML_TR = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<meta name="description" content="Atlas News gizlilik politikası — çok dilli otomatik haber toplayıcı">
-<title>Gizlilik Politikası — Atlas News</title>
+<meta name="description" content="Solvixi News gizlilik politikası — çok dilli otomatik haber toplayıcı">
+<title>Gizlilik Politikası — Solvixi News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -5610,7 +5610,7 @@ PRIVACY_HTML_TR = """\
 <div class="page">
   <h1>Gizlilik Politikası</h1>
   <p class="sub">Son güncelleme: 2026</p>
-  <p><strong>Atlas News</strong>'e hoş geldiniz. Gizliliğinizi korumaya kararlıyız.</p>
+  <p><strong>Solvixi News</strong>'e hoş geldiniz. Gizliliğinizi korumaya kararlıyız.</p>
   <h2>1. Topladığımız Bilgiler</h2>
   <p>Bu site doğrudan kişisel veri toplamaz. Diğer kaynaklardan haber başlıklarını gösteren bir haber toplayıcısıyız.</p>
   <ul>
@@ -5647,8 +5647,8 @@ ABOUT_HTML_TR = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<meta name="description" content="Atlas News hakkında — 5 dilde otomatik çok dilli haber toplayıcısı">
-<title>Hakkımızda — Atlas News</title>
+<meta name="description" content="Solvixi News hakkında — 5 dilde otomatik çok dilli haber toplayıcısı">
+<title>Hakkımızda — Solvixi News</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .page{max-width:820px;margin:40px auto;padding:0 16px 80px}
@@ -5677,7 +5677,7 @@ ABOUT_HTML_TR = """\
 </div>
 <div class="page">
   <h1>Hakkımızda</h1>
-  <p class="sub">Atlas News — Otomatik çok dilli haber toplayıcısı</p>
+  <p class="sub">Solvixi News — Otomatik çok dilli haber toplayıcısı</p>
   <p>Bu site, Türkiye ve dünyadan birden fazla güvenilir kaynaktan haberleri otomatik olarak toplayan bir <strong>haber toplayıcısıdır</strong>. Her içerik parçası, tam makaleye orijinal kaynağında bağlantı verir.</p>
   <h2>Nasıl Çalışır?</h2>
   <div class="steps">
@@ -5712,7 +5712,7 @@ ABOUT_HTML_TR = """\
   <h2>Yasal Uyarı</h2>
   <p>Bu site otomatik bir toplayıcıdır. Tüm makaleler orijinal kaynaklarına bağlantı verir. Reklamlar hakkında ayrıntılar için <a href="privacy.html">Gizlilik Politikası</a>'nı inceleyin.</p>
   <h2>Yayıncı</h2>
-  <p>Atlas News, bir <strong>bağımsız geliştirici</strong> tarafından işletilmektedir. Şeffaflık veya içerik hakkında sorularınız için <a href="contact.html">iletişim sayfamızı</a> ziyaret edin ya da <a href="mailto:contact@solvixi.com">contact@solvixi.com</a> adresine e-posta gönderin.</p>
+  <p>Solvixi News, bir <strong>bağımsız geliştirici</strong> tarafından işletilmektedir. Şeffaflık veya içerik hakkında sorularınız için <a href="contact.html">iletişim sayfamızı</a> ziyaret edin ya da <a href="mailto:contact@solvixi.com">contact@solvixi.com</a> adresine e-posta gönderin.</p>
 </div>
 <script src="app.js"></script>
 </body>
@@ -5763,8 +5763,8 @@ CONTACT_HTML = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>اتصل بنا — Atlas News</title>
-<meta name="description" content="تواصل مع فريق Atlas News — استفسارات، اقتراحات، وفرص الإعلان">
+<title>اتصل بنا — Solvixi News</title>
+<meta name="description" content="تواصل مع فريق Solvixi News — استفسارات، اقتراحات، وفرص الإعلان">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """</style>
 </head>
@@ -5805,7 +5805,7 @@ CONTACT_HTML = """\
   </div>
 
   <h2>معلومات عامة</h2>
-  <p><strong>Atlas News</strong> هو موقع تجميع إخباري آلي يخدم الجمهور العالمي بخمس لغات: العربية، الإنجليزية، الفرنسية، الإسبانية، والتركية.</p>
+  <p><strong>Solvixi News</strong> هو موقع تجميع إخباري آلي يخدم الجمهور العالمي بخمس لغات: العربية، الإنجليزية، الفرنسية، الإسبانية، والتركية.</p>
   <p>نحن نرحب بأي تعاون أو شراكة أو اقتراحات لمصادر جديدة. تواصل معنا وسنرد في أقرب وقت ممكن.</p>
 
   <h2>اقتراح مصدر إخباري</h2>
@@ -5823,8 +5823,8 @@ CONTACT_HTML_EN = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>Contact Us — Atlas News</title>
-<meta name="description" content="Get in touch with Atlas News — inquiries, suggestions, and advertising opportunities">
+<title>Contact Us — Solvixi News</title>
+<meta name="description" content="Get in touch with Solvixi News — inquiries, suggestions, and advertising opportunities">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
 </head>
@@ -5864,8 +5864,8 @@ CONTACT_HTML_EN = """\
     </div>
   </div>
 
-  <h2>About Atlas News</h2>
-  <p><strong>Atlas News</strong> is an automated multilingual news aggregator serving global audiences in five languages: Arabic, English, French, Spanish, and Turkish.</p>
+  <h2>About Solvixi News</h2>
+  <p><strong>Solvixi News</strong> is an automated multilingual news aggregator serving global audiences in five languages: Arabic, English, French, Spanish, and Turkish.</p>
   <p>We welcome collaborations, partnerships, and source suggestions. Reach out and we'll get back to you as soon as possible.</p>
 
   <h2>Suggest a News Source</h2>
@@ -5883,8 +5883,8 @@ CONTACT_HTML_FR = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>Contactez-nous — Atlas News</title>
-<meta name="description" content="Contactez l'équipe Atlas News — questions, suggestions et opportunités publicitaires">
+<title>Contactez-nous — Solvixi News</title>
+<meta name="description" content="Contactez l'équipe Solvixi News — questions, suggestions et opportunités publicitaires">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
 </head>
@@ -5924,8 +5924,8 @@ CONTACT_HTML_FR = """\
     </div>
   </div>
 
-  <h2>À propos d'Atlas News</h2>
-  <p><strong>Atlas News</strong> est un agrégateur d'actualités multilingue automatisé servant un public mondial en cinq langues : arabe, anglais, français, espagnol et turc.</p>
+  <h2>À propos d'Solvixi News</h2>
+  <p><strong>Solvixi News</strong> est un agrégateur d'actualités multilingue automatisé servant un public mondial en cinq langues : arabe, anglais, français, espagnol et turc.</p>
   <p>Nous accueillons volontiers les collaborations, partenariats et suggestions de sources. Contactez-nous et nous vous répondrons dans les plus brefs délais.</p>
 </div>
 <script src="app.js"></script>
@@ -5940,8 +5940,8 @@ CONTACT_HTML_ES = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>Contacto — Atlas News</title>
-<meta name="description" content="Contacta con el equipo de Atlas News — consultas, sugerencias y oportunidades publicitarias">
+<title>Contacto — Solvixi News</title>
+<meta name="description" content="Contacta con el equipo de Solvixi News — consultas, sugerencias y oportunidades publicitarias">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
 </head>
@@ -5981,8 +5981,8 @@ CONTACT_HTML_ES = """\
     </div>
   </div>
 
-  <h2>Sobre Atlas News</h2>
-  <p><strong>Atlas News</strong> es un agregador de noticias multilingüe automatizado que sirve a audiencias globales en cinco idiomas: árabe, inglés, francés, español y turco.</p>
+  <h2>Sobre Solvixi News</h2>
+  <p><strong>Solvixi News</strong> es un agregador de noticias multilingüe automatizado que sirve a audiencias globales en cinco idiomas: árabe, inglés, francés, español y turco.</p>
   <p>Damos la bienvenida a colaboraciones, asociaciones y sugerencias de fuentes. Contáctanos y te responderemos lo antes posible.</p>
 </div>
 <script src="app.js"></script>
@@ -5997,8 +5997,8 @@ CONTACT_HTML_TR = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>Iletisim — Atlas News</title>
-<meta name="description" content="Atlas News ekibiyle iletisime gecin — sorular, oneriler ve reklam firsatlari">
+<title>Iletisim — Solvixi News</title>
+<meta name="description" content="Solvixi News ekibiyle iletisime gecin — sorular, oneriler ve reklam firsatlari">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
 </head>
@@ -6038,8 +6038,8 @@ CONTACT_HTML_TR = """\
     </div>
   </div>
 
-  <h2>Atlas News Hakkinda</h2>
-  <p><strong>Atlas News</strong>, bes dilde — Arapca, Ingilizce, Fransizca, Ispanyolca ve Turkce — kuresel kitlelere hizmet eden otomatik cok dilli bir haber toplayicisidir.</p>
+  <h2>Solvixi News Hakkinda</h2>
+  <p><strong>Solvixi News</strong>, bes dilde — Arapca, Ingilizce, Fransizca, Ispanyolca ve Turkce — kuresel kitlelere hizmet eden otomatik cok dilli bir haber toplayicisidir.</p>
   <p>Is birlikleri, ortakliklar ve kaynak onerileri konusunda her zaman acigiz. Bize ulasin, en kisa surede geri donecegiz.</p>
 </div>
 <script src="app.js"></script>
@@ -6057,8 +6057,8 @@ TERMS_HTML = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>شروط الاستخدام — Atlas News</title>
-<meta name="description" content="شروط وأحكام استخدام موقع Atlas News">
+<title>شروط الاستخدام — Solvixi News</title>
+<meta name="description" content="شروط وأحكام استخدام موقع Solvixi News">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """</style>
 </head>
@@ -6072,10 +6072,10 @@ TERMS_HTML = """\
   <p class="sub">آخر تحديث: 2026 — يُرجى قراءة هذه الشروط بعناية قبل استخدام الموقع</p>
 
   <h2>1. القبول بالشروط</h2>
-  <p>باستخدامك لموقع <strong>Atlas News</strong> (news.solvixi.com)، فإنك توافق على الالتزام بهذه الشروط والأحكام. إذا كنت لا توافق على أي من هذه الشروط، يُرجى التوقف عن استخدام الموقع.</p>
+  <p>باستخدامك لموقع <strong>Solvixi News</strong> (news.solvixi.com)، فإنك توافق على الالتزام بهذه الشروط والأحكام. إذا كنت لا توافق على أي من هذه الشروط، يُرجى التوقف عن استخدام الموقع.</p>
 
   <h2>2. طبيعة الخدمة</h2>
-  <p>Atlas News هو <strong>مجمّع إخباري آلي</strong> يعرض عناوين الأخبار وروابطها من مصادر إخبارية خارجية. نحن:</p>
+  <p>Solvixi News هو <strong>مجمّع إخباري آلي</strong> يعرض عناوين الأخبار وروابطها من مصادر إخبارية خارجية. نحن:</p>
   <ul>
     <li>لا ننشئ أو نحرر أي محتوى إخباري</li>
     <li>نعرض فقط العناوين مع روابط المصادر الأصلية</li>
@@ -6120,8 +6120,8 @@ TERMS_HTML_EN = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>Terms of Use — Atlas News</title>
-<meta name="description" content="Terms and conditions for using Atlas News">
+<title>Terms of Use — Solvixi News</title>
+<meta name="description" content="Terms and conditions for using Solvixi News">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
 </head>
@@ -6135,10 +6135,10 @@ TERMS_HTML_EN = """\
   <p class="sub">Last updated: 2026 — Please read these terms carefully before using the site</p>
 
   <h2>1. Acceptance of Terms</h2>
-  <p>By accessing <strong>Atlas News</strong> (news.solvixi.com), you agree to be bound by these Terms of Use. If you do not agree to any of these terms, please discontinue use of the site.</p>
+  <p>By accessing <strong>Solvixi News</strong> (news.solvixi.com), you agree to be bound by these Terms of Use. If you do not agree to any of these terms, please discontinue use of the site.</p>
 
   <h2>2. Nature of Service</h2>
-  <p>Atlas News is an <strong>automated news aggregator</strong> that displays headlines and links from external news sources. We:</p>
+  <p>Solvixi News is an <strong>automated news aggregator</strong> that displays headlines and links from external news sources. We:</p>
   <ul>
     <li>Do not create or edit any news content</li>
     <li>Display only headlines with links to original sources</li>
@@ -6183,8 +6183,8 @@ TERMS_HTML_FR = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>Conditions d'utilisation — Atlas News</title>
-<meta name="description" content="Conditions générales d'utilisation d'Atlas News">
+<title>Conditions d'utilisation — Solvixi News</title>
+<meta name="description" content="Conditions générales d'utilisation d'Solvixi News">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
 </head>
@@ -6198,10 +6198,10 @@ TERMS_HTML_FR = """\
   <p class="sub">Dernière mise à jour : 2026 — Veuillez lire attentivement ces conditions</p>
 
   <h2>1. Acceptation des conditions</h2>
-  <p>En accédant à <strong>Atlas News</strong>, vous acceptez d'être lié par ces conditions d'utilisation.</p>
+  <p>En accédant à <strong>Solvixi News</strong>, vous acceptez d'être lié par ces conditions d'utilisation.</p>
 
   <h2>2. Nature du service</h2>
-  <p>Atlas News est un <strong>agrégateur d'actualités automatisé</strong> qui affiche des titres et des liens vers des sources d'information externes. Nous ne créons ni n'éditons aucun contenu journalistique.</p>
+  <p>Solvixi News est un <strong>agrégateur d'actualités automatisé</strong> qui affiche des titres et des liens vers des sources d'information externes. Nous ne créons ni n'éditons aucun contenu journalistique.</p>
 
   <h2>3. Propriété intellectuelle</h2>
   <p>Tous les titres et images d'articles appartiennent à leurs propriétaires respectifs. Si vous êtes propriétaire d'un contenu et souhaitez qu'il soit retiré, contactez-nous : <a href="mailto:report@solvixi.com">report@solvixi.com</a>.</p>
@@ -6239,8 +6239,8 @@ TERMS_HTML_ES = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>Términos de uso — Atlas News</title>
-<meta name="description" content="Términos y condiciones de uso de Atlas News">
+<title>Términos de uso — Solvixi News</title>
+<meta name="description" content="Términos y condiciones de uso de Solvixi News">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
 </head>
@@ -6254,10 +6254,10 @@ TERMS_HTML_ES = """\
   <p class="sub">Última actualización: 2026 — Por favor lee estos términos detenidamente</p>
 
   <h2>1. Aceptación de los términos</h2>
-  <p>Al acceder a <strong>Atlas News</strong>, aceptas quedar vinculado por estos Términos de uso.</p>
+  <p>Al acceder a <strong>Solvixi News</strong>, aceptas quedar vinculado por estos Términos de uso.</p>
 
   <h2>2. Naturaleza del servicio</h2>
-  <p>Atlas News es un <strong>agregador de noticias automatizado</strong> que muestra titulares y enlaces a fuentes de noticias externas. No creamos ni editamos ningún contenido periodístico.</p>
+  <p>Solvixi News es un <strong>agregador de noticias automatizado</strong> que muestra titulares y enlaces a fuentes de noticias externas. No creamos ni editamos ningún contenido periodístico.</p>
 
   <h2>3. Propiedad intelectual</h2>
   <p>Todos los titulares e imágenes pertenecen a sus respectivos propietarios. Si eres propietario de contenido y deseas que sea eliminado, contáctanos: <a href="mailto:report@solvixi.com">report@solvixi.com</a>.</p>
@@ -6295,8 +6295,8 @@ TERMS_HTML_TR = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>Kullanim Kosullari — Atlas News</title>
-<meta name="description" content="Atlas News kullanim sartlari ve kosullari">
+<title>Kullanim Kosullari — Solvixi News</title>
+<meta name="description" content="Solvixi News kullanim sartlari ve kosullari">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
 </head>
@@ -6310,10 +6310,10 @@ TERMS_HTML_TR = """\
   <p class="sub">Son guncelleme: 2026 — Siteyi kullanmadan once bu kosullari okuyunuz</p>
 
   <h2>1. Kosullarin Kabulü</h2>
-  <p><strong>Atlas News</strong>'e erisim saglamaniz, bu Kullanim Kosullarini kabul ettiginiz anlamina gelir.</p>
+  <p><strong>Solvixi News</strong>'e erisim saglamaniz, bu Kullanim Kosullarini kabul ettiginiz anlamina gelir.</p>
 
   <h2>2. Hizmetin Niteligj</h2>
-  <p>Atlas News, harici haber kaynaklarından basliklari ve bağlantilari görüntüleyen bir <strong>otomatik haber toplayicisidir</strong>. Herhangi bir gazetecilik icerigi olusturmuyoruz veya düzenlemiyoruz.</p>
+  <p>Solvixi News, harici haber kaynaklarından basliklari ve bağlantilari görüntüleyen bir <strong>otomatik haber toplayicisidir</strong>. Herhangi bir gazetecilik icerigi olusturmuyoruz veya düzenlemiyoruz.</p>
 
   <h2>3. Fikri Mülkiyet</h2>
   <p>Tüm haber basliklari ve görseller ilgili sahiplerine aittir. Icerik kaldirma talebi icin: <a href="mailto:report@solvixi.com">report@solvixi.com</a></p>
@@ -6354,8 +6354,8 @@ DMCA_HTML = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>إشعار DMCA وطلبات إزالة المحتوى — Atlas News</title>
-<meta name="description" content="طلبات إزالة المحتوى وإشعارات DMCA على موقع Atlas News — نستجيب خلال 48 ساعة عمل">
+<title>إشعار DMCA وطلبات إزالة المحتوى — Solvixi News</title>
+<meta name="description" content="طلبات إزالة المحتوى وإشعارات DMCA على موقع Solvixi News — نستجيب خلال 48 ساعة عمل">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """</style>
 </head>
@@ -6368,7 +6368,7 @@ DMCA_HTML = """\
   <h1>إشعار DMCA وطلبات إزالة المحتوى</h1>
   <p class="sub">آخر تحديث: 2026 — قانون حقوق الملكية الرقمية (DMCA)</p>
 
-  <p><strong>Atlas News</strong> مجمّع إخباري آلي يعرض عناوين المقالات مع روابط تؤدي إلى مصادرها الأصلية. نحترم حقوق الملكية الفكرية ونستجيب لإشعارات DMCA الصحيحة خلال <strong>48–72 ساعة عمل</strong>.</p>
+  <p><strong>Solvixi News</strong> مجمّع إخباري آلي يعرض عناوين المقالات مع روابط تؤدي إلى مصادرها الأصلية. نحترم حقوق الملكية الفكرية ونستجيب لإشعارات DMCA الصحيحة خلال <strong>48–72 ساعة عمل</strong>.</p>
 
   <h2>1. ماذا نعرض؟</h2>
   <p>نعرض فقط <strong>عناوين الأخبار</strong> مع روابط مصادرها الأصلية استناداً لمبدأ الاقتباس المنصف (Fair Use) للأغراض الإخبارية. لا نعيد نشر المقالات كاملة.</p>
@@ -6417,8 +6417,8 @@ DMCA_HTML_EN = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>DMCA Notice &amp; Takedown — Atlas News</title>
-<meta name="description" content="How to submit a DMCA takedown request for content on Atlas News">
+<title>DMCA Notice &amp; Takedown — Solvixi News</title>
+<meta name="description" content="How to submit a DMCA takedown request for content on Solvixi News">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
 </head>
@@ -6431,7 +6431,7 @@ DMCA_HTML_EN = """\
   <h1>DMCA Notice &amp; Content Takedown</h1>
   <p class="sub">Last updated: 2026 — Digital Millennium Copyright Act</p>
 
-  <p><strong>Atlas News</strong> is an automated news aggregator that displays article headlines with links to their original sources. We respect intellectual property rights and respond to valid DMCA notices within <strong>48–72 business hours</strong>.</p>
+  <p><strong>Solvixi News</strong> is an automated news aggregator that displays article headlines with links to their original sources. We respect intellectual property rights and respond to valid DMCA notices within <strong>48–72 business hours</strong>.</p>
 
   <h2>1. What We Display</h2>
   <p>We display only <strong>article headlines</strong> with links to original sources, based on the Fair Use principle for news aggregation purposes. We do not republish full articles.</p>
@@ -6480,8 +6480,8 @@ DMCA_HTML_FR = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>Avis DMCA &amp; Retrait de contenu — Atlas News</title>
-<meta name="description" content="Comment soumettre une demande de retrait DMCA sur Atlas News">
+<title>Avis DMCA &amp; Retrait de contenu — Solvixi News</title>
+<meta name="description" content="Comment soumettre une demande de retrait DMCA sur Solvixi News">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
 </head>
@@ -6494,7 +6494,7 @@ DMCA_HTML_FR = """\
   <h1>Avis DMCA &amp; Demandes de retrait</h1>
   <p class="sub">Dernière mise à jour : 2026 — Digital Millennium Copyright Act</p>
 
-  <p><strong>Atlas News</strong> est un agrégateur d'actualités automatisé affichant des titres d'articles avec des liens vers leurs sources originales. Nous respectons les droits de propriété intellectuelle et répondons aux avis DMCA valides dans un délai de <strong>48–72 heures ouvrables</strong>.</p>
+  <p><strong>Solvixi News</strong> est un agrégateur d'actualités automatisé affichant des titres d'articles avec des liens vers leurs sources originales. Nous respectons les droits de propriété intellectuelle et répondons aux avis DMCA valides dans un délai de <strong>48–72 heures ouvrables</strong>.</p>
 
   <h2>1. Ce que nous affichons</h2>
   <p>Nous affichons uniquement les <strong>titres d'articles</strong> avec des liens vers les sources originales, conformément au principe d'utilisation équitable pour l'agrégation d'actualités. Nous ne republions pas les articles complets.</p>
@@ -6543,8 +6543,8 @@ DMCA_HTML_ES = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>Aviso DMCA &amp; Eliminación de contenido — Atlas News</title>
-<meta name="description" content="Cómo enviar una solicitud de eliminación DMCA en Atlas News">
+<title>Aviso DMCA &amp; Eliminación de contenido — Solvixi News</title>
+<meta name="description" content="Cómo enviar una solicitud de eliminación DMCA en Solvixi News">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
 </head>
@@ -6557,7 +6557,7 @@ DMCA_HTML_ES = """\
   <h1>Aviso DMCA &amp; Eliminación de contenido</h1>
   <p class="sub">Última actualización: 2026 — Digital Millennium Copyright Act</p>
 
-  <p><strong>Atlas News</strong> es un agregador de noticias automatizado que muestra titulares de artículos con enlaces a sus fuentes originales. Respetamos los derechos de propiedad intelectual y respondemos a los avisos DMCA válidos en un plazo de <strong>48–72 horas hábiles</strong>.</p>
+  <p><strong>Solvixi News</strong> es un agregador de noticias automatizado que muestra titulares de artículos con enlaces a sus fuentes originales. Respetamos los derechos de propiedad intelectual y respondemos a los avisos DMCA válidos en un plazo de <strong>48–72 horas hábiles</strong>.</p>
 
   <h2>1. Lo que mostramos</h2>
   <p>Mostramos únicamente <strong>titulares de artículos</strong> con enlaces a las fuentes originales, basándonos en el principio de uso legítimo para la agregación de noticias. No republicamos artículos completos.</p>
@@ -6606,8 +6606,8 @@ DMCA_HTML_TR = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>DMCA Bildirimi ve Icerik Kaldirma — Atlas News</title>
-<meta name="description" content="Atlas News'de DMCA kaldirma talepleri nasil gonderilir">
+<title>DMCA Bildirimi ve Icerik Kaldirma — Solvixi News</title>
+<meta name="description" content="Solvixi News'de DMCA kaldirma talepleri nasil gonderilir">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
 </head>
@@ -6620,7 +6620,7 @@ DMCA_HTML_TR = """\
   <h1>DMCA Bildirimi &amp; Icerik Kaldirma</h1>
   <p class="sub">Son guncelleme: 2026 — Dijital Milenyum Telif Hakki Yasasi</p>
 
-  <p><strong>Atlas News</strong>, makale basliklarini orijinal kaynaklarina yonlendiren baglantilarla birlikte gosteren otomatik bir haber toplayicisidir. Fikri mulkiyet haklarini saygiyla karsiliyor ve gecerli DMCA bildirimlerine <strong>48-72 is saati</strong> icinde yanit veriyoruz.</p>
+  <p><strong>Solvixi News</strong>, makale basliklarini orijinal kaynaklarina yonlendiren baglantilarla birlikte gosteren otomatik bir haber toplayicisidir. Fikri mulkiyet haklarini saygiyla karsiliyor ve gecerli DMCA bildirimlerine <strong>48-72 is saati</strong> icinde yanit veriyoruz.</p>
 
   <h2>1. Ne Gosteriyoruz?</h2>
   <p>Yalnizca haber toplamayi kapsayan adil kullanim ilkesine dayanarak, orijinal kaynaklara baglanan <strong>makale basliklarini</strong> gosteriyoruz. Tam makaleleri yeniden yayinlamiyoruz.</p>
@@ -6672,8 +6672,8 @@ ADVERTISE_HTML = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>أعلن معنا — Atlas News</title>
-<meta name="description" content="أعلن على Atlas News وصل إلى جمهور عالمي بـ 5 لغات — عروض الإعلانات والشراكات">
+<title>أعلن معنا — Solvixi News</title>
+<meta name="description" content="أعلن على Solvixi News وصل إلى جمهور عالمي بـ 5 لغات — عروض الإعلانات والشراكات">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """</style>
 </head>
@@ -6743,8 +6743,8 @@ ADVERTISE_HTML_EN = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>Advertise with Us — Atlas News</title>
-<meta name="description" content="Advertise on Atlas News and reach a global audience in 5 languages — ad formats and partnership opportunities">
+<title>Advertise with Us — Solvixi News</title>
+<meta name="description" content="Advertise on Solvixi News and reach a global audience in 5 languages — ad formats and partnership opportunities">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
 </head>
@@ -6763,7 +6763,7 @@ ADVERTISE_HTML_EN = """\
     <div class="stat-box2"><div class="stat-box2-val">24/7</div><div class="stat-box2-lbl">Live Updates</div></div>
   </div>
 
-  <h2>Why Advertise with Atlas News?</h2>
+  <h2>Why Advertise with Solvixi News?</h2>
   <ul>
     <li><strong>Multilingual audience:</strong> Arabic, English, French, Spanish, Turkish — genuine coverage of 5 distinct geographic markets</li>
     <li><strong>Engaged readers:</strong> Visitors actively seeking news across politics, economy, tech, sports and more</li>
@@ -6814,8 +6814,8 @@ ADVERTISE_HTML_FR = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>Faites de la publicité avec nous — Atlas News</title>
-<meta name="description" content="Faites de la publicité sur Atlas News et touchez un public mondial en 5 langues">
+<title>Faites de la publicité avec nous — Solvixi News</title>
+<meta name="description" content="Faites de la publicité sur Solvixi News et touchez un public mondial en 5 langues">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
 </head>
@@ -6867,8 +6867,8 @@ ADVERTISE_HTML_ES = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>Publicidad — Atlas News</title>
-<meta name="description" content="Anúnciate en Atlas News y llega a una audiencia global en 5 idiomas">
+<title>Publicidad — Solvixi News</title>
+<meta name="description" content="Anúnciate en Solvixi News y llega a una audiencia global en 5 idiomas">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
 </head>
@@ -6920,8 +6920,8 @@ ADVERTISE_HTML_TR = """\
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<title>Reklam Ver — Atlas News</title>
-<meta name="description" content="Atlas News'te reklam verin ve 5 dilde kuresel kitlelere ulasin">
+<title>Reklam Ver — Solvixi News</title>
+<meta name="description" content="Solvixi News'te reklam verin ve 5 dilde kuresel kitlelere ulasin">
 <link rel="stylesheet" href="style.css">
 <style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
 </head>
@@ -6967,7 +6967,7 @@ ADVERTISE_HTML_TR = """\
 """
 
 ROBOTS_TXT = """\
-# Atlas News — robots.txt
+# Solvixi News — robots.txt
 # https://news.solvixi.com
 
 User-agent: Googlebot
@@ -7925,7 +7925,7 @@ def _gen_og_png(width: int = 1200, height: int = 630) -> bytes:
 OG_IMAGE_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
   <rect width="1200" height="630" fill="#1d4ed8"/>
   <text x="600" y="280" text-anchor="middle" font-family="Arial,sans-serif"
-        font-size="80" font-weight="bold" fill="#ffffff">Atlas News</text>
+        font-size="80" font-weight="bold" fill="#ffffff">Solvixi News</text>
   <text x="600" y="380" text-anchor="middle" font-family="Arial,sans-serif"
         font-size="36" fill="#93c5fd">Your World in 5 Languages</text>
 </svg>
@@ -8726,7 +8726,7 @@ def _generate_news_sitemap(
     media_slugs: set,
     out_dir: str,
     lang: str = "ar",
-    site_title: str = "Atlas News",
+    site_title: str = "Solvixi News",
 ) -> None:
     """Generate news-sitemap.xml for Google News (last 48 h articles, 7-day fallback)."""
     from datetime import datetime as _dt, timezone as _tz, timedelta as _td
@@ -9745,7 +9745,7 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
 
         # Update robots.txt with full bot rules + absolute sitemap URLs
         _robots = (
-            f"# Atlas News — robots.txt\n"
+            f"# Solvixi News — robots.txt\n"
             f"# {_base}\n\n"
             "User-agent: Googlebot\n"
             "Allow: /\n"

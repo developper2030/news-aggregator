@@ -3,7 +3,7 @@
     "max_articles_per_source": 10,
     "oldest_days": 7,
     "output_file": "static/index.html",
-    "site_title": "أطلس الأخبار",
+    "site_title": "Solvixi News",
     "site_description": "أهم العناوين من مصادر متعددة في مكان واحد",
     "site_url": "https://news.solvixi.com/ar",
     "lang_code": "ar",
