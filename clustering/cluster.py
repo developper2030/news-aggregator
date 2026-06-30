@@ -176,6 +176,9 @@ def build_cluster_map(db_path: str,
             "FROM articles WHERE is_active = 1 "
             "ORDER BY scraped_at DESC"
         ).fetchall()
+    except sqlite3.OperationalError:
+        # DB exists but articles table not yet created (new language, no scrape yet)
+        return {}
     finally:
         conn.close()
 
