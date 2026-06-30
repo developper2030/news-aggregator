@@ -1695,15 +1695,16 @@ LANG_DIRS: dict[str, str] = {
     "fr": "fr/",
     "es": "es/",
     "tr": "tr/",
+    "pt": "pt/",
 }
 LANG_LABELS: dict[str, str] = {
-    "en": "EN", "ar": "AR", "fr": "FR", "es": "ES", "tr": "TR",
+    "en": "EN", "ar": "AR", "fr": "FR", "es": "ES", "tr": "TR", "pt": "PT",
 }
 LANG_FLAGS: dict[str, str] = {
-    "en": "🇬🇧", "ar": "🇸🇦", "fr": "🇫🇷", "es": "🇪🇸", "tr": "🇹🇷",
+    "en": "🇬🇧", "ar": "🇸🇦", "fr": "🇫🇷", "es": "🇪🇸", "tr": "🇹🇷", "pt": "🇧🇷",
 }
 LANG_FULL_NAMES: dict[str, str] = {
-    "en": "English", "ar": "العربية", "fr": "Français", "es": "Español", "tr": "Türkçe",
+    "en": "English", "ar": "العربية", "fr": "Français", "es": "Español", "tr": "Türkçe", "pt": "Português",
 }
 # Bottom nav labels per language: (home, world, worldcup, prices)
 _BN_LABELS: dict[str, tuple] = {
@@ -1712,6 +1713,7 @@ _BN_LABELS: dict[str, tuple] = {
     "fr": ("Accueil",   "Sauvegardés",    "Coupe du Monde", "Prix"),
     "es": ("Inicio",    "Guardados",      "Mundial",        "Precios"),
     "tr": ("Ana Sayfa", "Kaydedilenler",  "Dünya Kupası",   "Fiyatlar"),
+    "pt": ("Início",    "Salvos",         "Copa do Mundo",  "Preços"),
 }
 # Bookmarks drawer labels per language
 _BK_LABELS: dict[str, dict] = {
@@ -1725,6 +1727,8 @@ _BK_LABELS: dict[str, dict] = {
            "save": "Guardar", "saved": "Guardado", "like": "Me gusta"},
     "tr": {"title": "Kaydedilen Makaleler", "empty": "Henüz kayıtlı makale yok 📭",
            "save": "Kaydet", "saved": "Kaydedildi", "like": "Beğen"},
+    "pt": {"title": "Artigos Salvos", "empty": "Nenhum artigo salvo ainda 📭",
+           "save": "Salvar artigo", "saved": "Salvo", "like": "Curtir"},
 }
 
 # Cross-language slug equivalency map.
