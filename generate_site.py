@@ -6072,7 +6072,7 @@ TERMS_HTML = """\
   <p class="sub">آخر تحديث: 2026 — يُرجى قراءة هذه الشروط بعناية قبل استخدام الموقع</p>
 
   <h2>1. القبول بالشروط</h2>
-  <p>باستخدامك لموقع <strong>Atlas News</strong> (atlasnews.solvixi.com)، فإنك توافق على الالتزام بهذه الشروط والأحكام. إذا كنت لا توافق على أي من هذه الشروط، يُرجى التوقف عن استخدام الموقع.</p>
+  <p>باستخدامك لموقع <strong>Atlas News</strong> (news.solvixi.com)، فإنك توافق على الالتزام بهذه الشروط والأحكام. إذا كنت لا توافق على أي من هذه الشروط، يُرجى التوقف عن استخدام الموقع.</p>
 
   <h2>2. طبيعة الخدمة</h2>
   <p>Atlas News هو <strong>مجمّع إخباري آلي</strong> يعرض عناوين الأخبار وروابطها من مصادر إخبارية خارجية. نحن:</p>
@@ -6135,7 +6135,7 @@ TERMS_HTML_EN = """\
   <p class="sub">Last updated: 2026 — Please read these terms carefully before using the site</p>
 
   <h2>1. Acceptance of Terms</h2>
-  <p>By accessing <strong>Atlas News</strong> (atlasnews.solvixi.com), you agree to be bound by these Terms of Use. If you do not agree to any of these terms, please discontinue use of the site.</p>
+  <p>By accessing <strong>Atlas News</strong> (news.solvixi.com), you agree to be bound by these Terms of Use. If you do not agree to any of these terms, please discontinue use of the site.</p>
 
   <h2>2. Nature of Service</h2>
   <p>Atlas News is an <strong>automated news aggregator</strong> that displays headlines and links from external news sources. We:</p>
@@ -6968,7 +6968,7 @@ ADVERTISE_HTML_TR = """\
 
 ROBOTS_TXT = """\
 # Atlas News — robots.txt
-# https://atlasnews.solvixi.com
+# https://news.solvixi.com
 
 User-agent: Googlebot
 Allow: /
@@ -7010,9 +7010,9 @@ Allow: /
 Disallow: /admin
 Crawl-delay: 10
 
-Sitemap: https://atlasnews.solvixi.com/sitemap.xml
-Sitemap: https://atlasnews.solvixi.com/news-sitemap.xml
-Sitemap: https://atlasnews.solvixi.com/sitemap-articles.xml
+Sitemap: https://news.solvixi.com/sitemap.xml
+Sitemap: https://news.solvixi.com/news-sitemap.xml
+Sitemap: https://news.solvixi.com/sitemap-articles.xml
 """
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -7086,7 +7086,7 @@ CLOUDFLARE_REDIRECTS = """\
 # ads.txt — placed at the DOMAIN ROOT only (written during EN generation).
 # Replace placeholder publisher IDs with your real IDs before going live.
 ADS_TXT = """\
-# ads.txt — atlasnews.solvixi.com
+# ads.txt — news.solvixi.com
 # Standard: https://iabtechlab.com/ads-txt/
 #
 # ════════════════════════════════════════════════════════════════════════════
@@ -7770,7 +7770,7 @@ def _hreflang_links(base_url: str, filename: str) -> str:
     """Return <link rel="alternate" hreflang="…"> tags for all 5 languages.
 
     base_url — the site root without trailing slash, e.g.
-               "https://atlasnews.solvixi.com"
+               "https://news.solvixi.com"
     filename — e.g. "index.html", "politics.html"
     Returns an empty string when base_url is not configured.
     """
@@ -8888,8 +8888,8 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
     _write_static_assets(out_dir, lang, settings.get("site_url", ""))
 
     # ── Site URL helpers for SEO ──────────────────────────────────────────────
-    # _site_url = language-specific base (e.g. "https://atlasnews.solvixi.com/ar")
-    # _root_url = domain root without lang path (e.g. "https://atlasnews.solvixi.com")
+    # _site_url = language-specific base (e.g. "https://news.solvixi.com/ar")
+    # _root_url = domain root without lang path (e.g. "https://news.solvixi.com")
     # hreflang needs the root; canonical/breadcrumb need the lang-specific base.
     _site_url = settings.get("site_url", "").rstrip("/")
     _lang_prefix = _LANG_PATHS.get(lang, "")  # e.g. "/ar" for AR, "" for EN

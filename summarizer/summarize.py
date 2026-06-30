@@ -49,7 +49,7 @@ GEMINI_API_URL = (
 # ── OpenRouter (OpenAI-compatible) ────────────────────────────────────────────
 OPENROUTER_API_URL   = "https://openrouter.ai/api/v1/chat/completions"
 OPENROUTER_MODEL     = "meta-llama/llama-3.3-70b-instruct:free"
-OPENROUTER_SITE_URL  = "https://atlasnews.solvixi.com"
+OPENROUTER_SITE_URL  = "https://news.solvixi.com"
 OPENROUTER_SITE_NAME = "Atlas News"
 
 # ── NVIDIA NIM (OpenAI-compatible) ────────────────────────────────────────────
