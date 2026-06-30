@@ -107,7 +107,7 @@ jobs:
           [ -s static/index.html ] || fail "static/index.html missing/empty"
           [ -s static/style.css ]  || fail "static/style.css missing/empty"
           [ -s static/app.js ]     || fail "static/app.js missing/empty"
-          for d in ar fr es tr; do
+          for d in ar fr es tr pt; do
             [ -s "static/$d/index.html" ] || fail "static/$d/index.html missing/empty"
           done
           size=$(stat -c%s static/index.html)

@@ -1,0 +1,502 @@
+{
+  "settings": {
+    "site_title": "Solvixi News",
+    "site_description": "As últimas manchetes de fontes internacionais confiáveis em um só lugar",
+    "oldest_days": 7,
+    "site_url": "https://news.solvixi.com/pt",
+    "lang_code": "pt",
+    "ga_id": "G-CXBERJSM8S",
+    "lang_rule": "Portuguese only — all sources must publish content in Portuguese (pt-BR preferred)",
+    "show_biz": false,
+    "show_stats": false,
+    "show_bourse": false,
+    "max_articles_per_source": 10
+  },
+  "categories": [
+    {
+      "name": "Mundo",
+      "slug": "politics",
+      "icon": "📰",
+      "sources": [
+        {
+          "name": "BBC Brasil",
+          "url": "https://www.bbc.com/portuguese",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "Agência Brasil",
+          "type": "rss",
+          "url": "https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml"
+        },
+        {
+          "name": "Deutsche Welle Brasil",
+          "url": "https://www.dw.com/pt-br/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.dw.com"
+        },
+        {
+          "name": "France 24 Português",
+          "type": "rss",
+          "url": "https://www.france24.com/pt/rss"
+        },
+        {
+          "name": "G1 Mundo",
+          "type": "rss",
+          "url": "https://g1.globo.com/rss/g1/mundo/"
+        },
+        {
+          "name": "UOL Notícias",
+          "url": "https://noticias.uol.com.br/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://noticias.uol.com.br"
+        }
+      ]
+    },
+    {
+      "name": "Economia",
+      "slug": "economy",
+      "icon": "💰",
+      "sources": [
+        {
+          "name": "G1 Economia",
+          "type": "rss",
+          "url": "https://g1.globo.com/rss/g1/economia/"
+        },
+        {
+          "name": "InfoMoney",
+          "type": "rss",
+          "url": "https://www.infomoney.com.br/feed/"
+        },
+        {
+          "name": "Agência Brasil Economia",
+          "type": "rss",
+          "url": "https://agenciabrasil.ebc.com.br/rss/economia/feed.xml"
+        },
+        {
+          "name": "Folha Mercado",
+          "url": "https://www1.folha.uol.com.br/mercado/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www1.folha.uol.com.br"
+        }
+      ]
+    },
+    {
+      "name": "Tecnologia",
+      "slug": "tech",
+      "icon": "💻",
+      "sources": [
+        {
+          "name": "Tecnoblog",
+          "type": "rss",
+          "url": "https://tecnoblog.net/feed/"
+        },
+        {
+          "name": "Olhar Digital",
+          "type": "rss",
+          "url": "https://olhardigital.com.br/feed/"
+        },
+        {
+          "name": "G1 Tecnologia",
+          "type": "rss",
+          "url": "https://g1.globo.com/rss/g1/tecnologia/"
+        },
+        {
+          "name": "Canaltech",
+          "type": "rss",
+          "url": "https://canaltech.com.br/rss/"
+        },
+        {
+          "name": "TecMundo",
+          "type": "rss",
+          "url": "https://rss.tecmundo.com.br/feed"
+        }
+      ]
+    },
+    {
+      "name": "Esportes",
+      "slug": "sports",
+      "icon": "⚽",
+      "sources": [
+        {
+          "name": "UOL Esporte",
+          "type": "rss",
+          "url": "https://esporte.uol.com.br/ultimas/"
+        },
+        {
+          "name": "G1 Esportes",
+          "type": "rss",
+          "url": "https://g1.globo.com/rss/g1/esportes/"
+        },
+        {
+          "name": "ESPN Brasil",
+          "url": "https://www.espn.com.br/futebol/",
+          "article_selector": "h1,h2",
+          "link_selector": "a",
+          "base_url": "https://www.espn.com.br"
+        }
+      ]
+    },
+    {
+      "name": "Saúde",
+      "slug": "health",
+      "icon": "🏥",
+      "sources": [
+        {
+          "name": "G1 Bem Estar",
+          "type": "rss",
+          "url": "https://g1.globo.com/rss/g1/bemestar/"
+        },
+        {
+          "name": "Agência Brasil Saúde",
+          "type": "rss",
+          "url": "https://agenciabrasil.ebc.com.br/rss/saude/feed.xml"
+        },
+        {
+          "name": "BBC Brasil Saúde",
+          "url": "https://www.bbc.com/portuguese/topics/ck2l9z7989lt",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        }
+      ]
+    },
+    {
+      "name": "Entretenimento",
+      "slug": "arts",
+      "icon": "🎬",
+      "sources": [
+        {
+          "name": "G1 Pop & Arte",
+          "type": "rss",
+          "url": "https://g1.globo.com/rss/g1/pop-arte/"
+        },
+        {
+          "name": "UOL Entretenimento",
+          "url": "https://entretenimento.uol.com.br/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://entretenimento.uol.com.br"
+        }
+      ]
+    },
+    {
+      "name": "Ciência",
+      "slug": "education",
+      "icon": "🔬",
+      "sources": [
+        {
+          "name": "G1 Ciência",
+          "type": "rss",
+          "url": "https://g1.globo.com/rss/g1/ciencia-e-saude/"
+        },
+        {
+          "name": "Agência Brasil Ciência",
+          "type": "rss",
+          "url": "https://agenciabrasil.ebc.com.br/rss/ciencia/feed.xml"
+        },
+        {
+          "name": "BBC Brasil Ciência",
+          "url": "https://www.bbc.com/portuguese/topics/cz74k717k8yt",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        }
+      ]
+    },
+    {
+      "name": "Meio Ambiente",
+      "slug": "environment",
+      "icon": "🌿",
+      "sources": [
+        {
+          "name": "Agência Brasil Meio Ambiente",
+          "type": "rss",
+          "url": "https://agenciabrasil.ebc.com.br/rss/meio-ambiente/feed.xml"
+        },
+        {
+          "name": "G1 Natureza",
+          "type": "rss",
+          "url": "https://g1.globo.com/rss/g1/natureza/"
+        }
+      ]
+    },
+    {
+      "name": "Finanças & Negócios",
+      "slug": "business",
+      "icon": "💼",
+      "sources": [
+        {
+          "name": "InfoMoney",
+          "type": "rss",
+          "url": "https://www.infomoney.com.br/feed/"
+        },
+        {
+          "name": "Folha Negócios",
+          "url": "https://www1.folha.uol.com.br/mercado/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www1.folha.uol.com.br"
+        }
+      ]
+    },
+    {
+      "name": "Brasil",
+      "slug": "brasil-pt",
+      "icon": "🇧🇷",
+      "sources": [
+        {
+          "name": "G1 Brasil",
+          "type": "rss",
+          "url": "https://g1.globo.com/rss/g1/brasil/"
+        },
+        {
+          "name": "Agência Brasil",
+          "type": "rss",
+          "url": "https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml"
+        },
+        {
+          "name": "Folha de S.Paulo",
+          "url": "https://www1.folha.uol.com.br/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www1.folha.uol.com.br"
+        },
+        {
+          "name": "UOL Notícias Brasil",
+          "url": "https://noticias.uol.com.br/",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://noticias.uol.com.br"
+        }
+      ]
+    },
+    {
+      "name": "América Latina",
+      "slug": "latam-pt",
+      "icon": "🌎",
+      "sources": [
+        {
+          "name": "BBC Brasil América Latina",
+          "url": "https://www.bbc.com/portuguese/topics/c340g5r171lt",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "Deutsche Welle Brasil América",
+          "url": "https://www.dw.com/pt-br/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.dw.com"
+        }
+      ]
+    },
+    {
+      "name": "Europa",
+      "slug": "europe-pt",
+      "icon": "🏰",
+      "sources": [
+        {
+          "name": "BBC Brasil Europa",
+          "url": "https://www.bbc.com/portuguese",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "Deutsche Welle Brasil Europa",
+          "url": "https://www.dw.com/pt-br/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.dw.com"
+        }
+      ]
+    },
+    {
+      "name": "África",
+      "slug": "africa-pt",
+      "icon": "🌍",
+      "sources": [
+        {
+          "name": "Deutsche Welle Brasil África",
+          "url": "https://www.dw.com/pt-br/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.dw.com"
+        },
+        {
+          "name": "BBC Brasil África",
+          "url": "https://www.bbc.com/portuguese",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        }
+      ]
+    },
+    {
+      "name": "Oriente Médio",
+      "slug": "mideast-pt",
+      "icon": "🕌",
+      "sources": [
+        {
+          "name": "BBC Brasil Oriente Médio",
+          "url": "https://www.bbc.com/portuguese",
+          "article_selector": "h3",
+          "link_selector": "a",
+          "base_url": "https://www.bbc.com"
+        },
+        {
+          "name": "Deutsche Welle Brasil",
+          "url": "https://www.dw.com/pt-br/",
+          "article_selector": "h2",
+          "link_selector": "a",
+          "base_url": "https://www.dw.com"
+        }
+      ]
+    },
+    {
+      "slug": "vid-news",
+      "name": "Vídeos",
+      "icon": "📰",
+      "sources": [
+        {
+          "name": "BBC News Brasil",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCer5M7oeSdVIWZFnvWaIcBg"
+        },
+        {
+          "name": "Deutsche Welle Brasil",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCDdYoMEFVWp3M9cHiWj1kBQ"
+        },
+        {
+          "name": "France 24 em Português",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCYHnGFVCiavVN95lQyiDT0w"
+        }
+      ]
+    },
+    {
+      "slug": "vid-business",
+      "name": "Finanças",
+      "icon": "💼",
+      "sources": [
+        {
+          "name": "InfoMoney",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCmRL6GJtQ0ZiPrFi6l3p0Hg"
+        }
+      ]
+    },
+    {
+      "slug": "vid-science",
+      "name": "Ciência e Tecnologia",
+      "icon": "🔬",
+      "sources": [
+        {
+          "name": "Manual do Mundo",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCKHhA5hN2UohhFDfNXB_cvQ"
+        },
+        {
+          "name": "Nerdologia",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UClu474HMt895mVxZdlIHXEA"
+        }
+      ]
+    },
+    {
+      "slug": "vid-sports",
+      "name": "Esportes",
+      "icon": "⚽",
+      "sources": [
+        {
+          "name": "ESPN Brasil",
+          "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCzfITDDkFTFz2DVwkAk1CJQ"
+        }
+      ]
+    },
+    {
+      "slug": "vid-politics",
+      "name": "Política e Análise",
+      "icon": "🎙️",
+      "sources": []
+    },
+    {
+      "slug": "vid-cooking",
+      "name": "Gastronomia",
+      "icon": "🍳",
+      "sources": []
+    },
+    {
+      "slug": "vid-entertainment",
+      "name": "Entretenimento",
+      "icon": "🎬",
+      "sources": []
+    },
+    {
+      "name": "Turismo & Viagens",
+      "slug": "travel",
+      "icon": "✈️",
+      "sources": []
+    },
+    {
+      "name": "Produtos",
+      "slug": "products",
+      "icon": "🛍️",
+      "enabled": true,
+      "sources": []
+    },
+    {
+      "name": "Notícias Copa",
+      "slug": "worldcup-news",
+      "icon": "🏆",
+      "color": "#16a34a",
+      "enabled": true,
+      "sources": []
+    },
+    {
+      "slug": "china-pt",
+      "name": "China",
+      "icon": "🇨🇳",
+      "sources": []
+    },
+    {
+      "slug": "australia-pt",
+      "name": "Austrália",
+      "icon": "🇦🇺",
+      "sources": []
+    },
+    {
+      "slug": "eastern-europe-pt",
+      "name": "Europa do Leste e Rússia",
+      "icon": "🏛️",
+      "sources": []
+    },
+    {
+      "slug": "russia-ukraine-pt",
+      "name": "Guerra Rússia-Ucrânia",
+      "icon": "⚡",
+      "sources": []
+    }
+  ],
+  "media_regions": [
+    { "slug": "vid-news",          "name": "Vídeos",              "icon": "📰" },
+    { "slug": "vid-business",      "name": "Finanças",            "icon": "💼" },
+    { "slug": "vid-science",       "name": "Ciência e Tecnologia","icon": "🔬" },
+    { "slug": "vid-sports",        "name": "Esportes",            "icon": "⚽" },
+    { "slug": "vid-politics",      "name": "Política e Análise",  "icon": "🎙️" },
+    { "slug": "vid-cooking",       "name": "Gastronomia",         "icon": "🍳" },
+    { "slug": "vid-entertainment", "name": "Entretenimento",      "icon": "🎬" }
+  ],
+  "world_regions": [
+    { "slug": "brasil-pt",       "name": "Brasil",                  "icon": "🇧🇷" },
+    { "slug": "latam-pt",        "name": "América Latina",          "icon": "🌎" },
+    { "slug": "mideast-pt",      "name": "Oriente Médio",           "icon": "🕌" },
+    { "slug": "russia-ukraine-pt","name": "Guerra Rússia-Ucrânia",  "icon": "⚡" },
+    { "slug": "europe-pt",       "name": "Europa",                  "icon": "🏰" },
+    { "slug": "eastern-europe-pt","name": "Europa do Leste e Rússia","icon": "🏛️" },
+    { "slug": "china-pt",        "name": "China",                   "icon": "🇨🇳" },
+    { "slug": "australia-pt",    "name": "Austrália",               "icon": "🇦🇺" },
+    { "slug": "africa-pt",       "name": "África",                  "icon": "🌍" }
+  ]
+}

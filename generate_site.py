@@ -1045,6 +1045,7 @@ _LANG_PILLS: dict[str, str] = {
     "fr": "Français",
     "es": "Español",
     "tr": "Türkçe",
+    "pt": "Português",
 }
 
 # UI strings per language — loaded dynamically from config/strings/*.json
@@ -6966,6 +6967,361 @@ ADVERTISE_HTML_TR = """\
 </html>
 """
 
+PRIVACY_HTML_PT = """\
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="description" content="Política de privacidade do Solvixi News — agregador de notícias multilíngue automatizado">
+<title>Política de privacidade — Solvixi News</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.page{max-width:820px;margin:40px auto;padding:0 16px 80px}
+.page h1{margin-bottom:6px}
+.sub{color:var(--text-muted);margin-bottom:36px;font-size:.85em}
+.page h2{margin:28px 0 10px;font-size:1.05em;color:var(--accent);border-left:3px solid var(--accent);padding-left:10px}
+.dark-mode .page h2{color:#60a5fa;border-color:#60a5fa}
+.page p,.page li{color:var(--text-muted);line-height:1.85;margin-bottom:12px;font-size:.95em}
+.page ul{padding-left:20px;margin-bottom:14px}
+.page li{list-style:disc}
+.page a{color:var(--accent);text-decoration:underline}
+.back{display:inline-block;margin-bottom:28px;color:var(--accent);font-size:.9em}
+.back:hover{text-decoration:underline}
+</style>
+</head>
+<body class="lang-ltr">
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <a href="index.html" class="back">&#8592; Voltar ao início</a>
+    <button id="theme-toggle" class="theme-btn">🌙</button>
+  </div>
+</div>
+<div class="page">
+  <h1>Política de privacidade</h1>
+  <p class="sub">Última atualização: 2026</p>
+  <p>Bem-vindo ao <strong>Solvixi News</strong>. Estamos comprometidos em proteger sua privacidade.</p>
+  <h2>1. Informações coletadas</h2>
+  <p>Este site não coleta dados pessoais diretamente. Somos um agregador de notícias que exibe manchetes de outras fontes.</p>
+  <ul>
+    <li>Não é necessário cadastro ou assinatura</li>
+    <li>Usamos o armazenamento local do navegador apenas para salvar suas preferências (ex: modo escuro) — não usamos cookies de rastreamento próprios</li>
+    <li>Não coletamos endereços IP nem dados de navegação</li>
+  </ul>
+  <h2>2. Google AdSense</h2>
+  <p>Este site pode usar o Google AdSense para exibir anúncios. O Google usa cookies para personalizar os anúncios.</p>
+  <ul>
+    <li>Desative os anúncios personalizados em <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Configurações de anúncios do Google</a></li>
+    <li>Mais informações: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Política de privacidade do Google</a></li>
+  </ul>
+  <h2>3. Links externos</h2>
+  <p>Todos os artigos vinculam às suas fontes originais. Não controlamos o conteúdo nem as práticas de privacidade desses sites.</p>
+  <h2>4. Análise</h2>
+  <p>Atualmente não usamos nenhuma ferramenta de análise. Isso pode mudar no futuro com divulgação completa.</p>
+  <h2>5. Propriedade intelectual</h2>
+  <p>As manchetes dos artigos pertencem aos seus editores originais. Exibimos manchetes com links para as fontes originais.</p>
+  <h2>6. Alterações na política</h2>
+  <p>Reservamo-nos o direito de atualizar esta política a qualquer momento.</p>
+  <h2>7. Contato</h2>
+  <p>Para quaisquer dúvidas, visite <a href="about.html">Sobre</a>.</p>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+ABOUT_HTML_PT = """\
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="description" content="Sobre o Solvixi News — agregador de notícias multilíngue automatizado em 6 idiomas">
+<title>Sobre — Solvixi News</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.page{max-width:820px;margin:40px auto;padding:0 16px 80px}
+.page h1{margin-bottom:6px}
+.sub{color:var(--text-muted);margin-bottom:36px;font-size:.85em}
+.page h2{margin:28px 0 10px;font-size:1.05em;color:var(--accent);border-left:3px solid var(--accent);padding-left:10px}
+.dark-mode .page h2{color:#60a5fa;border-color:#60a5fa}
+.page p,.page li{color:var(--text-muted);line-height:1.85;margin-bottom:12px;font-size:.95em}
+.page ul{padding-left:20px;margin-bottom:14px}
+.page li{list-style:disc}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{background:var(--surface-2);border:1px solid var(--border);padding:7px 14px;border-radius:8px;font-size:.85em;color:var(--text-muted)}
+.back{display:inline-block;margin-bottom:28px;color:var(--accent);font-size:.9em}
+.back:hover{text-decoration:underline}
+.steps{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.step{display:flex;gap:12px;align-items:flex-start;background:var(--surface-2);padding:12px 14px;border-radius:8px;border:1px solid var(--border)}
+.step-num{background:var(--accent);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8em;font-weight:700;flex-shrink:0;margin-top:2px}
+</style>
+</head>
+<body class="lang-ltr">
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <a href="index.html" class="back">&#8592; Voltar ao início</a>
+    <button id="theme-toggle" class="theme-btn">🌙</button>
+  </div>
+</div>
+<div class="page">
+  <h1>Sobre</h1>
+  <p class="sub">Solvixi News — Agregador de notícias multilíngue automatizado</p>
+  <p><strong>Solvixi News</strong> é um agregador de notícias que reúne as manchetes mais importantes de fontes internacionais confiáveis em um só lugar.</p>
+  <h2>Como funciona</h2>
+  <div class="steps">
+    <div class="step"><span class="step-num">1</span><span>As manchetes são obtidas automaticamente a cada 2 horas das fontes configuradas</span></div>
+    <div class="step"><span class="step-num">2</span><span>Manchetes irrelevantes são filtradas e duplicatas são removidas automaticamente</span></div>
+    <div class="step"><span class="step-num">3</span><span>O site exibe a manchete e um link para a fonte original apenas</span></div>
+    <div class="step"><span class="step-num">4</span><span>O site é atualizado automaticamente via GitHub Actions a cada 2 horas</span></div>
+  </div>
+  <h2>Nossas fontes</h2>
+  <p>Agregamos notícias de fontes reconhecidas e diversas:</p>
+  <div class="chips">
+    <span class="chip">🌍 BBC Brasil</span>
+    <span class="chip">🌍 G1 Globo</span>
+    <span class="chip">🌍 UOL Notícias</span>
+    <span class="chip">🌍 Agência Brasil</span>
+    <span class="chip">🌍 Deutsche Welle Brasil</span>
+    <span class="chip">🌍 France 24 PT</span>
+    <span class="chip">💰 InfoMoney</span>
+    <span class="chip">💻 Tecnoblog</span>
+    <span class="chip">💻 Olhar Digital</span>
+    <span class="chip">⚽ UOL Esporte</span>
+    <span class="chip">⚽ ESPN Brasil</span>
+    <span class="chip">🔬 Manual do Mundo</span>
+  </div>
+  <h2>Missão</h2>
+  <p>Acreditamos que o acesso às notícias deve ser simples, rápido e livre de distrações. Nosso objetivo é oferecer um panorama claro do que está acontecendo no mundo — em português do Brasil.</p>
+  <h2>Contato</h2>
+  <p>Para perguntas, parcerias ou relatórios de erros: <a href="contact.html">página de contato</a>.</p>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+CONTACT_HTML_PT = """\
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="index, follow">
+<meta name="description" content="Entre em contato com o Solvixi News — sugestões, parcerias e relatórios de erros">
+<title>Contato — Solvixi News</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.page{max-width:820px;margin:40px auto;padding:0 16px 80px}
+.page h1{margin-bottom:6px}
+.sub{color:var(--text-muted);margin-bottom:36px;font-size:.85em}
+.page h2{margin:28px 0 10px;font-size:1.05em;color:var(--accent);border-left:3px solid var(--accent);padding-left:10px}
+.dark-mode .page h2{color:#60a5fa;border-color:#60a5fa}
+.page p,.page li{color:var(--text-muted);line-height:1.85;margin-bottom:12px;font-size:.95em}
+.page ul{padding-left:20px;margin-bottom:14px}
+.page li{list-style:disc}
+.page a{color:var(--accent);text-decoration:underline}
+.back{display:inline-block;margin-bottom:28px;color:var(--accent);font-size:.9em}
+.back:hover{text-decoration:underline}
+.contact-box{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin-top:10px}
+</style>
+</head>
+<body class="lang-ltr">
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <a href="index.html" class="back">&#8592; Voltar ao início</a>
+    <button id="theme-toggle" class="theme-btn">🌙</button>
+  </div>
+</div>
+<div class="page">
+  <h1>Contato</h1>
+  <p class="sub">Solvixi News — Estamos aqui para ajudar</p>
+  <h2>Fale conosco</h2>
+  <div class="contact-box">
+    <p>📧 Email geral: <a href="mailto:contact@solvixi.com">contact@solvixi.com</a></p>
+    <p>📢 Publicidade: <a href="mailto:ads@solvixi.com">ads@solvixi.com</a></p>
+    <p>⚖️ DMCA / Conteúdo: <a href="mailto:dmca@solvixi.com">dmca@solvixi.com</a></p>
+  </div>
+  <h2>Tipos de contato</h2>
+  <ul>
+    <li><strong>Sugestão de fonte:</strong> Conhece um veículo de notícias confiável em português? Nos envie!</li>
+    <li><strong>Erro ou problema:</strong> Descreva o problema com o link da página afetada</li>
+    <li><strong>Parceria comercial:</strong> Visite nossa <a href="advertise.html">página de publicidade</a></li>
+    <li><strong>Solicitação de remoção:</strong> Contate-nos via <a href="dmca.html">DMCA</a></li>
+  </ul>
+  <p>Respondemos normalmente dentro de 48 horas úteis.</p>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+TERMS_HTML_PT = """\
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="index, follow">
+<meta name="description" content="Termos de uso do Solvixi News — agregador de notícias multilíngue">
+<title>Termos de uso — Solvixi News</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.page{max-width:820px;margin:40px auto;padding:0 16px 80px}
+.page h1{margin-bottom:6px}
+.sub{color:var(--text-muted);margin-bottom:36px;font-size:.85em}
+.page h2{margin:28px 0 10px;font-size:1.05em;color:var(--accent);border-left:3px solid var(--accent);padding-left:10px}
+.dark-mode .page h2{color:#60a5fa;border-color:#60a5fa}
+.page p,.page li{color:var(--text-muted);line-height:1.85;margin-bottom:12px;font-size:.95em}
+.page ul{padding-left:20px;margin-bottom:14px}
+.page li{list-style:disc}
+.page a{color:var(--accent);text-decoration:underline}
+.back{display:inline-block;margin-bottom:28px;color:var(--accent);font-size:.9em}
+.back:hover{text-decoration:underline}
+</style>
+</head>
+<body class="lang-ltr">
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <a href="index.html" class="back">&#8592; Voltar ao início</a>
+    <button id="theme-toggle" class="theme-btn">🌙</button>
+  </div>
+</div>
+<div class="page">
+  <h1>Termos de uso</h1>
+  <p class="sub">Última atualização: 2026</p>
+  <h2>1. Aceitação dos termos</h2>
+  <p>Ao usar o Solvixi News, você concorda com estes termos. Se não concordar, não use o site.</p>
+  <h2>2. Natureza do serviço</h2>
+  <p>O Solvixi News é um agregador de notícias. Coletamos e exibimos manchetes com links para fontes originais. Não produzimos conteúdo editorial.</p>
+  <h2>3. Propriedade intelectual</h2>
+  <p>As manchetes e artigos pertencem aos seus respectivos editores. O Solvixi News apenas indexa e vincula ao conteúdo original.</p>
+  <h2>4. Isenção de responsabilidade</h2>
+  <p>Não somos responsáveis pela precisão, integridade ou legalidade do conteúdo das fontes externas vinculadas.</p>
+  <h2>5. Uso aceitável</h2>
+  <ul>
+    <li>Não faça scraping automatizado ou sobrecarga dos nossos servidores</li>
+    <li>Use o site para fins pessoais e não comerciais</li>
+    <li>Não reproduza nosso layout ou código sem autorização</li>
+  </ul>
+  <h2>6. Alterações</h2>
+  <p>Podemos atualizar estes termos a qualquer momento. O uso continuado implica aceitação.</p>
+  <h2>7. Contato</h2>
+  <p>Dúvidas? <a href="contact.html">Entre em contato</a>.</p>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+DMCA_HTML_PT = """\
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="index, follow">
+<meta name="description" content="Política DMCA do Solvixi News — solicitações de remoção de conteúdo">
+<title>DMCA — Solvixi News</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.page{max-width:820px;margin:40px auto;padding:0 16px 80px}
+.page h1{margin-bottom:6px}
+.sub{color:var(--text-muted);margin-bottom:36px;font-size:.85em}
+.page h2{margin:28px 0 10px;font-size:1.05em;color:var(--accent);border-left:3px solid var(--accent);padding-left:10px}
+.dark-mode .page h2{color:#60a5fa;border-color:#60a5fa}
+.page p,.page li{color:var(--text-muted);line-height:1.85;margin-bottom:12px;font-size:.95em}
+.page ul{padding-left:20px;margin-bottom:14px}
+.page li{list-style:disc}
+.page a{color:var(--accent);text-decoration:underline}
+.back{display:inline-block;margin-bottom:28px;color:var(--accent);font-size:.9em}
+.back:hover{text-decoration:underline}
+</style>
+</head>
+<body class="lang-ltr">
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <a href="index.html" class="back">&#8592; Voltar ao início</a>
+    <button id="theme-toggle" class="theme-btn">🌙</button>
+  </div>
+</div>
+<div class="page">
+  <h1>DMCA — Solicitação de remoção</h1>
+  <p class="sub">Política de direitos autorais do Solvixi News</p>
+  <p>O Solvixi News respeita os direitos de propriedade intelectual. Somos um agregador — exibimos apenas manchetes e links para fontes originais, sem reproduzir artigos completos.</p>
+  <h2>Para solicitar remoção</h2>
+  <p>Se você acredita que seu conteúdo foi publicado de forma que infrinja seus direitos, envie um e-mail para <a href="mailto:dmca@solvixi.com">dmca@solvixi.com</a> com:</p>
+  <ul>
+    <li>Seu nome e informações de contato</li>
+    <li>O URL específico no nosso site que você deseja remover</li>
+    <li>Uma declaração de que você é o titular dos direitos ou está autorizado a agir</li>
+    <li>Sua assinatura eletrônica</li>
+  </ul>
+  <h2>Prazo de resposta</h2>
+  <p>Respondemos às solicitações válidas em até 48 horas úteis e removeremos o conteúdo contestado enquanto investigamos.</p>
+  <h2>Abuso de processo</h2>
+  <p>Solicitações de remoção fraudulentas ou sem fundamento podem estar sujeitas a responsabilidade legal.</p>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
+ADVERTISE_HTML_PT = """\
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<title>Anuncie — Solvixi News</title>
+<meta name="description" content="Anuncie no Solvixi News e alcance audiências globais em 6 idiomas">
+<link rel="stylesheet" href="style.css">
+<style>""" + _PAGE_CSS + """body{direction:ltr;font-family:'Roboto','Segoe UI',Arial,sans-serif}</style>
+</head>
+<body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="index.html" class="back">&#8592; Voltar ao início</a>
+  <button id="theme-toggle" class="theme-btn">🌙</button>
+</div></div>
+<div class="page">
+  <h1>Anuncie conosco</h1>
+  <p class="sub">Alcance audiências globais em 6 idiomas numa plataforma confiável de notícias</p>
+
+  <div class="stat-row">
+    <div class="stat-box2"><div class="stat-box2-val">6</div><div class="stat-box2-lbl">Idiomas</div></div>
+    <div class="stat-box2"><div class="stat-box2-val">500+</div><div class="stat-box2-lbl">Fontes</div></div>
+    <div class="stat-box2"><div class="stat-box2-val">24/7</div><div class="stat-box2-lbl">Atualizado</div></div>
+  </div>
+
+  <h2>Por que anunciar conosco?</h2>
+  <ul>
+    <li><strong>Audiência multilíngue:</strong> Árabe, Inglês, Francês, Espanhol, Turco, Português — 6 geografias</li>
+    <li><strong>Leitores ativos:</strong> Visitantes buscando notícias de política, economia, tecnologia, esportes e mais</li>
+    <li><strong>Credibilidade da marca:</strong> Conteúdo noticioso confiável e bem categorizado</li>
+    <li><strong>PWA + todos os dispositivos:</strong> Experiência fluida em mobile, tablet e desktop</li>
+  </ul>
+
+  <h2>Formatos de anúncio disponíveis</h2>
+  <div class="ad-format"><span class="ad-format-name">🖼️ Banner Leaderboard</span><span class="ad-format-size">728×90 / 320×50</span></div>
+  <div class="ad-format"><span class="ad-format-name">📐 Retângulo Grande</span><span class="ad-format-size">336×280 / 300×250</span></div>
+  <div class="ad-format"><span class="ad-format-name">📏 Coluna Lateral</span><span class="ad-format-size">160×600 / 300×600</span></div>
+  <div class="ad-format"><span class="ad-format-name">📌 Anúncios In-feed</span><span class="ad-format-size">Inserção entre artigos</span></div>
+  <div class="ad-format"><span class="ad-format-name">🤝 Conteúdo Patrocinado</span><span class="ad-format-size">Integração de marca</span></div>
+
+  <div class="cta-box">
+    <h2>Comece hoje</h2>
+    <p>Entre em contato para uma proposta personalizada de acordo com seu orçamento e objetivos de marketing</p>
+    <a href="mailto:ads@solvixi.com" class="cta-btn">📧 ads@solvixi.com</a>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
+"""
+
 ROBOTS_TXT = """\
 # Solvixi News — robots.txt
 # https://news.solvixi.com
@@ -7209,12 +7565,12 @@ def _write_static_assets(out_dir: str = OUTPUT_DIR, lang: str = "ar",
         with open(_fav32, "wb") as _f:
             _f.write(_FAVICON_32_PNG)
 
-    _privacy_map   = {"en": PRIVACY_HTML_EN,   "fr": PRIVACY_HTML_FR,   "es": PRIVACY_HTML_ES,   "tr": PRIVACY_HTML_TR}
-    _about_map     = {"en": ABOUT_HTML_EN,     "fr": ABOUT_HTML_FR,     "es": ABOUT_HTML_ES,     "tr": ABOUT_HTML_TR}
-    _contact_map   = {"en": CONTACT_HTML_EN,   "fr": CONTACT_HTML_FR,   "es": CONTACT_HTML_ES,   "tr": CONTACT_HTML_TR}
-    _terms_map     = {"en": TERMS_HTML_EN,     "fr": TERMS_HTML_FR,     "es": TERMS_HTML_ES,     "tr": TERMS_HTML_TR}
-    _dmca_map      = {"en": DMCA_HTML_EN,      "fr": DMCA_HTML_FR,      "es": DMCA_HTML_ES,      "tr": DMCA_HTML_TR}
-    _advertise_map = {"en": ADVERTISE_HTML_EN, "fr": ADVERTISE_HTML_FR, "es": ADVERTISE_HTML_ES, "tr": ADVERTISE_HTML_TR}
+    _privacy_map   = {"en": PRIVACY_HTML_EN,   "fr": PRIVACY_HTML_FR,   "es": PRIVACY_HTML_ES,   "tr": PRIVACY_HTML_TR,   "pt": PRIVACY_HTML_PT}
+    _about_map     = {"en": ABOUT_HTML_EN,     "fr": ABOUT_HTML_FR,     "es": ABOUT_HTML_ES,     "tr": ABOUT_HTML_TR,     "pt": ABOUT_HTML_PT}
+    _contact_map   = {"en": CONTACT_HTML_EN,   "fr": CONTACT_HTML_FR,   "es": CONTACT_HTML_ES,   "tr": CONTACT_HTML_TR,   "pt": CONTACT_HTML_PT}
+    _terms_map     = {"en": TERMS_HTML_EN,     "fr": TERMS_HTML_FR,     "es": TERMS_HTML_ES,     "tr": TERMS_HTML_TR,     "pt": TERMS_HTML_PT}
+    _dmca_map      = {"en": DMCA_HTML_EN,      "fr": DMCA_HTML_FR,      "es": DMCA_HTML_ES,      "tr": DMCA_HTML_TR,      "pt": DMCA_HTML_PT}
+    _advertise_map = {"en": ADVERTISE_HTML_EN, "fr": ADVERTISE_HTML_FR, "es": ADVERTISE_HTML_ES, "tr": ADVERTISE_HTML_TR, "pt": ADVERTISE_HTML_PT}
 
     static_pages = [
         ("privacy.html",   _privacy_map.get(lang, PRIVACY_HTML)),
@@ -7754,6 +8110,7 @@ _LANG_PATHS: dict[str, str] = {
     "fr": "/fr",
     "es": "/es",
     "tr": "/tr",
+    "pt": "/pt",
 }
 
 # BCP-47 hreflang values for each language
@@ -7763,6 +8120,7 @@ _LANG_HREFLANG: dict[str, str] = {
     "fr": "fr",
     "es": "es",
     "tr": "tr",
+    "pt": "pt-BR",
 }
 
 
@@ -9836,7 +10194,7 @@ def generate_sitemap_index(root_url: str, static_dir: str) -> None:
     today = _dt.now().strftime("%Y-%m-%d")
     base  = root_url.rstrip("/")
 
-    lang_paths = {"en": "", "ar": "/ar", "fr": "/fr", "es": "/es", "tr": "/tr"}
+    lang_paths = {"en": "", "ar": "/ar", "fr": "/fr", "es": "/es", "tr": "/tr", "pt": "/pt"}
     sm_types   = ["sitemap.xml", "sitemap-articles.xml", "news-sitemap.xml"]
 
     blocks = []

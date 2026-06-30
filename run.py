@@ -70,8 +70,14 @@ LANGS = {
         "out":    os.path.join(_ROOT, "static", "tr"),
         "label":  "Turkish",
     },
+    "pt": {
+        "config": os.path.join(_ROOT, "config", "sources-pt.json"),
+        "db":     os.path.join(_DATA, "news-pt.db"),
+        "out":    os.path.join(_ROOT, "static", "pt"),
+        "label":  "Portuguese",
+    },
 }
-ALL_LANGS = list(LANGS.keys())   # ["ar","en","fr","es","tr"]
+ALL_LANGS = list(LANGS.keys())   # ["ar","en","fr","es","tr","pt"]
 
 
 def _load_api_keys() -> dict:

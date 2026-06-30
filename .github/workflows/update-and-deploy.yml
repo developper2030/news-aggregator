@@ -134,8 +134,8 @@ jobs:
           [ -s static/index.html ] || fail "static/index.html missing/empty"
           [ -s static/style.css ]  || fail "static/style.css missing/empty"
           [ -s static/app.js ]     || fail "static/app.js missing/empty"
-          # صفحات اللغات الأربع الأخرى
-          for d in ar fr es tr; do
+          # صفحات اللغات الخمس الأخرى
+          for d in ar fr es tr pt; do
             [ -s "static/$d/index.html" ] || fail "static/$d/index.html missing/empty"
           done
           # حجم معقول للصفحة الرئيسية (> 5KB يعني محتوى حقيقي لا صفحة خطأ)
