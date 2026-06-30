@@ -9698,8 +9698,16 @@ def generate_html(config_path: str | None = None, db_path: str | None = None,
         if any(cat.get("slug") == "sports" for cat in categories):
             _cat_pages.append(("nfl.html", "0.8", "hourly"))
             _cat_pages.append(("nba.html", "0.8", "hourly"))
+            _cat_pages.append(("worldcup.html", "0.9", "hourly"))
 
-        _all_sm_pages = _static_pages + _cat_pages + _region_pages
+        # Deduplicate — region slugs can appear both from the categories loop
+        # and from the explicit world_regions / media_regions_list loops.
+        _seen_sm: set = set()
+        _all_sm_pages = []
+        for _entry in _static_pages + _cat_pages + _region_pages:
+            if _entry[0] not in _seen_sm:
+                _seen_sm.add(_entry[0])
+                _all_sm_pages.append(_entry)
         _today = datetime.now().strftime("%Y-%m-%d")
         _url_blocks = []
         for _fname, _pri, _freq in _all_sm_pages:
