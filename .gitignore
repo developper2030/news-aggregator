@@ -18,6 +18,8 @@ data/market_cache.json
 
 # Generated site output (built & deployed by CI, not stored in repo)
 static/
+# Exception: branded og-image committed once; CI honours "write-once" logic
+!static/og-image.png
 
 # Secrets — NEVER commit these
 config/api_keys.json

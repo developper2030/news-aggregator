@@ -7921,13 +7921,43 @@ def _gen_og_png(width: int = 1200, height: int = 630) -> bytes:
     )
 
 
-# Default OG image (SVG — kept for reference; actual OG meta uses og-image.png)
-OG_IMAGE_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="#1d4ed8"/>
-  <text x="600" y="280" text-anchor="middle" font-family="Arial,sans-serif"
-        font-size="80" font-weight="bold" fill="#ffffff">Solvixi News</text>
-  <text x="600" y="380" text-anchor="middle" font-family="Arial,sans-serif"
-        font-size="36" fill="#93c5fd">Your World in 5 Languages</text>
+# Default OG image (SVG source — actual OG meta uses og-image.png committed to git)
+OG_IMAGE_SVG = """<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0f1e"/>
+      <stop offset="100%" stop-color="#0f2d5a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#0891b2"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1d4ed8" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0e7490" stop-opacity="0.1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1020" cy="315" r="280" fill="url(#glow)" stroke="#1e40af" stroke-width="1" opacity="0.3"/>
+  <circle cx="1020" cy="315" r="220" fill="none" stroke="#2563eb" stroke-width="1" opacity="0.25"/>
+  <circle cx="1020" cy="315" r="160" fill="none" stroke="#3b82f6" stroke-width="1" opacity="0.2"/>
+  <circle cx="1020" cy="315" r="100" fill="none" stroke="#60a5fa" stroke-width="1" opacity="0.2"/>
+  <ellipse cx="1020" cy="315" rx="280" ry="100" fill="none" stroke="#1e40af" stroke-width="1" opacity="0.2"/>
+  <ellipse cx="1020" cy="315" rx="280" ry="200" fill="none" stroke="#1e40af" stroke-width="1" opacity="0.15"/>
+  <ellipse cx="1020" cy="315" rx="90" ry="280" fill="none" stroke="#1e40af" stroke-width="1" opacity="0.2"/>
+  <ellipse cx="1020" cy="315" rx="190" ry="280" fill="none" stroke="#1e40af" stroke-width="1" opacity="0.15"/>
+  <circle cx="1020" cy="315" r="8" fill="#3b82f6" opacity="0.6"/>
+  <circle cx="1020" cy="315" r="4" fill="#93c5fd"/>
+  <rect x="0" y="0" width="6" height="630" fill="url(#accent)"/>
+  <rect x="0" y="0" width="1200" height="4" fill="url(#accent)" opacity="0.7"/>
+  <rect x="80" y="50" width="130" height="38" rx="6" fill="#1e3a8a" opacity="0.8"/>
+  <text x="95" y="76" font-family="Arial,sans-serif" font-size="20" font-weight="bold" fill="#93c5fd" letter-spacing="2">LIVE</text>
+  <text x="80" y="280" font-family="Georgia,'Times New Roman',serif" font-size="96" font-weight="bold" fill="#f8fafc" letter-spacing="-1">Solvixi</text>
+  <text x="80" y="385" font-family="Georgia,'Times New Roman',serif" font-size="96" font-weight="bold" fill="#60a5fa" letter-spacing="-1">News</text>
+  <rect x="80" y="415" width="520" height="4" fill="url(#accent)" rx="2"/>
+  <text x="80" y="470" font-family="Arial,Helvetica,sans-serif" font-size="30" fill="#94a3b8" letter-spacing="1">Your World in 5 Languages</text>
+  <text x="80" y="520" font-family="Arial,Helvetica,sans-serif" font-size="22" fill="#475569" letter-spacing="3">AR  ·  EN  ·  FR  ·  ES  ·  TR</text>
+  <text x="80" y="585" font-family="'Courier New',Courier,monospace" font-size="22" fill="#334155" letter-spacing="1">news.solvixi.com</text>
 </svg>
 """
 
