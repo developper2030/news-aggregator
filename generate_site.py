@@ -8043,8 +8043,13 @@ def _article_page_html(
         _ld["image"] = {"@type": "ImageObject", "url": image_url}
     json_ld = json.dumps(_ld, ensure_ascii=False)
 
-    # ── Meta description ─────────────────────────────────────────────────────
-    meta_desc = ai_summary[:200] if ai_summary else title_raw[:200]
+    # ── Meta description (priority: AI summary → og:description → title) ────
+    _art_desc = (art.get("description") or "").strip()
+    meta_desc = (
+        ai_summary[:200]   if ai_summary
+        else _art_desc[:200] if _art_desc
+        else title_raw[:200]
+    )
 
     # ── Image HTML ───────────────────────────────────────────────────────────
     img_html = (
